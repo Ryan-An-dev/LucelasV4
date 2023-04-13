@@ -82,6 +82,7 @@ namespace LucelasV4
             containerRegistry.Register<LoginViewModel>();
             containerRegistry.RegisterSingleton<Login>(); 
             containerRegistry.Register<IReceiptRepository, ReceiptRepository>();
+            containerRegistry.Register<IStatisticsRepository, StatisticsRepository>();
             containerRegistry.Register<IContractRepository, ContractRepository>();
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();

@@ -32,5 +32,9 @@ namespace DataAccess
         GetContractList = 30,
         #endregion
 
+
+        #region 통계데이터
+        GetDailyList = 42,
+        #endregion
     }
 }

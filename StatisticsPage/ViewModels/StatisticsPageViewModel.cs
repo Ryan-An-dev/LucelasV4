@@ -66,7 +66,10 @@ namespace StatisticsPage.ViewModels
         private IContainerProvider ContainerProvider { get; }
 
         public void ChangedChartUnit(StatisticsUnit args) {
-           
+            if(args == StatisticsUnit.Daily)
+            {
+
+            }
         }
         public StatisticsPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
@@ -143,14 +146,22 @@ namespace StatisticsPage.ViewModels
         }
         private void SendData()
         {
-            using (var network = this.ContainerProvider.Resolve<DataAgent.BankListDataAgent>())
+            using (var network = this.ContainerProvider.Resolve<DataAgent.StatisticsDataAgent>())
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                
-                //network.GetBankHistory(jobj);
-                
+                DateTime now = DateTime.Now;  // 현재 날짜와 시간
+                DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1); // 이번 달의 1일
+                jobj["start_time"] = firstDayOfMonth.ToString("yyyy-MM-dd HH:mm:ss");
+                jobj["end_time"] = firstDayOfMonth.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss");
+                network.GetDailyList(jobj);
             }
+        }
+
+        private int CountDaily(int year, int month) {
+            
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            return daysInMonth;
         }
     }
 }
