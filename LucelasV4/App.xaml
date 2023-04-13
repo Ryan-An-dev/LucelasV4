@@ -1,0 +1,223 @@
+﻿<prism:PrismApplication x:Class="LucelasV4.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:EnumConverter ="clr-namespace:CommonModel;assembly=CommonModel"
+             xmlns:local="clr-namespace:LucelasV4"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/" >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- MahApps -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Purple.xaml" />
+
+                <!-- Material Design -->
+                <md:MahAppsBundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Purple" />
+                <md:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- Material Design: MahApps Compatibility -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Defaults.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="MainColor" Color="#7368ff"/>
+            <SolidColorBrush x:Key="textColor" Color="#edeeee"/>
+            <Style x:Key="menubutton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource textColor}"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Margin" Value="0 12" />
+                <Setter Property="Tag" Value="Hidden" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource MainColor}"  />
+                        <Setter Property="Tag" Value="Visible" />
+                    </Trigger>
+
+                    <DataTrigger Binding="{Binding ElementName=menubutton,Path=IsActive}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource MainColor}" />
+                        <Setter Property="Tag" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+
+
+            <Style x:Key="menuButtonIcon" TargetType="Icon:PackIconMaterial">
+                <Setter Property="Width" Value="18" />
+                <Setter Property="Height" Value="18" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
+            </Style>
+
+            <Style x:Key="searchTextBox" TargetType="TextBox">
+                <Setter Property="Background" Value="#1e2e44" />
+                <Setter Property="Foreground" Value="#9ea4ad" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="40 15 15 15" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBoxBase">
+                            <Border x:Name="border" 
+                                CornerRadius="7" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                SnapsToDevicePixels="True">
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="False" 
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="loginTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="#9ea4ad" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="#7166f9" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="0 5 0 5" />
+                <Setter Property="Padding" Value="10 2 0 2" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBoxBase">
+                            <Border x:Name="border" 
+                                CornerRadius="7" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                SnapsToDevicePixels="True">
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="False" 
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="#d9d9d9" TargetName="border" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="topMenuButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Width"   Value="45"/>
+                <Setter Property="Height" Value="45"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Margin" Value="3 0" />
+                <Setter Property="Tag" Value="Hidden" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="50">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="#1e2e44" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="genericButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource textColor}" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="BorderBrush" Value="{StaticResource MainColor}"/>
+                <Setter Property="Width"   Value="120"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="3 0" />
+                <Setter Property="Tag" Value="Hidden" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="10" BorderThickness="2" BorderBrush="{StaticResource MainColor}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="#1e2e44" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="topMenuButtonIcon" TargetType="Icon:PackIconMaterial">
+                <Setter Property="Width" Value="15" />
+                <Setter Property="Height" Value="15" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="#edeeee" />
+            </Style>
+
+            <Style x:Key="mainBorder" TargetType="Border">
+                <Setter Property="Background" Value="#1e2e44" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+
+            <Style x:Key="titleText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#efefef" />
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+
+            <Style x:Key="titleButton" TargetType="Button" BasedOn="{StaticResource topMenuButton}">
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="Width" Value="35" />
+                <Setter Property="Height" Value="35" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#2e3966" />
+
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>

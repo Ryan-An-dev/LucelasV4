@@ -1,0 +1,162 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:local ="clr-namespace:CommonModule"
+                    xmlns:Selector ="clr-namespace:CommonModel;assembly=CommonModel"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <!--  MahApps  -->
+    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Violet.xaml" />
+
+    <!--  Material Design  -->
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+    <md:MahAppsBundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Purple" />
+    <md:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+
+        <!--  Material Design: MahApps Compatibility  -->
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
+
+    <!-- Licenses -->
+    <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Strings.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  MahApps Brushes  -->
+    <SolidColorBrush x:Key="MainColor" Color="#7368ff"/>
+    <SolidColorBrush x:Key="MahApps.Brushes.Highlight" Color="{DynamicResource Primary700}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.AccentBase" Color="{DynamicResource Primary600}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.Accent" Color="{DynamicResource Primary500}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.Accent2" Color="{DynamicResource Primary400}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.Accent3" Color="{DynamicResource Primary300}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.Accent4" Color="{DynamicResource Primary200}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.WindowTitle" Color="{DynamicResource Primary700}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.Selected.Foreground" Color="{DynamicResource Primary500Foreground}" />
+    <LinearGradientBrush x:Key="MahApps.Brushes.Progress" StartPoint="1.002,0.5" EndPoint="0.001,0.5">
+        <GradientStop Offset="0" Color="{DynamicResource Primary700}" />
+        <GradientStop Offset="1" Color="{DynamicResource Primary300}" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="MahApps.Brushes.CheckmarkFill" Color="{DynamicResource Primary500}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.RightArrowFill" Color="{DynamicResource Primary500}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.IdealForeground" Color="{DynamicResource Primary500Foreground}" />
+    <SolidColorBrush
+                x:Key="MahApps.Brushes.IdealForegroundDisabled"
+                Opacity="0.4"
+                Color="{DynamicResource Primary500}" />
+
+    <Style x:Key="DataGridBase" TargetType="DataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="EnableColumnVirtualization" Value="True"/>
+        <Setter Property="EnableRowVirtualization" Value="True"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+    </Style>
+    <!--<Style TargetType="DataGridCell">
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+    </Style>-->
+    <Style x:Key="MaterialDesignDataGridColumnHeaderCustom" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+        <Setter Property="BorderThickness" Value="{Binding GridLinesVisibility, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource GridLinesVisibilityBorderToThicknessConverter}}" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignColumnHeader}" />
+        <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Self}, Path=(md:DataGridAssist.ColumnHeaderPadding)}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="GoToVisible">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SortDirectionIndicator" Storyboard.TargetProperty="Width">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="12" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="GoToHidden">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SortDirectionIndicator" Storyboard.TargetProperty="Width">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="12" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Grid Background="Transparent">
+                        <Border Padding="{TemplateBinding Padding}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                                <md:ListSortDirectionIndicator x:Name="SortDirectionIndicator"
+                                                Width="0"
+                                                Height="12"
+                                                Margin="-16,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                IsTabStop="False"
+                                                ListSortDirection="{TemplateBinding SortDirection}"
+                                                Opacity="0.45"
+                                                Visibility="{Binding CanUserSortColumns, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  RecognizesAccessKey="True" HorizontalAlignment="Center"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <ContentPresenter.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextTrimming" Value="WordEllipsis" />
+                                            <Setter Property="md:TextBlockAssist.AutoToolTip" Value="True" />
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="Foreground" Value="{StaticResource MainColor}"/>
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Grid>
+                        </Border>
+                        <Thumb x:Name="PART_LeftHeaderGripper"
+                   HorizontalAlignment="Left"
+                   Style="{StaticResource MaterialDesignGridColumnHeaderGripper}" />
+                        <Thumb x:Name="PART_RightHeaderGripper"
+                   HorizontalAlignment="Right"
+                   Style="{StaticResource MaterialDesignGridColumnHeaderGripper}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                        </Trigger>
+                        <Trigger SourceName="SortDirectionIndicator" Property="IsNeutral" Value="False">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Name="GoToVisible" Storyboard="{StaticResource GoToVisible}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="GoToVisible" />
+                                <BeginStoryboard Storyboard="{StaticResource GoToHidden}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextBlock.FontWeight" Value="Medium" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+
+    <local:ReverseBoolConverter x:Key="ReverseBool"/>
+    <Selector:DepositStyleSelector x:Key="DepositCellStyleSelector">
+        <Selector:DepositStyleSelector.IncomeDataStyle>
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="Red"/>
+            </Style>
+        </Selector:DepositStyleSelector.IncomeDataStyle>
+        <Selector:DepositStyleSelector.CostDataStyle>
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="Gray"/>
+            </Style>
+        </Selector:DepositStyleSelector.CostDataStyle>
+    </Selector:DepositStyleSelector>
+</ResourceDictionary>

@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="DepositWithdrawal.Views.FindItemPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             Width="500" Height="600" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             prism:ViewModelLocator.AutoWireViewModel="True"  Background="Transparent"
+             >
+    <Border  CornerRadius="25" Background="#151f2d">
+        <Grid Margin="10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.1*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Margin="10 10" VerticalAlignment="Center">
+                <TextBlock Text="대기중인 계약목록" FontSize="16" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <DataGrid Grid.Row="1" Margin="0 10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="No" Width="60"/>
+                    <DataGridTextColumn Header="날짜" Width="100"/>
+                    <DataGridTextColumn Header="계약자명" Width="100"/>
+                    <DataGridTextColumn Header="금액" Width="100"/>
+                    <DataGridTemplateColumn Header="비고">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="{md:PackIcon Kind=Details}" Width="50"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Grid.Row="2" Margin="0 10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="구분" Width="130"/>
+                    <DataGridTextColumn Header="금액" Width="100"/>
+                    <DataGridTemplateColumn Header="비고">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="{md:PackIcon Kind=Details}" Width="50"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Cursor="">
+                <Button Content="선택" Width="60" Margin="10 0" Command="{Binding CloseDialogCommand}" CommandParameter="true"/>
+                <Button Content="취소" Width="60" Margin="10 0" Command="{Binding CloseDialogCommand}" CommandParameter="false"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

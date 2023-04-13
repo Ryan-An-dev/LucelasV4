@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="GlobalPage.Views.GlobalPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        
+    </StackPanel>
+</UserControl>

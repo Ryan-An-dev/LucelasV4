@@ -1,0 +1,221 @@
+﻿<UserControl x:Class="HomePage.Views.HomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:uc ="clr-namespace:HomePage.UserControls"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:lvc ="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:prism="http://prismlibrary.com/"               
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1000"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid Margin="20 0 24 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            
+        </StackPanel>
+        <StackPanel x:Name="CompletedStack" Margin="10 10 10 10" VerticalAlignment="Stretch">
+            <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight,UpdateSourceTrigger=PropertyChanged}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.33*"/>
+                </Grid.RowDefinitions>
+                <uc:MontlyCard 
+                Number="51" Grid.Row="0"
+                Title="{Binding Month.Value, StringFormat={}{0:0월 완료 계약건수} }"
+                IsTechnical="True" 
+                IsActive="True" />
+                <uc:MontlyCard Grid.Row="1"
+                Number="76" 
+                Title="{Binding Month.Value, StringFormat={}{0:0월 분류 입금 지출 건수} }"
+                IsTechnical="True"
+                IsActive="True"/>
+                <uc:MontlyCard Grid.Row="2"
+                Number="55" 
+                Title="{Binding Month.Value, StringFormat={}{0:0월 완료된 배송 건수} }"
+                IsTechnical="True" 
+                IsActive="True"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Margin="10 10 10 10"  Grid.Column="1"  x:Name="UnCompletedStack">
+            <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight, UpdateSourceTrigger=PropertyChanged}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.33*"/>
+                </Grid.RowDefinitions>
+                <uc:MontlyCard 
+                Number="68" Grid.Row="0"
+                Title="{Binding Month.Value, StringFormat={}{0:0월 미완료 계약건수} }" 
+                IsTechnical="False"/>
+                <uc:MontlyCard Grid.Row="1"
+                Number="16" 
+                Title="{Binding Month.Value, StringFormat={}{0:0월 미분류 입금 지출 건수}}"
+                IsTechnical="False"/>
+                <uc:MontlyCard Grid.Row="2"
+                Number="94" 
+                Title=" 금일 배송 건수" 
+                IsTechnical="False"/>
+            </Grid>
+            
+        </StackPanel>
+        <Border Grid.Column="2" Style="{StaticResource mainBorder}"  Margin="0 10 0 30">
+            <Grid>
+                <!--Title-->
+                <TextBlock Text="일간 매출추이" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
+
+                <!--Filter Button-->
+                <Button Style="{StaticResource titleButton}">
+                    <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
+                </Button>
+
+                <!--Legends-->
+                <StackPanel Orientation="Horizontal" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Right"
+                            Margin="0 45 0 0">
+                    <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
+                    <TextBlock Text="Cost" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+
+                    <Border Width="12" Height="12" Background="#101a28" CornerRadius="3"/>
+                    <TextBlock Text="Profit" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                </StackPanel>
+
+                <!--Cost Chart-->
+                <lvc:CartesianChart LegendLocation="None" Margin="0 40 0 0">
+                    <lvc:CartesianChart.DataTooltip>
+                        <lvc:DefaultTooltip Background="#24336a" Foreground="#d5e2ff"/>
+                    </lvc:CartesianChart.DataTooltip>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis 
+                                    Foreground="#bcc0c6" 
+                                    ShowLabels="True" 
+                                    Labels="월,화,수,목,금,토,일">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator StrokeThickness="0" Step="1"/>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis 
+                                    Foreground="#bcc0c6" 
+                                    ShowLabels="True" 
+                                    MinValue="0" MaxValue="30">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator StrokeThickness="0"/>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+
+                    <lvc:CartesianChart.Series>
+                        <lvc:StackedColumnSeries Title="영어"
+                                    Fill="#7166f9" MaxColumnWidth="15"
+                                    Values="11,13,17,20,17,15,16"/>
+
+                        <lvc:StackedColumnSeries Title="한글"
+                                    Fill="#101a28" MaxColumnWidth="15"
+                                    Values="6,5,6,4,6,6,7"/>
+
+                    </lvc:CartesianChart.Series>
+                </lvc:CartesianChart>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="0,0,0,2" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="450"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Hire Section-->
+            <Border Style="{StaticResource mainBorder}" Margin="10 0 20 30">
+                <Grid>
+                    <!--Title-->
+                    <TextBlock Text="월간 매출추이" Style="{StaticResource titleText}"/>
+
+                    <!--Filter Button-->
+                    <Button Style="{StaticResource titleButton}">
+                        <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
+                    </Button>
+
+                    <!--Legends-->
+                    <StackPanel Orientation="Horizontal" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Right"
+                            Margin="0 8 40 0">
+                        <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
+                        <TextBlock Text="매출액" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                    </StackPanel>
+                    <lvc:CartesianChart LegendLocation="None" Margin="0 50 0 0">
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip Background="#101a28" Foreground="#d5e2ff"/>
+                        </lvc:CartesianChart.DataTooltip>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis 
+                                    Foreground="#bcc0c6" 
+                                    ShowLabels="True" 
+                                    Labels="1월,2월,3월,4월,5월,6월,7월,8월,9월,10월,11월,12월">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" Step="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis 
+                                    Foreground="#bcc0c6" 
+                                    ShowLabels="True" 
+                                    MinValue="0" MaxValue="100">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+
+                        <lvc:CartesianChart.Series>
+                            <lvc:LineSeries StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
+                                                Values="60,50,68,41,85,34,97,21,64,31,48,64">
+                                <lvc:LineSeries.Fill>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="#2e3966" Offset="0.4"/>
+                                        <GradientStop Color="#21304a" Offset="1.2"/>
+                                    </LinearGradientBrush>
+                                </lvc:LineSeries.Fill>
+                            </lvc:LineSeries>
+                        </lvc:CartesianChart.Series>
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource mainBorder}" Margin="0 0 0 30" Grid.Column="1">
+                <Grid>
+                    <!--Title-->
+                    <TextBlock Text="최고의 사원" Style="{StaticResource titleText}"/>
+
+                    <!--Filter Button-->
+                    <Button Style="{StaticResource titleButton}">
+                        <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
+                    </Button>
+
+                    <ListView Margin="0 50 0 0" 
+                                  Background="Transparent" 
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                  Style="{StaticResource MaterialDesignListView}">
+
+                    </ListView>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
