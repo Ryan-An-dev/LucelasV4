@@ -98,7 +98,7 @@ namespace StatisticsPage.ViewModels
                 t += r.Next(0, 100);
                 values2[i] = t;
             }
-            XAxes.Value = new ObservableCollection<string>();
+            Label.Value = new ObservableCollection<string>();
             LineSeries temp = new LineSeries();
             temp.Values = (IChartValues)values;
             this.PreviousMonth.Value = temp;
