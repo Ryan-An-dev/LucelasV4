@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:md ="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:lvc ="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:lvcore="clr-namespace:LiveChartsCore;assembly=LiveChartsCore"
+             xmlns:lvc ="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:prism="http://prismlibrary.com/"               
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -42,16 +41,14 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Right"
                             Margin="0 45 0 0">
-                        <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
-                        <TextBlock Text="Cost" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                        <Border Width="12" Height="12" Background="#101a28" CornerRadius="3"/>
-                        <TextBlock Text="Profit" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                        <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
+                        <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                        <Border Width="12" Height="12" Background="DeepSkyBlue" CornerRadius="3"/>
+                        <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                     </StackPanel>
-                    <lvc:CartesianChart AxisX="{Binding }">
-                        <lvc:CartesianChart.Series>
-                            <lvc:LineSeries Title="지난달" Values="{Binding PreviousMonth.Value}"></lvc:LineSeries>
-                            <lvc:LineSeries Title="이번달" Values="{Binding ThisMonth.Value}"></lvc:LineSeries>
-                        </lvc:CartesianChart.Series>
+                    <lvc:CartesianChart Margin="0 60 0 0" 
+                        Series="{Binding SeriesCollection}">
+                        
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
@@ -76,10 +73,8 @@
                         <Border Width="12" Height="12" Background="#101a28" CornerRadius="3"/>
                         <TextBlock Text="Profit" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                     </StackPanel>
-                    <lvc:CartesianChart
-                        Grid.Row="1"
-                        Series="{Binding SeriesCollection}"
-                        >
+                    <lvc:CartesianChart>
+                        
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
