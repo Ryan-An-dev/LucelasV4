@@ -3,18 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:md ="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:lvc ="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:prism="http://prismlibrary.com/"               
+             xmlns:connverter ="clr-namespace:CommonModel.Converter;assembly=CommonModel"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1000"
              prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <connverter:DateTimeToStringConverter x:Key="DateTimeConvert"/>
+        <Style TargetType="lvc:DefaultLegend" x:Key="MyLegend">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="lvc:DefaultLegend">
+                        <Grid>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}">
+                                <ItemsControl ItemsSource="{Binding Series}" 
+                                          />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+ 
     <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}" Margin="20 0 10 0">
         <Grid Margin="0 0 24 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.7*"/>
-                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.6*"/>
+                <ColumnDefinition Width="0.4*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*"/>
@@ -23,19 +51,17 @@
             <Border Grid.Column="0" Style="{StaticResource mainBorder}"  Margin="10 10 10 10">
                 <Grid>
                     <!--Title-->
-                    <TextBlock Text="매출추이" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
+                    <TextBlock Text="지출내역" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
 
                     <!--Filter Button-->
-                    <ComboBox 
+                    <!--<ComboBox 
                         md:HintAssist.Hint="단위설정" 
                         Foreground="{StaticResource MainColor}" 
                         SelectedIndex="{Binding ComboIndex, UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Top" 
                         ItemsSource="{Binding StatisticsUnitList}"
-                        Margin="0 10 10 0"/>
-
-
+                        Margin="0 10 10 0"/>-->
                     <!--Legends-->
                     <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Top" 
@@ -43,39 +69,37 @@
                             Margin="0 45 0 0">
                         <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
                         <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                        <Border Width="12" Height="12" Background="DeepSkyBlue" CornerRadius="3"/>
+                        <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
                         <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                     </StackPanel>
-                    <lvc:CartesianChart Margin="0 60 0 0" 
-                        Series="{Binding SeriesCollection}">
-                        
+                    <lvc:CartesianChart 
+                        Zoom="Xy"
+                        Series="{Binding SeriesCollection}" 
+                        Margin="0 70 0 0">
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis MinValue="0"  LabelFormatter="{Binding YFormatter}" IsEnabled="False"></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Labels="{Binding Labels}" IsEnabled="False"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
             <Border Grid.Column="1" Style="{StaticResource mainBorder}"  Margin="10 10 10 10">
                 <Grid>
                     <!--Title-->
-                    <TextBlock Text="일간 매출추이" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
-
-                    <!--Filter Button-->
-                    <Button Style="{StaticResource titleButton}">
-                        <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
-                    </Button>
-
+                    <TextBlock Text="이번달 지출내역" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
                     <!--Legends-->
-                    <StackPanel Orientation="Horizontal" 
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            Margin="0 45 0 0">
-                        <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
-                        <TextBlock Text="Cost" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
 
-                        <Border Width="12" Height="12" Background="#101a28" CornerRadius="3"/>
-                        <TextBlock Text="Profit" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                    </StackPanel>
-                    <lvc:CartesianChart>
-                        
-                    </lvc:CartesianChart>
+                    <lvc:PieChart 
+                        LegendLocation="Right"
+                        Series="{Binding PieSeries}"
+                        Margin="0 80 60 10"
+                        >
+                        <lvc:PieChart.ChartLegend>
+                            <lvc:DefaultLegend Style="{StaticResource MyLegend}"/>
+                        </lvc:PieChart.ChartLegend>
+                    </lvc:PieChart>
                 </Grid>
             </Border>
             <Grid Grid.Row="1" Margin="0,0,0,2" Grid.Column="0" Grid.ColumnSpan="3">
