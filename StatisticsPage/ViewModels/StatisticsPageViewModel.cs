@@ -20,6 +20,11 @@ using Reactive.Bindings.Extensions;
 using System.Collections.ObjectModel;
 using LiveCharts.Wpf;
 using LiveCharts;
+using LogWriter;
+using System.Windows;
+using System.Windows.Media;
+using LiveCharts.Definitions.Charts;
+using System.Windows.Controls.Primitives;
 
 namespace StatisticsPage.ViewModels
 {
@@ -31,88 +36,43 @@ namespace StatisticsPage.ViewModels
         Monthly = 1
     }
 
-    public class ChartDataBase {
-        private string _Name;
-
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; }
-        }
-
-        private int myVar;
-
-        public int MyProperty
-        {
-            get { return myVar; }
-            set { myVar = value; }
-        }
-
-
-    }
-
     public class StatisticsPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
     {
-        public ObservableCollection<string> Label { get; set; }
-        
+        public ChartValues<int> PreviousMonthSalesValues { get; set; }
+        public ChartValues<int> CurrentMonthSalesValues { get; set; }
 
         public ReactiveProperty<StatisticsUnit> SelectedUnit { get; set; }
         public IEnumerable<StatisticsUnit> StatisticsUnitList
         {
             get { return Enum.GetValues(typeof(StatisticsUnit)).Cast<StatisticsUnit>(); }
         }
-
+        public Func<DateTime, string> XFormatter { get; set; }
         public SeriesCollection SeriesCollection { get; set; }
+        public DefaultTooltip DataToolTip { get; set; }
         private IContainerProvider ContainerProvider { get; }
 
         public void ChangedChartUnit(StatisticsUnit args) {
-            if(args == StatisticsUnit.Daily)
+            if (args == StatisticsUnit.Daily)
             {
 
             }
         }
+        public SeriesCollection PieSeries { get; set; }
+        //public SeriesCollection SeriesCollection { get; set; }
+        public string[] Labels { get; set; }
+        public Func<double, string> YFormatter { get; set; }
         public StatisticsPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
-            this.Label = new ObservableCollection<string>();
-            this.SeriesCollection = new SeriesCollection(); 
+            YFormatter = value => value.ToString("C");
+            XFormatter = value => value.ToString("dd") + "일";
+            this.PieSeries = new SeriesCollection();
+            this.PreviousMonthSalesValues = new ChartValues<int>();
+            this.CurrentMonthSalesValues = new ChartValues<int>();
+            this.SeriesCollection = new SeriesCollection();
             this.SelectedUnit = new ReactiveProperty<StatisticsUnit>(0).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SelectedUnit.Subscribe(x => { ChangedChartUnit(x); });
-            ChartValues<double> values = new ChartValues<double>();
-            ChartValues<double> values2 = new ChartValues<double>();
-            var r = new Random();
-            var t = 0;
-           
-            for (var i = 0; i < 100; i++)
-            {
-                t += r.Next(0, 100);
-                values.Add(t);
-            }
-            for (var i = 0; i < 100; i++)
-            {
-                if (i >= 51) {
-                    
-                    continue;
-                }
-                t += r.Next(0, 100);
-                values2.Add(t);
-            }
-            for (int i = 1; i < 101; i++) { 
-                Label.Add(i+"일");
-            }
-            var series1 = new LineSeries
-            {
-                Title = "지난달",
-                Values = values
-            };
 
-            var series2 = new LineSeries
-            {
-                Title = "이번달",
-                Values = values2
-            };
-            SeriesCollection.Add(series2);
-            SeriesCollection.Add(series1);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -127,17 +87,138 @@ namespace StatisticsPage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            Application.Current.Dispatcher.Invoke(() => { this.SeriesCollection.Clear(); this.PieSeries.Clear(); });
             SendData();
         }
 
         public void OnRceivedData(ErpPacket packet)
         {
-            throw new NotImplementedException();
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            JObject jobj = new JObject(JObject.Parse(msg));
+            ErpLogWriter.LogWriter.Trace(jobj.ToString());
+            switch ((COMMAND)packet.Header.CMD)
+            {
+                case COMMAND.GetDailyList: //데이터 조회
+                    MakeStatisticsChart(jobj);
+                    break;
+
+            }
+        }
+
+        private void MakeStatisticsChart(JObject jobj)
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                ChartValues<int> Target = new ChartValues<int>();
+                List<string> labelsList = new List<string>(); // Labels 배열 대신 List<string>을 사용합니다.
+                int Sum = 0;
+                List<Series> PieItems = new List<Series>();
+                if (jobj["biz_type_statistics_list"] != null)
+                {
+                    if (jobj["period_type"].ToObject<int>() == 0) // 이번달
+                    {
+                        foreach (JObject jobj in jobj["biz_type_statistics_list"] as JArray) {
+                            ChartValues<double> percent = new ChartValues<double>();
+                            percent.Add(jobj["sum_rate_cost"].ToObject<int>() / 100.0);
+                            Series Pie = new PieSeries()
+                            {
+                                PushOut=5,
+                                Values = percent,
+                                Title = jobj["sbt_biz_name"].ToString()
+                            };
+                            PieSeries.Add(Pie);
+                        }
+                    }
+                }
+                if (jobj["cost_day_list"] != null)
+                {
+                    LineSeries Series = null;
+                    JArray innerCostDayList = jobj["cost_day_list"] as JArray;
+                    foreach (JObject InnerJobj in innerCostDayList)
+                    {
+                        int value = InnerJobj["sum_cost"].ToObject<int>();
+                        Sum = Sum + value;
+                        Target.Add(Sum);
+                        string date = InnerJobj["shi_time_day"].ToString(); // 날짜를 가져옵니다.
+                        labelsList.Add(date); // 리스트에 날짜를 추가합니다.
+                    }
+                    if (jobj["period_type"].ToObject<int>() == 0) // 이번달
+                    {
+                        SendData(false);
+                        Series = new LineSeries()
+                        {
+                            Values = Target,
+                            Title = "이번달",
+                            ScalesXAt = 0,
+                            ScalesYAt = 0,
+                            Stroke = Brushes.Red,
+                            Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50 , 255,0 , 0))
+                        };
+                    }
+                    else // 지난달
+                    {
+                        Series = new LineSeries()
+                        {
+                            Values = Target,
+                            Title = "지난달",
+                            ScalesXAt = 0,
+                            ScalesYAt = 0,
+                            Stroke = Brushes.Gray,
+                            Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50, 220, 220,220))
+                        };
+                    }
+                    SeriesCollection.Add(Series);
+                    Labels = labelsList.ToArray(); // List<string>을 배열로 변환합니다.
+                    
+                }
+            });
+            //Application.Current.Dispatcher.Invoke(() => {
+
+            //    ChartValues<int> Target = new ChartValues<int>();
+            //    int Sum = 0;
+            //    //사용처별 퍼센트
+            //    if (jobj["biz_type_statistics_list"] != null)
+            //    {
+
+            //    }
+            //    if (jobj["cost_day_list"] != null)
+            //    {
+            //        LineSeries Series = null;
+            //        JArray innerCostDayList = jobj["cost_day_list"] as JArray;
+            //        foreach (JObject InnerJobj in innerCostDayList)
+            //        {
+            //            int value=jobj["sum_cost"].ToObject<int>();
+            //            Sum = Sum + value;
+            //            Target.Add(Sum);
+            //        }
+            //        if (jobj["period_type"].ToObject<int>() == 0) //이번달
+            //        {
+            //            SendData(false);
+            //            Series = new LineSeries()
+            //            {
+            //                Values = Target,
+            //                Title = "이번달"
+            //            };
+            //        }
+            //        else //지난달
+            //        {
+            //            Series = new LineSeries()
+            //            {
+            //                Values = Target,
+            //                Title = "지난달"
+            //            };
+            //        }
+            //        SeriesCollection.Add(Series);
+            //        for (int j = 0; j <= 31; j++) {
+            //            Labels[j] = (j + 1) + "일";
+            //        }
+            //    }
+
+            //});
         }
 
         public void OnSent()
@@ -151,12 +232,39 @@ namespace StatisticsPage.ViewModels
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 DateTime now = DateTime.Now;  // 현재 날짜와 시간
+
+                jobj["period_type"] = 0;
                 DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1); // 이번 달의 1일
                 jobj["start_time"] = firstDayOfMonth.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["end_time"] = firstDayOfMonth.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss");
                 network.GetDailyList(jobj);
             }
         }
+
+        private void SendData(bool thisMonth) {
+            using (var network = this.ContainerProvider.Resolve<DataAgent.StatisticsDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                DateTime now = DateTime.Now;  // 현재 날짜와 시간
+                if (thisMonth)
+                {
+                    jobj["period_type"] = 0;
+                    DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1); // 이번 달의 1일
+                    jobj["start_time"] = firstDayOfMonth.ToString("yyyy-MM-dd HH:mm:ss");
+                    jobj["end_time"] = firstDayOfMonth.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss");
+                    network.GetDailyList(jobj);
+                }
+                else {
+                    DateTime PreviousOfMonth = new DateTime(now.Year, now.Month - 1, 1); // 저번 달의 1일
+                    jobj["period_type"] = 1;
+                    jobj["start_time"] = PreviousOfMonth.ToString("yyyy-MM-dd HH:mm:ss");
+                    jobj["end_time"] = PreviousOfMonth.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss");
+                    network.GetDailyList(jobj);
+                }
+            }
+        }
+
 
         private int CountDaily(int year, int month) {
             
