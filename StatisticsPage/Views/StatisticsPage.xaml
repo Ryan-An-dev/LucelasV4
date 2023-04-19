@@ -12,7 +12,7 @@
              d:DesignHeight="700" d:DesignWidth="1000"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
-        <connverter:DateTimeToStringConverter x:Key="DateTimeConvert"/>
+        
         <Style TargetType="lvc:DefaultLegend" x:Key="MyLegend">
             <Setter Property="Background" Value="White" />
             <Setter Property="BorderBrush" Value="Black" />
@@ -144,17 +144,6 @@
                         <Button Style="{StaticResource titleButton}" Grid.Column="1" Margin="0,0,3,0">
                             <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
                         </Button>
-
-                        <lvc:CartesianChart
-                            Series="{Binding RowSeries}" 
-                            Margin="0 70 0 0">
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis></lvc:Axis>
-                            </lvc:CartesianChart.AxisY>
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis></lvc:Axis>
-                            </lvc:CartesianChart.AxisX>
-                        </lvc:CartesianChart>
 
                     </Grid>
                 </Border>

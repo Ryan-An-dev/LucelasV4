@@ -23,8 +23,6 @@ using LiveCharts;
 using LogWriter;
 using System.Windows;
 using System.Windows.Media;
-using LiveCharts.Definitions.Charts;
-using System.Windows.Controls.Primitives;
 
 namespace StatisticsPage.ViewModels
 {
@@ -61,6 +59,9 @@ namespace StatisticsPage.ViewModels
         //public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> YFormatter { get; set; }
+
+
+        
         public StatisticsPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
             YFormatter = value => value.ToString("C");
@@ -72,9 +73,9 @@ namespace StatisticsPage.ViewModels
             this.SelectedUnit = new ReactiveProperty<StatisticsUnit>(0).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SelectedUnit.Subscribe(x => { ChangedChartUnit(x); });
-
+           
         }
-
+      
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
@@ -155,7 +156,7 @@ namespace StatisticsPage.ViewModels
                             Title = "이번달",
                             ScalesXAt = 0,
                             ScalesYAt = 0,
-                            Stroke = Brushes.Red,
+                            Stroke = System.Windows.Media.Brushes.Red,
                             Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50 , 255,0 , 0))
                         };
                     }
@@ -167,7 +168,7 @@ namespace StatisticsPage.ViewModels
                             Title = "지난달",
                             ScalesXAt = 0,
                             ScalesYAt = 0,
-                            Stroke = Brushes.Gray,
+                            Stroke = System.Windows.Media.Brushes.Gray,
                             Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50, 220, 220,220))
                         };
                     }
