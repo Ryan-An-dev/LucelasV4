@@ -23,21 +23,20 @@
             <RowDefinition Height="0.105*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" DataContext="{Binding Contract.Value, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Vertical" Margin="20 0 20 0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.5*"/>
-                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DatePicker  
-                        Width="200" HorizontalAlignment="Left" 
+                        Width="460" HorizontalAlignment="Left" 
                         md:HintAssist.Hint="판매날짜" FontSize="14" 
                         md:HintAssist.IsFloating="True"  
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="ReceiptModel.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:NotEmptyValidation/>
                                     <val:FutureDateValidation/>
@@ -45,53 +44,78 @@
                             </Binding>
                         </DatePicker.SelectedDate>
                     </DatePicker>
-                    <md:TimePicker Is24Hours="False"  Width="200"  Grid.Column="1" HorizontalAlignment="Right" 
-                           md:HintAssist.Hint="판매시간"
-                           FontSize="14" Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
-                           md:HintAssist.IsFloating="True"  
-                           Foreground="{StaticResource MainColor}" 
-                           BorderBrush="{StaticResource MainColor}" >
-                        <md:TimePicker.Text>
-                            <Binding Path="ReceiptModel.Value.Month.Value"
-                             NotifyOnValidationError="True" 
-                             Mode="TwoWay" 
-                             UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:NotEmptyValidation/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </md:TimePicker.Text>
-                    </md:TimePicker>
+                    
                 </Grid>
 
-                <GroupBox Header="고객인적사항" Margin="0 20 0 0">
+                <GroupBox Header="고객인적사항" Margin="0 20 0 0" DataContext="{Binding Contractor.Value, UpdateSourceTrigger=PropertyChanged}">
                     <StackPanel>
                         <TextBox 
-                            DataContext="{Binding Contract.Value}"
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
-                            Text="{Binding Contractor.Value.Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
+                            Text="{Binding Name.Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                         <TextBox 
-                            DataContext="{Binding Contract.Value}"
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
-                            Text="{Binding Contractor.Value.Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
+                            Text="{Binding Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                         <TextBox 
-                            DataContext="{Binding Contract.Value}"
                             md:HintAssist.Hint="주소"
                             FontSize="14"  
-                            Text="{Binding Contractor.Value.Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
+                            Text="{Binding Address.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                     </StackPanel>
                 </GroupBox>
+
+                <GroupBox
+                    Header="계약물품"  
+                    Margin="0 20 0 0" 
+                    Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
+                    <StackPanel Cursor="">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
+                            md:HintAssist.Hint="추가"
+                            Content="{md:PackIcon Kind=Plus, Size=14}"
+                            Command="{Binding AddContractItemButton}"
+                            CommandParameter="Add"
+                            Margin="5" Cursor="Hand"/>
+                            <Button 
+                            md:HintAssist.Hint="삭제"
+                            Content="{md:PackIcon Kind=Minus, Size=14}"
+                            Command="{Binding AddContractItemButton}"
+                            CommandParameter="Delete"
+                            Margin="5"/>
+                        </StackPanel>
+                        <DataGrid MinHeight="100" Margin="5">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Width="0.54*"/>
+                                <DataGridTextColumn Header="계약자명" Width="*"/>
+                                <DataGridTextColumn Header="날짜" Width="*"/>
+                                <DataGridTextColumn Header="구분" Width="*"/>
+                                <DataGridTextColumn Header="금액" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+                            <TextBlock 
+                        Text="총 금액 : " 
+                        Foreground="White" 
+                        FontSize="13" 
+                        FontWeight="Bold"/>
+                            <TextBlock 
+                        Text="150,000 원"
+                        Foreground="White" 
+                        FontSize="13" 
+                        FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
                 <GroupBox
                     Margin="0 20 0 0"
                     Header="배송">
@@ -144,46 +168,19 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox 
-                    Header="계약물품"  
-                    Margin="0 20 0 0" 
-                    Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
-                    <StackPanel Cursor="">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button 
-                            md:HintAssist.Hint="추가"
-                            Content="{md:PackIcon Kind=Plus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Add"
-                            Margin="5" Cursor="Hand"/>
-                            <Button 
-                            md:HintAssist.Hint="삭제"
-                            Content="{md:PackIcon Kind=Minus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Delete"
-                            Margin="5"/>
-                        </StackPanel>
-                        <DataGrid MinHeight="100" Margin="5">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="No" Width="0.54*"/>
-                                <DataGridTextColumn Header="계약자명" Width="*"/>
-                                <DataGridTextColumn Header="날짜" Width="*"/>
-                                <DataGridTextColumn Header="구분" Width="*"/>
-                                <DataGridTextColumn Header="금액" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
-                            <TextBlock 
-                        Text="총 금액 : " 
-                        Foreground="White" 
-                        FontSize="13" 
-                        FontWeight="Bold"/>
-                            <TextBlock 
-                        Text="150,000 원"
-                        Foreground="White" 
-                        FontSize="13" 
-                        FontWeight="Bold"/>
-                        </StackPanel>
+                <GroupBox
+                    Margin="0 20 0 0"
+                    Header="판매자">
+                    <StackPanel>
+                        <Grid>
+                            <ComboBox  Style="{StaticResource MaterialDesignComboBox}" 
+                        md:HintAssist.IsFloating="True" 
+                        md:HintAssist.Hint="판매자"
+                        Foreground="{StaticResource MainColor}">
+                                <ComboBoxItem>안성진</ComboBoxItem>
+                                <ComboBoxItem>이상우</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

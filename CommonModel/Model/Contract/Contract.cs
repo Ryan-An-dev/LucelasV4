@@ -22,7 +22,7 @@ namespace CommonModel.Model
         public ReactiveProperty<bool> DepositComplete { get; set; } 
         public ReactiveProperty<FullyCompleted> PaymentComplete { get; set; }
         public ReactiveCollection<Payment> Payment { get; set; } //지불 클래스
-        public ReactiveCollection<Company> Product { get; set; } //상품 클래스
+        public ReactiveCollection<Furniture> Product { get; set; } //주문 상품 클래스
         public ReactiveProperty<string> Memo { get; set; } //메모
         public ReactiveProperty<int> SalerId { get; set; } //판매자
         public JObject ChangedItem { get; set; }
@@ -33,7 +33,7 @@ namespace CommonModel.Model
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);
-            this.Month = new ReactiveProperty<DateTime>().AddTo(disposable);
+            this.Month = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
             this.Contractor = new ReactiveProperty<Customer>().AddTo(disposable);
             this.Delivery = new ReactiveProperty<DateTime>().AddTo(disposable);
             this.SalerId = new ReactiveProperty<int>().AddTo(disposable);
@@ -41,8 +41,14 @@ namespace CommonModel.Model
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
-            this.Product = new ReactiveCollection<Company>().AddTo(disposable);
+            this.Product = new ReactiveCollection<Furniture>().AddTo(disposable);
             this.ChangedItem = new JObject();
+        }
+        public void CompleteChangedData()
+        {
+            this.ChangedItem.RemoveAll();
+            this.IsChanged.Value = false;
+
         }
         private void SetObserver() {
             this.Price.Subscribe(x => ChangedJson("total", x));

@@ -169,6 +169,12 @@
                         Binding="{Binding CreatedAt, StringFormat=yyyy/MM/dd}"
                         Header="등록날짜" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    <DataGridTextColumn 
+                        MinWidth="120"  
+                        MaxWidth="120"
+                        Binding="{Binding CreatedAt, StringFormat=yyyy/MM/dd}"
+                        Header="완료여부" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

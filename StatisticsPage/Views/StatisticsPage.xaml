@@ -112,39 +112,39 @@
                 <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10">
                     <Grid>
                         <!--Title-->
-                        <TextBlock Text="월간 매출추이" Style="{StaticResource titleText}"/>
+                        <TextBlock Text="매출 추이" Style="{StaticResource titleText}"/>
 
                         <!--Filter Button-->
-                        <Button Style="{StaticResource titleButton}">
-                            <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
-                        </Button>
-
-                        <!--Legends-->
                         <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Right"
-                            Margin="0 8 40 0">
-                            <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
-                            <TextBlock Text="매출액" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                            Margin="0 45 0 0">
+                            <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
+                            <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                            <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
+                            <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                         </StackPanel>
+                        <lvc:CartesianChart 
+                        Zoom="Xy" Series="{Binding SeriesCollection2}"
+                        Margin="0 70 0 0">
+                           
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Border>
 
                 <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10" Grid.Column="1">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="17*"/>
-                            <ColumnDefinition Width="393*"/>
-                        </Grid.ColumnDefinitions>
                         <!--Title-->
-                        <TextBlock Text="최고의 사원" Style="{StaticResource titleText}" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="이번달 매출구성" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
+                        <!--Legends-->
 
-                        <!--Filter Button-->
-                        <Button Style="{StaticResource titleButton}" Grid.Column="1" Margin="0,0,3,0">
-                            <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
-                        </Button>
-
+                        <lvc:PieChart 
+                        LegendLocation="Right"
+                        Series="{Binding SalesPieSeries}"
+                        Margin="0 80 60 10"
+                        >
+                        </lvc:PieChart>
                     </Grid>
                 </Border>
             </Grid>

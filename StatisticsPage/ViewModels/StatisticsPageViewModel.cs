@@ -46,6 +46,7 @@ namespace StatisticsPage.ViewModels
         }
         public Func<DateTime, string> XFormatter { get; set; }
         public SeriesCollection SeriesCollection { get; set; }
+        public SeriesCollection SeriesCollection2 { get; set; }
         public DefaultTooltip DataToolTip { get; set; }
         private IContainerProvider ContainerProvider { get; }
 
@@ -56,6 +57,8 @@ namespace StatisticsPage.ViewModels
             }
         }
         public SeriesCollection PieSeries { get; set; }
+
+        public SeriesCollection SalesPieSeries { get; set; }
         //public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> YFormatter { get; set; }
@@ -67,15 +70,58 @@ namespace StatisticsPage.ViewModels
             YFormatter = value => value.ToString("C");
             XFormatter = value => value.ToString("dd") + "일";
             this.PieSeries = new SeriesCollection();
+            this.SalesPieSeries = new SeriesCollection();
             this.PreviousMonthSalesValues = new ChartValues<int>();
             this.CurrentMonthSalesValues = new ChartValues<int>();
             this.SeriesCollection = new SeriesCollection();
+            this.SeriesCollection2 = new SeriesCollection();
             this.SelectedUnit = new ReactiveProperty<StatisticsUnit>(0).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SelectedUnit.Subscribe(x => { ChangedChartUnit(x); });
-           
+
+            initSales();
         }
-      
+        private void initSales()
+        {
+            List<string> Title = new List<string>();
+            Title.Add("식탁");
+            Title.Add("침대프레임");
+            Title.Add("매트리스");
+            Title.Add("거실장");
+            Title.Add("쇼파");
+            Title.Add("협탁");
+
+            List<ChartValues<double>> vales = new List<ChartValues<double>>();
+            ChartValues<double> percent = new ChartValues<double>();
+            percent.Add(12.5);
+            vales.Add(percent);
+            ChartValues<double> percent1 = new ChartValues<double>();
+            percent1.Add(15.2);
+            vales.Add(percent1);
+            ChartValues<double> percent2 = new ChartValues<double>();
+            percent2.Add(25);
+            vales.Add(percent2);
+            ChartValues<double> percent3 = new ChartValues<double>();
+            percent3.Add(11);
+            vales.Add(percent3);
+            ChartValues<double> percent4 = new ChartValues<double>();
+            percent4.Add(8.5);
+            vales.Add(percent4);
+            ChartValues<double> percent5 = new ChartValues<double>();
+            percent5.Add(27.8);
+            vales.Add(percent5);
+
+            for (int i = 0; i < 6; i++) {
+                Series Pie = new PieSeries()
+                {
+                    PushOut = 5,
+                    Values = vales[i],
+                    Title = Title[i]
+                };
+                SalesPieSeries.Add(Pie);
+            }
+        }
+
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
@@ -111,27 +157,103 @@ namespace StatisticsPage.ViewModels
             }
         }
 
+        private void PieChart(JObject jobject) {
+            if (jobject["period_type"].ToObject<int>() == 0) // 이번달
+            {
+                List<PieSeries> PieSeriesList = new List<PieSeries>();
+
+                // 퍼센트를 계산할 총합을 구합니다.
+                double total = 0;
+                foreach (JObject jobj in jobject["biz_type_statistics_list"] as JArray)
+                {
+                    total += jobj["sum_cost"].ToObject<double>();
+                }
+
+                // 퍼센트가 일정 기준 이하인 항목들의 퍼센트 합을 구합니다.
+                double threshold = 2; // 기준 퍼센트
+                double otherPercentage = 0;
+                List<JObject> smallPercentages = new List<JObject>();
+                foreach (JObject jobj in jobject["biz_type_statistics_list"] as JArray)
+                {
+                    double percentage = Math.Round(jobj["sum_cost"].ToObject<int>() / total * 100,1);
+                    if (percentage < threshold)
+                    {
+                        smallPercentages.Add(jobj);
+                        otherPercentage += percentage;
+                    }
+                }
+
+                // "기타" 항목을 생성합니다.
+                if (smallPercentages.Count > 0)
+                {
+                    ChartValues<double> otherPercent = new ChartValues<double>();
+                    otherPercent.Add(otherPercentage);
+                    PieSeries other = new PieSeries()
+                    {
+                        Values = otherPercent,
+                        Title = "기타"
+                    };
+                    PieSeriesList.Add(other);
+                }
+
+                // 퍼센트가 일정 기준 이하인 항목들을 "기타" 항목으로 묶습니다.
+                foreach (JObject jobj in smallPercentages)
+                {
+                    PieSeriesList.Last().Values.Add(Math.Round(jobj["sum_cost"].ToObject<int>() / total * 100, 1));
+                }
+
+                // 나머지 항목들을 PieSeries에 추가합니다.
+                foreach (JObject jobj in jobject["biz_type_statistics_list"] as JArray)
+                {
+                    double percentage = Math.Round(jobj["sum_cost"].ToObject<int>() / total * 100, 1);
+                    if (percentage >= threshold)
+                    {
+                        ChartValues<double> percent = new ChartValues<double>();
+                        percent.Add(percentage);
+                        PieSeries pie = new PieSeries()
+                        {
+                            Values = percent,
+                            Title = jobj["sbt_biz_name"].ToString()
+                        };
+                        PieSeriesList.Add(pie);
+                    }
+                }
+
+                // PieChart에 PieSeries를 추가합니다.
+                foreach (PieSeries pie in PieSeriesList)
+                {
+                    PieSeries.Add(pie);
+                }
+            }
+        }
+
         private void MakeStatisticsChart(JObject jobj)
         {
             Application.Current.Dispatcher.Invoke(() => {
                 ChartValues<int> Target = new ChartValues<int>();
                 List<string> labelsList = new List<string>(); // Labels 배열 대신 List<string>을 사용합니다.
                 int Sum = 0;
+
+                //PieChart(jobj);
+
+
                 List<Series> PieItems = new List<Series>();
                 if (jobj["biz_type_statistics_list"] != null)
                 {
                     if (jobj["period_type"].ToObject<int>() == 0) // 이번달
                     {
-                        foreach (JObject jobj in jobj["biz_type_statistics_list"] as JArray) {
+                        foreach (JObject jobj in jobj["biz_type_statistics_list"] as JArray)
+                        {
                             ChartValues<double> percent = new ChartValues<double>();
-                            percent.Add(jobj["sum_rate_cost"].ToObject<int>() / 100.0);
+                            percent.Add(Math.Round(jobj["sum_rate_cost"].ToObject<int>() / 100.0,1));
                             Series Pie = new PieSeries()
                             {
-                                PushOut=5,
+                                PushOut = 5,
                                 Values = percent,
                                 Title = jobj["sbt_biz_name"].ToString()
                             };
                             PieSeries.Add(Pie);
+
                         }
                     }
                 }
@@ -177,49 +299,7 @@ namespace StatisticsPage.ViewModels
                     
                 }
             });
-            //Application.Current.Dispatcher.Invoke(() => {
-
-            //    ChartValues<int> Target = new ChartValues<int>();
-            //    int Sum = 0;
-            //    //사용처별 퍼센트
-            //    if (jobj["biz_type_statistics_list"] != null)
-            //    {
-
-            //    }
-            //    if (jobj["cost_day_list"] != null)
-            //    {
-            //        LineSeries Series = null;
-            //        JArray innerCostDayList = jobj["cost_day_list"] as JArray;
-            //        foreach (JObject InnerJobj in innerCostDayList)
-            //        {
-            //            int value=jobj["sum_cost"].ToObject<int>();
-            //            Sum = Sum + value;
-            //            Target.Add(Sum);
-            //        }
-            //        if (jobj["period_type"].ToObject<int>() == 0) //이번달
-            //        {
-            //            SendData(false);
-            //            Series = new LineSeries()
-            //            {
-            //                Values = Target,
-            //                Title = "이번달"
-            //            };
-            //        }
-            //        else //지난달
-            //        {
-            //            Series = new LineSeries()
-            //            {
-            //                Values = Target,
-            //                Title = "지난달"
-            //            };
-            //        }
-            //        SeriesCollection.Add(Series);
-            //        for (int j = 0; j <= 31; j++) {
-            //            Labels[j] = (j + 1) + "일";
-            //        }
-            //    }
-
-            //});
+           
         }
 
         public void OnSent()

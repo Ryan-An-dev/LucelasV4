@@ -12,6 +12,7 @@ using DataAccess.Interface;
 using DataAccess.Repository;
 using LogWriter;
 using SettingPage;
+using MESPage;
 
 namespace LucelasV4
 {
@@ -61,6 +62,10 @@ namespace LucelasV4
             moduleCatalog.AddModule<HomePage.HomePageModule>();
             ErpLogWriter.LogWriter.Debug("============= Statictics initialize =============");
             moduleCatalog.AddModule<StatisticsPage.StatisticsPageModule>();
+            ErpLogWriter.LogWriter.Debug("============= Mes initialize =============");
+            moduleCatalog.AddModule<MESPage.MESPageModule>();
+            ErpLogWriter.LogWriter.Debug("============= DeliveryPage initialize =============");
+            moduleCatalog.AddModule<DeliveryPage.DeliveryPageModule>();
         }
 
         public void RegisterAllNavigation() {
@@ -73,6 +78,8 @@ namespace LucelasV4
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListSingle>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.FindItemPage>();
             regMan.RegisterForNavigation<StatisticsPage.Views.StatisticsPage>();
+            regMan.RegisterForNavigation<MESPage.Views.MesPage>();
+            regMan.RegisterForNavigation<DeliveryPage.Views.DeliveryPage>();
         }
 
 

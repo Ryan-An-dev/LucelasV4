@@ -154,7 +154,7 @@ namespace DepositWithdrawal.ViewModels
                             if (Company["acpi_id"] != null)
                                 ProductId = Company["acpi_id"].ToObject<int>();
                             Company item = MakeProductClass(CompanyId,ProductId);
-                            temp.Product.Add(item);
+                            //temp.Product.Add(item);
                         }
                     }
 

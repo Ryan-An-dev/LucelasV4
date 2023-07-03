@@ -35,7 +35,10 @@ namespace DataAccess.Repository
 
         public void CreateContractHistory(JObject msg)
         {
-            throw new NotImplementedException();
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.CREATECONTRACT);
+            }
         }
 
         public void DeleteContract(JObject msg)

@@ -30,6 +30,7 @@ namespace DataAccess
 
         #region 계약리스트
         GetContractList = 30,
+        CREATECONTRACT = 31,
         #endregion
 
 

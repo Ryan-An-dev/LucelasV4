@@ -21,11 +21,13 @@
   <ItemGroup>
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />
     <ProjectReference Include="..\ContractPage\ContractPage.csproj" />
+    <ProjectReference Include="..\DeliveryPage\DeliveryPage.csproj" />
     <ProjectReference Include="..\DepositWithdrawal\DepositWithdrawal.csproj" />
     <ProjectReference Include="..\GlobalPage\GlobalPage.csproj" />
     <ProjectReference Include="..\HomePage\HomePage.csproj" />
     <ProjectReference Include="..\LoginPage\LoginPage.csproj" />
     <ProjectReference Include="..\LogWriter\LogWriter.csproj" />
+    <ProjectReference Include="..\MESPage\MESPage.csproj" />
     <ProjectReference Include="..\SettingPage\SettingPage.csproj" />
     <ProjectReference Include="..\StatisticsPage\StatisticsPage.csproj" />
   </ItemGroup>

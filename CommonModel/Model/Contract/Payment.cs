@@ -20,8 +20,8 @@ namespace CommonModel.Model
 
     public class Payment : PrismCommonModelBase
     {
-        public ReactiveProperty<ReceiptType> PaymentMethod { get; set; }
-        public ReactiveProperty<PaymentType> PaymentType  { get; set; }
+        public ReactiveProperty<ReceiptType> PaymentMethod { get; set; } //계좌, 카드 , 계좌이체 , 현금
+        public ReactiveProperty<PaymentType> PaymentType  { get; set; } // 계약금, 잔금
         public ReactiveProperty<bool> PaymentCompleted { get; set; }
         public ReactiveProperty<int> Price { get; set; }
 

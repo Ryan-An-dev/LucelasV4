@@ -33,6 +33,7 @@
 
                         <!--MenuButton-->
                         <StackPanel Orientation="Vertical">
+                            <!--홈화면-->
                             <Button Margin="5" Command="{Binding MenuSelectCommand}"  CommandParameter="HomePage"
                                           Style="{StaticResource MaterialDesignFlatButton}" Height="80">
                                 <StackPanel Orientation="Vertical">
@@ -40,6 +41,7 @@
                                                  Width="30" Height="30" />
                                 </StackPanel>
                             </Button>
+                            <!--재무관리-->
                             <Button  Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="BankListPage"
                                           Style="{StaticResource MaterialDesignFlatButton}" Cursor="Hand">
                                 <StackPanel Orientation="Vertical">
@@ -47,6 +49,7 @@
                                                  Width="30" Height="30" />
                                 </StackPanel>
                             </Button>
+                            <!--계약관리-->
                             <Button  Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="ContractPage"
                                           Style="{StaticResource MaterialDesignFlatButton}">
                                 <StackPanel Orientation="Vertical">
@@ -54,6 +57,7 @@
                                                  Width="30" Height="30" />
                                 </StackPanel>
                             </Button>
+                            <!--통계-->
                             <Button   Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="StatisticsPage"
                                           Style="{StaticResource MaterialDesignFlatButton}">
                                 <StackPanel Orientation="Vertical">
@@ -61,9 +65,34 @@
                                                  Width="30" Height="30" />
                                 </StackPanel>
                             </Button>
-
-                            <Button  Margin="5"  Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="SettingPage"
-                                          Style="{StaticResource MaterialDesignFlatButton}">
+                            <!--재고관리-->
+                            <Button  Margin="5"  
+                                     Height="80" 
+                                     Command="{Binding MenuSelectCommand}" 
+                                     CommandParameter="MesPage"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                                <StackPanel Orientation="Vertical">
+                                    <md:PackIcon Kind="TableFurniture" VerticalAlignment="Center" Margin="5" 
+                                                 Width="30" Height="30" />
+                                </StackPanel>
+                            </Button>
+                            <!--배송관리-->
+                            <Button  Margin="5"  
+                                     Height="80" 
+                                     Command="{Binding MenuSelectCommand}" 
+                                     CommandParameter="DeliveryPage"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
+                                <StackPanel Orientation="Vertical">
+                                    <md:PackIcon Kind="Truck" VerticalAlignment="Center" Margin="5" 
+                                                 Width="30" Height="30" />
+                                </StackPanel>
+                            </Button>
+                            <!--세팅-->
+                            <Button  Margin="5"  
+                                     Height="80" 
+                                     Command="{Binding MenuSelectCommand}" 
+                                     CommandParameter="SettingPage"
+                                     Style="{StaticResource MaterialDesignFlatButton}">
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
