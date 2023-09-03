@@ -48,7 +48,7 @@ namespace DataAccess.Repository
         {
             this.NetManager.Send(COMMAND.AccountLIst);
             this.NetManager.Send(COMMAND.CategoryList);
-            this.NetManager.Send(COMMAND.ProductCategoryList);
+            //this.NetManager.Send(COMMAND.ProductCategoryList);
         }
 
         public void OnRceivedData(ErpPacket packet)

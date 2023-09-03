@@ -240,7 +240,9 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception ex) { }
-                finally { network.GetProductCategory(); }
+                finally { 
+                    //network.GetProductCategory(); 
+                }
             }
         }
 
