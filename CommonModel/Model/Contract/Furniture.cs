@@ -3,17 +3,29 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonModel.Model
 {
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum Purpose {
+        [Description("배송용")]
+        ForCustomer = 1,
+        [Description("DP용")]
+        Display = 2,
+        [Description("사입")]
+        Inventory = 3
+    }
     public class Furniture: PrismCommonModelBase
     {
-        public ReactiveProperty<Company> Company;
+        public ReactiveProperty<Purpose> Purpose; //재고 목적
 
-        public ReactiveProperty<Product> SelectedProduct;
+        public ReactiveProperty<Company> Company; //회사명
+
+        public ReactiveProperty<Product> SelectedProduct; 
 
         public ReactiveProperty<DateTime> DeliveryDate; //고객 배송 요청날짜
 
@@ -23,8 +35,9 @@ namespace CommonModel.Model
 
         public ReactiveProperty<bool> Completed;//개별 상품 완료 여부
 
-        public Furniture()
+        public Furniture() : base()
         {
+            this.Purpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
             this.Company = new ReactiveProperty<Company>().AddTo(this.disposable);
             this.SelectedProduct = new ReactiveProperty<Product>().AddTo(this.disposable);
             this.DeliveryDate = new ReactiveProperty<DateTime>().AddTo(this.disposable);

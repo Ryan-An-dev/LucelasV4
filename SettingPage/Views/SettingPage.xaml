@@ -13,188 +13,228 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Text="설정" FontSize="18" Margin="0 0 0 0" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.7*"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="0.3*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*"/>
-                <RowDefinition Height="0.5*"/>
-            </Grid.RowDefinitions>
-            <GroupBox Header="제품리스트" Margin="5 5">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button 
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="300"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="제품리스트" Margin="5 5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
                             md:HintAssist.Hint="추가"
                             Content="{md:PackIcon Kind=Plus, Size=14}"
                             Command="{Binding AddCompanyCommand}"
                             CommandParameter="Add"
                             Margin="5" Cursor="Hand"/>
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="삭제"
                             Content="{md:PackIcon Kind=Minus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Delete"
                             Margin="5"/>
-                    </StackPanel>
-                    <DataGrid Grid.Row="2"
+                        </StackPanel>
+                        <DataGrid Grid.Row="2"
                         VirtualizingStackPanel.IsVirtualizing="True"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"
                         AutoGenerateColumns="False" 
                         CanUserAddRows="False"
                         Margin="10" x:Name="CompanyInfo"
                         ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                            <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right"
                         Grid.Column="1">
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="추가"
                             Content="{md:PackIcon Kind=Plus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Add"
                             Margin="5" Cursor="Hand"/>
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="삭제"
                             Content="{md:PackIcon Kind=Minus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Delete"
                             Margin="5"/>
-                    </StackPanel>
-                    <DataGrid  Margin="10" Grid.Column="1" Grid.Row="1"
+                        </StackPanel>
+                        <DataGrid  Margin="10" Grid.Column="1" Grid.Row="1"
                                DataContext="{Binding ElementName=CompanyInfo,Path=SelectedItem}"
                                ItemsSource="{Binding ProductList}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                            <DataGridTextColumn Header="물품명" Binding="{Binding ProductName.Value}"/>
-                            <DataGridTextColumn Header="가격" Binding="{Binding ProductPrice.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </GroupBox>
-            <GridSplitter Grid.Column="1" Grid.RowSpan="2"></GridSplitter>
-            <GroupBox Header="고객등록" Grid.Column="2" Margin="5 5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button 
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="물품명" Binding="{Binding ProductName.Value}"/>
+                                <DataGridTextColumn Header="가격" Binding="{Binding ProductPrice.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="3"></GridSplitter>
+                <GroupBox Header="상품 카테고리 추가" Grid.Column="2" Margin="5 5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
                             md:HintAssist.Hint="추가"
                             Content="{md:PackIcon Kind=Plus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Add"
                             Margin="5" Cursor="Hand"/>
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="삭제"
                             Content="{md:PackIcon Kind=Minus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Delete"
                             Margin="5"/>
-                    </StackPanel>
-                    <DataGrid Grid.Row="2"
+                        </StackPanel>
+                        <DataGrid Grid.Row="2"
                         VirtualizingStackPanel.IsVirtualizing="True"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"
                         AutoGenerateColumns="False" 
                         CanUserAddRows="False"
                         Margin="10"
                         ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                            <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                            <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
-                            <DataGridTextColumn Header="주소" Binding="{Binding CompanyName.Value}"/>
-                            <DataGridTextColumn Header="구매일자" Binding="{Binding CompanyName.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </GroupBox>
-            <GroupBox Header="계좌등록" Grid.Column="0" Grid.Row="1" Margin="5 5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button 
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="고객등록" Grid.Column="3" Margin="5 5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
                             md:HintAssist.Hint="추가"
                             Content="{md:PackIcon Kind=Plus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Add"
                             Margin="5" Cursor="Hand"/>
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="삭제"
                             Content="{md:PackIcon Kind=Minus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Delete"
                             Margin="5"/>
-                    </StackPanel>
-                    <DataGrid Grid.Row="2"
+                        </StackPanel>
+                        <DataGrid Grid.Row="2"
                         VirtualizingStackPanel.IsVirtualizing="True"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"
                         AutoGenerateColumns="False" 
                         CanUserAddRows="False"
                         Margin="10"
                         ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                            <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </GroupBox>
-            <GroupBox Header="직원등록" Grid.Column="2" Grid.Row="1" Margin="5 5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button 
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
+                                <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
+                                <DataGridTextColumn Header="주소" Binding="{Binding CompanyName.Value}"/>
+                                <DataGridTextColumn Header="구매일자" Binding="{Binding CompanyName.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="계좌등록" Grid.Column="0" Grid.Row="1" Margin="5 5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
                             md:HintAssist.Hint="추가"
                             Content="{md:PackIcon Kind=Plus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Add"
                             Margin="5" Cursor="Hand"/>
-                        <Button 
+                            <Button 
                             md:HintAssist.Hint="삭제"
                             Content="{md:PackIcon Kind=Minus, Size=14}"
                             Command="{Binding AddContractItemButton}"
                             CommandParameter="Delete"
                             Margin="5"/>
-                    </StackPanel>
-                    <DataGrid Grid.Row="2"
+                        </StackPanel>
+                        <DataGrid Grid.Row="2"
                         VirtualizingStackPanel.IsVirtualizing="True"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"
                         AutoGenerateColumns="False" 
                         CanUserAddRows="False"
                         Margin="10"
                         ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                            <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                            <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
-                            <DataGridTextColumn Header="입사일" Binding="{Binding CompanyName.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </GroupBox>
-        </Grid>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="직원등록" Grid.Column="2" Grid.Row="1" Margin="5 5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button 
+                            md:HintAssist.Hint="추가"
+                            Content="{md:PackIcon Kind=Plus, Size=14}"
+                            Command="{Binding AddContractItemButton}"
+                            CommandParameter="Add"
+                            Margin="5" Cursor="Hand"/>
+                            <Button 
+                            md:HintAssist.Hint="삭제"
+                            Content="{md:PackIcon Kind=Minus, Size=14}"
+                            Command="{Binding AddContractItemButton}"
+                            CommandParameter="Delete"
+                            Margin="5"/>
+                        </StackPanel>
+                        <DataGrid Grid.Row="2"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"
+                        AutoGenerateColumns="False" 
+                        CanUserAddRows="False"
+                        Margin="10"
+                        ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
+                                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
+                                <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
+                                <DataGridTextColumn Header="입사일" Binding="{Binding CompanyName.Value}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+            
+        </ScrollViewer>
     </Grid>
 </UserControl>

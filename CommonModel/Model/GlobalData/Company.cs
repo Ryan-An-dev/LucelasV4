@@ -23,7 +23,7 @@ namespace CommonModel.Model
     public class Company : PrismCommonModelBase
     {
         public ReactiveProperty<int> Id { get; set; }
-        public ReactiveProperty<string> CompanyName { get; set; }
+        public ReactiveProperty<string> CompanyName { get; set; }  
         public ReactiveProperty<string> CompanyPhone { get; set; }
         public ReactiveProperty<string> CompanyAddress { get; set; }
         public ReactiveCollection<Product> ProductList { get; set; }
