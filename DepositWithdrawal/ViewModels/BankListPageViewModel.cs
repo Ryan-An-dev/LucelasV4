@@ -204,8 +204,9 @@ namespace DepositWithdrawal.ViewModels
 
                 //ListCount : 요청 유닛 수량 30
                 //CurrentPage : 페이지 5
+
                 jobj["next_preview"] = (int)param;
-                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ?  this.TotalItemCount.Value - (this.ListCount.Value * CurrentPage.Value - 1) : this.ListCount.Value;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ?  this.TotalItemCount.Value - (this.ListCount.Value * (CurrentPage.Value - 1)) : this.ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 jobj["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
