@@ -13,7 +13,6 @@ namespace DataAccess.Interface
         void OnConnected();
         void OnConeectedFail(object sender, Exception ex);
         void OnSendFail(object sender, Exception ex);
-
         void OnReceiveFail(object sender, Exception ex);
     }
 }

@@ -17,7 +17,8 @@ namespace DataAccess.Repository
         INetReceiver _Receiver = null;
 
         private IContainerProvider _Container;
-
+        private string ip = "";
+        private int port = 0;
         private string id = "";
         private string pw = "";
         public LoginRepository(IContainerProvider Container)
@@ -33,6 +34,8 @@ namespace DataAccess.Repository
 
         public void CheckLogin(string ip , int port, string id , string pw)
         {
+            this.ip = ip;
+            this.port = port;
             this.NetManager.Connect(ip, port);
             this.id = id;
             this.pw = pw;
@@ -68,7 +71,8 @@ namespace DataAccess.Repository
 
         public void OnSendFail(object sender, Exception ex)
         {
-            Console.WriteLine("OnSendFail");
+            NetManager.Disconnect();
+            this.NetManager.Connect(ip, port);
         }
 
         public void OnReceiveFail(object sender, Exception ex)

@@ -119,7 +119,7 @@ namespace DataAccess.Repository
 
         public void OnSendFail(object sender, Exception ex)
         {
-            Console.WriteLine("OnSendFail");
+            NetManager.Disconnect();
         }
 
         public void OnReceiveFail(object sender, Exception ex)

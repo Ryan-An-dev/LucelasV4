@@ -27,9 +27,9 @@ namespace CommonModel.Model
         [Description("모두")]
         All = 0,
         [Description("계좌")]
-        Card = 1,
+        Account = 1,
         [Description("카드")]
-        Account = 2,
+        Card = 2,
         [Description("현금")]
         Cash =3,
        

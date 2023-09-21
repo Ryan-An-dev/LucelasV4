@@ -45,7 +45,7 @@ namespace DepositWithdrawal.ViewModels
             
             if (parameter?.ToLower() == "true")
             {
-                if (this.SelectedPayment.Value == null)
+                if (this.SelectedPayment == null)
                     return;
                 result = ButtonResult.OK;
                 temp = new DialogResult(result);
@@ -104,6 +104,7 @@ namespace DepositWithdrawal.ViewModels
                 jobj["shi_time"] = this.args.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["shi_id"] = this.args.Value.ReceiptNo.Value;
                 jobj["shi_remain_price"] = this.args.Value.RemainPrice.Value;
+                jobj["shi_use_content"] = this.args.Value.Contents.Value;
                 network.SetReceiver(this);
                 network.GetConnectedContract(jobj);
             }

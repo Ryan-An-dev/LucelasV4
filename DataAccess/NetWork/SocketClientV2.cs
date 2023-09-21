@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Interop;
 
 namespace DataAccess.NetWork
@@ -36,11 +37,22 @@ namespace DataAccess.NetWork
             get { return _receiver; }
             set { _receiver = value; }
         }
+        private ICMDReceiver _MainVM;
+        public ICMDReceiver MainVM
+        {
+            get { return _MainVM; }
+            set { _MainVM = value; }
+        }
 
         public void SetReceiver(ICMDReceiver recv)
         {
             this.Receiver = recv;
         }
+
+        public void SetMainConnectCheck(ICMDReceiver mainviewmodel) {
+            this._MainVM = mainviewmodel;   
+        }
+
         private byte[] Buffer { get; set; }
         public ConnectState state { get; set; }
 
@@ -66,6 +78,8 @@ namespace DataAccess.NetWork
         private string ID = "";
         private string PW = "";
         public int session_id = 0;
+        System.Timers.Timer m_timer;
+        private int m_nKeepAliveTime = 30;
         public void Connect(string IP, int Port)
         {
             this.IP = IP;
@@ -92,6 +106,8 @@ namespace DataAccess.NetWork
                 this.state = ConnectState.Connected;
                 clnt.ClientStream = clnt.mainSock.GetStream();
                 this.Receiver.OnConnected();
+                if(this.MainVM != null)
+                    this.MainVM.OnConnected();
                 StartReceive(Buffer,0, BUFFER_SIZE);
             }
             catch (Exception e)
@@ -137,7 +153,8 @@ namespace DataAccess.NetWork
             }
             else
             {
-                Receiver.OnReceiveFail(null,null);
+                this.state = ConnectState.Disconnected;
+                MainVM.OnReceiveFail(null,null);
                 return;
             }
             StartReceive();
@@ -215,13 +232,35 @@ namespace DataAccess.NetWork
                     JObject jobj = new JObject(JObject.Parse(text));
                     if (jobj["session_id"] != null)
                         this.session_id = jobj["session_id"].ToObject<int>();
+                    //KeepAlive 가동시작
+                    Initialize();
+
+
                 }
             }
             this._packet.InitIndex();
         }
+
+        private void Initialize()
+        {
+            m_timer = new System.Timers.Timer();
+            m_timer.Interval = m_nKeepAliveTime * 1000; // 100 Milliseconds 
+            m_timer.Elapsed += M_timer_Elapsed;
+            m_timer.Start();
+        }
+
+        private void M_timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            JObject jobj = new JObject();
+            jobj["keep_alive"] = 1;
+            Send(jobj,COMMAND.KeepAlive);
+            //System.Diagnostics.Debug.WriteLine("Send Keep Alive " + DateTime.Now);
+        }
+
         public void Disconnect()
         {
             this.state = ConnectState.Disconnected;
+            this.m_timer.Stop();
         }
 
         public void Send(JObject msg, COMMAND CMD)
@@ -250,8 +289,12 @@ namespace DataAccess.NetWork
             }
             catch (Exception ex)
             {
-                if (Receiver != null)
+                this.state = ConnectState.Disconnected;
+                if (Receiver != null) {
                     Receiver.OnSendFail(this, ex);
+                    MainVM.OnSendFail(null, null);
+                }
+
             }
         }
         public void OnSent(IAsyncResult result)
@@ -264,8 +307,12 @@ namespace DataAccess.NetWork
             }
             catch (Exception ex)
             {
-                if (clnt.Receiver != null)
+                this.state = ConnectState.Disconnected;
+                if (clnt.Receiver != null) { 
                     clnt.Receiver.OnSendFail(this, ex);
+                    clnt.MainVM.OnSendFail(null, null);
+                
+                }
             }
         }
         public void Send(COMMAND CMD)
