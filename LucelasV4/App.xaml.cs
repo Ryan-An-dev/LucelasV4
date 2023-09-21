@@ -13,6 +13,8 @@ using DataAccess.Repository;
 using LogWriter;
 using SettingPage;
 using MESPage;
+using DataAccess.NetWork;
+using LucelasV4.ViewModels;
 
 namespace LucelasV4
 {
@@ -43,6 +45,8 @@ namespace LucelasV4
                 RegisterAllNavigation();
                 var regionManager = Container.Resolve<IRegionManager>();
                 regionManager.RequestNavigate("ContentRegion", "HomePage");
+                SocketClientV2 temp =Container.Resolve<SocketClientV2>();
+                temp.SetMainConnectCheck(Container.Resolve<MainWindowViewModel>());
             }
             else {
                 MessageBox.Show("비밀번호가 틀립니다.");

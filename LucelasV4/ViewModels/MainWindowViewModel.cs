@@ -34,8 +34,7 @@ namespace LucelasV4.ViewModels
             //Login module 생성하고, True일때 DataAccess 의 IMPCommandDistributor 를 전역에서 사용하도록 등록해준다.
             this._Container = Container;
             this.regionmanager = regionmanager;
-            NetManager = this._Container.Resolve<SocketClientV2>();
-            NetManager.SetMainConnectCheck(this);
+            
             this.ConnectionCheck = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(this.disposables);
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
         }
@@ -60,7 +59,7 @@ namespace LucelasV4.ViewModels
 
         public void OnConeectedFail(object sender, Exception ex)
         {
-            throw new NotImplementedException();
+            this.ConnectionCheck.Value = Visibility.Visible;
         }
 
         public void OnSendFail(object sender, Exception ex)
