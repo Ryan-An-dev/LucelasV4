@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Interface;
 using DataAccess.NetWork;
+using DataAccess.Repository;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -8,6 +9,7 @@ using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Windows;
 
@@ -34,7 +36,6 @@ namespace LucelasV4.ViewModels
             //Login module 생성하고, True일때 DataAccess 의 IMPCommandDistributor 를 전역에서 사용하도록 등록해준다.
             this._Container = Container;
             this.regionmanager = regionmanager;
-            
             this.ConnectionCheck = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(this.disposables);
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
         }
@@ -57,19 +58,30 @@ namespace LucelasV4.ViewModels
             this.ConnectionCheck.Value = Visibility.Collapsed;
         }
 
+        public void Reconnect() {
+            SocketClientV2 socket = this._Container.Resolve<SocketClientV2>();
+            socket.Close();
+            LoginRepository temp = this._Container.Resolve<LoginRepository>();
+            temp.Reconnect();
+        }
+
+
         public void OnConeectedFail(object sender, Exception ex)
         {
             this.ConnectionCheck.Value = Visibility.Visible;
+            Reconnect();
         }
 
         public void OnSendFail(object sender, Exception ex)
         {
             this.ConnectionCheck.Value = Visibility.Visible;
+            Reconnect();
         }
 
         public void OnReceiveFail(object sender, Exception ex)
         {
             this.ConnectionCheck.Value = Visibility.Visible;
+            Reconnect();
         }
     }
 }

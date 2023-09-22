@@ -42,10 +42,10 @@ namespace DataAccess.Repository
         }
         public void TryLogin(string id, string pass)
         {
-            JObject body = new JObject();
-            body["login_id"] = id;
-            body["login_pw"] = pass;
-            this.NetManager.Send(body,COMMAND.LOGIN);
+            this.NetManager.TryLogin(id, pass);
+        }
+        public void Reconnect() {
+            this.NetManager.Reconnect();
         }
         public void RequestGlobalData()
         {

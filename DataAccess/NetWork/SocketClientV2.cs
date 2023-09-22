@@ -79,7 +79,7 @@ namespace DataAccess.NetWork
         private string PW = "";
         public int session_id = 0;
         System.Timers.Timer m_timer;
-        private int m_nKeepAliveTime = 30;
+        private int m_nKeepAliveTime = 5;
         public void Connect(string IP, int Port)
         {
             this.IP = IP;
@@ -88,6 +88,24 @@ namespace DataAccess.NetWork
             mainSock.Client.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, false);
             this.mainSock.BeginConnect(this.IP, this.Port, ConnectCallback, this);
         }
+        public void TryLogin(string id, string pw) {
+            if (id != string.Empty) { 
+                this.ID = id;
+                this.PW = pw;
+            }
+            JObject body = new JObject();
+            body["login_id"] = this.ID;
+            body["login_pw"] = this.PW;
+            Send(body, COMMAND.LOGIN);
+        }
+
+        public void Reconnect()
+        {
+            mainSock = new TcpClient();
+            mainSock.Client.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, false);
+            this.mainSock.BeginConnect(this.IP, this.Port, ConnectCallback, this);
+        }
+
         public void Close()
         {
             if (mainSock != null)
@@ -141,7 +159,6 @@ namespace DataAccess.NetWork
             {
                 ;
             }
-
             OnRceivedData(recvLen);
         }
         public void OnRceivedData(int len)
@@ -233,7 +250,7 @@ namespace DataAccess.NetWork
                     if (jobj["session_id"] != null)
                         this.session_id = jobj["session_id"].ToObject<int>();
                     //KeepAlive 가동시작
-                    Initialize();
+                    //Initialize();
 
 
                 }
@@ -260,7 +277,8 @@ namespace DataAccess.NetWork
         public void Disconnect()
         {
             this.state = ConnectState.Disconnected;
-            this.m_timer.Stop();
+            if(this.m_timer!=null)
+                this.m_timer.Stop();
         }
 
         public void Send(JObject msg, COMMAND CMD)
