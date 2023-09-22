@@ -250,7 +250,7 @@ namespace DataAccess.NetWork
                     if (jobj["session_id"] != null)
                         this.session_id = jobj["session_id"].ToObject<int>();
                     //KeepAlive 가동시작
-                    //Initialize();
+                    Initialize();
 
 
                 }
