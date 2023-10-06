@@ -29,6 +29,7 @@ namespace ContractPage.ViewModels
         private readonly CompositeDisposable _disposable = new();
         public ReactiveProperty<Contract> Contract { get; set; }
         public DelegateCommand DeleteButton { get; }
+        public DelegateCommand SearchAddress { get; } 
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
         public DelegateCommand<string> AddProductItemButton { get; }
@@ -36,16 +37,41 @@ namespace ContractPage.ViewModels
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService):base(regionManager)
         {
             ContainerProvider = containerProvider;
-            dialogService = dialogService;
+            this.dialogService = dialogService;
 
             //AddProductItemButton = new DelegateCommand<string>(ExeAddProductItemButton);
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
+            SearchAddress = new DelegateCommand(SearchAdressExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
         }
 
+        private void SearchAdressExcute()
+        {
+            DialogParameters p = new DialogParameters();
+            p.Add("Contractor", this.Contract.Value.Contractor.Value);
+            this.dialogService.ShowDialog("SearchAdressPage", p, r => FindAddressItem(r), "CommonDialogWindow");
+        }
+        private void FindAddressItem(IDialogResult r)
+        {
+            //Contract ID 받아야되는데 
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("SelectedPaymentItem")) return;
+                else
+                {
+                    Payment temp = null;
+                    r.Parameters.TryGetValue("SelectedPaymentItem", out temp);
+                }
+            }
+            else
+            {
+
+            }
+        }
         public void Dispose()
         {
             _disposable.Dispose();

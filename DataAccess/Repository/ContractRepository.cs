@@ -43,7 +43,7 @@ namespace DataAccess.Repository
 
         public void DeleteContract(JObject msg)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void GetContractList(JObject msg)

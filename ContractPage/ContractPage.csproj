@@ -13,6 +13,7 @@
     <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AddressSearchManager\AddressSearchManager.csproj" />
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\DataAgent\DataAgent.csproj" />

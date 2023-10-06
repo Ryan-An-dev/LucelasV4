@@ -23,7 +23,7 @@
             <RowDefinition Height="0.105*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" DataContext="{Binding Contract.Value, UpdateSourceTrigger=PropertyChanged}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
             <StackPanel Orientation="Vertical" Margin="20 0 20 0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -47,7 +47,7 @@
                     
                 </Grid>
 
-                <GroupBox Header="고객인적사항" Margin="0 20 0 0" DataContext="{Binding Contractor.Value, UpdateSourceTrigger=PropertyChanged}">
+                <GroupBox Header="고객인적사항" Margin="0 20 0 0" >
                     <StackPanel>
                         <TextBox 
                             md:HintAssist.Hint="이름"
@@ -63,13 +63,22 @@
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
-                        <TextBox 
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox MinWidth="340" Margin="0 0 10 12" IsReadOnly="True"
                             md:HintAssist.Hint="주소"
                             FontSize="14"  
                             Text="{Binding Address.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
+
+                            <Button 
+                                Margin="10 0 0 0"
+                                Content="검색"
+                                Command="{Binding SearchAddress}" 
+                                Width="80" 
+                                HorizontalAlignment="Right"/>
+                        </StackPanel>
+                        
                     </StackPanel>
                 </GroupBox>
 
@@ -190,7 +199,17 @@
             <Grid Width="Auto">
                 <views:DeleteButton Command="{Binding DeleteButton}"
                                     Visibility="{Binding VisibilityAddButton.Value}"/>
-                <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
+                <Button 
+                    x:Name="BtnSave" 
+                    Content="저장"
+                    FontSize="12"
+                    Height="30" 
+                    Width="100" 
+                    Padding="0" 
+                    HorizontalAlignment="Right"
+                    Margin="8"
+                    Command="{Binding SaveButton}" 
+                    IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
             </Grid>
         </md:ColorZone>
     </Grid>

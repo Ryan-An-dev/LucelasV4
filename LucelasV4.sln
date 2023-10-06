@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Page", "Page", "{91BB9984-D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4E66F20E-DA32-4E79-8CA1-240FA96363A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressSearchManager", "AddressSearchManager\AddressSearchManager.csproj", "{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{73DA1A5F-9A59-4F26-9B82-C02552137BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73DA1A5F-9A59-4F26-9B82-C02552137BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73DA1A5F-9A59-4F26-9B82-C02552137BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +132,7 @@ Global
 		{2D9A1BA5-3882-4A17-A46B-661D6B6BAC9D} = {91BB9984-D416-4E49-9210-E0D8CA33018F}
 		{16540E8B-997E-491F-A0CD-254B4CE9DC95} = {91BB9984-D416-4E49-9210-E0D8CA33018F}
 		{73DA1A5F-9A59-4F26-9B82-C02552137BA2} = {91BB9984-D416-4E49-9210-E0D8CA33018F}
+		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6} = {4E66F20E-DA32-4E79-8CA1-240FA96363A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2F03A9C-F508-4412-B4FE-E50AFAB70D9C}

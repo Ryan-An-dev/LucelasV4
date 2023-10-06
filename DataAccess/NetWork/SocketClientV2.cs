@@ -101,6 +101,11 @@ namespace DataAccess.NetWork
 
         public void Reconnect()
         {
+            if (mainSock != null) {
+                this.mainSock.Close();
+                this.mainSock.Dispose();
+                this.mainSock = null;
+            }
             mainSock = new TcpClient();
             mainSock.Client.SetSocketOption(SocketOptionLevel.IPv6, (SocketOptionName)27, false);
             this.mainSock.BeginConnect(this.IP, this.Port, ConnectCallback, this);
@@ -108,10 +113,12 @@ namespace DataAccess.NetWork
 
         public void Close()
         {
+            ErpLogWriter.LogWriter.Trace(string.Format("socket Close And Null처리"));
             if (mainSock != null)
             {
                 mainSock.Close();
                 mainSock.Dispose();
+                mainSock = null;
             }
         }
 
@@ -252,7 +259,6 @@ namespace DataAccess.NetWork
                     //KeepAlive 가동시작
                     Initialize();
 
-
                 }
             }
             this._packet.InitIndex();
@@ -276,6 +282,8 @@ namespace DataAccess.NetWork
 
         public void Disconnect()
         {
+            ErpLogWriter.LogWriter.Trace(string.Format("Keep Alive 종료시키기"));
+            try { this.Close(); } catch (Exception e) { }
             this.state = ConnectState.Disconnected;
             if(this.m_timer!=null)
                 this.m_timer.Stop();
@@ -309,6 +317,7 @@ namespace DataAccess.NetWork
             {
                 this.state = ConnectState.Disconnected;
                 if (Receiver != null) {
+                    this.Close();
                     Receiver.OnSendFail(this, ex);
                     MainVM.OnSendFail(null, null);
                 }
@@ -326,7 +335,8 @@ namespace DataAccess.NetWork
             catch (Exception ex)
             {
                 this.state = ConnectState.Disconnected;
-                if (clnt.Receiver != null) { 
+                if (clnt.Receiver != null) {
+                    this.Close();
                     clnt.Receiver.OnSendFail(this, ex);
                     clnt.MainVM.OnSendFail(null, null);
                 

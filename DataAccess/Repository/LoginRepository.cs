@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interface;
 using DataAccess.NetWork;
+using LogWriter;
 using Newtonsoft.Json.Linq;
 using Prism.Ioc;
 using System;
@@ -42,7 +43,8 @@ namespace DataAccess.Repository
         }
         public void TryLogin(string id, string pass)
         {
-            this.NetManager.TryLogin(id, pass);
+            this.NetManager.TryLogin(id, pass); 
+            
         }
         public void Reconnect() {
             this.NetManager.Reconnect();
@@ -71,8 +73,7 @@ namespace DataAccess.Repository
 
         public void OnSendFail(object sender, Exception ex)
         {
-            NetManager.Disconnect();
-            this.NetManager.Connect(ip, port);
+            Console.WriteLine("OnSendFail");
         }
 
         public void OnReceiveFail(object sender, Exception ex)

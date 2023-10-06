@@ -14,7 +14,7 @@ namespace ContractPage
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
         }
     }
 }
