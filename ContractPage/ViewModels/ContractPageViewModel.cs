@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -123,7 +124,7 @@ namespace ContractPage.ViewModels
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 jobj["con_name"] = this.SearchName.Value;
-                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? this.TotalItemCount.Value - (this.ListCount.Value * (CurrentPage.Value - 1)) : this.ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 jobj["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -166,7 +167,12 @@ namespace ContractPage.ViewModels
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
-            JObject jobj = new JObject(JObject.Parse(msg));
+            JObject jobj = null;
+            try { jobj = new JObject(JObject.Parse(msg)); } 
+            catch (Exception) {
+                return;
+            }
+            
             ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
@@ -192,31 +198,32 @@ namespace ContractPage.ViewModels
                         foreach (JObject inner in msg["contract_history"] as JArray)
                         {
                             int id = 0;
-                            Customer Contractor = null;
+                            //Customer Contractor = JsonSerializer.Deserialize<Customer>(inner["contractor"].ToString());
                             
-                            if (inner["contractor"] != null)
-                            {
-                                if (inner["contractor"]["cui_id"] != null)
-                                {
-                                    id = inner["cui_id"].ToObject<int>();
-                                    Contractor = FindCustomer(id);
-                                }
-                            }
-                            Contract temp = new Contract();
-                            if (inner["create_time"] != null)
-                                temp.Month.Value = inner["create_time"].ToObject<DateTime>();
-                            if (inner["con_id"] != null)
-                                temp.Id.Value = inner["con_id"].ToObject<int>();
-                            if (inner["memo"] != null)
-                                temp.Memo.Value = inner["memo"].ToString();
-                            if (inner["payment_complete"] != null)
-                                temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
-                            if (Contractor != null)
-                                temp.Contractor.Value = Contractor;
-                            if (inner["delivery_date"] != null)
-                                temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
-                            if (inner["total"] != null)
-                                temp.Price.Value = inner["total"].ToObject<int>();
+                            //if (inner["contractor"] != null)
+                            //{
+                            //    if (inner["contractor"]["cui_id"] != null)
+                            //    {
+                            //        id = inner["cui_id"].ToObject<int>();
+                            //        Contractor = FindCustomer(id);
+                            //    }
+                            //}
+                            Contract temp = JsonSerializer.Deserialize<Contract>(inner.ToString());
+
+                            //if (inner["create_time"] != null)
+                            //    temp.Month.Value = inner["create_time"].ToObject<DateTime>();
+                            //if (inner["con_id"] != null)
+                            //    temp.Id.Value = inner["con_id"].ToObject<int>();
+                            //if (inner["memo"] != null)
+                            //    temp.Memo.Value = inner["memo"].ToString();
+                            //if (inner["payment_complete"] != null)
+                            //    temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
+                            //if (Contractor != null)
+                            //    temp.Contractor.Value = Contractor;
+                            //if (inner["delivery_date"] != null)
+                            //    temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
+                            //if (inner["total"] != null)
+                            //    temp.Price.Value = inner["total"].ToObject<int>();
                             this.ContractItems.Add(temp);
                         }
                     }
@@ -244,6 +251,11 @@ namespace ContractPage.ViewModels
         public void OnSent()
         {
             
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

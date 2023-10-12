@@ -1,4 +1,5 @@
 ﻿using CommonModel.Model;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -49,6 +50,11 @@ namespace HomePage.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
          
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

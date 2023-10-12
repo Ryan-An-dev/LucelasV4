@@ -2,6 +2,7 @@
 using AddressSearchManager.Models;
 using CommonModel.Model;
 using DataAccess;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -25,6 +26,7 @@ namespace ContractPage.ViewModels
         public ReactiveCollection<AddressDetail> AddressDetails { get; set; }
         public IContainerProvider ContainerProvider { get; }
         public ReactiveProperty<ReceiptModel> args { get; set; }
+        public AddressDetail SelectedItem { get; set; }
         public AddressCommon Common => addrSearchManager.Common;
         public ReactiveProperty<string> Keyword { get; set; }
 
@@ -41,8 +43,12 @@ namespace ContractPage.ViewModels
             this.ContainerProvider = con;
             this.Keyword = new ReactiveProperty<string>().AddTo(disposable);
             this.addrSearchManager = new AddressSearchManagerClass();
-            AddressDetails = new ReactiveCollection<AddressDetail>();
+            AddressDetails = new ReactiveCollection<AddressDetail>().AddTo(disposable);
             this.args = new ReactiveProperty<ReceiptModel>().AddTo(disposable);
+        }
+
+        public SearchAdressPageViewModel()
+        {
         }
 
         private void SearchBase(bool success)
@@ -64,6 +70,13 @@ namespace ContractPage.ViewModels
             bool success = await addrSearchManager.Search(Keyword.Value);
             SearchBase(success);
         }
+        internal async void SearchAddress(string value)
+        {
+            AddressDetails.Clear();
+            bool success = await addrSearchManager.Search(value);
+            SearchBase(success);
+        }
+
 
         internal async Task OnScrollReachedBottom()
         {
@@ -76,15 +89,15 @@ namespace ContractPage.ViewModels
 
             DialogResult temp = null;
             ButtonResult result = ButtonResult.None;
+           
             if (parameter?.ToLower() == "true")
             {
-                //if (this.SelectedPayment == null)
-                //    return;
-                //result = ButtonResult.OK;
-                //temp = new DialogResult(result);
-                //DialogParameters p = new DialogParameters();
-                //p.Add("SelectedPaymentItem", this.SelectedPayment.Value);
-                //temp.Parameters.Add("SelectedPaymentItem", p);
+                if (this.SelectedItem == null)
+                    return;
+                result = ButtonResult.OK;
+                DialogParameters p = new DialogParameters();
+                p.Add("SelectedAddress", this.SelectedItem);
+                temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")
             {
@@ -115,6 +128,11 @@ namespace ContractPage.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

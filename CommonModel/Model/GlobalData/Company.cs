@@ -1,4 +1,5 @@
-﻿using PrsimCommonBase;
+﻿using Newtonsoft.Json.Linq;
+using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -19,6 +20,11 @@ namespace CommonModel.Model
             this.CompanyName = new ReactiveProperty<string>(CompanyName).AddTo(disposable);
             this.ProductList = new ReactiveCollection<Product>().AddTo(disposable);
         }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
+        }
     }
     public class Company : PrismCommonModelBase
     {
@@ -32,6 +38,11 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>(categoryId).AddTo(disposable);
             this.CompanyName = new ReactiveProperty<string>(CompanyName).AddTo(disposable);
             this.ProductList = new ReactiveCollection<Product>().AddTo(disposable);
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -52,6 +63,11 @@ namespace CommonModel.Model
         public Product Clone() {
             Product tmp = new Product(this.ProductId.Value, this.ProductName.Value, this.ProductPrice.Value, this.ProductMargin.Value);
             return tmp;
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

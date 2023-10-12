@@ -162,5 +162,10 @@ namespace LoginPage.ViewModels
         {
             throw new NotImplementedException();
         }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PrsimCommonBase;
+﻿using Newtonsoft.Json.Linq;
+using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -46,5 +47,9 @@ namespace CommonModel.Model
             this.Completed = new ReactiveProperty<bool>().AddTo(this.disposable);
         }
 
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

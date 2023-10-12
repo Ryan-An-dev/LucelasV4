@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.NetWork;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -17,6 +18,11 @@ namespace MESPage.ViewModels
         public MesPageViewModel()
         {
 
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

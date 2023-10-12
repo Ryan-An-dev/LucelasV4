@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using Newtonsoft.Json.Linq;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -65,6 +66,11 @@ namespace SettingPage.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

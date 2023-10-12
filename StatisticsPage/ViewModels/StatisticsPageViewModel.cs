@@ -81,6 +81,11 @@ namespace StatisticsPage.ViewModels
 
             initSales();
         }
+
+        public StatisticsPageViewModel()
+        {
+        }
+
         private void initSales()
         {
             List<string> Title = new List<string>();
@@ -351,6 +356,11 @@ namespace StatisticsPage.ViewModels
             
             int daysInMonth = DateTime.DaysInMonth(year, month);
             return daysInMonth;
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

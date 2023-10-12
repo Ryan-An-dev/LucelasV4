@@ -1,4 +1,5 @@
-﻿using PrsimCommonBase;
+﻿using Newtonsoft.Json.Linq;
+using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -29,6 +30,11 @@ namespace CommonModel.Model
             this.NotCompleteContract = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.NotCompleteDistribute = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.TodayDelevery = new ReactiveProperty<int?>(0).AddTo(this.disposable);
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

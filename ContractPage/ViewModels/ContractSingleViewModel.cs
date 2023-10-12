@@ -1,8 +1,11 @@
-﻿using CommonModel.Model;
+﻿using AddressSearchManager.Models;
+using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
 using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog.Targets;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -30,22 +33,43 @@ namespace ContractPage.ViewModels
         public ReactiveProperty<Contract> Contract { get; set; }
         public DelegateCommand DeleteButton { get; }
         public DelegateCommand SearchAddress { get; } 
+        public DelegateCommand<string> AddContractItemButton { get; }
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
-        public DelegateCommand<string> AddProductItemButton { get; }
+        public ReactiveProperty<Payment>SelectedPayment { get; set; }
+        public ReactiveProperty<Furniture> SelectedProduct { get; set; }
         public IDialogService dialogService { get; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService):base(regionManager)
         {
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
-
-            //AddProductItemButton = new DelegateCommand<string>(ExeAddProductItemButton);
+            SelectedPayment = new ReactiveProperty<Payment>().AddTo(disposable);
+            SelectedProduct = new ReactiveProperty<Furniture>().AddTo(disposable);
+            AddContractItemButton = new DelegateCommand<string>(ExecAddContractItemButton);
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
             SearchAddress = new DelegateCommand(SearchAdressExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
+        }
+
+        private void ExecAddContractItemButton(string obj)
+        {
+            switch (obj) {
+                case "AddProduct":
+
+                    break;
+                case "DeleteProduct":
+                    this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
+                    break;
+                case "AddPayment":
+                    this.Contract.Value.Payment.Add(new Payment());
+                    break;
+                case "DeletePayment":
+                    this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
+                    break;
+            }
         }
 
         private void SearchAdressExcute()
@@ -60,11 +84,15 @@ namespace ContractPage.ViewModels
             if (r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedPaymentItem")) return;
+                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
                 else
                 {
-                    Payment temp = null;
-                    r.Parameters.TryGetValue("SelectedPaymentItem", out temp);
+                    AddressDetail temp = null;
+                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    if (this.Contract.Value != null) {
+                        this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
+                    }
+                    
                 }
             }
             else
@@ -96,7 +124,6 @@ namespace ContractPage.ViewModels
             {
                 Title.Value = "신규계약 추가";
                 this.Contract.Value = new Contract();
-                this.Contract.Value.Month.Value = DateTime.Now;
             }
             else
             {
@@ -129,16 +156,10 @@ namespace ContractPage.ViewModels
                 { // Update
                     if (this.Title.Value == "신규계약 추가") //신규등록일경우
                     {
-                        JObject inner = new JObject();
-                        //inner["shi_type"] = (int)this.Contract.Value.IncomeCostType.Value;
-                        //inner["shi_biz_type"] = this.Contract.Value.CategoryInfo.Value.CategoryId.Value;
-                        //inner["shi_cost"] = this.Contract.Value.Money.Value;
-                        //inner["shi_time"] = this.Contract.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                        //inner["shi_use_content"] = this.Contract.Value.Contents.Value;
-                        //inner["shi_memo"] = this.Contract.Value.Memo.Value;
-                        //inner["shi_use_name"] = this.Contract.Value.Tip.Value;
-                        //jobj["create_history"] = inner;
-                        network.CreateContractHistory(jobj);
+
+                        if (this.Contract.Value.isChanged) {
+                            network.CreateContractHistory(this.Contract.Value.GetChangedItem());
+                        }
                     }
                     else
                     { //내역수정일경우
@@ -189,6 +210,11 @@ namespace ContractPage.ViewModels
 
         public void OnSent()
         {
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

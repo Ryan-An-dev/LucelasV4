@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using Newtonsoft.Json.Linq;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -9,13 +10,15 @@ using System.Reactive.Disposables;
 
 namespace PrsimCommonBase
 {
-    public class PrismCommonModelBase : BindableBase, IDisposable
+    public abstract class PrismCommonModelBase : BindableBase, IDisposable
     {
         #region  프로퍼티
 
         protected CompositeDisposable disposable { get; }
             = new CompositeDisposable();
 
+        public bool isChanged { get; set; }
+        public JObject ChangedItem { get; set; } = new JObject();
         public IRegionManager regionManager { get; } = null;
 
         #endregion
@@ -59,7 +62,7 @@ namespace PrsimCommonBase
 
             disposed = true;
         }
-
         #endregion
+        public abstract JObject GetChangedItem();
     }
 }

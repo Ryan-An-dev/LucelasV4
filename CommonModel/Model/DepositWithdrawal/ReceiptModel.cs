@@ -173,5 +173,10 @@ namespace CommonModel.Model
             }
             return tmp;
         }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

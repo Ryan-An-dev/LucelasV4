@@ -1,4 +1,5 @@
-﻿using PrsimCommonBase;
+﻿using Newtonsoft.Json.Linq;
+using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -20,6 +21,11 @@ namespace CommonModel.Model
             EmployeeId = employeeId.AddTo(disposable);
             CompanyName = companyName.AddTo(disposable);
             
+        }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -433,5 +433,10 @@ namespace DepositWithdrawal.ViewModels
         {
             
         }
+
+        public override JObject GetChangedItem()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
