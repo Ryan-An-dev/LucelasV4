@@ -31,11 +31,35 @@ namespace DataAccess
         #region 계약리스트
         GetContractList = 30,
         CREATECONTRACT = 31,
+        UPDATECONTRACT = 32,
+        DELETECONTRACT = 33,
+        #endregion
+
+        #region 고객리스트
+        GETCUSTOMERINFO = 35,
+        CREATECUSTOMERINFO = 36,
+        UPDATECUSTOMERINFO = 37,
+        DELETECUSTOMERINFO = 38,
+        #endregion
+
+        #region 회사리스트
+        GETCOMPANYINFO = 40,
+        CREATECOMPANYINFO,
+        UPDATECOMPANYINFO,
+        DELETECOMPANYINFO,
+        #endregion
+
+        #region 제품리스트
+        GETPRODUCTINFO = 45,
+        CREATEPRODUCTINFO,
+        UPDATEPRODUCTINFO,
+        DELETEPRODUCTINFO,
         #endregion
 
 
+
         #region 통계데이터
-        GetDailyList = 42,
+        GetDailyList = 60,
         #endregion
     }
 }

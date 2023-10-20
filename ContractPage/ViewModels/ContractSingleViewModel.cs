@@ -32,7 +32,8 @@ namespace ContractPage.ViewModels
         private readonly CompositeDisposable _disposable = new();
         public ReactiveProperty<Contract> Contract { get; set; }
         public DelegateCommand DeleteButton { get; }
-        public DelegateCommand SearchAddress { get; } 
+        public DelegateCommand SearchAddress { get; }
+        public DelegateCommand SearchName { get; }
         public DelegateCommand<string> AddContractItemButton { get; }
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
@@ -49,7 +50,8 @@ namespace ContractPage.ViewModels
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
-            SearchAddress = new DelegateCommand(SearchAdressExcute);
+            SearchAddress = new DelegateCommand(SearchNameExcute);
+            SearchName = new DelegateCommand(SearchAdressExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
         }
@@ -78,6 +80,12 @@ namespace ContractPage.ViewModels
             p.Add("Contractor", this.Contract.Value.Contractor.Value);
             this.dialogService.ShowDialog("SearchAdressPage", p, r => FindAddressItem(r), "CommonDialogWindow");
         }
+        private void SearchNameExcute()
+        {
+            DialogParameters p = new DialogParameters();
+            p.Add("Contractor", this.Contract.Value.Contractor.Value);
+            this.dialogService.ShowDialog("SearchNamePage", p, r => FindNameItem(r), "CommonDialogWindow");
+        }
         private void FindAddressItem(IDialogResult r)
         {
             //Contract ID 받아야되는데 
@@ -93,6 +101,29 @@ namespace ContractPage.ViewModels
                         this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
                     }
                     
+                }
+            }
+            else
+            {
+
+            }
+        }
+        private void FindNameItem(IDialogResult r)
+        {
+            //Contract ID 받아야되는데 
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
+                else
+                {
+                    AddressDetail temp = null;
+                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    if (this.Contract.Value != null)
+                    {
+                        this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
+                    }
+
                 }
             }
             else

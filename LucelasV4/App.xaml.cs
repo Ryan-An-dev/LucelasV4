@@ -79,6 +79,7 @@ namespace LucelasV4
             regMan.RegisterForNavigation<ContractPage.Views.ContractPage>();
             regMan.RegisterForNavigation<ContractPage.Views.ContractSingle>();
             regMan.RegisterForNavigation<ContractPage.Views.SearchAdressPage>();
+            regMan.RegisterForNavigation<ContractPage.Views.SearchNamePage>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListPage>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListSingle>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.FindItemPage>();
@@ -98,7 +99,8 @@ namespace LucelasV4
             containerRegistry.Register<IContractRepository, ContractRepository>();
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();
-            
+            containerRegistry.Register<ICustomerRepository, CustomerRepository>();
+
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
