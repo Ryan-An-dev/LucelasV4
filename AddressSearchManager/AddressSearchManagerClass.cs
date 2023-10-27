@@ -38,7 +38,6 @@ namespace AddressSearchManager
               })!;
             IsLoading = false;
             OnLoadingChanged?.Invoke(IsLoading);
-
             return Common.ErrorCode == "0";
         }
 

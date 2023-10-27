@@ -22,8 +22,7 @@ namespace CommonModel.Model
             CompanyName = companyName.AddTo(disposable);
             
         }
-
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
             throw new NotImplementedException();
         }

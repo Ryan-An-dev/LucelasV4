@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="ContractPage.Views.SearchAdressPage"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
@@ -28,14 +29,17 @@
                 >
                 <TextBox 
                     x:Name="Search"
-                    KeyDown="TextBox_KeyDown"
                     md:HintAssist.Hint="주소검색" 
                     Width="680"
                     FontSize="14"  
                     Text="{Binding Keyword.Value}"
                     Margin="0 0 0 12"
                     Foreground="{StaticResource MainColor}"  
-                    md:HintAssist.IsFloating="True"/>
+                    md:HintAssist.IsFloating="True">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+                    </TextBox.InputBindings>
+                </TextBox>
                 <Button 
                     Margin="10"
                     Content="검색" Command="{Binding SearchDialogCommand}"/>

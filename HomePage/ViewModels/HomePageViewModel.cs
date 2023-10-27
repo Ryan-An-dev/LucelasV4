@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace HomePage.ViewModels
 {
-    public class HomePageViewModel : PrismCommonModelBase, INavigationAware
+    public class HomePageViewModel : PrismCommonViewModelBase, INavigationAware
     {
         //뷰모델 부를 때마다 서버에 요청해서 데이터 가져오기 
         //뷰모델이 Dispose 될때 수정내역이 있다면 전달하자.
@@ -50,11 +50,6 @@ namespace HomePage.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
          
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

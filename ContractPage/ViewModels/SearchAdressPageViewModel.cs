@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace ContractPage.ViewModels
 {
-    public class SearchAdressPageViewModel : PrismCommonModelBase, IDialogAware
+    public class SearchAdressPageViewModel : PrismCommonViewModelBase, IDialogAware
     {
         public AddressSearchManagerClass addrSearchManager { get; set; }
         public ReactiveCollection<AddressDetail> AddressDetails { get; set; }
@@ -29,10 +29,14 @@ namespace ContractPage.ViewModels
         public AddressDetail SelectedItem { get; set; }
         public AddressCommon Common => addrSearchManager.Common;
         public ReactiveProperty<string> Keyword { get; set; }
-
+        
         private DelegateCommand _SearchDialogCommand;
         public DelegateCommand SearchDialogCommand =>
             _SearchDialogCommand ?? (_SearchDialogCommand = new DelegateCommand(SearchAddress));
+
+        private DelegateCommand _SearchExecute;
+        public DelegateCommand SearchExecute =>
+            _SearchExecute ?? (_SearchExecute = new DelegateCommand(SearchAddress));
 
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
@@ -51,6 +55,7 @@ namespace ContractPage.ViewModels
         {
         }
 
+        
         private void SearchBase(bool success)
         {
             if (success)
@@ -128,11 +133,6 @@ namespace ContractPage.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

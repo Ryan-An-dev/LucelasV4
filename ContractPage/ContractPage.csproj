@@ -4,6 +4,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
     <PackageReference Include="MaterialDesignThemes" Version="4.6.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.3" />

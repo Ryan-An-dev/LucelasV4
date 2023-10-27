@@ -21,9 +21,10 @@ using System.Windows.Interop;
 
 namespace SettingPage.ViewModels
 {
-    public class SettingPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class SettingPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         private SettingDataAgent network { get; set; }
+        public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; }
         public ReactiveCollection<CategoryInfo> CategoryInfos { get; set; }
         public ReactiveCollection<BankModel> AccountInfos { get; set; }
         public ReactiveCollection<Customer> CustomerInfos { get; set; }
@@ -36,7 +37,7 @@ namespace SettingPage.ViewModels
         public SettingPageViewModel(IContainerRegistry containerProvider)
         {
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
-            this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
+            this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
         }
@@ -109,7 +110,8 @@ namespace SettingPage.ViewModels
                         SetAccountList(jobj);
                         break;
                     case COMMAND.ProductCategoryList:
-                        SetProductList(jobj);
+                        //SetProductList(jobj);
+                        SetProductType(jobj);
                         break;
                     case COMMAND.CategoryList:
                         SetCategoryList(jobj);
@@ -118,6 +120,32 @@ namespace SettingPage.ViewModels
                         SetCustomerList(jobj);
                         break;
                 }
+            }
+        }
+
+        private void SetProductType(JObject msg)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.FurnitureInfos.Clear();
+            });
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try {
+                    if (msg["product_code_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["product_code_list"] as JArray;
+                    foreach (JObject jobj in jarr) {
+                        FurnitureType temp = new FurnitureType();
+                        if (jobj["product_code"] != null)
+                            temp.ProductCode.Value = msg["product_code"].ToObject<int>();
+                        if (jobj["product_name"] != null)
+                            temp.Name.Value = msg["product_name"].ToString();
+                        this.FurnitureInfos.Add(temp);
+                    }
+                } catch (Exception) { }
+                finally { network.GetCustomerList(); }
             }
         }
 
@@ -155,63 +183,6 @@ namespace SettingPage.ViewModels
                 catch (Exception ex) { }
             }
         }
-
-        private void SetProductList(JObject msg)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.CompanyInfos.Clear();
-            });
-            if (msg.ToString().Trim() != string.Empty)
-            {
-                try
-                {
-                    if (msg["company_product"].ToString().Equals(""))
-                        return;
-                    foreach (JObject inner in msg["company_product"] as JArray)
-                    {
-                        int id = 0;
-                        string companyName = "";
-                        CompanyList temp = null;
-                        if (inner["aci_id"]!=null)
-                            id = inner["aci_id"].ToObject<int>();
-                        if (inner["company_name"]!=null)
-                            companyName = inner["company_name"].ToString().Trim() ;
-                        if (id != 0 && !string.IsNullOrEmpty(companyName)) {
-                            temp = new CompanyList(id,companyName);
-                        }
-                        if(temp != null){
-                            if (inner["product"] != null) {
-                                foreach (var item in inner["product"] as JArray)
-                                {
-                                    int pdId = 0;
-                                    string pdName = "";
-                                    int pdPrice = 0;
-                                    int pdMargin = 0;
-                                    if (item["acpi_product_id"]!=null)
-                                        pdId = item["acpi_product_id"].ToObject<int>();
-                                    if (item["acpi_product_name"] != null)
-                                        pdName = item["acpi_product_name"].ToString().Trim();
-                                    if (item["acpi_product_price"] != null)
-                                        pdPrice = item["acpi_product_price"].ToObject<int>();
-                                    if (item["acpi_product_margin"] != null)
-                                        pdMargin = item["acpi_product_margin"].ToObject<int>();
-                                    Product tmp = new Product(pdId, pdName, pdPrice, pdMargin);
-                                    temp.ProductList.Add(tmp);
-                                }
-                            }
-                        }
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            this.CompanyInfos.Add(temp);
-                        });
-                    }
-                }
-                catch (Exception ex) { }
-                finally { network.GetCustomerList(); }
-            }
-        }
-
         private void SetCategoryList(JObject msg)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -241,7 +212,7 @@ namespace SettingPage.ViewModels
                 }
                 catch (Exception ex) { }
                 finally { 
-                    //network.GetProductCategory(); 
+                    network.GetProductCategory(); 
                 }
             }
         }
@@ -291,9 +262,6 @@ namespace SettingPage.ViewModels
             throw new NotImplementedException();
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

@@ -30,7 +30,6 @@ namespace PrsimCommonBase
         }
 
         public PrismCommonModelBase(IRegionManager regionManager)
-            : this()
         {
             this.regionManager = regionManager;
         }
@@ -63,6 +62,34 @@ namespace PrsimCommonBase
             disposed = true;
         }
         #endregion
-        public abstract JObject GetChangedItem();
+        public JObject GetChangedItem() {
+            return ChangedItem;
+        }
+        public abstract void SetObserver();
+
+        public void ChangedJson(string name, object value)
+        {
+            if (value != null)
+            {
+                if (value is int)
+                {
+                    ChangedItem[name] = (int)value;
+                }
+                else if (value is string)
+                {
+                    ChangedItem[name] = value.ToString();
+                }
+                else if (value is JToken)
+                {
+                    ChangedItem[name] = value.ToString();
+                }
+                else if (value is DateTime)
+                {
+                    DateTime time = (DateTime)value;
+                    ChangedItem[name] = time.ToString("yyyy-MM-dd");                }
+
+                isChanged = true;
+            }
+        }
     }
 }

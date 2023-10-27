@@ -33,7 +33,6 @@ namespace LucelasV4
 
         protected override void OnInitialized()
         {
-           
             ErpLogWriter.LogWriter.Debug("============= OnInitialized =============");
             var login = Container.Resolve<Login>();
             var result = login.ShowDialog();
@@ -80,6 +79,7 @@ namespace LucelasV4
             regMan.RegisterForNavigation<ContractPage.Views.ContractSingle>();
             regMan.RegisterForNavigation<ContractPage.Views.SearchAdressPage>();
             regMan.RegisterForNavigation<ContractPage.Views.SearchNamePage>();
+            regMan.RegisterForNavigation<ContractPage.Views.SearchCompanyPage>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListPage>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListSingle>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.FindItemPage>();
@@ -100,6 +100,8 @@ namespace LucelasV4
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();
             containerRegistry.Register<ICustomerRepository, CustomerRepository>();
+            containerRegistry.Register<CompanyRepository>();
+            containerRegistry.Register<ProductRepository>();
 
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

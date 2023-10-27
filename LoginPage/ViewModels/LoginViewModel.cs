@@ -25,7 +25,7 @@ using System.Windows;
 
 namespace LoginPage.ViewModels
 {
-    public class LoginViewModel : PrismCommonModelBase , INetReceiver
+    public class LoginViewModel : PrismCommonViewModelBase, INetReceiver
     {
         private readonly string _localPath;
         private readonly string _filePath;
@@ -163,9 +163,5 @@ namespace LoginPage.ViewModels
             throw new NotImplementedException();
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

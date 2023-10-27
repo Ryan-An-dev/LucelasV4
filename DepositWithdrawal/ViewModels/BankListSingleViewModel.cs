@@ -27,7 +27,7 @@ using System.Windows.Controls;
 namespace DepositWithdrawal.ViewModels
 {
     //여기 삭제랑 업데이트 할때 로딩아이콘 넣어야된다. 무조껀
-    public class BankListSingleViewModel : PrismCommonModelBase, INavigationAware, IDisposable, INetReceiver
+    public class BankListSingleViewModel : PrismCommonViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
         public IEnumerable<IncomeCostType> SearchIncomeCostTypeValues
         {
@@ -74,7 +74,6 @@ namespace DepositWithdrawal.ViewModels
 
         private void ExcuteContractButton(string obj)
         {
-            
             if (obj == "Add")
             {
                 if (this.ReceiptModel.Value.RemainPrice.Value == 0)
@@ -176,7 +175,7 @@ namespace DepositWithdrawal.ViewModels
                         network.CreateBankHistory(jobj);
                     }
                     else { //내역수정일경우
-                        if (this.ReceiptModel.Value.IsChanged.Value) {
+                        if (this.ReceiptModel.Value.isChanged) {
                             JObject inner = new JObject();
                             inner["shi_id"] = this.ReceiptModel.Value.ReceiptNo.Value;
                             inner["changed_property"] = this.ReceiptModel.Value.ChangedItem;
@@ -206,8 +205,7 @@ namespace DepositWithdrawal.ViewModels
                 case COMMAND.DeleteBankHistory: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
-                        this.ReceiptModel.Value.CompleteChangedData(); //변경완료 후 변수 초기화
-                        Dispose();
+                        Dispose(); //변경완료 후 변수 초기화
                         regionManager.RequestNavigate("ContentRegion", nameof(BankListPage));
                     });
                     break;
@@ -220,11 +218,6 @@ namespace DepositWithdrawal.ViewModels
 
         public void OnSent()
         {
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

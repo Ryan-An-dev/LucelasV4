@@ -36,38 +36,14 @@ namespace CommonModel.Model
             this.Address = new ReactiveProperty<string>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Address1  = new ReactiveProperty<string>().AddTo(disposable);
-            SetObserver();
         }
-
-        public override JObject GetChangedItem()
-        {
-            return ChangedItem;
-        }
-        private void SetObserver()
+        public override void SetObserver()
         {
             this.Name.Subscribe(x => ChangedJson("cui_name", x));
             this.Phone.Subscribe(x => ChangedJson("cui_phone", x));
             this.Address.Subscribe(x => ChangedJson("cui_address", x));
             this.Address1.Subscribe(x => ChangedJson("cui_address_detail", x));
         }
-        private void ChangedJson(string name, object value)
-        {
-            if (value != null)
-            {
-                if (value is int)
-                {
-                    ChangedItem[name] = (int)value;
-                }
-                else if (value is string)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                else if (value is JToken)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                isChanged = true;
-            }
-        }
+        
     }
 }

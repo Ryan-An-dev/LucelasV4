@@ -62,33 +62,15 @@ namespace CommonModel.Model
             isChanged = false;
 
         }
-        private void SetObserver() {
+        public override void SetObserver() {
             this.Month.Subscribe(x => ChangedJson("create_time", x));
             this.Price.Subscribe(x => ChangedJson("total", x));
             this.SalerId.Subscribe(x => ChangedJson("saler_id", x));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
         }
-        private void ChangedJson(string name, object value)
-        {
-            if (value != null)
-            {
-                if (value is int)
-                {
-                    ChangedItem[name] = (int)value;
-                }
-                else if (value is string)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                else if (value is JToken) {
-                    ChangedItem[name] = value.ToString();
-                }
-                isChanged = true;
-            }
-        }
 
-        public override JObject GetChangedItem()
+        public JObject GetChangedItem()
         {
             if (this.Contractor.Value.isChanged) {
                 ChangedItem["contractor"] =this.Contractor.Value.GetChangedItem();

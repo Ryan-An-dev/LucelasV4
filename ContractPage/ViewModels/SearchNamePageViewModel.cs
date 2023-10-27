@@ -23,7 +23,7 @@ using System.Collections.ObjectModel;
 
 namespace ContractPage.ViewModels
 {
-    public class SearchNamePageViewModel : PrismCommonModelBase, IDialogAware, INetReceiver
+    public class SearchNamePageViewModel : PrismCommonViewModelBase, IDialogAware, INetReceiver
     {
         public AddressSearchManagerClass addrSearchManager { get; set; }
         public ObservableCollection<Customer> CustomerList { get; set; }
@@ -117,11 +117,6 @@ namespace ContractPage.ViewModels
             parameters.TryGetValue("Contractor", out temp);
             this.Keyword.Value=temp.Name.Value;
             SearchBase(this.Keyword.Value);
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
 
         public void OnRceivedData(ErpPacket packet)

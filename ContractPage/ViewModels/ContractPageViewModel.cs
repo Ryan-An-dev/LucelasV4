@@ -26,7 +26,7 @@ using System.Windows.Controls;
 namespace ContractPage.ViewModels
 {
     public enum MovePageType { Next = 1, Prev }
-    public class ContractPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class ContractPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
         
@@ -251,11 +251,6 @@ namespace ContractPage.ViewModels
         public void OnSent()
         {
             
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

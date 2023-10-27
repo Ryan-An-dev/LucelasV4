@@ -17,7 +17,7 @@ using System.Text;
 
 namespace DepositWithdrawal.ViewModels
 {
-    public class FindItemPageViewModel : PrismCommonModelBase, INetReceiver,IDialogAware
+    public class FindItemPageViewModel : PrismCommonViewModelBase, INetReceiver,IDialogAware
     {
         public ReactiveCollection<Contract> ContractItems { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
@@ -200,9 +200,5 @@ namespace DepositWithdrawal.ViewModels
             throw new NotImplementedException();
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

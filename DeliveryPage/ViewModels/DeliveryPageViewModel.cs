@@ -12,17 +12,12 @@ using System.Linq;
 namespace DeliveryPage.ViewModels
 {
     public enum MovePageType { Next = 1, Prev }
-    public class DeliveryPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class DeliveryPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
 
         public DeliveryPageViewModel()
         {
 
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

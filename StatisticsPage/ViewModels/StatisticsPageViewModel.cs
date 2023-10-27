@@ -34,7 +34,7 @@ namespace StatisticsPage.ViewModels
         Monthly = 1
     }
 
-    public class StatisticsPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class StatisticsPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         public ChartValues<int> PreviousMonthSalesValues { get; set; }
         public ChartValues<int> CurrentMonthSalesValues { get; set; }
@@ -356,11 +356,6 @@ namespace StatisticsPage.ViewModels
             
             int daysInMonth = DateTime.DaysInMonth(year, month);
             return daysInMonth;
-        }
-
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
         }
     }
 }

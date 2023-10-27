@@ -35,26 +35,37 @@ namespace DataAccess
         DELETECONTRACT = 33,
         #endregion
 
-        #region 고객리스트
-        GETCUSTOMERINFO = 35,
-        CREATECUSTOMERINFO = 36,
-        UPDATECUSTOMERINFO = 37,
-        DELETECUSTOMERINFO = 38,
+        #region 직원리스트
+        CREATEEMPLOEEINFO = 56,
+        GETEMPLOEEINFO ,
+        UPDATEEMPLOEEINFO,
+        DELETEEMPLOEEINFO,
         #endregion
 
         #region 회사리스트
-        GETCOMPANYINFO = 40,
-        CREATECOMPANYINFO,
+        CREATECOMPANYINFO =60,
+        GETCOMPANYINFO,
         UPDATECOMPANYINFO,
         DELETECOMPANYINFO,
         #endregion
 
         #region 제품리스트
-        GETPRODUCTINFO = 45,
-        CREATEPRODUCTINFO,
+        CREATEPRODUCTINFO = 64,
+        GETPRODUCTINFO,
         UPDATEPRODUCTINFO,
         DELETEPRODUCTINFO,
         #endregion
+
+        #region 고객리스트
+        CREATECUSTOMERINFO = 68,
+        GETCUSTOMERINFO,
+        UPDATECUSTOMERINFO,
+        DELETECUSTOMERINFO,
+        #endregion
+
+      
+
+        
 
 
 

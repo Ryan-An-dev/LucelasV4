@@ -12,7 +12,7 @@ using System.Linq;
 namespace MESPage.ViewModels
 {
     public enum MovePageType { Next = 1, Prev }
-    public class MesPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class MesPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         
         public MesPageViewModel()
@@ -20,10 +20,6 @@ namespace MESPage.ViewModels
 
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {

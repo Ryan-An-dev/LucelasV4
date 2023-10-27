@@ -30,7 +30,7 @@ namespace DepositWithdrawal.ViewModels
 {
  
     public enum MovePageType { Next=1, Prev }
-    public class BankListPageViewModel : PrismCommonModelBase, INavigationAware, INetReceiver
+    public class BankListPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         public ReactiveProperty<bool> Working { get; set; } //작업중인지 아닌지 표현
         public ReactiveProperty<bool> CompletedCheck { get; set; }
@@ -434,9 +434,5 @@ namespace DepositWithdrawal.ViewModels
             
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

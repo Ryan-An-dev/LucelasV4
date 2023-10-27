@@ -48,7 +48,7 @@ namespace CommonModel.Model
             this.Price= new ReactiveProperty<int>(0).AddTo(disposable);
         }
 
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
             throw new NotImplementedException();
         }

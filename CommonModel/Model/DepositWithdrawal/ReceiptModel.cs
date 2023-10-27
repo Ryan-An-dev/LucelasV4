@@ -82,11 +82,8 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Memo { get; set; }
         public ReactiveProperty<int> RemainPrice { get; set; }
         public ReactiveProperty<string> indexKey { get; set; }
-        public ReactiveProperty<bool> IsChanged { get; set; }
-        public JObject ChangedItem { get; set; }
         public ReceiptModel() : base()
         {
-            this.IsChanged = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>("", mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);//ListNo
@@ -103,15 +100,10 @@ namespace CommonModel.Model
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
-            this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
-            this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
-            this.Memo.Subscribe(x => ChangedJson("shi_memo", x)).AddTo(disposable);
-            this.Tip.Subscribe(x => ChangedJson("shi_use_name", x)).AddTo(disposable);
-            this.Money.Subscribe(x => ChangedJson("shi_cost", x));
-            this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
+           
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
-            this.IsChanged = new ReactiveProperty<bool>(false).AddTo(disposable);
+            
             this.Tip = new ReactiveProperty<string>(Tip, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //적요
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);//ListNo
@@ -128,35 +120,11 @@ namespace CommonModel.Model
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
-            this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
-            this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
-            this.Memo.Subscribe(x => ChangedJson("shi_memo", x)).AddTo(disposable);
-            this.Tip.Subscribe(x => ChangedJson("shi_use_name", x)).AddTo(disposable);
-            this.Money.Subscribe(x => ChangedJson("shi_cost", x));
-            this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
-        }
-        private void ChangedJson(string name, object value) {
-            if (value != null) {
-                if (value is int)
-                {
-                    ChangedItem[name] = (int)value;
-                }
-                else if (value is string)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                this.IsChanged.Value = true;
-            }
-        }
-        public void CompleteChangedData() {
-            this.ChangedItem.RemoveAll();
-            this.IsChanged.Value = false;
             
         }
-
         public ReceiptModel Copy() {
             ReceiptModel tmp = new ReceiptModel(this.Tip.Value, this.CategoryInfo.Value, this.Memo.Value,this.Money.Value,this.Contents.Value,(int)this.IncomeCostType.Value);
-            tmp.IsChanged.Value = this.IsChanged.Value;
+            
             tmp.ChangedItem= this.ChangedItem;
             tmp.BankInfo.Value = this.BankInfo.Value;
             tmp.ListNo.Value = this.ListNo.Value;
@@ -173,10 +141,15 @@ namespace CommonModel.Model
             }
             return tmp;
         }
-
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
-            throw new NotImplementedException();
+            this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
+            this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
+            this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
+            this.Memo.Subscribe(x => ChangedJson("shi_memo", x)).AddTo(disposable);
+            this.Tip.Subscribe(x => ChangedJson("shi_use_name", x)).AddTo(disposable);
+            this.Money.Subscribe(x => ChangedJson("shi_cost", x));
+            this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
         }
     }
 }

@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -18,7 +19,7 @@ using System.Windows.Interop;
 
 namespace LucelasV4.ViewModels
 {
-    public class MainWindowViewModel : BindableBase,ICMDReceiver
+    public class MainWindowViewModel : PrismCommonViewModelBase, ICMDReceiver
     {
         public ReactiveCommand<string> MenuSelectCommand { get; }
 

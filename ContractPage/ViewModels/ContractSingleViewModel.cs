@@ -25,7 +25,7 @@ using System.Windows.Controls;
 
 namespace ContractPage.ViewModels
 {
-    public class ContractSingleViewModel : PrismCommonModelBase, INavigationAware, IDisposable, INetReceiver
+    public class ContractSingleViewModel : PrismCommonViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
         public DelegateCommand SaveButton { get; }
         public ReactiveProperty<string> Title { get; } = new();
@@ -37,10 +37,10 @@ namespace ContractPage.ViewModels
         public DelegateCommand<string> AddContractItemButton { get; }
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
-        public ReactiveProperty<Payment>SelectedPayment { get; set; }
+        public ReactiveProperty<Payment> SelectedPayment { get; set; }
         public ReactiveProperty<Furniture> SelectedProduct { get; set; }
         public IDialogService dialogService { get; }
-        public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService):base(regionManager)
+        public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
@@ -55,12 +55,11 @@ namespace ContractPage.ViewModels
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
         }
-
         private void ExecAddContractItemButton(string obj)
         {
             switch (obj) {
                 case "AddProduct":
-
+                    SearchCompanySelectExcute();
                     break;
                 case "DeleteProduct":
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
@@ -72,6 +71,12 @@ namespace ContractPage.ViewModels
                     this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
                     break;
             }
+        }
+
+        private void SearchCompanySelectExcute() {
+            DialogParameters p = new DialogParameters();
+            p.Add("Contractor", this.Contract.Value.Contractor.Value);
+            this.dialogService.ShowDialog("SearchCompanyPage", p, r => FindAddressItem(r), "CommonDialogWindow");
         }
 
         private void SearchAdressExcute()
@@ -243,9 +248,5 @@ namespace ContractPage.ViewModels
         {
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

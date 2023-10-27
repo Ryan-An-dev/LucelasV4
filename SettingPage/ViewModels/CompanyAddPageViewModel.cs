@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SettingPage.ViewModels
 {
-    public class CompanyAddPageViewModel : PrismCommonModelBase, IDialogAware
+    public class CompanyAddPageViewModel : PrismCommonViewModelBase, IDialogAware
     {
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
@@ -68,9 +68,6 @@ namespace SettingPage.ViewModels
             
         }
 
-        public override JObject GetChangedItem()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

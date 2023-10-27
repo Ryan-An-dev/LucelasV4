@@ -21,7 +21,7 @@ namespace CommonModel.Model
             this.ProductList = new ReactiveCollection<Product>().AddTo(disposable);
         }
 
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
             throw new NotImplementedException();
         }
@@ -32,17 +32,24 @@ namespace CommonModel.Model
         public ReactiveProperty<string> CompanyName { get; set; }  
         public ReactiveProperty<string> CompanyPhone { get; set; }
         public ReactiveProperty<string> CompanyAddress { get; set; }
-        public ReactiveCollection<Product> ProductList { get; set; }
+        public Company():base()
+        {
+            this.Id = new ReactiveProperty<int>().AddTo(disposable);
+            this.CompanyName = new ReactiveProperty<string>().AddTo(disposable);
+            this.CompanyAddress = new ReactiveProperty<string>().AddTo(disposable);
+            this.CompanyPhone = new ReactiveProperty<string>().AddTo(disposable);
+        }
         public Company(int categoryId, string CompanyName)
         {
             this.Id = new ReactiveProperty<int>(categoryId).AddTo(disposable);
             this.CompanyName = new ReactiveProperty<string>(CompanyName).AddTo(disposable);
-            this.ProductList = new ReactiveCollection<Product>().AddTo(disposable);
         }
 
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
-            throw new NotImplementedException();
+            this.CompanyName.Subscribe(x => ChangedJson("company_name", x));
+            this.CompanyPhone.Subscribe(x => ChangedJson("company_phone", x));
+            this.CompanyAddress.Subscribe(x => ChangedJson("company_address", x));
         }
     }
 
@@ -65,7 +72,7 @@ namespace CommonModel.Model
             return tmp;
         }
 
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
             throw new NotImplementedException();
         }

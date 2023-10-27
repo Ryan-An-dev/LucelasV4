@@ -32,7 +32,7 @@ namespace CommonModel.Model
             this.TodayDelevery = new ReactiveProperty<int?>(0).AddTo(this.disposable);
         }
 
-        public override JObject GetChangedItem()
+        public override void SetObserver()
         {
             throw new NotImplementedException();
         }
