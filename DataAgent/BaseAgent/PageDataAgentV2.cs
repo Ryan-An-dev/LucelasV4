@@ -15,6 +15,10 @@ namespace DataAgent.BaseAgent
         public IBaseRepositoryV2 repo = null;
 
         public INetReceiver ReceiverViewModel = null;
+        public PageDataAgentV2()
+        {
+           
+        }
         public PageDataAgentV2(IBaseRepositoryV2 repo)
         {
             this.repo = repo;

@@ -32,7 +32,7 @@ namespace CommonModel.Model
         [JsonPropertyName("payment")]
         public ReactiveCollection<Payment> Payment { get; set; } //지불 클래스
         [JsonPropertyName("product")]
-        public ReactiveCollection<Furniture> Product { get; set; } //주문 상품 클래스
+        public ReactiveCollection<FurnitureInventory> Product { get; set; } //주문 상품 클래스
         [JsonPropertyName("memo")]
         public ReactiveProperty<string> Memo { get; set; } //메모
         [JsonPropertyName("saler_id")]
@@ -52,7 +52,7 @@ namespace CommonModel.Model
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
-            this.Product = new ReactiveCollection<Furniture>().AddTo(disposable);
+            this.Product = new ReactiveCollection<FurnitureInventory>().AddTo(disposable);
             this.Contractor.Value = new Customer();
             SetObserver();
         }
@@ -87,7 +87,7 @@ namespace CommonModel.Model
                 ChangedItem["payment"] = jarrPayment;
 
             JArray jarrProduct = null;
-            foreach (Furniture item in Product)
+            foreach (FurnitureInventory item in Product)
             {
                 if (item.isChanged)
                 {

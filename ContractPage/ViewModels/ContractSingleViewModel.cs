@@ -38,14 +38,14 @@ namespace ContractPage.ViewModels
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
-        public ReactiveProperty<Furniture> SelectedProduct { get; set; }
+        public ReactiveProperty<FurnitureInventory> SelectedProduct { get; set; }
         public IDialogService dialogService { get; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
             SelectedPayment = new ReactiveProperty<Payment>().AddTo(disposable);
-            SelectedProduct = new ReactiveProperty<Furniture>().AddTo(disposable);
+            SelectedProduct = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             AddContractItemButton = new DelegateCommand<string>(ExecAddContractItemButton);
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
@@ -76,7 +76,27 @@ namespace ContractPage.ViewModels
         private void SearchCompanySelectExcute() {
             DialogParameters p = new DialogParameters();
             p.Add("Contractor", this.Contract.Value.Contractor.Value);
-            this.dialogService.ShowDialog("SearchCompanyPage", p, r => FindAddressItem(r), "CommonDialogWindow");
+            this.dialogService.ShowDialog("SearchCompanyPage", p, r => SetProduct(r), "CommonDialogWindow");
+        }
+        private void SetProduct(IDialogResult r) {
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("SelectedFurniture")) return;
+                else
+                {
+                    FurnitureInventory temp = null;
+                    r.Parameters.TryGetValue("SelectedFurniture", out temp);
+                    if (this.Contract.Value != null)
+                    {
+                        this.Contract.Value.Product.Add(temp);
+                    }
+                }
+            }
+            else
+            {
+
+            }
         }
 
         private void SearchAdressExcute()

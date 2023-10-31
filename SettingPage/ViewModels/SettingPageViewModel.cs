@@ -39,6 +39,7 @@ namespace SettingPage.ViewModels
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
+            this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
         }
         public SettingPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
@@ -101,7 +102,7 @@ namespace SettingPage.ViewModels
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
-            if (!string.IsNullOrEmpty(msg)) {
+            if (!msg.Contains("null")) {
                 JObject jobj = new JObject(JObject.Parse(msg));
                 ErpLogWriter.LogWriter.Trace(jobj.ToString());
                 switch ((COMMAND)packet.Header.CMD)
@@ -185,10 +186,14 @@ namespace SettingPage.ViewModels
         }
         private void SetCategoryList(JObject msg)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            try
             {
-                this.CategoryInfos.Clear();
-            }); 
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.CategoryInfos.Clear();
+                });
+            } catch (Exception) { }
+           
             if (msg.ToString().Trim() != string.Empty)
             {
                 try

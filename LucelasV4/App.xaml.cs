@@ -100,8 +100,8 @@ namespace LucelasV4
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();
             containerRegistry.Register<ICustomerRepository, CustomerRepository>();
-            containerRegistry.Register<CompanyRepository>();
-            containerRegistry.Register<ProductRepository>();
+            containerRegistry.Register<IBaseRepositoryV2, CompanyRepository>();
+            containerRegistry.Register<IBaseRepositoryV2,ProductRepository>();
 
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

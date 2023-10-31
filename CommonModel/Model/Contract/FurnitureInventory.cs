@@ -28,9 +28,13 @@ namespace CommonModel.Model
 
     public class FurnitureInventory: PrismCommonModelBase
     {
-        public ReactiveProperty<Purpose> Purpose; //재고 목적
+        public ReactiveProperty<string> Name { get; set; } //제품명
+        public ReactiveProperty<int> Price { get; set; } // 가격
+        public ReactiveProperty<int> Id { get; set; } // 아이디
+        public ReactiveProperty<Company> Company { get; set; } //회사
+        public ReactiveProperty<FurnitureType> ProductType { get; set; } //분류
 
-        public ReactiveProperty<Furniture> Furniture; //제품
+        public ReactiveProperty<Purpose> Purpose; //재고 목적
 
         public ReactiveProperty<DateTime> StoreReachDate;//입고일
 
@@ -39,13 +43,20 @@ namespace CommonModel.Model
         public FurnitureInventory() : base()
         {
             this.Purpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
-            this.Furniture = new ReactiveProperty<Furniture>().AddTo(this.disposable);
             this.StoreReachDate = new ReactiveProperty<DateTime>().AddTo(this.disposable);
             this.Count = new ReactiveProperty<int>().AddTo(this.disposable);
+            this.Name = new ReactiveProperty<string>("").AddTo(disposable);
+            this.Price = new ReactiveProperty<int>().AddTo(disposable);
+            this.Id = new ReactiveProperty<int>().AddTo(disposable);
+            this.Company = new ReactiveProperty<Company>().AddTo(disposable);
+            this.ProductType = new ReactiveProperty<FurnitureType>().AddTo(disposable);
         }
 
         public override void SetObserver()
         {
+            this.Name.Subscribe(x => ChangedJson("product_name", x));
+            this.Price.Subscribe(x => ChangedJson("product_price", x));
+            this.ProductType.Subscribe(x => ChangedJson("product_type", x));
             this.Purpose.Subscribe(x => ChangedJson("purpose", x));
             this.StoreReachDate.Subscribe(x => ChangedJson("insert_date", x));
             this.Count.Subscribe(x => ChangedJson("count", x));

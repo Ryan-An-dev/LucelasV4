@@ -34,7 +34,7 @@
                 <ComboBox
                     Style="{StaticResource MaterialDesignComboBox}" 
                     ItemsSource="{Binding CompanyProductTypeSelectValues, Mode=OneWay}"
-                    SelectedItem="{Binding CompanyProductTypeSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     md:HintAssist.Hint="검색타입"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True" 
@@ -75,8 +75,8 @@
                     Text="회사목록"/>
                 <DataGrid Grid.Row="1"
                     Margin="10 10" 
-                    ItemsSource="{Binding AddressDetails}"
-                    SelectedItem="{Binding SelectedItem}"
+                    ItemsSource="{Binding CompanyList}"
+                    SelectedItem="{Binding SelectedCompany, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     AutoGenerateColumns="False"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
@@ -84,9 +84,9 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName}" 
                                             Width="0.4*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="대표자명" Binding="{Binding 도로명주소}" 
+                        <DataGridTextColumn Header="번호" Binding="{Binding CompanyPhone}" 
                                             Width="0.3*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="등록일자" Binding="{Binding 도로명주소}" 
+                        <DataGridTextColumn Header="주소" Binding="{Binding CompanyAddress}" 
                                             Width="0.3*" IsReadOnly="True"/>
 
                     </DataGrid.Columns>
@@ -107,21 +107,23 @@
                     Text="제품목록"/>
                 <DataGrid Grid.Row="1"
                     Margin="10 10" 
-                    ItemsSource="{Binding AddressDetails}"
-                    SelectedItem="{Binding SelectedItem}"
+                    ItemsSource="{Binding FurnitureList}"
+                    SelectedItem="{Binding SelectedFurniture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     AutoGenerateColumns="False"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
                     >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="회사명" Binding="{Binding 우편번호}" 
-                                            Width="0.3*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="제품타입" Binding="{Binding 도로명주소}" 
+                        <DataGridTextColumn Header="회사명" Binding="{Binding Company.Value.Name.Value}" 
+                                            Width="0.24*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="제품타입" Binding="{Binding ProductType.Value.Name.Value}" 
                                             Width="0.25*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="제품명" Binding="{Binding 우편번호}" 
-                                            Width="0.5*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="가격" Binding="{Binding 도로명주소}" 
-                                            Width="0.2*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="제품명" Binding="{Binding Name.Value}" 
+                                            Width="0.4*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="가격" Binding="{Binding Price.Value}" 
+                                            Width="0.2*" />
+                        <DataGridTextColumn Header="재고량" Binding="{Binding Count.Value}" 
+                                            Width="0.2*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -157,8 +159,13 @@
                 <Button Content="취소" Margin="10 0" Command="{Binding CloseDialogCommand}" CommandParameter="false"/>
 
             </StackPanel>
-            <Grid Visibility="{Binding SearchVisibility.Value, UpdateSourceTrigger=PropertyChanged}" 
-                  Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="3" Opacity="0.5" Background="#151f2d">
+            <Grid 
+                Visibility="{Binding SearchVisibility.Value, UpdateSourceTrigger=PropertyChanged}" 
+                Grid.ColumnSpan="2" 
+                Grid.Row="1" 
+                Grid.RowSpan="3" 
+                Opacity="0.5" 
+                Background="#151f2d">
                 <fa:ImageAwesome Icon="Refresh" Spin="True" Height="48" Width="48" Foreground="White"/>
             </Grid>
         </Grid>
