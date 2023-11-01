@@ -16,6 +16,7 @@ using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -73,6 +74,24 @@ namespace ContractPage.ViewModels
         public string Title => throw new NotImplementedException();
 
         //선택된 회사 더블클릭시 제품 조회되도록 하는 커맨드
+        #region Paging Company
+        public ReactiveProperty<int> CurrentPage { get; set; }
+        public ReactiveProperty<int> TotalPage { get; set; }
+        public ReactiveProperty<int> TotalItemCount { get; set; }
+        public ReactiveProperty<int> ListCount { get; set; }
+        public ReactiveProperty<int> FirstItem { get; set; }
+        public DelegateCommand<object> CmdGoPage { get; }
+        public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
+        #endregion
+       
+        
+        #region Paging Product
+        public ReactiveProperty<int> CurrentPageProduct { get; set; }
+        public ReactiveProperty<int> TotalPageProduct { get; set; }
+        public ReactiveProperty<int> TotalItemCountProduct { get; set; }
+        public ReactiveProperty<int> FirstItemProduct { get; set; }
+        public DelegateCommand<object> CmdGoPageProduct { get; }
+        #endregion
 
         public SearchCompanyPageViewModel(IContainerProvider con) : base()
         {
@@ -87,9 +106,115 @@ namespace ContractPage.ViewModels
             this.SelectedFurniture = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             this.SelectedCompany = new ReactiveProperty<Company>().AddTo(disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+
+            
+            
+            this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable); //Company
+
+
+            this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalPage = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);//Company
+            this.CurrentPage = new ReactiveProperty<int>().AddTo(this.disposable);
+            CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);//Company
+
+            this.CurrentPageProduct = new ReactiveProperty<int>().AddTo(this.disposable);//product
+            this.FirstItemProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
+            this.TotalPageProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
+            this.TotalItemCountProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
+            this.TotalItemCountProduct.Subscribe(c => this.TotalPageProduct.Value = (c / this.ListCount.Value) + 1);//product
+            CmdGoPageProduct = new DelegateCommand<object>(ExecCmdGoPageProduct);//product
+
             FurnitureInfos = temp.FurnitureInfos;
+            
+            CountList.Add(30);
+            CountList.Add(50);
+            CountList.Add(100);
         }
-        
+
+        private void ExecCmdGoPageProduct(object param)
+        {
+            MovePageType moveType = (MovePageType)param;
+            if (this.CurrentPageProduct.Value == this.TotalPageProduct.Value && moveType == MovePageType.Next)
+            {
+                return;
+            }
+            if (this.CurrentPageProduct.Value == 1 && moveType == MovePageType.Prev)
+            {
+                return;
+            }
+            switch (moveType)
+            {
+                case MovePageType.Next:
+                    this.CurrentPageProduct.Value = this.CurrentPageProduct.Value == this.TotalPageProduct.Value ? this.CurrentPageProduct.Value : this.CurrentPageProduct.Value + 1;
+                    break;
+                case MovePageType.Prev:
+                    this.CurrentPageProduct.Value = this.CurrentPageProduct.Value == 1 ? 1 : this.CurrentPageProduct.Value - 1;
+                    break;
+                default:
+                    break;
+            }
+            UpdatePageItemProduct(moveType, this.ListCount.Value);
+        }
+
+        private void UpdatePageItemProduct(MovePageType param, int count)
+        {
+            using (var network = this.ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)param;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPageProduct.Value) > this.TotalItemCountProduct.Value ? (this.ListCount.Value * CurrentPageProduct.Value) - this.TotalItemCountProduct.Value : this.ListCount.Value;
+                jobj["page_start_pos"] = (this.CurrentPageProduct.Value - 1) * this.ListCount.Value;
+                JObject inner = new JObject();
+                inner["product_name"] = this.Keyword.Value;
+                jobj["search_option"] = inner;
+                network.repo.Read(jobj);
+                this.IsLoading.Value = true;
+            }
+        }
+        private void ExecCmdGoPage(object param)
+        {
+            MovePageType moveType = (MovePageType)param;
+            if (this.CurrentPage.Value == this.TotalPage.Value && moveType == MovePageType.Next)
+            {
+                return;
+            }
+            if (this.CurrentPage.Value == 1 && moveType == MovePageType.Prev)
+            {
+                return;
+            }
+            switch (moveType)
+            {
+                case MovePageType.Next:
+                    this.CurrentPage.Value = this.CurrentPage.Value == this.TotalPage.Value ? this.CurrentPage.Value : this.CurrentPage.Value + 1;
+                    break;
+                case MovePageType.Prev:
+                    this.CurrentPage.Value = this.CurrentPage.Value == 1 ? 1 : this.CurrentPage.Value - 1;
+                    break;
+                default:
+                    break;
+            }
+            UpdatePageItem(moveType, this.ListCount.Value);
+        }
+
+        private void UpdatePageItem(MovePageType param, int count)
+        {
+            using (var network = this.ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)param;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
+                jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
+                JObject inner = new JObject();
+                inner["company_name"] = this.Keyword.Value;
+                jobj["search_option"] = inner;
+                network.repo.Read(jobj);
+                this.IsLoading.Value = true;
+            }
+        }
 
         internal void SearchCompanyProduct()
         {
@@ -99,6 +224,10 @@ namespace ContractPage.ViewModels
             switch (this.CompanyProductTypeSelect.Value) {
                 case CompanyProductSelect.ProductName :
                     { //제품명 검색
+                        this.FirstItemProduct.Value = 0;
+                        this.CurrentPageProduct.Value = 1;
+                        this.TotalPageProduct.Value = 0;
+                        this.TotalItemCountProduct.Value = 0;
                         using (var network = this.ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
                         {
                             JObject jobj = new JObject();
@@ -106,6 +235,8 @@ namespace ContractPage.ViewModels
                             JObject inner = new JObject();
                             inner["product_name"] = this.Keyword.Value;
                             jobj["search_option"] = inner;
+                            jobj["page_unit"] = ListCount.Value;
+                            jobj["page_start_pos"] = 0;
                             network.repo.Read(jobj);
                         }
                         this.IsLoading.Value = true;
@@ -114,6 +245,10 @@ namespace ContractPage.ViewModels
                     break;
                 case CompanyProductSelect.CompanyName: {
                         //회사명 검색
+                        this.FirstItem.Value = 0;
+                        this.CurrentPage.Value = 1;
+                        this.TotalPage.Value = 0;
+                        this.TotalItemCount.Value = 0;
                         using (var network = this.ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
                         {
                             JObject jobj = new JObject();
@@ -121,6 +256,8 @@ namespace ContractPage.ViewModels
                             JObject inner = new JObject();
                             inner["company_name"] = this.Keyword.Value;
                             jobj["search_option"] = inner;
+                            jobj["page_unit"] = ListCount.Value;
+                            jobj["page_start_pos"] = 0;
                             network.repo.Read(jobj);
                         }
                         this.IsLoading.Value = true;

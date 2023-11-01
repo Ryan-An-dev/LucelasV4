@@ -50,8 +50,8 @@ namespace ContractPage.ViewModels
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
-            SearchAddress = new DelegateCommand(SearchNameExcute);
-            SearchName = new DelegateCommand(SearchAdressExcute);
+            SearchAddress = new DelegateCommand(SearchAdressExcute);
+            SearchName = new DelegateCommand(SearchNameExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
         }
@@ -65,7 +65,9 @@ namespace ContractPage.ViewModels
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     break;
                 case "AddPayment":
-                    this.Contract.Value.Payment.Add(new Payment());
+                    Payment temp = new Payment();
+                    temp.SetObserver();
+                    this.Contract.Value.Payment.Add(temp);
                     break;
                 case "DeletePayment":
                     this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);

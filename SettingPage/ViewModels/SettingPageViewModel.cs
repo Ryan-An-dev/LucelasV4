@@ -133,16 +133,16 @@ namespace SettingPage.ViewModels
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
-                    if (msg["product_code_list"] == null)
+                    if (msg["category_list"] == null)
                         return;
                     JArray jarr = new JArray();
-                    jarr = msg["product_code_list"] as JArray;
+                    jarr = msg["category_list"] as JArray;
                     foreach (JObject jobj in jarr) {
                         FurnitureType temp = new FurnitureType();
-                        if (jobj["product_code"] != null)
-                            temp.ProductCode.Value = msg["product_code"].ToObject<int>();
-                        if (jobj["product_name"] != null)
-                            temp.Name.Value = msg["product_name"].ToString();
+                        if (jobj["product_type_id"] != null)
+                            temp.ProductCode.Value = jobj["product_type_id"].ToObject<int>();
+                        if (jobj["product_type_name"] != null)
+                            temp.Name.Value = jobj["product_type_name"].ToString();
                         this.FurnitureInfos.Add(temp);
                     }
                 } catch (Exception) { }

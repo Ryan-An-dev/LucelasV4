@@ -68,6 +68,8 @@ namespace CommonModel.Model
             this.SalerId.Subscribe(x => ChangedJson("saler_id", x));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
+            this.Contractor.Value.SetObserver();
+            
         }
 
         public JObject GetChangedItem()
@@ -76,14 +78,13 @@ namespace CommonModel.Model
                 ChangedItem["contractor"] =this.Contractor.Value.GetChangedItem();
             }
 
-            JArray jarrPayment = null;
+            JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
                 if (item.isChanged) {
-                    jarrPayment = new JArray();
                     jarrPayment.Add(item.GetChangedItem());
                 }
             }
-            if(jarrPayment!=null)
+            if(jarrPayment.Count>0)
                 ChangedItem["payment"] = jarrPayment;
 
             JArray jarrProduct = null;

@@ -43,9 +43,10 @@
             <DataGrid 
                 Grid.Row="2"
                 Margin="0 10" 
-                ItemsSource="{Binding CustomerList}"
+                ItemsSource="{Binding CustomerList }"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
+                CanUserAddRows="False"
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Auto"
                 >

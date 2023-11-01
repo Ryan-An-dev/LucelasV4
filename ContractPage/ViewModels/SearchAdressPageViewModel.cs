@@ -34,9 +34,9 @@ namespace ContractPage.ViewModels
         public DelegateCommand SearchDialogCommand =>
             _SearchDialogCommand ?? (_SearchDialogCommand = new DelegateCommand(SearchAddress));
 
-        private DelegateCommand _SearchExecute;
-        public DelegateCommand SearchExecute =>
-            _SearchExecute ?? (_SearchExecute = new DelegateCommand(SearchAddress));
+        private DelegateCommand<string> _SearchExecute;
+        public DelegateCommand<string> SearchExecute =>
+            _SearchExecute ?? (_SearchExecute = new DelegateCommand<string>(SearchAddress));
 
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>

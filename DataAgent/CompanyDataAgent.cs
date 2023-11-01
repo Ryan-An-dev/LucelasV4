@@ -13,9 +13,9 @@ namespace DataAgent
 {
     public class CompanyDataAgent : PageDataAgentV2
     {
-        private IBaseRepositoryV2 repo = null;
+        private ICompanyRepository repo = null;
 
-        public CompanyDataAgent(IBaseRepositoryV2 repo):base(repo)
+        public CompanyDataAgent(ICompanyRepository repo):base(repo)
         {
             this.repo = repo;
         }

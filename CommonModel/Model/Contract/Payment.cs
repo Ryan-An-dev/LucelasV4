@@ -31,10 +31,24 @@ namespace CommonModel.Model
 
     public class Payment : PrismCommonModelBase
     {
+        public IEnumerable<PaymentType> PaymentTypeSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>(); }
+        }
+        public IEnumerable<ReceiptType> PaymentMethodSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(ReceiptType)).Cast<ReceiptType>(); }
+        }
+        public IEnumerable<Complete> CompleteSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(Complete)).Cast<Complete>(); }
+        }
+
         [JsonPropertyName("payment_method")]
         public ReactiveProperty<ReceiptType> PaymentMethod { get; set; } //계좌, 카드 , 계좌이체 , 현금
         [JsonPropertyName("payment_type")]
         public ReactiveProperty<PaymentType> PaymentType  { get; set; } // 계약금, 잔금
+
         [JsonPropertyName("payment_completed")]
         public ReactiveProperty<Complete> PaymentCompleted { get; set; }
         [JsonPropertyName("price")]
@@ -46,11 +60,15 @@ namespace CommonModel.Model
             this.PaymentMethod = new ReactiveProperty<ReceiptType>().AddTo(disposable);
             this.PaymentCompleted = new ReactiveProperty<Complete>().AddTo(disposable);
             this.Price= new ReactiveProperty<int>(0).AddTo(disposable);
+            SetObserver();
         }
 
         public override void SetObserver()
         {
-            throw new NotImplementedException();
+            this.PaymentType.Subscribe(x => ChangedJson("payment_type", x));
+            this.PaymentMethod.Subscribe(x => ChangedJson("payment_method", x));
+            this.PaymentCompleted.Subscribe(x => ChangedJson("payment_completed", x));
+            this.Price.Subscribe(x => ChangedJson("price", x));
         }
     }
 }

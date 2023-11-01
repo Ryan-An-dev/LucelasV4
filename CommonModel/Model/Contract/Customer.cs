@@ -36,6 +36,7 @@ namespace CommonModel.Model
             this.Address = new ReactiveProperty<string>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Address1  = new ReactiveProperty<string>().AddTo(disposable);
+            
         }
         public override void SetObserver()
         {
@@ -43,6 +44,7 @@ namespace CommonModel.Model
             this.Phone.Subscribe(x => ChangedJson("cui_phone", x));
             this.Address.Subscribe(x => ChangedJson("cui_address", x));
             this.Address1.Subscribe(x => ChangedJson("cui_address_detail", x));
+            this.Id.Subscribe(x => ChangedJson("cui_id", x));
         }
         
     }

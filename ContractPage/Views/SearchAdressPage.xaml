@@ -37,7 +37,7 @@
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True">
                     <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+                        <KeyBinding Command="{Binding SearchExecute}" CommandParameter="{Binding ElementName=Search, Path=Text}" Key="Enter"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button 
@@ -47,9 +47,10 @@
             <DataGrid 
                 Grid.Row="2"
                 Margin="0 10" 
-                ItemsSource="{Binding AddressDetails}"
+                ItemsSource="{Binding AddressDetails, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
+                CanUserAddRows="False"
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Auto"
                 >
@@ -58,17 +59,7 @@
                                         Width="0.2*" IsReadOnly="True"/>
                     <DataGridTextColumn Header="주소" Binding="{Binding 도로명주소}" 
                                         Width="0.7*" IsReadOnly="True"/>
-                    <!--<DataGridTemplateColumn Header="비고" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button
-                                    HorizontalAlignment="Left"
-                                    Content="선택" 
-                                    Command="{Binding CloseDialogCommand}" 
-                                    CommandParameter="true" Width="60"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                    
                 </DataGrid.Columns>
             </DataGrid>
          

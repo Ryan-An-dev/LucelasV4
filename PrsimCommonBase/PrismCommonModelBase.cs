@@ -83,10 +83,14 @@ namespace PrsimCommonBase
                 {
                     ChangedItem[name] = value.ToString();
                 }
+                else if (value is Enum) {
+                    ChangedItem[name] = (int)value;
+                }
                 else if (value is DateTime)
                 {
                     DateTime time = (DateTime)value;
-                    ChangedItem[name] = time.ToString("yyyy-MM-dd");                }
+                    ChangedItem[name] = time.ToString("yyyy-MM-dd");
+                }
 
                 isChanged = true;
             }

@@ -49,10 +49,10 @@ namespace ContractPage.ViewModels
         public ReactiveProperty<int> TotalItemCount { get; set; }
         public ReactiveProperty<int> ListCount { get; set; }
         public ReactiveProperty<int> FirstItem { get; set; }
+        public DelegateCommand<object> CmdGoPage { get; }
         #endregion
 
         public DelegateCommand NewButton { get; }
-        public DelegateCommand<object> CmdGoPage { get; }
         public DelegateCommand RowDoubleClick { get; }
         public ReactiveCollection<Contract> ContractItems { get; }
         public ReactiveProperty<Contract> SelectedItem { get; set; }
@@ -75,6 +75,11 @@ namespace ContractPage.ViewModels
             RowDoubleClick = new DelegateCommand(RowDoubleClickExecute);
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
+
+            this.CountList.Add(30);
+            this.CountList.Add(50);
+            this.CountList.Add(70);
+            this.CountList.Add(100);
         }
         private void ExecCmdGoPage(object param)
         {
@@ -151,6 +156,10 @@ namespace ContractPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            this.FirstItem.Value = 0;
+            this.CurrentPage.Value = 1;
+            this.TotalPage.Value = 0;
+            this.TotalItemCount.Value = 0;
             SendData();
         }
         

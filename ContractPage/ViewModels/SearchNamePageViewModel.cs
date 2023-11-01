@@ -127,14 +127,17 @@ namespace ContractPage.ViewModels
             {
                 jobj = new JObject(JObject.Parse(msg));
             }
-            catch (Exception e) { }
+            catch (Exception e) { return; }
+
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETCUSTOMERINFO: //데이터 조회 완료
                     if (jobj != null)
                     {
                         JArray jarr = new JArray();
-                        jarr=jobj["contractor"] as JArray;
+                        try { jarr = jobj["contractor"] as JArray; } catch (Exception e) { break; }
+                        if (jarr == null)
+                            return;
                         foreach (JObject inner in jarr)
                         {
                             Customer customer = new Customer();

@@ -60,7 +60,7 @@
                                 Margin="10 0 0 0"
                                 Content="검색"
                                 CommandParameter="{Binding ElementName=ContractorName, Path=Text}"
-                                Command="{Binding SearchAddress}" 
+                                Command="{Binding SearchName}" 
                                 Width="80" 
                                 HorizontalAlignment="Right"/>
                         </StackPanel>
@@ -172,7 +172,7 @@
                             Margin="5" 
                             ItemsSource="{Binding Contract.Value.Payment}"
                             SelectedItem="{Binding SelectedPayment.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            CanUserAddRows="False" 
+                            CanUserAddRows="False" RowHeight="60"
                             AutoGenerateColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="구분" Width="*">
@@ -183,18 +183,34 @@
                                                 md:HintAssist.IsFloating="True" 
                                                 md:HintAssist.Hint="계약구분"
                                                 Foreground="{StaticResource MainColor}"
-                                                SelectedIndex="{Binding Contract.Value.Payment.Value.PaymentType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                                <ComboBoxItem>계약금</ComboBoxItem>
-                                                <ComboBoxItem>잔금</ComboBoxItem>
-                                            </ComboBox>
+                                                ItemsSource="{Binding PaymentTypeSelectValues}"
+                                                SelectedItem="{Binding PaymentType.Value}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn 
+                                <DataGridTemplateColumn Header="지불방식" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox
+                                                Style="{StaticResource MaterialDesignComboBox}" 
+                                                md:HintAssist.IsFloating="True" 
+                                                md:HintAssist.Hint="지불방식"
+                                                Foreground="{StaticResource MainColor}"
+                                                ItemsSource="{Binding PaymentMethodSelectValues}"
+                                                SelectedItem="{Binding PaymentMethod.Value}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn
                                     Header="금액" 
-                                    Width="*"
-                                    Binding="{Binding Contract.Value.Payment.Value.Price.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                <DataGridTextColumn Header="비고" Width="*"/>
+                                    Width="*" md:HintAssist.Hint="금액"
+                                    Binding="{Binding Price.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:N0\}}">
+                                </DataGridTextColumn>
+                                <DataGridTextColumn 
+                                    HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
+                                    Width="*" 
+                                    MaxWidth="120" Binding="{Binding PaymentCompleted.Value}" 
+                                    Header="완료유무" IsReadOnly="True"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

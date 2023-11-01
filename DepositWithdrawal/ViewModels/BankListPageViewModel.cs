@@ -61,8 +61,8 @@ namespace DepositWithdrawal.ViewModels
         }
         public ReactiveProperty<int> TotalIncome { get; set; }
         public ReactiveProperty<int> TotalCost { get; set; }
-        public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         #region Paging
+        public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         public ReactiveProperty<int> CurrentPage { get; set; }
         public ReactiveProperty<int> TotalPage { get; set; }
         public ReactiveProperty<int> TotalItemCount { get; set; }

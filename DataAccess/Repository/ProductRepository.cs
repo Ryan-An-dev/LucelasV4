@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class ProductRepository : IBaseRepositoryV2, ICMDReceiver, IDisposable
+    public class ProductRepository : IProductRepository, ICMDReceiver, IDisposable
     {
         private SocketClientV2 NetManager;
 
@@ -38,7 +38,7 @@ namespace DataAccess.Repository
         {
             if (NetManager.session_id != 0)
             {
-                NetManager.Send(msg, COMMAND.CREATEPRODUCTINFO);
+                NetManager.Send(msg, COMMAND.GETPRODUCTINFO);
             }
         }
       
@@ -66,28 +66,28 @@ namespace DataAccess.Repository
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnConeectedFail(object sender, Exception ex)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnConnected()
         {
-            throw new NotImplementedException();
+            
         }
 
   
         public void OnReceiveFail(object sender, Exception ex)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnSendFail(object sender, Exception ex)
         {
-            throw new NotImplementedException();
+            
         }
 
         

@@ -17,7 +17,26 @@
         <!-- Main -->
         <DockPanel Margin="20 8 20 20">
             <!-- Search Condition -->
-            <TextBlock DockPanel.Dock="Top" Text="계약 리스트 조회" FontSize="18" Margin="0 0 0 0" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
+            
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="계약 리스트 조회" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
+                <ComboBox
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        ItemsSource="{Binding CountList}"
+                        SelectedValue="{Binding ListCount.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignComboBox}" 
+                        md:HintAssist.IsFloating="True" 
+                        md:HintAssist.Hint="리스트설정"
+                        Foreground="{StaticResource MainColor}"
+                        Margin=" 0 4 0 0" Cursor="">
+                </ComboBox>
+            </Grid>
             <DockPanel Dock="Top">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
                     <TextBox 
