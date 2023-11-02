@@ -321,11 +321,14 @@ namespace ContractPage.ViewModels
             {
                 return;
             }
-
+            
             ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETCOMPANYINFO: //데이터 조회
+                    if (jobj["company_list"] == null) {
+                        return;
+                    }
                     foreach(JObject jobject in jobj["company_list"] as JArray) {
                         Company temp=SetCompanyInfo(jobject);
                         this.CompanyList.Add(temp);
