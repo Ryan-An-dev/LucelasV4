@@ -96,11 +96,11 @@
                     HorizontalScrollBarVisibility="Auto"
                     >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName}" 
+                        <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName.Value}" 
                                             Width="0.4*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="번호" Binding="{Binding CompanyPhone}" 
+                        <DataGridTextColumn Header="번호" Binding="{Binding CompanyPhone.Value}" 
                                             Width="0.3*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="주소" Binding="{Binding CompanyAddress}" 
+                        <DataGridTextColumn Header="주소" Binding="{Binding CompanyAddress.Value}" 
                                             Width="0.3*" IsReadOnly="True"/>
 
                     </DataGrid.Columns>

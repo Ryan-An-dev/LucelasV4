@@ -331,7 +331,9 @@ namespace ContractPage.ViewModels
                     }
                     foreach(JObject jobject in jobj["company_list"] as JArray) {
                         Company temp=SetCompanyInfo(jobject);
-                        this.CompanyList.Add(temp);
+                        Application.Current.Dispatcher.Invoke(() => {
+                            this.CompanyList.Add(temp);
+                        });
                     }
                     IsLoading.Value = false;
                     break;
@@ -341,7 +343,10 @@ namespace ContractPage.ViewModels
                     foreach (JObject jobject in jobj["product_list"] as JArray)
                     {
                         FurnitureInventory temp = SetProductInfo(jobject);
-                        this.FurnitureList.Add(temp);
+                        Application.Current.Dispatcher.Invoke(() => {
+                            this.FurnitureList.Add(temp);
+                        });
+                        
                     }
                     IsLoading.Value = false;
                     break;
