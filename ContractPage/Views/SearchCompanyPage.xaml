@@ -10,8 +10,8 @@
     <Border  CornerRadius="25" Background="#151f2d">
         <Grid Margin="10 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.7*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.1*"/>
@@ -98,8 +98,6 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="회사명" Binding="{Binding CompanyName.Value}" 
                                             Width="0.4*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="번호" Binding="{Binding CompanyPhone.Value}" 
-                                            Width="0.3*" IsReadOnly="True"/>
                         <DataGridTextColumn Header="주소" Binding="{Binding CompanyAddress.Value}" 
                                             Width="0.3*" IsReadOnly="True"/>
 

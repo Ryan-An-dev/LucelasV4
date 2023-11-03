@@ -46,6 +46,7 @@ namespace SettingPage.ViewModels
         {
             this.dialogService = dialogService;
             this.ContainerProvider = containerProvider;
+            this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);

@@ -40,34 +40,101 @@ namespace ContractPage.ViewModels
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
 
+        #region Paging Name
+        public ReactiveProperty<int> CurrentPage { get; set; }
+        public ReactiveProperty<int> TotalPage { get; set; }
+        public ReactiveProperty<int> TotalItemCount { get; set; }
+        public ReactiveProperty<int> ListCount { get; set; }
+        public ReactiveProperty<int> FirstItem { get; set; }
+        public DelegateCommand<object> CmdGoPage { get; }
+        public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
+        #endregion
+
         public SearchNamePageViewModel(IContainerProvider con) : base()
         {
             this.ContainerProvider = con;
             this.Keyword = new ReactiveProperty<string>().AddTo(disposable);
             CustomerList = new ObservableCollection<Customer>();
             this.args = new ReactiveProperty<ReceiptModel>().AddTo(disposable);
+            this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable); //Company
+            this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalPage = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
+            this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);//Company
+            this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
+            CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);//Company
+            CountList.Add(30);
+            CountList.Add(50);
+            CountList.Add(100);
         }
 
         public SearchNamePageViewModel()
         {
 
         }
+        private void ExecCmdGoPage(object param)
+        {
+            MovePageType moveType = (MovePageType)param;
+            if (this.CurrentPage.Value == this.TotalPage.Value && moveType == MovePageType.Next)
+            {
+                return;
+            }
+            if (this.CurrentPage.Value == 1 && moveType == MovePageType.Prev)
+            {
+                return;
+            }
+            switch (moveType)
+            {
+                case MovePageType.Next:
+                    this.CurrentPage.Value = this.CurrentPage.Value == this.TotalPage.Value ? this.CurrentPage.Value : this.CurrentPage.Value + 1;
+                    break;
+                case MovePageType.Prev:
+                    this.CurrentPage.Value = this.CurrentPage.Value == 1 ? 1 : this.CurrentPage.Value - 1;
+                    break;
+                default:
+                    break;
+            }
+            UpdatePageItem(moveType, this.ListCount.Value);
+        }
 
+        private void UpdatePageItem(MovePageType param, int count)
+        {
+            using (var network = this.ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)param;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
+                jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
+                JObject inner = new JObject();
+                inner["employee_name"] = this.Keyword.Value;
+                jobj["search_option"] = inner;
+                network.GetCustomerList(jobj);
+            }
+        }
         private void SearchBase(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return;
             using (var network = this.ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
             {
                 network.SetReceiver(this);
                 //accountList, CategoryList, ProductList 기본으로 요청하기
                 JObject jobj = new JObject();
-                jobj["contractor_name"] = value;
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
+                jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
+                JObject inner = new JObject();
+                inner["employee_name"] = value;
+                jobj["search_option"] = inner;
                 network.GetCustomerList(jobj);
             }
         }
         internal async void SearchName(string value)
         {
-            CustomerList.Clear();
-            SearchBase(value);
+            if (!string.IsNullOrEmpty(value)) {
+                CustomerList.Clear();
+                SearchBase(value);
+            }
         }
 
         protected virtual void CloseDialog(string parameter)

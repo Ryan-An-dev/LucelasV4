@@ -116,10 +116,10 @@ namespace ContractPage.ViewModels
             this.TotalPage = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
             this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
             this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);//Company
-            this.CurrentPage = new ReactiveProperty<int>().AddTo(this.disposable);
+            this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);//Company
 
-            this.CurrentPageProduct = new ReactiveProperty<int>().AddTo(this.disposable);//product
+            this.CurrentPageProduct = new ReactiveProperty<int>(1).AddTo(this.disposable);//product
             this.FirstItemProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
             this.TotalPageProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
             this.TotalItemCountProduct = new ReactiveProperty<int>(0).AddTo(this.disposable);//product
