@@ -3,11 +3,11 @@
 namespace SettingPage.Views
 {
     /// <summary>
-    /// Interaction logic for EmployeeAddPageViewModel
+    /// Interaction logic for ProductAddPage
     /// </summary>
-    public partial class EmployeeAddPageViewModel : UserControl
+    public partial class ProductAddPage : UserControl
     {
-        public EmployeeAddPageViewModel()
+        public ProductAddPage()
         {
             InitializeComponent();
         }
