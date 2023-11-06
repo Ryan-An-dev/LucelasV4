@@ -20,7 +20,11 @@ namespace SettingPage
         {
             SettingPageViewModel instance = new SettingPageViewModel(containerRegistry);
             containerRegistry.RegisterInstance<SettingPageViewModel>(instance,"GlobalData");
+
             containerRegistry.RegisterDialog<CompanyAddPage>("CompanyAddPage");
+            containerRegistry.RegisterDialog<CustomerAddPage>("CustomerAddPage");
+            containerRegistry.RegisterDialog<EmployeeAddPage>("EmployeeAddPage");
+            containerRegistry.RegisterDialog<ProductAddPage>("ProductAddPage");
         }
     }
 }

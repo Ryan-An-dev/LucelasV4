@@ -32,15 +32,34 @@ namespace SettingPage.ViewModels
 
         public DelegateCommand AddCompanyCommand { get; set; }
 
+        public CustomerListViewModel CustomerListViewModel { get; set; }
+
+        public EmployeeListViewModel EmployeeListViewModel { get; set; }
+        public ProductCategoryListViewModel ProductCategoryListViewModel { get; set; }
+
+        public CompanyListViewModel CompanyListViewModel { get; set; }
+
+        public ProductListViewModel ProductListViewModel { get; set; }
+
         public IContainerProvider ContainerProvider { get; set; }
         public IDialogService dialogService { get; }
+
+        private void initViewModel() {
+            ProductCategoryListViewModel = new ProductCategoryListViewModel(ContainerProvider, regionManager, dialogService);
+            EmployeeListViewModel = new EmployeeListViewModel(ContainerProvider, regionManager, dialogService);
+            CustomerListViewModel = new CustomerListViewModel(ContainerProvider, regionManager, dialogService);
+            CompanyListViewModel = new CompanyListViewModel(ContainerProvider, regionManager, dialogService);
+            ProductListViewModel = new ProductListViewModel(ContainerProvider, regionManager, dialogService);
+        }
         public SettingPageViewModel(IContainerRegistry containerProvider)
         {
+            
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
+            initViewModel();
         }
         public SettingPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
@@ -53,6 +72,7 @@ namespace SettingPage.ViewModels
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.AddCompanyCommand = new DelegateCommand(ExecAddCompanyCommand);
             initData();
+            initViewModel();
         }
 
         private void ExecAddCompanyCommand()

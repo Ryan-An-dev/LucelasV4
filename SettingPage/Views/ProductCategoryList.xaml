@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="SettingPage.Views.ProductCategoryList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"            
+             xmlns:base="clr-namespace:PrsimCommonBase;assembly=PrsimCommonBase"
+             xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button 
+                    md:HintAssist.Hint="추가"
+                    Content="{md:PackIcon Kind=Plus, Size=14}"
+                    Command="{Binding AddDeleteButton}"
+                    CommandParameter="Add"
+                    Margin="5" Cursor="Hand"/>
+            <Button 
+                    md:HintAssist.Hint="삭제"
+                    Content="{md:PackIcon Kind=Minus, Size=14}"
+                    Command="{Binding AddDeleteButton}"
+                    CommandParameter="Delete"
+                    Margin="5"/>
+        </StackPanel>
+        <DataGrid 
+            x:Name="List"
+            SelectionMode="Single"
+            SelectionUnit="FullRow"
+            Grid.Row="1"
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            AutoGenerateColumns="False" 
+            CanUserAddRows="False"
+            Margin="10"
+            ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="No" Binding="{Binding No.Value}" Width="0.3*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="카테고리" Binding="{Binding Name.Value}" Width="0.7*" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button 
+                Width="30" 
+                Height="30" 
+                Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
+                Margin="5 5 5 5" 
+                Foreground="{StaticResource MainColor}" 
+                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
+                />
+            <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} / {1}({2})">
+                        <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button 
+                Width="30" 
+                Height="30" 
+                Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
+                Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
+                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
