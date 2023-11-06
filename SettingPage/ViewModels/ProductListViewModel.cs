@@ -66,5 +66,22 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
+        public override void DeleteButtonClick(PrismCommonModelBase selecteditem)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["aci_id"] = (int)(selecteditem as FurnitureInventory).Company.Value.Id.Value;
+                jobj["acpi_id"] = (int)(selecteditem as FurnitureInventory).Id.Value;
+                network.Delete(jobj);
+                IsLoading.Value = true;
+            }
+        }
+
+        public override void RowDoubleClickEvent()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

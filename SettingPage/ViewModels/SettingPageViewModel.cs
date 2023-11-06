@@ -53,7 +53,6 @@ namespace SettingPage.ViewModels
         }
         public SettingPageViewModel(IContainerRegistry containerProvider)
         {
-            
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
@@ -71,8 +70,8 @@ namespace SettingPage.ViewModels
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.AddCompanyCommand = new DelegateCommand(ExecAddCompanyCommand);
-            initData();
             initViewModel();
+            initData();
         }
 
         private void ExecAddCompanyCommand()
@@ -101,8 +100,8 @@ namespace SettingPage.ViewModels
                     network.GetAccountList();
                 }
             }
-            catch(Exception ex) { }
-          
+            catch (Exception ex) { }
+
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -149,7 +148,7 @@ namespace SettingPage.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                this.FurnitureInfos.Clear();
+                this.ProductCategoryListViewModel.List.Clear();
             });
             if (msg.ToString().Trim() != string.Empty)
             {
@@ -158,15 +157,22 @@ namespace SettingPage.ViewModels
                         return;
                     JArray jarr = new JArray();
                     jarr = msg["category_list"] as JArray;
+                    
+                    int i = 1;
                     foreach (JObject jobj in jarr) {
                         FurnitureType temp = new FurnitureType();
                         if (jobj["product_type_id"] != null)
-                            temp.ProductCode.Value = jobj["product_type_id"].ToObject<int>();
+                            temp.Id.Value = jobj["product_type_id"].ToObject<int>();
                         if (jobj["product_type_name"] != null)
                             temp.Name.Value = jobj["product_type_name"].ToString();
-                        this.FurnitureInfos.Add(temp);
+                        temp.No.Value = i++;
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.ProductCategoryListViewModel.List.Add(temp);
+                        });
+                      
                     }
-                } catch (Exception) { }
+                } catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString());  }
                 finally { network.GetCustomerList(); }
             }
         }
@@ -198,7 +204,7 @@ namespace SettingPage.ViewModels
                             temp.Memo.Value = inner["memo"].ToString().Trim();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            this.CustomerInfos.Add(temp);
+                            this.CustomerListViewModel.List.Add(temp);
                         });
                     }
                 }

@@ -363,7 +363,7 @@ namespace ContractPage.ViewModels
             if (jobj["count"] != null)
                 inventory.Count.Value = jobj["count"].ToObject<int>();
             if (jobj["product_type"] != null)
-                inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.ProductCode.Value == jobj["product_type"].ToObject<int>());
+                inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)
                 inventory.Name.Value = jobj["product_name"].ToString();
             if(jobj["product_price"] != null)

@@ -12,16 +12,19 @@ namespace CommonModel.Model
     public class FurnitureType : PrismCommonModelBase
     {
         //제품타입
-        public ReactiveProperty<int> ProductCode { get; set; } //DB Id
+        public ReactiveProperty<int> Id { get; set; } //DB Id
         public ReactiveProperty<string> Name { get; set; } // 사용자지정 Name
+        public ReactiveProperty<int>No { get; set; }
         public FurnitureType() : base()
         {
-            this.ProductCode = new ReactiveProperty<int>().AddTo(disposable);
+            this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Name = new ReactiveProperty<string>().AddTo(disposable);
+            this.No = new ReactiveProperty<int>().AddTo(disposable);
+            SetObserver();
         }
         public override void SetObserver()
         {
-            
+            this.Name.Subscribe(x => ChangedJson("product_type_name", x));
         }
     }
 }

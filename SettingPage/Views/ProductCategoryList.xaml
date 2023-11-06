@@ -37,6 +37,9 @@
             CanUserAddRows="False"
             Margin="10"
             ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No" Binding="{Binding No.Value}" Width="0.3*" IsReadOnly="True"/>
                 <DataGridTextColumn Header="카테고리" Binding="{Binding Name.Value}" Width="0.7*" IsReadOnly="True"/>

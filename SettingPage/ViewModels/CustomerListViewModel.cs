@@ -67,6 +67,21 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
-       
+        public override void DeleteButtonClick(PrismCommonModelBase selecteditem)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["cui_id"] = (int)(selecteditem as Customer).Id.Value;
+                network.DeleteCustomerList(jobj);
+                IsLoading.Value = true;
+            }
+        }
+
+        public override void RowDoubleClickEvent()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

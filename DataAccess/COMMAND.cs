@@ -64,7 +64,7 @@ namespace DataAccess
         #endregion
 
         #region 제품카테고리
-        CREATE_PRODUCTCATEGORY_INFO = 117,
+        CREATE_PRODUCTCATEGORY_INFO = 72,
         UPDATE_PRODUCTCATEGORY_INFO,
         DELETE_PRODUCTCATEGORY_INFO,
         #endregion

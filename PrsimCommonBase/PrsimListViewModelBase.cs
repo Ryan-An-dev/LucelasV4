@@ -17,6 +17,8 @@ namespace PrsimCommonBase
     public enum MovePageType { Next = 1, Prev }
     public abstract class PrsimListViewModelBase : PrismCommonViewModelBase
     {
+        public DelegateCommand RowDoubleClick { get; }
+        public ReactiveProperty<bool> IsLoading { get; set; }
         #region Paging
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         public ReactiveProperty<int> CurrentPage { get; set; }
@@ -45,7 +47,8 @@ namespace PrsimCommonBase
             AddDeleteButton = new DelegateCommand<string>(ExecAddDeleteButton);
             this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             this.List = new ReactiveCollection<PrismCommonModelBase>().AddTo(this.disposable);
-
+            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
+            this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
             this.CountList.Add(30);
             this.CountList.Add(50);
             this.CountList.Add(70);
@@ -85,15 +88,15 @@ namespace PrsimCommonBase
                     AddButtonClick();
                     break;
                 case "Delete":
-                    DeleteButtonClick();
+                    if (this.SelectedItem.Value == null)
+                        return;
+                    DeleteButtonClick(this.SelectedItem.Value);
+                    this.List.Remove(this.SelectedItem.Value);
                     break;
             }
         }
         public abstract void AddButtonClick();
-        public void DeleteButtonClick() {
-            if (this.SelectedItem.Value == null)
-                return;
-            this.List.Remove(this.SelectedItem.Value);
-        }
+        public abstract void DeleteButtonClick(PrismCommonModelBase selecteditem);
+        public abstract void RowDoubleClickEvent();
     }
 }

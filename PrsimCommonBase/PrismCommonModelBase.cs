@@ -16,7 +16,7 @@ namespace PrsimCommonBase
 
         protected CompositeDisposable disposable { get; }
             = new CompositeDisposable();
-
+        public bool isinit { get; set; } = true;
         public bool isChanged { get; set; }
         public JObject ChangedItem { get; set; } = new JObject();
         public IRegionManager regionManager { get; } = null;
@@ -64,6 +64,10 @@ namespace PrsimCommonBase
         #endregion
         public JObject GetChangedItem() {
             return ChangedItem;
+        }
+        public void ClearJson() {
+            this.ChangedItem.RemoveAll();
+            this.isChanged = false;
         }
         public abstract void SetObserver();
 
