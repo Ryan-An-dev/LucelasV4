@@ -35,6 +35,17 @@ namespace SettingPage.ViewModels
                 network.GetEmployeeList(jobj);
             }
         }
+        public void SendBasicData(INetReceiver receiver) {
+            using (var network = ContainerProvider.Resolve<DataAgent.EmployeeDataAgent>())
+            {
+                network.SetReceiver(receiver);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)0;
+                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                network.GetEmployeeList(jobj);
+            }
+        }
         public void OnConnected()
         {
 
@@ -42,7 +53,7 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnSent()
@@ -52,14 +63,32 @@ namespace SettingPage.ViewModels
 
         public override void AddButtonClick()
         {
-            dialogService.ShowDialog("EmployeeAddPage", null, r =>
+            DialogParameters dialogParameters = new DialogParameters();
+            dialogParameters.Add("object", new Employee());
+
+            dialogService.ShowDialog("EmployeeAddPage", dialogParameters, r =>
             {
                 try
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        //CompanyList item = r.Parameters.GetValue<CompanyList>("Company");
-                        //this.CompanyInfos.Add(item);
+                        Employee item = r.Parameters.GetValue<Employee>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.EmployeeDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["employee_id"] = (int)0;
+                                jobj["employee_name"] = item.Name.Value;
+                                jobj["employee_phone"] = item.Phone.Value;
+                                jobj["employee_start"] = item.StartWorkTime.Value.ToString("yyyy-MM-dd");
+                                jobj["employee_address"] = item.Address.Value;
+                                jobj["employee_address_detail"] = item.AddressDetail.Value;
+                                network.CreateEmployeeList(jobj);
+                                IsLoading.Value = true;
+                            }
+                        }
                     }
                 }
                 catch (Exception) { }
@@ -81,7 +110,33 @@ namespace SettingPage.ViewModels
 
         public override void RowDoubleClickEvent()
         {
-            throw new NotImplementedException();
+            DialogParameters dialogParameters = new DialogParameters();
+            SelectedItem.Value.ClearJson();
+            dialogParameters.Add("object", SelectedItem.Value as Employee);
+
+            dialogService.ShowDialog("EmployeeAddPage", dialogParameters, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        Employee item = r.Parameters.GetValue<Employee>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.EmployeeDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["changed_item"] = item.ChangedItem;
+                                jobj["employee_id"] = item.Id.Value;
+                                network.UpdateEmployeeList(jobj);
+                            }
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
         }
     }
 }

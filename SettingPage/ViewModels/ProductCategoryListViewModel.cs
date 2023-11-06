@@ -151,7 +151,6 @@ namespace SettingPage.ViewModels
             DialogParameters dialogParameters = new DialogParameters();
             SelectedItem.Value.ClearJson();
             dialogParameters.Add("object", SelectedItem.Value as FurnitureType);
-
             dialogService.ShowDialog("ProductCategoryAddPage", dialogParameters, r =>
             {
                 try
@@ -165,7 +164,8 @@ namespace SettingPage.ViewModels
                                 using (var network = ContainerProvider.Resolve<DataAgent.ProductCategoryDataAgent>())
                                 {
                                     network.SetReceiver(this);
-                                    JObject jobj = item.ChangedItem;
+                                    JObject jobj = new JObject();
+                                    jobj["changed_item"] = item.ChangedItem;
                                     jobj["product_type_id"] = item.Id.Value;
                                     network.UpdateProductCategory(jobj);
                                 }

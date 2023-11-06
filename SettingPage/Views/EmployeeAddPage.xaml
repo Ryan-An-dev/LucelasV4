@@ -26,21 +26,21 @@
                 Text="직원 관리"/>
             </Border>
 
-            <GroupBox Header="직원 인적사항" Margin="0 20 0 0" Grid.Row="1">
+            <GroupBox Header="직원 인적사항" Margin="0 20 0 0" Grid.Row="1" DataContext="Employee">
                 <StackPanel>
                     <TextBox 
                             Margin="0 0 10 12" 
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
                             x:Name="ContractorName"
-                            Text="{Binding Contract.Value.Contractor.Value.Name.Value,Mode=TwoWay}"
+                            Text="{Binding Name.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
 
                     <TextBox 
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
+                            Text="{Binding Phone.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
@@ -48,7 +48,7 @@
                         <TextBox MinWidth="260" Margin="0 0 10 12" IsReadOnly="True"
                             md:HintAssist.Hint="주소"
                             FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Address.Value, Mode=TwoWay}"
+                            Text="{Binding Address.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                         <Button 
@@ -61,14 +61,14 @@
                     <TextBox 
                             md:HintAssist.Hint="상세주소입력"
                             FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Address1.Value, Mode=TwoWay}"
+                            Text="{Binding AddressDetail.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                     <TextBox 
                             md:HintAssist.Hint="메모"
                             FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Memo.Value, Mode=TwoWay}"
+                            Text="{Binding Memo.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>

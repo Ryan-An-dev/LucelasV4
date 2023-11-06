@@ -140,7 +140,53 @@ namespace SettingPage.ViewModels
                     case COMMAND.CustomerList:
                         SetCustomerList(jobj);
                         break;
+                    case COMMAND.GETEMPLOEEINFO:
+                        SetEmployeeList(jobj);
+                        break;
                 }
+            }
+        }
+
+        private void SetEmployeeList(JObject msg)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.EmployeeListViewModel.List.Clear();
+            });
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try
+                {
+                    if (msg["employee_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["employee_list"] as JArray;
+
+                    int i = 1;
+                    foreach (JObject jobj in jarr)
+                    {
+                        Employee temp = new Employee();
+                        if (jobj["employee_id"] != null)
+                            temp.Id.Value = jobj["employee_id"].ToObject<int>();
+                        if (jobj["employee_name"] != null)
+                            temp.Name.Value = jobj["employee_name"].ToString();
+                        if (jobj["employee_phone"] != null)
+                            temp.Phone.Value = jobj["employee_phone"].ToString();
+                        if (jobj["employee_start"] != null)
+                            temp.StartWorkTime.Value = jobj["employee_start"].ToObject<DateTime>();
+                        if (jobj["employee_address"] != null)
+                            temp.Address.Value = jobj["employee_address"].ToString();
+                        if (jobj["employee_address_detail"] != null)
+                            temp.Address.Value = jobj["employee_address_detail"].ToString();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.ProductCategoryListViewModel.List.Add(temp);
+                        });
+
+                    }
+                }
+                catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                finally {  }
             }
         }
 
@@ -199,7 +245,7 @@ namespace SettingPage.ViewModels
                         if (inner["con_phone"] != null)
                             temp.Phone.Value = inner["con_phone"].ToString().Trim();
                         if (inner["con_address"] != null)
-                            temp.Address.Value = inner["con_address"].ToString().Trim(); 
+                            temp.Address.Value = inner["con_address"].ToString().Trim();
                         if (inner["memo"] != null)
                             temp.Memo.Value = inner["memo"].ToString().Trim();
                         Application.Current.Dispatcher.Invoke(() =>
@@ -209,6 +255,9 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception ex) { }
+                finally {
+                    this.EmployeeListViewModel.SendBasicData(this);
+                }
             }
         }
         private void SetCategoryList(JObject msg)
