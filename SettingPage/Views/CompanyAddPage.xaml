@@ -26,7 +26,7 @@
                 Text="회사 등록"/>
             </Border>
             
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Company}">
+            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Company.Value}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>

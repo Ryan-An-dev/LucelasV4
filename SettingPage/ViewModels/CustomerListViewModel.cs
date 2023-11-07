@@ -42,7 +42,7 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnSent()
@@ -52,14 +52,32 @@ namespace SettingPage.ViewModels
 
         public override void AddButtonClick()
         {
-            dialogService.ShowDialog("CustomerAddPage", null, r =>
+            DialogParameters dialogParameters = new DialogParameters();
+            dialogParameters.Add("object", new Customer());
+
+            dialogService.ShowDialog("CustomerAddPage", dialogParameters, r =>
             {
                 try
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        //CompanyList item = r.Parameters.GetValue<CompanyList>("Company");
-                        //this.CompanyInfos.Add(item);
+                        Customer item = r.Parameters.GetValue<Customer>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["cui_id"] = (int)0;
+                                jobj["cui_name"] = item.Name.Value;
+                                jobj["cui_phone"] = item.Phone.Value;
+                                jobj["cui_address"] = item.Address.Value;
+                                jobj["cui_address_detail"] = item.Address1.Value;
+                                jobj["cui_memo"] = item.Memo.Value;
+                                network.CreateCustomerList(jobj);
+                                IsLoading.Value = true;
+                            }
+                        }
                     }
                 }
                 catch (Exception) { }

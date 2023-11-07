@@ -25,7 +25,7 @@
                 Foreground="{StaticResource MainColor}"
                 Text="제품 등록"/>
             </Border>
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Product}">
+            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Product.Value}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>

@@ -71,8 +71,6 @@ namespace DataAccess
 
 
 
-
-
         #region 통계데이터
         GetDailyList = 60,
         #endregion

@@ -10,6 +10,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,7 @@ namespace SettingPage.ViewModels
         public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; }
         public ProductListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            FurnitureInfos = temp.FurnitureInfos;
+            FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
         }
 
         public override void UpdatePageItem(MovePageType param, int count)
@@ -80,6 +80,8 @@ namespace SettingPage.ViewModels
                 return;
             }
             ErpLogWriter.LogWriter.Trace(jobject.ToString());
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            FurnitureInfos = temp.FurnitureInfos;
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETPRODUCTINFO: //데이터 조회

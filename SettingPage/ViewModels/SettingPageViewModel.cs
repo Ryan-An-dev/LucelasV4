@@ -124,7 +124,7 @@ namespace SettingPage.ViewModels
             string msg = Encoding.UTF8.GetString(packet.Body);
             if (!msg.Contains("null")) {
                 JObject jobj = new JObject(JObject.Parse(msg));
-                ErpLogWriter.LogWriter.Trace(jobj.ToString());
+                ErpLogWriter.LogWriter.Trace((COMMAND)packet.Header.CMD+ " \r\n " +jobj.ToString());
                 switch ((COMMAND)packet.Header.CMD)
                 {
                     case COMMAND.AccountLIst: //데이터 조회
@@ -242,7 +242,11 @@ namespace SettingPage.ViewModels
                     
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally { this.ProductListViewModel.SendBasicData(this); }
+                finally {
+                    if (this.ProductListViewModel.ContainerProvider != null) {
+                        this.ProductListViewModel.SendBasicData(this);
+                    }
+                }
             }
         }
 
@@ -285,7 +289,12 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally { this.CompanyListViewModel.SendBasicData(this); }
+                finally {
+                    if (this.CompanyListViewModel.ContainerProvider != null)
+                    {
+                        this.CompanyListViewModel.SendBasicData(this);
+                    }
+                }
             }
         }
 
@@ -318,7 +327,12 @@ namespace SettingPage.ViewModels
                       
                     }
                 } catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString());  }
-                finally { this.CustomerListViewModel.SendBasicData(this); }
+                finally {
+                    if (this.CustomerListViewModel.ContainerProvider != null)
+                    {
+                        this.CustomerListViewModel.SendBasicData(this);
+                    }
+                }
             }
         }
 
@@ -332,7 +346,7 @@ namespace SettingPage.ViewModels
             {
                 try
                 {
-                    if (msg["cui_list"].ToString().Equals(""))
+                    if (msg["cui_list"] == null)
                         return;
                     foreach (JObject inner in msg["cui_list"] as JArray)
                     {
@@ -355,7 +369,10 @@ namespace SettingPage.ViewModels
                 }
                 catch (Exception ex) { }
                 finally {
-                    this.EmployeeListViewModel.SendBasicData(this);
+                    if (this.EmployeeListViewModel.ContainerProvider != null)
+                    {
+                        this.EmployeeListViewModel.SendBasicData(this);
+                    }
                 }
             }
         }
