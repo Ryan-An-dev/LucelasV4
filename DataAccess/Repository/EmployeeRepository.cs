@@ -31,7 +31,7 @@ namespace DataAccess.Repository
         {
             if (NetManager.session_id != 0)
             {
-                NetManager.Send(msg, COMMAND.CREATECOMPANYINFO);
+                NetManager.Send(msg, COMMAND.CREATEEMPLOEEINFO);
             }
         }
         public void GetEmployee(JObject msg)

@@ -11,7 +11,21 @@
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <TextBox 
+            x:Name="Search"
+            md:HintAssist.Hint="입력" 
+            VerticalAlignment="Bottom"
+            FontSize="14"  
+            Text="{Binding Keyword.Value}"
+            Margin="10"
+            Foreground="{StaticResource MainColor}"
+            md:HintAssist.IsFloating="True">    
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+            </TextBox.InputBindings>
+        </TextBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            
             <Button 
                     md:HintAssist.Hint="추가"
                     Content="{md:PackIcon Kind=Plus, Size=14}"

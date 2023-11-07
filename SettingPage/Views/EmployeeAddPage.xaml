@@ -4,6 +4,7 @@
              xmlns:prism="http://prismlibrary.com/"         
              xmlns:views="clr-namespace:CommonModule.UserControls.Views;assembly=CommonModule"
              Width="400" 
+             xmlns:val="clr-namespace:CommonModule.Validations;assembly=CommonModule"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              prism:ViewModelLocator.AutoWireViewModel="True">
@@ -28,6 +29,20 @@
 
             <GroupBox Header="직원 인적사항" Margin="0 20 0 0" Grid.Row="1" DataContext="{Binding Employee.Value}">
                 <StackPanel>
+                    <DatePicker 
+                        md:HintAssist.Hint="날짜" FontSize="14" 
+                        md:HintAssist.IsFloating="True"  
+                        Foreground="{StaticResource MainColor}" 
+                        BorderBrush="{StaticResource MainColor}" >
+                        <DatePicker.SelectedDate>
+                            <Binding Path="StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:NotEmptyValidation/>
+                                    <val:FutureDateValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </DatePicker.SelectedDate>
+                    </DatePicker>
                     <TextBox 
                             Margin="0 0 10 12" 
                             md:HintAssist.Hint="이름"
@@ -44,6 +59,19 @@
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
+                    <DatePicker 
+                        md:HintAssist.Hint="생일" FontSize="14" 
+                        md:HintAssist.IsFloating="True"  
+                        Foreground="{StaticResource MainColor}" 
+                        BorderBrush="{StaticResource MainColor}" >
+                        <DatePicker.SelectedDate>
+                            <Binding Path="StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:FutureDateValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </DatePicker.SelectedDate>
+                    </DatePicker>
                     <StackPanel Orientation="Horizontal">
                         <TextBox MinWidth="260" Margin="0 0 10 12" IsReadOnly="True"
                             md:HintAssist.Hint="주소"

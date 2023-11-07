@@ -27,8 +27,8 @@ namespace CommonModel.Model
             Phone = new ReactiveProperty<string>().AddTo(disposable);
             Address = new ReactiveProperty<string>().AddTo(disposable);
             AddressDetail = new ReactiveProperty<string>().AddTo(disposable);
-            StartWorkTime = new ReactiveProperty<DateTime>().AddTo(disposable);
-            BirthDay  = new ReactiveProperty<DateTime>().AddTo(disposable);
+            StartWorkTime = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
+            BirthDay  = new ReactiveProperty<DateTime>(new DateTime(1991,01,01)).AddTo(disposable);
             Memo = new ReactiveProperty<string>().AddTo(disposable);
         }
         public override void SetObserver()
@@ -39,6 +39,7 @@ namespace CommonModel.Model
             Address.Subscribe(x => ChangedJson("employee_address", x));
             AddressDetail.Subscribe(x => ChangedJson("employee_address_detail", x));
             Memo.Subscribe(x => ChangedJson("employee_memo", x));
+            BirthDay.Subscribe(x => ChangedJson("employee_birthday", x));
         }
     }
 }
