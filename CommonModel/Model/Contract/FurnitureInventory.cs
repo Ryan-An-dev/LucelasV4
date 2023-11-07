@@ -28,6 +28,7 @@ namespace CommonModel.Model
 
     public class FurnitureInventory: PrismCommonModelBase
     {
+        public ReactiveProperty<int> No { get; set; } // 가격
         public ReactiveProperty<string> Name { get; set; } //제품명
         public ReactiveProperty<int> Price { get; set; } // 가격
         public ReactiveProperty<int> Id { get; set; } // 아이디
@@ -42,6 +43,7 @@ namespace CommonModel.Model
 
         public FurnitureInventory() : base()
         {
+            this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Purpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
             this.StoreReachDate = new ReactiveProperty<DateTime>().AddTo(this.disposable);
             this.Count = new ReactiveProperty<int>().AddTo(this.disposable);

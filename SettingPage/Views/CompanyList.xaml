@@ -44,13 +44,16 @@
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             AutoGenerateColumns="False" 
-            SelectedItem="{Binding SelectedItem}"
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             CanUserAddRows="False"
             Margin="10" x:Name="List"
-            ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="0.2*" Header="No" Binding="{Binding No.Value}"/>
-                <DataGridTextColumn Width="0.8*" Header="회사명" Binding="{Binding CompanyName.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="No" Binding="{Binding No.Value}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="0.8*" Header="회사명" Binding="{Binding CompanyName.Value}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
 

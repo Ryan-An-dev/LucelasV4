@@ -28,18 +28,22 @@
         <DataGrid 
             x:Name="List"
             Grid.Row="1"
-            SelectedItem="{Binding SelectedItem}"
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             AutoGenerateColumns="False" 
             CanUserAddRows="False"
+            IsReadOnly="True"
             Margin="10"
-            ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            ItemsSource="{Binding List}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
-                <DataGridTextColumn Header="입사일" Binding="{Binding CompanyName.Value}"/>
+                <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="이름" Binding="{Binding Name.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="번호" Binding="{Binding Phone.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="입사일" Binding="{Binding StartWorkTime.Value, StringFormat=yy-MM-dd}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">

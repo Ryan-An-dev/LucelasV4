@@ -30,16 +30,19 @@
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             AutoGenerateColumns="False"
-            SelectedItem="{Binding SelectedItem}"
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             CanUserAddRows="False"
+            IsReadOnly="True"
             Margin="10" Grid.Row="1"
-            DataContext="{Binding ElementName=CompanyInfo,Path=SelectedItem}"
-            ItemsSource="{Binding ProductList}">
+            ItemsSource="{Binding List}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="0.2*" Header="No" Binding="{Binding No.Value}" />
                 <DataGridTextColumn Width="0.2*" Header="제품타입" Binding="{Binding ProductType.Value}"/>
-                <DataGridTextColumn Width="0.4*" Header="물품명" Binding="{Binding ProductName.Value}"/>
-                <DataGridTextColumn Width="0.2*" Header="가격" Binding="{Binding ProductPrice.Value}"/>
+                <DataGridTextColumn Width="0.4*" Header="물품명" Binding="{Binding Name.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="가격" Binding="{Binding Price.Value}"/>
             </DataGrid.Columns>
         </DataGrid>
         

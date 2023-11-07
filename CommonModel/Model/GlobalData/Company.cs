@@ -28,6 +28,7 @@ namespace CommonModel.Model
     }
     public class Company : PrismCommonModelBase
     {
+        public ReactiveProperty<int> No { get; set; }
         public ReactiveProperty<int> Id { get; set; }
         public ReactiveProperty<string> CompanyName { get; set; }  
         public ReactiveProperty<string> CompanyPhone { get; set; }
@@ -35,6 +36,7 @@ namespace CommonModel.Model
         public ReactiveProperty<string> CompanyAddressDetail { get; set; }
         public Company():base()
         {
+            this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.CompanyName = new ReactiveProperty<string>().AddTo(disposable);
             this.CompanyAddress = new ReactiveProperty<string>().AddTo(disposable);

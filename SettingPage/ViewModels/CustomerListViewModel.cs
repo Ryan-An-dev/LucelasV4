@@ -70,7 +70,7 @@ namespace SettingPage.ViewModels
                                 JObject jobj = new JObject();
                                 jobj["cui_id"] = (int)0;
                                 jobj["cui_name"] = item.Name.Value;
-                                jobj["cui_phone"] = item.Phone.Value;
+                                jobj["cui_phone_num"] = item.Phone.Value;
                                 jobj["cui_address"] = item.Address.Value;
                                 jobj["cui_address_detail"] = item.Address1.Value;
                                 jobj["cui_memo"] = item.Memo.Value;
@@ -103,7 +103,7 @@ namespace SettingPage.ViewModels
                 network.SetReceiver(receiver);
                 JObject jobj = new JObject();
                 jobj["next_preview"] = (int)0;
-                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 network.GetCustomerList(jobj);
             }
@@ -111,7 +111,33 @@ namespace SettingPage.ViewModels
 
         public override void RowDoubleClickEvent()
         {
-            throw new NotImplementedException();
+            DialogParameters dialogParameters = new DialogParameters();
+            SelectedItem.Value.ClearJson();
+            dialogParameters.Add("object", SelectedItem.Value as Customer);
+
+            dialogService.ShowDialog("CustomerAddPage", dialogParameters, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        Customer item = r.Parameters.GetValue<Customer>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["changed_item"] = item.ChangedItem;
+                                jobj["cui_id"] = item.Id.Value;
+                                network.Update(jobj);
+                            }
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
         }
     }
 }

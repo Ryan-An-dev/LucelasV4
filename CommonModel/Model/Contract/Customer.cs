@@ -13,6 +13,7 @@ namespace CommonModel.Model
 {
     public class Customer : PrismCommonModelBase
     {
+        public ReactiveProperty<int> No { get; set; }
         [JsonPropertyName("cui_name")]
         public ReactiveProperty<string> Name { get; set; }
         [JsonPropertyName("cui_phone")]
@@ -30,6 +31,7 @@ namespace CommonModel.Model
 
         public Customer()
         {
+            this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Name= new ReactiveProperty<string>().AddTo(disposable);
             this.Phone = new ReactiveProperty<string>().AddTo(disposable);

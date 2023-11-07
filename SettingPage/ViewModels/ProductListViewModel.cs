@@ -46,7 +46,7 @@ namespace SettingPage.ViewModels
                 network.SetReceiver(receiver);
                 JObject jobj = new JObject();
                 jobj["next_preview"] = (int)0;
-                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_unit"] = ListCount.Value;
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 network.repo.Read(jobj);
             }
@@ -85,7 +85,7 @@ namespace SettingPage.ViewModels
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETPRODUCTINFO: //데이터 조회
-                    List.Clear();
+                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try

@@ -12,6 +12,7 @@ namespace CommonModel.Model
 {
     public class Employee : PrismCommonModelBase
     {
+        public ReactiveProperty<int> No { get; set; }
         public ReactiveProperty<int> Id { get; set; }
         public ReactiveProperty<string> Name { get; set; }
         public ReactiveProperty<string> Phone { get; set; }
@@ -22,6 +23,7 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Memo { get; set; }
         public Employee()
         {
+            No = new ReactiveProperty<int>().AddTo(disposable);
             Id = new ReactiveProperty<int>().AddTo(disposable);
             Name = new ReactiveProperty<string>().AddTo(disposable);
             Phone = new ReactiveProperty<string>().AddTo(disposable);

@@ -54,7 +54,7 @@ namespace SettingPage.ViewModels
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 jobj["next_preview"] = (int)param;
-                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 network.GetProductCategory(jobj);
                 IsLoading.Value = true;

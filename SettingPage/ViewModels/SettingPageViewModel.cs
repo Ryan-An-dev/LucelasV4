@@ -41,8 +41,11 @@ namespace SettingPage.ViewModels
 
         public ProductListViewModel ProductListViewModel { get; set; }
 
+        public ReactiveProperty<Visibility> SearchVisibility { get; set; }
+
         public IContainerProvider ContainerProvider { get; set; }
         public IDialogService dialogService { get; }
+        public ReactiveProperty<bool> IsLoading { get; set; } //로딩
 
         private void initViewModel() {
             ProductCategoryListViewModel = new ProductCategoryListViewModel(ContainerProvider, regionManager, dialogService);
@@ -58,10 +61,15 @@ namespace SettingPage.ViewModels
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
-            initViewModel();
+            this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
+            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
+            this.IsLoading.Subscribe(x => OnLoadingChanged(x));
+            
+
         }
         public SettingPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
+            this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
             this.dialogService = dialogService;
             this.ContainerProvider = containerProvider;
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
@@ -70,10 +78,16 @@ namespace SettingPage.ViewModels
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.AddCompanyCommand = new DelegateCommand(ExecAddCompanyCommand);
+            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
+            this.IsLoading.Subscribe(x => OnLoadingChanged(x));
             initViewModel();
             initData();
         }
+        private void OnLoadingChanged(bool isLoading)
+        {
+            SearchVisibility.Value = isLoading ? Visibility.Visible : Visibility.Collapsed;
 
+        }
         private void ExecAddCompanyCommand()
         {
             this.dialogService.ShowDialog("CompanyAddPage", null, r => 
@@ -125,31 +139,34 @@ namespace SettingPage.ViewModels
             if (!msg.Contains("null")) {
                 JObject jobj = new JObject(JObject.Parse(msg));
                 ErpLogWriter.LogWriter.Trace((COMMAND)packet.Header.CMD+ " \r\n " +jobj.ToString());
-                switch ((COMMAND)packet.Header.CMD)
+                try
                 {
-                    case COMMAND.AccountLIst: //데이터 조회
-                        SetAccountList(jobj);
-                        break;
-                    case COMMAND.ProductCategoryList:
-                        //SetProductList(jobj);
-                        SetProductType(jobj);
-                        break;
-                    case COMMAND.CategoryList:
-                        SetCategoryList(jobj);
-                        break;
-                    case COMMAND.GETCUSTOMERINFO:
-                        SetCustomerList(jobj);
-                        break;
-                    case COMMAND.GETEMPLOEEINFO:
-                        SetEmployeeList(jobj);
-                        break;
-                    case COMMAND.GETCOMPANYINFO:
-                        SetCompanyList(jobj);
-                        break;
-                    case COMMAND.GETPRODUCTINFO:
-                        SetProductList(jobj);
-                        break;
-                }
+                    switch ((COMMAND)packet.Header.CMD)
+                    {
+                        case COMMAND.AccountLIst: //데이터 조회
+                            SetAccountList(jobj);
+                            break;
+                        case COMMAND.ProductCategoryList:
+                            SetProductType(jobj);
+                            break;
+                        case COMMAND.CategoryList:
+                            SetCategoryList(jobj);
+                            break;
+                        case COMMAND.GETCUSTOMERINFO:
+                            SetCustomerList(jobj);
+                            break;
+                        case COMMAND.GETEMPLOEEINFO:
+                            SetEmployeeList(jobj);
+                            break;
+                        case COMMAND.GETCOMPANYINFO:
+                            SetCompanyList(jobj);
+                            break;
+                        case COMMAND.GETPRODUCTINFO:
+                            SetProductList(jobj);
+                            break;
+                    }
+                } catch (Exception e) { }
+               
             }
         }
 
@@ -157,7 +174,8 @@ namespace SettingPage.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                this.ProductListViewModel.List.Clear();
+                if (this.ProductListViewModel != null)
+                    this.ProductListViewModel.List.Clear();
             });
             if (msg.ToString().Trim() != string.Empty)
             {
@@ -167,9 +185,13 @@ namespace SettingPage.ViewModels
                         return;
                     JArray jarr = new JArray();
                     jarr = msg["product_list"] as JArray;
+                    if (msg["history_count"] != null)
+                        this.ProductListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    int i = 1;
                     foreach (JObject jobj in jarr)
                     {
                         FurnitureInventory inventory = new FurnitureInventory();
+                        inventory.No.Value = i++;
                         if (jobj["company"] != null)
                             inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
                         if (jobj["count"] != null)
@@ -188,7 +210,7 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally { }
+                finally { IsLoading.Value = false; }
             }
         }
 
@@ -209,20 +231,26 @@ namespace SettingPage.ViewModels
 
         private void SetCompanyList(JObject msg)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.CompanyListViewModel.List.Clear();
-            });
+            
             if (msg.ToString().Trim() != string.Empty)
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (this.CompanyListViewModel != null)
+                            this.CompanyListViewModel.List.Clear();
+                    });
                     if (msg["company_list"] == null)
                         return;
                     JArray jarr = new JArray();
                     jarr = msg["company_list"] as JArray;
+                    if (msg["history_count"] != null)
+                        this.CompanyListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    int i = 1;
                     foreach (JObject jobj in jarr) {
                         Company temp = new Company();
+                        temp.No.Value = i++;
                         if (jobj["company_name"] != null)
                             temp.CompanyName.Value = jobj["company_name"].ToString();
                         if (jobj["company_phone"] != null)
@@ -252,23 +280,26 @@ namespace SettingPage.ViewModels
 
         private void SetEmployeeList(JObject msg)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.EmployeeListViewModel.List.Clear();
-            });
+            
             if (msg.ToString().Trim() != string.Empty)
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.EmployeeListViewModel.List.Clear();
+                    });
                     if (msg["employee_list"] == null)
                         return;
                     JArray jarr = new JArray();
                     jarr = msg["employee_list"] as JArray;
-
+                    if (msg["history_count"] != null)
+                        this.EmployeeListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
                     int i = 1;
                     foreach (JObject jobj in jarr)
                     {
                         Employee temp = new Employee();
+                        temp.No.Value = i++;
                         if (jobj["employee_id"] != null)
                             temp.Id.Value = jobj["employee_id"].ToObject<int>();
                         if (jobj["employee_name"] != null)
@@ -280,10 +311,10 @@ namespace SettingPage.ViewModels
                         if (jobj["employee_address"] != null)
                             temp.Address.Value = jobj["employee_address"].ToString();
                         if (jobj["employee_address_detail"] != null)
-                            temp.Address.Value = jobj["employee_address_detail"].ToString();
+                            temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            this.ProductCategoryListViewModel.List.Add(temp);
+                            this.EmployeeListViewModel.List.Add(temp);
                         });
 
                     }
@@ -300,15 +331,20 @@ namespace SettingPage.ViewModels
 
         private void SetProductType(JObject msg)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.ProductCategoryListViewModel.List.Clear();
-            });
+           
             if (msg.ToString().Trim() != string.Empty)
             {
-                try {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if(this.ProductCategoryListViewModel!=null)
+                            this.ProductCategoryListViewModel.List.Clear();
+                    });
                     if (msg["category_list"] == null)
                         return;
+                    if (msg["history_count"] != null)
+                        this.ProductCategoryListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
                     JArray jarr = new JArray();
                     jarr = msg["category_list"] as JArray;
                     
@@ -322,13 +358,14 @@ namespace SettingPage.ViewModels
                         temp.No.Value = i++;
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            this.ProductCategoryListViewModel.List.Add(temp);
+                            if(ProductCategoryListViewModel !=null)
+                                this.ProductCategoryListViewModel.List.Add(temp);
                         });
                       
                     }
                 } catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString());  }
                 finally {
-                    if (this.CustomerListViewModel.ContainerProvider != null)
+                    if (this.CustomerListViewModel != null)
                     {
                         this.CustomerListViewModel.SendBasicData(this);
                     }
@@ -338,29 +375,37 @@ namespace SettingPage.ViewModels
 
         private void SetCustomerList(JObject msg)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.CustomerInfos.Clear();
-            });
+            
             if (msg.ToString().Trim() != string.Empty)
             {
                 try
                 {
-                    if (msg["cui_list"] == null)
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (this.EmployeeListViewModel != null)
+                            this.EmployeeListViewModel.List.Clear();
+                    });
+                    if (msg["customer_list"] == null)
                         return;
-                    foreach (JObject inner in msg["cui_list"] as JArray)
+                    if (msg["history_count"] != null)
+                        this.EmployeeListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    int i = 1;
+                    foreach (JObject inner in msg["customer_list"] as JArray)
                     {
                         Customer temp = new Customer();
+                        temp.No.Value = i++;
                         if (inner["cui_id"] != null)
                             temp.Id.Value = inner["cui_id"].ToObject<int>();
-                        if (inner["con_name"] != null)
-                            temp.Name.Value = inner["con_name"].ToString().Trim();
-                        if (inner["con_phone"] != null)
-                            temp.Phone.Value = inner["con_phone"].ToString().Trim();
-                        if (inner["con_address"] != null)
-                            temp.Address.Value = inner["con_address"].ToString().Trim();
-                        if (inner["memo"] != null)
-                            temp.Memo.Value = inner["memo"].ToString().Trim();
+                        if (inner["cui_name"] != null)
+                            temp.Name.Value = inner["cui_name"].ToString().Trim();
+                        if (inner["cui_phone_num"] != null)
+                            temp.Phone.Value = inner["cui_phone_num"].ToString().Trim();
+                        if (inner["cui_address"] != null)
+                            temp.Address.Value = inner["cui_address"].ToString().Trim();
+                        if (inner["cui_address_detail"] != null)
+                            temp.Address1.Value = inner["cui_address_detail"].ToString().Trim();
+                        if (inner["cui_memo"] != null)
+                            temp.Memo.Value = inner["cui_memo"].ToString().Trim();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             this.CustomerListViewModel.List.Add(temp);
@@ -408,8 +453,10 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception ex) { }
-                finally { 
-                    network.GetProductCategory(); 
+                finally {
+                    if (this.ProductCategoryListViewModel != null)
+                        IsLoading.Value = true;
+                    network.GetProductCategory();
                 }
             }
         }

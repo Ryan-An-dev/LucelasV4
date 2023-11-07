@@ -30,15 +30,18 @@
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             AutoGenerateColumns="False" 
-            SelectedItem="{Binding SelectedItem}"
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             CanUserAddRows="False"
             Margin="10"
             x:Name="List"
-            ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                <DataGridTextColumn Header="번호" Binding="{Binding CompanyName.Value}"/>
+                <DataGridTextColumn Header="이름" Binding="{Binding Name.Value}"/>
+                <DataGridTextColumn Header="번호" Binding="{Binding Phone.Value}"/>
                 <DataGridTextColumn Header="주소" Binding="{Binding CompanyName.Value}"/>
                 <DataGridTextColumn Header="구매일자" Binding="{Binding CompanyName.Value}"/>
             </DataGrid.Columns>

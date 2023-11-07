@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace SettingPage.ViewModels
         public ReactiveProperty<FurnitureInventory> Product { get; set; }
         public ProductAddPageViewModel()
         {
-
+            Product = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
         }
 
         public string Title => throw new NotImplementedException();
