@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Interop;
 
 namespace SettingPage.ViewModels
@@ -72,6 +73,7 @@ namespace SettingPage.ViewModels
             {
                 JObject body = new JObject(JObject.Parse(msg));
                 ErpLogWriter.LogWriter.Trace(body.ToString());
+                Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                 if (body.ToString().Trim() != string.Empty)
                 {
                     try
@@ -80,7 +82,9 @@ namespace SettingPage.ViewModels
                             return;
                         JArray jarr = new JArray();
                         jarr = body["category_list"] as JArray;
-                        int i = 1;
+                        if (body["history_count"] != null)
+                            TotalItemCount.Value = body["history_count"].ToObject<int>();
+                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
                         foreach (JObject jobj in jarr)
                         {
                             FurnitureType temp = new FurnitureType();
@@ -176,6 +180,21 @@ namespace SettingPage.ViewModels
                 catch (Exception) { }
 
             }, "CommonDialogWindow");
+        }
+
+        public override void SearchAddress()
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductCategoryDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                search["product_type_name"] = Keyword.Value;
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
+                network.GetProductCategory(jobj);
+            }
         }
     }
 }

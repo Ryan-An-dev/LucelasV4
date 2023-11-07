@@ -31,12 +31,17 @@ namespace PrsimCommonBase
         public ReactiveProperty<PrismCommonModelBase> SelectedItem { get; set; }
         public IDialogService dialogService { get; }
         public ReactiveCollection<PrismCommonModelBase> List { get; set; }
-
+        public ReactiveProperty<string> Keyword { get; set; }
         #endregion
         public IContainerProvider ContainerProvider { get; }
+        private DelegateCommand _SearchExecute;
+        public DelegateCommand SearchExecute =>
+            _SearchExecute ?? (_SearchExecute = new DelegateCommand(SearchAddress));
+
         public PrsimListViewModelBase(IRegionManager regionManager, IContainerProvider containerProvider,IDialogService dialogService) : base(regionManager) {
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
+            this.Keyword = new ReactiveProperty<string>().AddTo(this.disposable);
             this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
             this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable);
             this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);
@@ -98,5 +103,6 @@ namespace PrsimCommonBase
         public abstract void AddButtonClick();
         public abstract void DeleteButtonClick(PrismCommonModelBase selecteditem);
         public abstract void RowDoubleClickEvent();
+        public abstract void SearchAddress();
     }
 }

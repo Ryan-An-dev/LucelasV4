@@ -6,26 +6,46 @@
              xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBox     
+            Grid.Column="0"
+            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
+            x:Name="Search"
+            md:HintAssist.Hint="입력" 
+            VerticalAlignment="Center"
+            FontSize="14"  
+            Text="{Binding Keyword.Value}"
+            Margin="10,0,0,0"
+            Foreground="{StaticResource MainColor}"
+            md:HintAssist.IsFloating="True">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+            </TextBox.InputBindings>
+        </TextBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
             <Button 
-                    md:HintAssist.Hint="추가"
-                    Content="{md:PackIcon Kind=Plus, Size=14}"
-                    Command="{Binding AddDeleteButton}"
-                    CommandParameter="Add"
-                    Margin="5" Cursor="Hand"/>
+                md:HintAssist.Hint="추가"
+                Content="{md:PackIcon Kind=Plus, Size=14}"
+                Command="{Binding AddDeleteButton}"
+                CommandParameter="Add"
+                Margin="5" Cursor="Hand"/>
             <Button 
-                    md:HintAssist.Hint="삭제"
-                    Content="{md:PackIcon Kind=Minus, Size=14}"
-                    Command="{Binding AddDeleteButton}"
-                    CommandParameter="Delete"
-                    Margin="5"/>
+                md:HintAssist.Hint="삭제"
+                Content="{md:PackIcon Kind=Minus, Size=14}"
+                Command="{Binding AddDeleteButton}"
+                CommandParameter="Delete"
+                Margin="5"/>
         </StackPanel>
         <DataGrid 
+            Grid.ColumnSpan="2"
             x:Name="List"
             Grid.Row="1"
             SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -46,7 +66,7 @@
                 <DataGridTextColumn Width="0.2*" Header="입사일" Binding="{Binding StartWorkTime.Value, StringFormat=yy-MM-dd}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <StackPanel  Grid.ColumnSpan="2" Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <Button 
                 Width="30" 
                 Height="30" 

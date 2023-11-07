@@ -1,6 +1,7 @@
 ﻿using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
+using LogWriter;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
@@ -13,6 +14,8 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Windows;
 
 namespace SettingPage.ViewModels
 {
@@ -53,7 +56,43 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            JObject jobject = new JObject(JObject.Parse(msg));
+            if (!msg.Contains("null"))
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    List.Clear();
+                });
+                if (jobject["employee_list"] == null)
+                    return;
+                JArray jarr = new JArray();
+                jarr = jobject["employee_list"] as JArray;
+                if (jobject["history_count"] != null)
+                    TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+                foreach (JObject jobj in jarr)
+                {
+                    Employee temp = new Employee();
+                    temp.No.Value = i++;
+                    if (jobj["employee_id"] != null)
+                        temp.Id.Value = jobj["employee_id"].ToObject<int>();
+                    if (jobj["employee_name"] != null)
+                        temp.Name.Value = jobj["employee_name"].ToString();
+                    if (jobj["employee_phone"] != null)
+                        temp.Phone.Value = jobj["employee_phone"].ToString();
+                    if (jobj["employee_start"] != null)
+                        temp.StartWorkTime.Value = jobj["employee_start"].ToObject<DateTime>();
+                    if (jobj["employee_address"] != null)
+                        temp.Address.Value = jobj["employee_address"].ToString();
+                    if (jobj["employee_address_detail"] != null)
+                        temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        List.Add(temp);
+                    });
+                }
+            }
         }
 
         public void OnSent()
@@ -137,6 +176,21 @@ namespace SettingPage.ViewModels
                 catch (Exception) { }
 
             }, "CommonDialogWindow");
+        }
+
+        public override void SearchAddress()
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.EmployeeDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                search["employee_name"] = Keyword.Value;
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
+                network.GetEmployeeList(jobj);
+            }
         }
     }
 }

@@ -56,7 +56,7 @@ namespace SettingPage.ViewModels
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETCOMPANYINFO: //데이터 조회
-                    List.Clear();
+                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try
@@ -65,9 +65,13 @@ namespace SettingPage.ViewModels
                                 return;
                             JArray jarr = new JArray();
                             jarr = jobject["company_list"] as JArray;
+                            if(jobject["history_count"] != null)
+                                TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value -1);
                             foreach (JObject jobj in jarr)
                             {
                                 Company temp = new Company();
+                                temp.No.Value = i++;
                                 if (jobj["company_name"] != null)
                                     temp.CompanyName.Value = jobj["company_name"].ToString();
                                 if (jobj["company_phone"] != null)
@@ -183,6 +187,21 @@ namespace SettingPage.ViewModels
                 jobj["next_preview"] = (int)0;
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                network.Get(jobj);
+            }
+        }
+
+        public override void SearchAddress()
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                search["company_name"] = Keyword.Value;
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
                 network.Get(jobj);
             }
         }

@@ -13,6 +13,8 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Windows;
 
 namespace SettingPage.ViewModels
 {
@@ -42,7 +44,43 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            JObject jobject = new JObject(JObject.Parse(msg));
+            if (msg.Equals("null\n"))
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    List.Clear();
+                });
+                if (jobject["customer_list"] == null)
+                    return;
+                JArray jarr = new JArray();
+                jarr = jobject["customer_list"] as JArray;
+                if (jobject["history_count"] != null)
+                    TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+                foreach (JObject inner in jobject["customer_list"] as JArray)
+                {
+                    Customer temp = new Customer();
+                    temp.No.Value = i++;
+                    if (inner["cui_id"] != null)
+                        temp.Id.Value = inner["cui_id"].ToObject<int>();
+                    if (inner["cui_name"] != null)
+                        temp.Name.Value = inner["cui_name"].ToString().Trim();
+                    if (inner["cui_phone_num"] != null)
+                        temp.Phone.Value = inner["cui_phone_num"].ToString().Trim();
+                    if (inner["cui_address"] != null)
+                        temp.Address.Value = inner["cui_address"].ToString().Trim();
+                    if (inner["cui_address_detail"] != null)
+                        temp.Address1.Value = inner["cui_address_detail"].ToString().Trim();
+                    if (inner["cui_memo"] != null)
+                        temp.Memo.Value = inner["cui_memo"].ToString().Trim();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                       List.Add(temp);
+                    });
+                }
+            }
         }
 
         public void OnSent()
@@ -138,6 +176,21 @@ namespace SettingPage.ViewModels
                 catch (Exception) { }
 
             }, "CommonDialogWindow");
+        }
+
+        public override void SearchAddress()
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                search["customer_name"] = Keyword.Value;
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
+                network.GetCustomerList(jobj);
+            }
         }
     }
 }

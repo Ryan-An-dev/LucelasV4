@@ -94,9 +94,14 @@ namespace SettingPage.ViewModels
                                 return;
                             JArray jarr = new JArray();
                             jarr = jobject["product_list"] as JArray;
+                            if (jobject["history_count"] != null)
+                                TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+
                             foreach (JObject jobj in jarr)
                             {
                                 FurnitureInventory inventory = new FurnitureInventory();
+                                inventory.No.Value = i++;
                                 if (jobj["company"] != null)
                                     inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
                                 if (jobj["count"] != null)
@@ -202,6 +207,21 @@ namespace SettingPage.ViewModels
                 catch (Exception) { }
 
             }, "CommonDialogWindow");
+        }
+
+        public override void SearchAddress()
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                search["product_name"] = Keyword.Value;
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
+                network.Get(jobj);
+            }
         }
     }
 }
