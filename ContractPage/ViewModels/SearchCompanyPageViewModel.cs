@@ -106,9 +106,9 @@ namespace ContractPage.ViewModels
             this.SelectedFurniture = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             this.SelectedCompany = new ReactiveProperty<Company>().AddTo(disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            FurnitureInfos = temp.FurnitureInfos;
 
-            
-            
+
             this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable); //Company
 
 
@@ -126,7 +126,7 @@ namespace ContractPage.ViewModels
             this.TotalItemCountProduct.Subscribe(c => this.TotalPageProduct.Value = (c / this.ListCount.Value) + 1);//product
             CmdGoPageProduct = new DelegateCommand<object>(ExecCmdGoPageProduct);//product
 
-            FurnitureInfos = temp.FurnitureInfos;
+           
             
             CountList.Add(30);
             CountList.Add(50);

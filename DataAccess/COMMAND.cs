@@ -16,7 +16,7 @@ namespace DataAccess
         AccountLIst = 4,
         CategoryList = 5,
         ProductCategoryList = 6,
-        CustomerList = 7,
+        
         #endregion
 
 

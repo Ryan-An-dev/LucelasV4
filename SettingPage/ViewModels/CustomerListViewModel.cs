@@ -78,6 +78,18 @@ namespace SettingPage.ViewModels
                 IsLoading.Value = true;
             }
         }
+        public void SendBasicData(INetReceiver receiver)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+            {
+                network.SetReceiver(receiver);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)0;
+                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                network.GetCustomerList(jobj);
+            }
+        }
 
         public override void RowDoubleClickEvent()
         {

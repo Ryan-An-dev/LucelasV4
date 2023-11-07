@@ -32,12 +32,15 @@ namespace CommonModel.Model
         public ReactiveProperty<string> CompanyName { get; set; }  
         public ReactiveProperty<string> CompanyPhone { get; set; }
         public ReactiveProperty<string> CompanyAddress { get; set; }
+        public ReactiveProperty<string> CompanyAddressDetail { get; set; }
         public Company():base()
         {
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.CompanyName = new ReactiveProperty<string>().AddTo(disposable);
             this.CompanyAddress = new ReactiveProperty<string>().AddTo(disposable);
             this.CompanyPhone = new ReactiveProperty<string>().AddTo(disposable);
+            this.CompanyAddressDetail = new ReactiveProperty<string>().AddTo(disposable);
+            SetObserver();
         }
         public Company(int categoryId, string CompanyName)
         {
@@ -50,6 +53,7 @@ namespace CommonModel.Model
             this.CompanyName.Subscribe(x => ChangedJson("company_name", x));
             this.CompanyPhone.Subscribe(x => ChangedJson("company_phone", x));
             this.CompanyAddress.Subscribe(x => ChangedJson("company_address", x));
+            this.CompanyAddressDetail.Subscribe(x => ChangedJson("company_address_detail", x));
         }
     }
 

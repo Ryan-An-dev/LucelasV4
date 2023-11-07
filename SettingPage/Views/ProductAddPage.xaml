@@ -25,7 +25,7 @@
                 Foreground="{StaticResource MainColor}"
                 Text="제품 등록"/>
             </Border>
-            <Grid Grid.Row="1" Margin="20 5">
+            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Product}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>
@@ -37,7 +37,7 @@
                     IsReadOnly="True"
                     md:HintAssist.Hint="선택된 회사명"
                     FontSize="14"
-                    Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
+                    Text="{Binding Company.Value.CompanyName.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -45,7 +45,7 @@
                     Grid.Row="1"
                     md:HintAssist.Hint="제품타입"
                     FontSize="14"
-                    Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
+                    Text="{Binding ProductType.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -53,7 +53,7 @@
                     Grid.Row="2"
                     md:HintAssist.Hint="제품명"
                     FontSize="14"
-                    Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
+                    Text="{Binding Name.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -61,7 +61,7 @@
                     Grid.Row="3"
                     md:HintAssist.Hint="금액"
                     FontSize="14"  
-                    Text="{Binding Contract.Value.Contractor.Value.Address1.Value, Mode=TwoWay}"
+                    Text="{Binding Price.Value}"
                     Margin="0 0 0 12"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"/>

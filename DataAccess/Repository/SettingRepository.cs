@@ -61,7 +61,7 @@ namespace DataAccess.Repository
         public void GetCustomerList() {
             if (NetManager.session_id != 0)
             {
-                NetManager.Send(COMMAND.CustomerList);
+                NetManager.Send(COMMAND.GETCUSTOMERINFO);
             }
         }
         public void GetProductCategoryList()

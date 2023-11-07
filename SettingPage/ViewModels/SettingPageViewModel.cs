@@ -137,13 +137,112 @@ namespace SettingPage.ViewModels
                     case COMMAND.CategoryList:
                         SetCategoryList(jobj);
                         break;
-                    case COMMAND.CustomerList:
+                    case COMMAND.GETCUSTOMERINFO:
                         SetCustomerList(jobj);
                         break;
                     case COMMAND.GETEMPLOEEINFO:
                         SetEmployeeList(jobj);
                         break;
+                    case COMMAND.GETCOMPANYINFO:
+                        SetCompanyList(jobj);
+                        break;
+                    case COMMAND.GETPRODUCTINFO:
+                        SetProductList(jobj);
+                        break;
                 }
+            }
+        }
+
+        private void SetProductList(JObject msg)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.ProductListViewModel.List.Clear();
+            });
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try
+                {
+                    if (msg["product_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["product_list"] as JArray;
+                    foreach (JObject jobj in jarr)
+                    {
+                        FurnitureInventory inventory = new FurnitureInventory();
+                        if (jobj["company"] != null)
+                            inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
+                        if (jobj["count"] != null)
+                            inventory.Count.Value = jobj["count"].ToObject<int>();
+                        if (jobj["product_type"] != null)
+                            inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
+                        if (jobj["product_name"] != null)
+                            inventory.Name.Value = jobj["product_name"].ToString();
+                        if (jobj["product_price"] != null)
+                            inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.ProductListViewModel.List.Add(inventory);
+                        });
+
+                    }
+                }
+                catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                finally { }
+            }
+        }
+
+        private Company SetCompanyInfo(JObject jobj)
+        {
+            Company temp = new Company();
+            if (jobj["company_name"] != null)
+                temp.CompanyName.Value = jobj["company_name"].ToString();
+            if (jobj["company_phone"] != null)
+                temp.CompanyPhone.Value = jobj["company_phone"].ToString();
+            if (jobj["company_id"] != null)
+                temp.Id.Value = jobj["company_id"].ToObject<int>();
+            if (jobj["company_address"] != null)
+                temp.CompanyAddress.Value = jobj["company_address"].ToString();
+            return temp;
+
+        }
+
+        private void SetCompanyList(JObject msg)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.CompanyListViewModel.List.Clear();
+            });
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try
+                {
+                    if (msg["company_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["company_list"] as JArray;
+                    foreach (JObject jobj in jarr) {
+                        Company temp = new Company();
+                        if (jobj["company_name"] != null)
+                            temp.CompanyName.Value = jobj["company_name"].ToString();
+                        if (jobj["company_phone"] != null)
+                            temp.CompanyPhone.Value = jobj["company_phone"].ToString();
+                        if (jobj["company_id"] != null)
+                            temp.Id.Value = jobj["company_id"].ToObject<int>();
+                        if (jobj["company_address"] != null)
+                            temp.CompanyAddress.Value = jobj["company_address"].ToString();
+                        if (jobj["company_address_detail"] != null)
+                            temp.CompanyAddressDetail.Value = jobj["company_address_detail"].ToString();
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.CompanyListViewModel.List.Add(temp);
+                        });
+                    }
+                    
+                }
+                catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                finally { this.ProductListViewModel.SendBasicData(this); }
             }
         }
 
@@ -186,7 +285,7 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally {  }
+                finally { this.CompanyListViewModel.SendBasicData(this); }
             }
         }
 
@@ -219,7 +318,7 @@ namespace SettingPage.ViewModels
                       
                     }
                 } catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString());  }
-                finally { network.GetCustomerList(); }
+                finally { this.CustomerListViewModel.SendBasicData(this); }
             }
         }
 
