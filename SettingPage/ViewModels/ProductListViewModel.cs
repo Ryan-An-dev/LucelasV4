@@ -72,6 +72,10 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
+            if (packet.Header.CMD != (ushort)COMMAND.GETPRODUCTINFO)
+            {
+                return;
+            }
             string msg = Encoding.UTF8.GetString(packet.Body);
             JObject jobject = null;
             try { jobject = new JObject(JObject.Parse(msg)); }
@@ -116,9 +120,7 @@ namespace SettingPage.ViewModels
                                 {
                                     this.List.Add(inventory);
                                 });
-
                             }
-
                         }
                         catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
                     }

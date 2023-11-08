@@ -56,6 +56,10 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
+            if (packet.Header.CMD != (ushort)COMMAND.GETEMPLOEEINFO)
+            {
+                return;
+            }
             string msg = Encoding.UTF8.GetString(packet.Body);
             JObject jobject = new JObject(JObject.Parse(msg));
             if (!msg.Contains("null"))

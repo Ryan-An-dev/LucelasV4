@@ -68,6 +68,10 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
+            if (packet.Header.CMD != (ushort)COMMAND.ProductCategoryList)
+            {
+                return;
+            }
             string msg = Encoding.UTF8.GetString(packet.Body);
             if (!msg.Contains("null"))
             {
