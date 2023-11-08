@@ -38,6 +38,7 @@ namespace CommonModel.Model
             this.Address = new ReactiveProperty<string>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Address1  = new ReactiveProperty<string>().AddTo(disposable);
+            SetObserver();
             
         }
         public override void SetObserver()

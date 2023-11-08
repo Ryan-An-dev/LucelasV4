@@ -32,6 +32,7 @@ namespace CommonModel.Model
             StartWorkTime = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
             BirthDay  = new ReactiveProperty<DateTime>(new DateTime(1991,01,01)).AddTo(disposable);
             Memo = new ReactiveProperty<string>().AddTo(disposable);
+            SetObserver();
         }
         public override void SetObserver()
         {

@@ -8,7 +8,7 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Border  CornerRadius="25" Background="#151f2d">
+    <Border  CornerRadius="25" Background="#151f2d" >
         <Grid Margin="10 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -27,7 +27,7 @@
                 Text="직원 관리"/>
             </Border>
 
-            <GroupBox Header="직원 인적사항" Margin="0 20 0 0" Grid.Row="1" DataContext="{Binding Employee.Value}">
+            <GroupBox Header="직원 인적사항" Margin="0 20 0 0" Grid.Row="1">
                 <StackPanel>
                     <DatePicker 
                         md:HintAssist.Hint="날짜" FontSize="14" 
@@ -35,7 +35,7 @@
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:NotEmptyValidation/>
                                     <val:FutureDateValidation/>
@@ -48,14 +48,14 @@
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
                             x:Name="ContractorName"
-                            Text="{Binding Name.Value}"
+                            Text="{Binding Employee.Value.Name.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
 
                     <TextBox 
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
-                            Text="{Binding Phone.Value}"
+                            Text="{Binding Employee.Value.Phone.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
@@ -65,7 +65,7 @@
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:FutureDateValidation/>
                                 </Binding.ValidationRules>
@@ -76,27 +76,27 @@
                         <TextBox MinWidth="260" Margin="0 0 10 12" IsReadOnly="True"
                             md:HintAssist.Hint="주소"
                             FontSize="14"  
-                            Text="{Binding Address.Value}"
+                            Text="{Binding Employee.Value.Address.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                         <Button 
                                 Margin="10 0 0 0"
                                 Content="검색"
-                                Command="{Binding SearchAddress}" 
+                                Command="{Binding SearchAddress}"
                                 Width="80" 
                                 HorizontalAlignment="Right"/>
                     </StackPanel>
                     <TextBox 
                             md:HintAssist.Hint="상세주소입력"
                             FontSize="14"  
-                            Text="{Binding AddressDetail.Value}"
+                            Text="{Binding Employee.Value.AddressDetail.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                     <TextBox 
                             md:HintAssist.Hint="메모"
                             FontSize="14"  
-                            Text="{Binding Memo.Value}"
+                            Text="{Binding Employee.Value.Memo.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>

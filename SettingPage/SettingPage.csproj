@@ -11,6 +11,7 @@
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AddressSearchManager\AddressSearchManager.csproj" />
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />

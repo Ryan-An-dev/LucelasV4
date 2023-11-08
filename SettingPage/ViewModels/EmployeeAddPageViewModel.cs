@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using AddressSearchManager.Models;
+using CommonModel.Model;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -17,11 +18,15 @@ namespace SettingPage.ViewModels
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
-
         public ReactiveProperty<Employee> Employee { get; set; }
-        public EmployeeAddPageViewModel()
+        public DelegateCommand SearchAddress { get; }
+        IDialogService DialogService;
+
+        public EmployeeAddPageViewModel(IDialogService dialogService)
         {
+            DialogService = dialogService;
             Employee = new ReactiveProperty<Employee>().AddTo(disposable);
+            SearchAddress = new DelegateCommand(SearchAdressExcute);
         }
 
         public string Title => throw new NotImplementedException();
@@ -75,7 +80,31 @@ namespace SettingPage.ViewModels
                 }
             }
         }
+        private void SearchAdressExcute()
+        {
+            this.DialogService.ShowDialog("SearchAdressPage", null, r => FindAddressItem(r), "CommonDialogWindow");
+        }
+        private void FindAddressItem(IDialogResult r)
+        {
+            //Contract ID 받아야되는데 
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
+                else
+                {
+                    AddressDetail temp = null;
+                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    if (temp != null)
+                    {
+                        Employee.Value.Address.Value = temp.도로명주소1;
+                    }
+                }
+            }
+            else
+            {
 
-
+            }
+        }
     }
 }

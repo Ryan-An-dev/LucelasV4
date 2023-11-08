@@ -52,6 +52,7 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Company = new ReactiveProperty<Company>().AddTo(disposable);
             this.ProductType = new ReactiveProperty<FurnitureType>().AddTo(disposable);
+            SetObserver();
         }
 
         public override void SetObserver()

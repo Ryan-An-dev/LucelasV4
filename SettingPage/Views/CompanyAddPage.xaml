@@ -26,7 +26,7 @@
                 Text="회사 등록"/>
             </Border>
             
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Company.Value}">
+            <Grid Grid.Row="1" Margin="20 5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>
@@ -37,7 +37,7 @@
                     Grid.Row="0"
                     md:HintAssist.Hint="회사명"
                     FontSize="14"
-                    Text="{Binding CompanyName.Value}"
+                    Text="{Binding Company.Value.CompanyName.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -45,7 +45,7 @@
                     Grid.Row="1"
                     md:HintAssist.Hint="번호"
                     FontSize="14"
-                    Text="{Binding CompanyPhone.Value}"
+                    Text="{Binding Company.Value.CompanyPhone.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -53,7 +53,7 @@
                     <TextBox MinWidth="240" Margin="0 0 10 12" IsReadOnly="True"
                             md:HintAssist.Hint="주소"
                             FontSize="14"  
-                            Text="{Binding CompanyAddress.Value}"
+                            Text="{Binding Company.Value.CompanyAddress.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                     <Button 
@@ -67,7 +67,7 @@
                     Grid.Row="3"
                     md:HintAssist.Hint="상세주소입력"
                     FontSize="14"  
-                    Text="{Binding CompanyAddressDetail.Value}"
+                    Text="{Binding Company.Value.CompanyAddressDetail.Value}"
                     Margin="0 0 0 12"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"/>

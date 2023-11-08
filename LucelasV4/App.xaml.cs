@@ -104,6 +104,8 @@ namespace LucelasV4
             containerRegistry.Register<ICompanyRepository, CompanyRepository>();
             containerRegistry.Register<IEmployeeRepository, EmployeeRepository>();
             containerRegistry.Register<IProductCategoryRepository, ProductCategoryRepository>();
+            containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
+            containerRegistry.RegisterDialog<SearchAdressPage>("SearchNamePage");
 
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

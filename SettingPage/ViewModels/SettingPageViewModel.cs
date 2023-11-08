@@ -358,8 +358,10 @@ namespace SettingPage.ViewModels
                         temp.No.Value = i++;
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            if(ProductCategoryListViewModel !=null)
+                            if (ProductCategoryListViewModel != null) {
                                 this.ProductCategoryListViewModel.List.Add(temp);
+                            }
+                            this.FurnitureInfos.Add(temp);
                         });
                       
                     }

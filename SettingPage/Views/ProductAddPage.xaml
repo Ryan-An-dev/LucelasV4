@@ -25,35 +25,37 @@
                 Foreground="{StaticResource MainColor}"
                 Text="제품 등록"/>
             </Border>
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding Product.Value}">
+            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding }">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBox 
                     Grid.Row="0"
                     IsReadOnly="True"
                     md:HintAssist.Hint="선택된 회사명"
                     FontSize="14"
-                    Text="{Binding Company.Value.CompanyName.Value}"
+                    Text="{Binding Product.Value.Company.Value.CompanyName.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
                 <ComboBox 
-                    Grid.Row="1"
-                    md:HintAssist.Hint="제품타입"
-                    FontSize="14"
-                    Text="{Binding ProductType.Value}"
-                    Foreground="{StaticResource MainColor}"  
-                    md:HintAssist.IsFloating="True"
-                    />
+                      Grid.Row="1"
+                      md:HintAssist.Hint="제품타입"
+                      FontSize="14"
+                      SelectedValuePath="Id.Value"
+                      SelectedValue="{Binding Product.Value.ProductType.Value.Id.Value}"
+                      ItemsSource="{Binding FurnitureType}"
+                      DisplayMemberPath="Name.Value"
+                      Foreground="{StaticResource MainColor}"
+                      md:HintAssist.IsFloating="True"/>
                 <TextBox 
                     Grid.Row="2"
                     md:HintAssist.Hint="제품명"
                     FontSize="14"
-                    Text="{Binding Name.Value}"
+                    Text="{Binding Product.Value.Name.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
@@ -61,7 +63,7 @@
                     Grid.Row="3"
                     md:HintAssist.Hint="금액"
                     FontSize="14"  
-                    Text="{Binding Price.Value}"
+                    Text="{Binding Product.Value.Price.Value}"
                     Margin="0 0 0 12"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"/>

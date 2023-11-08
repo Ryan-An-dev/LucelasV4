@@ -60,7 +60,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}" />
-                <DataGridTextColumn Width="0.2*" Header="카테고리" Binding="{Binding ProductType.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="카테고리" Binding="{Binding ProductType.Value.Name.Value}"/>
                 <DataGridTextColumn Width="0.4*" Header="물품명" Binding="{Binding Name.Value}"/>
                 <DataGridTextColumn Width="0.2*" Header="가격" Binding="{Binding Price.Value}"/>
             </DataGrid.Columns>

@@ -1,6 +1,7 @@
 ﻿using CommonModel.Model;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -8,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SettingPage.ViewModels
@@ -18,9 +20,15 @@ namespace SettingPage.ViewModels
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
         public ReactiveProperty<FurnitureInventory> Product { get; set; }
-        public ProductAddPageViewModel()
+        public ObservableCollection<FurnitureType> FurnitureType { get; set; }
+        public IContainerProvider ContainerProvider { get; set; }
+        public ProductAddPageViewModel(IContainerProvider con)
         {
+            this.ContainerProvider = con;
             Product = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            this.FurnitureType = temp.FurnitureInfos;
+            
         }
 
         public string Title => throw new NotImplementedException();
