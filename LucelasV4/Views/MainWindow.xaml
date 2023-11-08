@@ -5,7 +5,7 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:fa="http://schemas.fontawesome.io/icons/" 
         WindowState="Maximized" 
         ResizeMode="CanResizeWithGrip" AllowsTransparency="True" 
         WindowStyle="None" WindowStartupLocation="CenterScreen" Background="Transparent">

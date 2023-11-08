@@ -5,7 +5,12 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:prism="http://prismlibrary.com/"       
              xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="1200"
+             >
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
     </UserControl.Resources>
@@ -19,10 +24,11 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="3"/>
                     <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="3"/>
                     <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="3"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="400"/>
@@ -44,50 +50,22 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GridSplitter Grid.Column="2" Width="3"></GridSplitter>
+                <GridSplitter Grid.Column="3"></GridSplitter>
                 <GroupBox Header="상품 카테고리 추가" Grid.Column="4" Margin="5 5" Grid.Row="0">
                     <local:ProductCategoryList DataContext="{Binding ProductCategoryListViewModel}"/>
                 </GroupBox>
                 <GroupBox Header="직원등록" Grid.Column="0" Margin="5 5" Grid.Row="1">
                     <local:EmployeeList DataContext="{Binding EmployeeListViewModel}"/>
                 </GroupBox>
+                <GridSplitter Grid.Column="1" Grid.Row="1"></GridSplitter>
                 <GroupBox Header="고객등록" Grid.Column="2" Grid.Row="1" Margin="5 5">
                     <local:CustomerList DataContext="{Binding CustomerListViewModel}"/>
                 </GroupBox>
+                <GridSplitter Grid.Column="3" Grid.Row="1"></GridSplitter>
                 <GroupBox Header="계좌등록" Grid.Column="4" Grid.Row="1" Margin="5 5">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button 
-                            md:HintAssist.Hint="추가"
-                            Content="{md:PackIcon Kind=Plus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Add"
-                            Margin="5" Cursor="Hand"/>
-                            <Button 
-                            md:HintAssist.Hint="삭제"
-                            Content="{md:PackIcon Kind=Minus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Delete"
-                            Margin="5"/>
-                        </StackPanel>
-                        <DataGrid Grid.Row="2"
-                        VirtualizingStackPanel.IsVirtualizing="True"
-                        VirtualizingStackPanel.VirtualizationMode="Recycling"
-                        AutoGenerateColumns="False" 
-                        CanUserAddRows="False"
-                        Margin="10"
-                        ItemsSource="{Binding CompanyInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="No" Binding="{Binding No.Value}"/>
-                                <DataGridTextColumn Header="이름" Binding="{Binding CompanyName.Value}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
+                    <local:AccountList DataContext="{Binding AccountListViewModel}"/>
                 </GroupBox>
+                <GridSplitter Grid.Column="5" Grid.Row="1"></GridSplitter>
             </Grid>
             
         </ScrollViewer>
