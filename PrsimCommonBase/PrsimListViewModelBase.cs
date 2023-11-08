@@ -34,9 +34,9 @@ namespace PrsimCommonBase
         public ReactiveProperty<string> Keyword { get; set; }
         #endregion
         public IContainerProvider ContainerProvider { get; }
-        private DelegateCommand _SearchExecute;
-        public DelegateCommand SearchExecute =>
-            _SearchExecute ?? (_SearchExecute = new DelegateCommand(SearchAddress));
+        private DelegateCommand<string> _SearchExecute;
+        public DelegateCommand<string> SearchExecute =>
+            _SearchExecute ?? (_SearchExecute = new DelegateCommand<string>(SearchTitle));
 
         public PrsimListViewModelBase(IRegionManager regionManager, IContainerProvider containerProvider,IDialogService dialogService) : base(regionManager) {
             ContainerProvider = containerProvider;
@@ -103,6 +103,6 @@ namespace PrsimCommonBase
         public abstract void AddButtonClick();
         public abstract void DeleteButtonClick(PrismCommonModelBase selecteditem);
         public abstract void RowDoubleClickEvent();
-        public abstract void SearchAddress();
+        public abstract void SearchTitle(string value);
     }
 }

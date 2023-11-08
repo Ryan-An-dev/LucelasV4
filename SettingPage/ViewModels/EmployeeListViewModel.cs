@@ -74,7 +74,7 @@ namespace SettingPage.ViewModels
                 jarr = jobject["employee_list"] as JArray;
                 if (jobject["history_count"] != null)
                     TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
                 foreach (JObject jobj in jarr)
                 {
                     Employee temp = new Employee();
@@ -182,14 +182,14 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
-        public override void SearchAddress()
+        public override void SearchTitle(string Keyword)
         {
             using (var network = ContainerProvider.Resolve<DataAgent.EmployeeDataAgent>())
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 JObject search = new JObject();
-                search["employee_name"] = Keyword.Value;
+                search["employee_name"] = Keyword;
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 jobj["search_option"] = search;

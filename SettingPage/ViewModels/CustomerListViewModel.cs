@@ -62,7 +62,7 @@ namespace SettingPage.ViewModels
                 jarr = jobject["customer_list"] as JArray;
                 if (jobject["history_count"] != null)
                     TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
                 foreach (JObject inner in jobject["customer_list"] as JArray)
                 {
                     Customer temp = new Customer();
@@ -182,14 +182,14 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
-        public override void SearchAddress()
+        public override void SearchTitle(string Keyword)
         {
             using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 JObject search = new JObject();
-                search["customer_name"] = Keyword.Value;
+                search["customer_name"] = Keyword;
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 jobj["search_option"] = search;

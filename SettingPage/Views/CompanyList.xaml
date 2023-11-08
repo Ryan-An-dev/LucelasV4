@@ -27,7 +27,7 @@
             Foreground="{StaticResource MainColor}"
             md:HintAssist.IsFloating="True">
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+                <KeyBinding Command="{Binding SearchExecute}" Key="Enter" CommandParameter="{Binding ElementName=Search, Path=Text}"/>
             </TextBox.InputBindings>
         </TextBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">

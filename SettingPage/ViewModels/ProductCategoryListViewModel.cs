@@ -88,7 +88,7 @@ namespace SettingPage.ViewModels
                         jarr = body["category_list"] as JArray;
                         if (body["history_count"] != null)
                             TotalItemCount.Value = body["history_count"].ToObject<int>();
-                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1);
+                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
                         foreach (JObject jobj in jarr)
                         {
                             FurnitureType temp = new FurnitureType();
@@ -186,14 +186,14 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
-        public override void SearchAddress()
+        public override void SearchTitle(string Keyword)
         {
             using (var network = ContainerProvider.Resolve<DataAgent.ProductCategoryDataAgent>())
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 JObject search = new JObject();
-                search["product_type_name"] = Keyword.Value;
+                search["product_type_name"] = Keyword;
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 jobj["search_option"] = search;
