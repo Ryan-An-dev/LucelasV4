@@ -20,9 +20,9 @@ namespace SettingPage.ViewModels
 {
     
 
-    public class ApiListViewModel : PrsimListViewModelBase, INetReceiver
+    public class CustomerListViewModel : PrsimListViewModelBase, INetReceiver
     {
-        public ApiListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
+        public CustomerListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
           
         }

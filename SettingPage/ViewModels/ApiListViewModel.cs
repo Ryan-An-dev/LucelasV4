@@ -20,9 +20,9 @@ using System.Windows.Interop;
 
 namespace SettingPage.ViewModels
 {
-    public class AccountListViewModel : PrsimListViewModelBase, INetReceiver
+    public class ApiListViewModel : PrsimListViewModelBase, INetReceiver
     {
-        public AccountListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
+        public ApiListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
 
         }

@@ -66,7 +66,7 @@
                     <local:AccountList DataContext="{Binding AccountListViewModel}"/>
                 </GroupBox>
                 <GroupBox Header="API 등록" Grid.Column="0" Grid.Row="2" Margin="5 5">
-                    
+                    <local:ApiList DataContext="{Binding ApiListViewModel}"/>
                 </GroupBox>
             </Grid>
             
