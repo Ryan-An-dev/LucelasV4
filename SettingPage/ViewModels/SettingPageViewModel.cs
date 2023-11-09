@@ -42,6 +42,8 @@ namespace SettingPage.ViewModels
         public ProductListViewModel ProductListViewModel { get; set; }
         public AccountListViewModel AccountListViewModel { get; set; }
 
+        public ApiListViewModel ApiListViewModel { get; set; }
+
         public ReactiveProperty<Visibility> SearchVisibility { get; set; }
 
         public IContainerProvider ContainerProvider { get; set; }
@@ -55,6 +57,8 @@ namespace SettingPage.ViewModels
             CompanyListViewModel = new CompanyListViewModel(ContainerProvider, regionManager, dialogService);
             ProductListViewModel = new ProductListViewModel(ContainerProvider, regionManager, dialogService);
             AccountListViewModel = new AccountListViewModel(ContainerProvider, regionManager, dialogService);
+            ApiListViewModel = new ApiListViewModel(ContainerProvider, regionManager, dialogService);
+
 
         }
         public SettingPageViewModel(IContainerRegistry containerProvider)
@@ -167,9 +171,56 @@ namespace SettingPage.ViewModels
                         case COMMAND.GETPRODUCTINFO:
                             SetProductList(jobj);
                             break;
+                        case COMMAND.READ_API_INFO:
+                            SetApiList(jobj);
+                            break;
+
                     }
                 } catch (Exception e) { }
                
+            }
+        }
+
+        private void SetApiList(JObject msg)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (this.ApiListViewModel != null)
+                    this.ApiListViewModel.List.Clear();
+            });
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try
+                {
+                    if (msg["api_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["api_list"] as JArray;
+                    if (msg["history_count"] != null)
+                        this.ApiListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    int i = 1;
+                    foreach (JObject jobj in jarr)
+                    {
+                        API temp = new API();
+                        temp.No.Value = i++;
+                        if (jobj["api_id"] != null)
+                            temp.Id.Value = jobj["api_id"].ToObject<int>();
+                        if (jobj["api_type"] != null)
+                            temp.Type.Value = jobj["api_type"].ToObject<APIType>();
+                        if (jobj["api_key"] != null)
+                            temp.ApiKey.Value = jobj["api_key"].ToString();
+                        if (jobj["api_account"] != null)
+                            temp.ApiID.Value = jobj["api_account"].ToString();
+                        if (jobj["api_cert_num"] != null)
+                            temp.CertNum.Value = jobj["api_cert_num"].ToString();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.ApiListViewModel.List.Add(temp);
+                        });
+                    }
+                }
+                catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                finally { IsLoading.Value = false; }
             }
         }
 
@@ -213,7 +264,14 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally { IsLoading.Value = false; }
+                finally
+                {
+                    if (this.ApiListViewModel.ContainerProvider != null)
+                    {
+                        this.ApiListViewModel.SendBasicData(this);
+                    }
+                    IsLoading.Value = false;
+                }
             }
         }
 

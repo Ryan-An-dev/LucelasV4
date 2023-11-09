@@ -18,6 +18,10 @@ namespace CommonModel.Model
     }
     public class API : PrismCommonModelBase
     {
+        public IEnumerable<APIType> SearchAPITypeValues
+        {
+            get { return Enum.GetValues(typeof(APIType)).Cast<APIType>(); }
+        }
         //제품타입
         public ReactiveProperty<int>No { get; set; }
         public ReactiveProperty<int> Id { get; set; } //DB Id

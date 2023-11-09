@@ -105,6 +105,7 @@ namespace LucelasV4
             containerRegistry.Register<IEmployeeRepository, EmployeeRepository>();
             containerRegistry.Register<IProductCategoryRepository, ProductCategoryRepository>();
             containerRegistry.Register<IAccountRepository, AccountRepository>();
+            containerRegistry.Register<IApiRepository, APIRepository>();
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchNamePage");
 

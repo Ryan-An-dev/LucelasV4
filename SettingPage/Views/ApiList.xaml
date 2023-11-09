@@ -65,10 +65,8 @@
                 <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}"/>
-                <DataGridTextColumn Width="0.15*" Header="타입" Binding="{Binding Type.Value}"/>
-                <DataGridTextColumn Width="0.2*" Header="이름" Binding="{Binding Name.Value}"/>
-                <DataGridTextColumn Width="0.4*" Header="번호" Binding="{Binding AccountNum.Value}"/>
+                <DataGridTextColumn Width="0.15*" Header="No" Binding="{Binding No.Value}"/>
+                <DataGridTextColumn Width="0.8*" Header="API 종류" Binding="{Binding Type.Value}"/>
             </DataGrid.Columns>
         </DataGrid>
 

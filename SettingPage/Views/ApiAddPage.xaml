@@ -26,33 +26,42 @@
                 Text="계좌 등록"/>
             </Border>
 
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding BankModel.Value}">
+            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding API.Value}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
                 <ComboBox 
                       Grid.Row="0"
-                      md:HintAssist.Hint="제품타입"
+                      md:HintAssist.Hint="Api타입"
                       FontSize="14"
                       SelectedItem="{Binding Type.Value}"
-                      ItemsSource="{Binding SearchBankTypeValues}"
+                      ItemsSource="{Binding SearchAPITypeValues}"
                       Foreground="{StaticResource MainColor}"
                       md:HintAssist.IsFloating="True"/>
                 <TextBox 
                     Grid.Row="1"
-                    md:HintAssist.Hint="이름"
+                    md:HintAssist.Hint="계정명"
                     FontSize="14"
-                    Text="{Binding Name.Value}"
+                    Text="{Binding ApiID.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />
                 <TextBox 
                     Grid.Row="2"
-                    md:HintAssist.Hint="계좌/카드 번호"
+                    md:HintAssist.Hint="API키"
                     FontSize="14"
-                    Text="{Binding AccountNum.Value}"
+                    Text="{Binding ApiKey.Value}"
+                    Foreground="{StaticResource MainColor}"  
+                    md:HintAssist.IsFloating="True"
+                 />
+                <TextBox 
+                    Grid.Row="3"
+                    md:HintAssist.Hint="사업자등록번호"
+                    FontSize="14"
+                    Text="{Binding CertNum.Value}"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"
                     />

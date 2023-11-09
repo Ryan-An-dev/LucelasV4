@@ -19,11 +19,11 @@ namespace SettingPage.ViewModels
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
-        public ReactiveProperty<BankModel> BankModel { get; set; }
+        public ReactiveProperty<API> API { get; set; }
         public ApiAddPageViewModel(IDialogService _DialogService)
         {
             DialogService = _DialogService;
-            BankModel = new ReactiveProperty<BankModel>().AddTo(disposable);
+            API = new ReactiveProperty<API>().AddTo(disposable);
         }
 
         public string Title => throw new NotImplementedException();
@@ -37,11 +37,11 @@ namespace SettingPage.ViewModels
             ButtonResult result = ButtonResult.None;
             if (parameter?.ToLower() == "true")
             {
-                if (this.BankModel.Value == null)
+                if (this.API.Value == null)
                     return;
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
-                p.Add("object", this.BankModel.Value);
+                p.Add("object", this.API.Value);
                 temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")
@@ -69,11 +69,11 @@ namespace SettingPage.ViewModels
         {
             if (parameters.ContainsKey("object"))
             {
-                BankModel BankModel = null;
-                parameters.TryGetValue("object", out BankModel);
-                if (BankModel != null)
+                API API = null;
+                parameters.TryGetValue("object", out API);
+                if (API != null)
                 {
-                    this.BankModel.Value = BankModel;
+                    this.API.Value = API;
                 }
             }
         }

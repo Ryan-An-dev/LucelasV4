@@ -75,6 +75,12 @@ namespace DataAccess
         DELETE_ACCOUNT_INFO,
         #endregion
 
+        #region API
+        CREATE_API_INFO = 75,
+        READ_API_INFO,
+        UPDATE_API_INFO,
+        DELETE_API_INFO,
+        #endregion
 
         #region 통계데이터
         GetDailyList = 60,
