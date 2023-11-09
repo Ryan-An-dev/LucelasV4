@@ -69,6 +69,11 @@ namespace DataAccess
         DELETE_PRODUCTCATEGORY_INFO,
         #endregion
 
+        #region 계좌/카드
+        CREATE_ACCOUNT_INFO = 50,
+        UPDATE_ACCOUNT_INFO,
+        DELETE_ACCOUNT_INFO,
+        #endregion
 
 
         #region 통계데이터

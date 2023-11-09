@@ -34,7 +34,6 @@
                     <RowDefinition Height="400"/>
                     <RowDefinition Height="400"/>
                     <RowDefinition Height="400"/>
-                    <RowDefinition Height="400"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="제품리스트" Margin="5 5" Grid.ColumnSpan="3">
                     <Grid>
@@ -51,6 +50,8 @@
                     </Grid>
                 </GroupBox>
                 <GridSplitter Grid.Column="3"></GridSplitter>
+                <GridSplitter Grid.Column="3" Grid.Row="1"></GridSplitter>
+                <GridSplitter Grid.Column="5" Grid.Row="1"></GridSplitter>
                 <GroupBox Header="상품 카테고리 추가" Grid.Column="4" Margin="5 5" Grid.Row="0">
                     <local:ProductCategoryList DataContext="{Binding ProductCategoryListViewModel}"/>
                 </GroupBox>
@@ -61,11 +62,12 @@
                 <GroupBox Header="고객등록" Grid.Column="2" Grid.Row="1" Margin="5 5">
                     <local:CustomerList DataContext="{Binding CustomerListViewModel}"/>
                 </GroupBox>
-                <GridSplitter Grid.Column="3" Grid.Row="1"></GridSplitter>
                 <GroupBox Header="계좌등록" Grid.Column="4" Grid.Row="1" Margin="5 5">
                     <local:AccountList DataContext="{Binding AccountListViewModel}"/>
                 </GroupBox>
-                <GridSplitter Grid.Column="5" Grid.Row="1"></GridSplitter>
+                <GroupBox Header="API 등록" Grid.Column="0" Grid.Row="2" Margin="5 5">
+                    
+                </GroupBox>
             </Grid>
             
         </ScrollViewer>

@@ -40,6 +40,7 @@ namespace SettingPage.ViewModels
         public CompanyListViewModel CompanyListViewModel { get; set; }
 
         public ProductListViewModel ProductListViewModel { get; set; }
+        public AccountListViewModel AccountListViewModel { get; set; }
 
         public ReactiveProperty<Visibility> SearchVisibility { get; set; }
 
@@ -53,6 +54,8 @@ namespace SettingPage.ViewModels
             CustomerListViewModel = new CustomerListViewModel(ContainerProvider, regionManager, dialogService);
             CompanyListViewModel = new CompanyListViewModel(ContainerProvider, regionManager, dialogService);
             ProductListViewModel = new ProductListViewModel(ContainerProvider, regionManager, dialogService);
+            AccountListViewModel = new AccountListViewModel(ContainerProvider, regionManager, dialogService);
+
         }
         public SettingPageViewModel(IContainerRegistry containerProvider)
         {
@@ -465,16 +468,23 @@ namespace SettingPage.ViewModels
 
         private void SetAccountList(JObject msg)
         {
+            
             Application.Current.Dispatcher.Invoke(() =>
             {
                 this.AccountInfos.Clear();
+                if (AccountListViewModel != null)
+                    this.AccountListViewModel.List.Clear();
             });
             if (msg.ToString().Trim() != string.Empty)
             {
                 try
                 {
+                    if (AccountListViewModel != null)
+                        if (msg["history_count"] != null)
+                            this.AccountListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
                     if (msg["user_account"].ToString().Equals(""))
                         return;
+                    int i = 1;
                     foreach (JObject inner in msg["user_account"] as JArray)
                     {
                         BankModel temp = new BankModel();
@@ -487,9 +497,12 @@ namespace SettingPage.ViewModels
                         if (inner["account_type"] != null)
                             temp.Type.Value = (BankType)inner["account_type"].ToObject<int>();
                         temp.IsChecked.Value = true;
+                        temp.No.Value = i++;
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             this.AccountInfos.Add(temp);
+                            if (AccountListViewModel != null)
+                                this.AccountListViewModel.List.Add(temp);
                         });
                     }
                 }

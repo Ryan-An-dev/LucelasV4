@@ -24,6 +24,7 @@ namespace SettingPage
             containerRegistry.RegisterDialog<CustomerAddPage>("CustomerAddPage");
             containerRegistry.RegisterDialog<EmployeeAddPage>("EmployeeAddPage");
             containerRegistry.RegisterDialog<ProductAddPage>("ProductAddPage");
+            containerRegistry.RegisterDialog<AccountAddPage>("AccountAddPage");
             containerRegistry.RegisterDialog<ProductCategoryAddPage>("ProductCategoryAddPage");
             
         }

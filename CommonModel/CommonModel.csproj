@@ -4,14 +4,17 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Model\Common\**" />
+    <EmbeddedResource Remove="Model\Common\**" />
+    <None Remove="Model\Common\**" />
+    <Page Remove="Model\Common\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PrsimCommonBase\PrsimCommonBase.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Common\" />
   </ItemGroup>
 </Project>

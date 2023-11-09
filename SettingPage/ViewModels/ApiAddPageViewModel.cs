@@ -13,14 +13,14 @@ using System.Linq;
 
 namespace SettingPage.ViewModels
 {
-    public class AccountAddPageViewModel : PrismCommonViewModelBase, IDialogAware
+    public class ApiAddPageViewModel : PrismCommonViewModelBase, IDialogAware
     {
         IDialogService DialogService;
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
         public ReactiveProperty<BankModel> BankModel { get; set; }
-        public AccountAddPageViewModel(IDialogService _DialogService)
+        public ApiAddPageViewModel(IDialogService _DialogService)
         {
             DialogService = _DialogService;
             BankModel = new ReactiveProperty<BankModel>().AddTo(disposable);

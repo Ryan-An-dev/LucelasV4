@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SettingPage.Views.AccountList"
+﻿<UserControl x:Class="SettingPage.Views.ApiList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"       

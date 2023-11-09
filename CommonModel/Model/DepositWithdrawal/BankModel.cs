@@ -1,4 +1,6 @@
-﻿using Reactive.Bindings;
+﻿using PrsimCommonBase;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +17,13 @@ namespace CommonModel.Model
         [Description("카드")]
         Card,
     }
-    public class BankModel
+    public class BankModel : PrismCommonModelBase
     {
+        public IEnumerable<BankType> SearchBankTypeValues
+        {
+            get { return Enum.GetValues(typeof(BankType)).Cast<BankType>(); }
+        }
+        public ReactiveProperty<int> No { get; set; } //순서
         public ReactiveProperty<BankType> Type { get; set; } //타입
         public ReactiveProperty<string> Name { get; set; } //사용자 지정 이름
         public ReactiveProperty<int> AccountSerial { get; set; } //DB 번호
@@ -24,11 +31,12 @@ namespace CommonModel.Model
         public ReactiveProperty<bool> IsChecked { get; set; }//선택됬는지 안됫는지
         public BankModel()
         {
-            this.IsChecked = new ReactiveProperty<bool>();
-            this.Type = new ReactiveProperty<BankType>();
-            this.Name= new ReactiveProperty<string>();
-            this.AccountNum =  new ReactiveProperty<string>();
-            this.AccountSerial = new ReactiveProperty<int>();
+            this.No = new ReactiveProperty<int>().AddTo(disposable);
+            this.IsChecked = new ReactiveProperty<bool>().AddTo(disposable);
+            this.Type = new ReactiveProperty<BankType>().AddTo(disposable); 
+            this.Name= new ReactiveProperty<string>().AddTo(disposable);
+            this.AccountNum =  new ReactiveProperty<string>().AddTo(disposable);
+            this.AccountSerial = new ReactiveProperty<int>().AddTo(disposable);
         }
         public BankModel(BankType type, string name, int AccountSerial, string AccountNum)
         {
@@ -37,6 +45,13 @@ namespace CommonModel.Model
             this.Name.Value = name;
             this.AccountSerial.Value = AccountSerial;
             this.AccountNum.Value = AccountNum;
+        }
+
+        public override void SetObserver()
+        {
+            Type.Subscribe(x => ChangedJson("account_type", x));
+            Name.Subscribe(x => ChangedJson("account_name", x));
+            AccountNum.Subscribe(x => ChangedJson("account_num", x));
         }
     }
 }
