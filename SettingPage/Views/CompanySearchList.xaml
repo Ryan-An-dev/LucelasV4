@@ -8,21 +8,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             mc:Ignorable="d" 
-            d:DesignHeight="400" d:DesignWidth="400"
+            d:DesignHeight="500" d:DesignWidth="400"
              >
     <Border CornerRadius="25" Background="#151f2d">
-        <Grid Margin="10 10" Width="400" Height="400">
+        <Grid Margin="10 10" Width="400" Height="500">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
+            <Border 
+                Grid.ColumnSpan="2"
+                CornerRadius="10" Margin="0 10 0 0"
+                BorderThickness="5" 
+                BorderBrush="{StaticResource MainColor}">
+                <TextBlock 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center" 
+                    FontSize="20" 
+                    FontWeight="Bold"
+                    Foreground="{StaticResource MainColor}"
+                    Text="회사 선택"/>
+            </Border>
             <TextBox     
+                Grid.Row="1"
                  Grid.Column="0"
                  Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
                  x:Name="Search"
@@ -39,7 +54,7 @@
             </TextBox>
             <DataGrid 
                  Grid.ColumnSpan="2"
-                 Grid.Row="1"
+                 Grid.Row="2"
                  VirtualizingStackPanel.IsVirtualizing="True"
                  VirtualizingStackPanel.VirtualizationMode="Recycling"
                  AutoGenerateColumns="False" 
@@ -56,15 +71,15 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center"  Grid.ColumnSpan="2">
+            <StackPanel Grid.Row="3" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center"  Grid.ColumnSpan="2">
                 <Button 
-             Width="30" 
-             Height="30" 
-             Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
-             Margin="5 5 5 5" 
-             Foreground="{StaticResource MainColor}" 
-             Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
-             />
+                     Width="30" 
+                     Height="30" 
+                     Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
+                     Margin="5 5 5 5" 
+                     Foreground="{StaticResource MainColor}" 
+                     Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
+                     />
                 <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} / {1}({2})">
@@ -75,11 +90,11 @@
                     </TextBlock.Text>
                 </TextBlock>
                 <Button 
-             Width="30" 
-             Height="30" 
-             Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
-             Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
-             Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
+                     Width="30" 
+                     Height="30" 
+                     Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
+                     Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
+                     Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
             </StackPanel>
             <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Content="저장" Width="60" Margin="10 0" Command="{Binding CloseDialogCommand}" CommandParameter="true"/>
