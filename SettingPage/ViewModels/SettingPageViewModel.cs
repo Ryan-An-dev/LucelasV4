@@ -554,6 +554,8 @@ namespace SettingPage.ViewModels
                             temp.AccountSerial.Value = inner["account_serial"].ToObject<int>();
                         if (inner["account_type"] != null)
                             temp.Type.Value = (BankType)inner["account_type"].ToObject<int>();
+                        if (inner["last_update"]!=null)
+                            temp.LastUpdate.Value = inner["last_update"].ToObject<DateTime>();
                         temp.IsChecked.Value = true;
                         temp.No.Value = i++;
                         Application.Current.Dispatcher.Invoke(() =>

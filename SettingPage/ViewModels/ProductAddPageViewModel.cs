@@ -22,8 +22,34 @@ namespace SettingPage.ViewModels
         public ReactiveProperty<FurnitureInventory> Product { get; set; }
         public ObservableCollection<FurnitureType> FurnitureType { get; set; }
         public IContainerProvider ContainerProvider { get; set; }
-        public ProductAddPageViewModel(IContainerProvider con)
+        public IDialogService dialogService { get; set; }
+
+        private DelegateCommand<string> _SearchCompany;
+        public DelegateCommand<string> SearchCompany =>
+            _SearchCompany ?? (_SearchCompany = new DelegateCommand<string>(ExecSearchCompany));
+
+        private void ExecSearchCompany(string obj)
         {
+            dialogService.ShowDialog("CompanySearchList", null, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        Company item = r.Parameters.GetValue<Company>("object");
+                        if (item != null)
+                        {
+                            this.Product.Value.Company.Value = item;
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
+        }
+        public ProductAddPageViewModel(IContainerProvider con,IDialogService dialogService)
+        {
+            this.dialogService = dialogService;
             this.ContainerProvider = con;
             Product = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");

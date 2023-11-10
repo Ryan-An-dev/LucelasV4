@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;
@@ -13,6 +14,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -21,10 +23,26 @@ namespace SettingPage.ViewModels
 {
     public class ProductListViewModel : PrsimListViewModelBase, INetReceiver
     {
+        public ReactiveProperty<CompanyProductSelect> CompanyProductTypeSelect { get; set; } //검색옵션
+        public IEnumerable<CompanyProductSelect> CompanyProductTypeSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(CompanyProductSelect)).Cast<CompanyProductSelect>(); }
+        }
+        
+
+        [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+        public enum CompanyProductSelect
+        {
+            [Description("제품명")]
+            ProductName = 0,
+            [Description("회사명")]
+            CompanyName = 1,
+        }
         public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; }
         public ProductListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
+            CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
         }
 
         public override void UpdatePageItem(MovePageType param, int count)
@@ -219,7 +237,13 @@ namespace SettingPage.ViewModels
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
                 JObject search = new JObject();
-                search["product_name"] = Keyword;
+                if (this.CompanyProductTypeSelect.Value == CompanyProductSelect.ProductName)
+                {
+                    search["product_name"] = Keyword;
+                }
+                else {
+                    search["company_name"] = Keyword;
+                }
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
                 jobj["search_option"] = search;

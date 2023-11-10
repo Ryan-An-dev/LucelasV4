@@ -50,16 +50,17 @@ namespace CommonModel.Model
             this.Name = new ReactiveProperty<string>("").AddTo(disposable);
             this.Price = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
-            this.Company = new ReactiveProperty<Company>().AddTo(disposable);
-            this.ProductType = new ReactiveProperty<FurnitureType>().AddTo(disposable);
+            this.Company = new ReactiveProperty<Company>(new Model.Company()).AddTo(disposable);
+            this.ProductType = new ReactiveProperty<FurnitureType>(new FurnitureType()).AddTo(disposable);
             SetObserver();
         }
 
         public override void SetObserver()
         {
+            this.Company.Subscribe(x => ChangedJson("company_id", x.Id));
             this.Name.Subscribe(x => ChangedJson("product_name", x));
             this.Price.Subscribe(x => ChangedJson("product_price", x));
-            this.ProductType.Subscribe(x => ChangedJson("product_type", x));
+            this.ProductType.Subscribe(x => ChangedJson("product_type", x.Id));
             this.Purpose.Subscribe(x => ChangedJson("purpose", x));
             this.StoreReachDate.Subscribe(x => ChangedJson("insert_date", x));
             this.Count.Subscribe(x => ChangedJson("count", x));

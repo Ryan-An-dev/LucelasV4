@@ -36,15 +36,29 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBox 
-                    Grid.Row="0"
-                    IsReadOnly="True"
-                    md:HintAssist.Hint="선택된 회사명"
-                    FontSize="14"
-                    Text="{Binding Product.Value.Company.Value.CompanyName.Value}"
-                    Foreground="{StaticResource MainColor}"  
-                    md:HintAssist.IsFloating="True"
-                    />
+                <Grid Cursor="">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="0.3*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox 
+                        IsReadOnly="True"
+                        md:HintAssist.Hint="선택된 회사명"
+                        FontSize="14"
+                        Text="{Binding Product.Value.Company.Value.CompanyName.Value}"
+                        Foreground="{StaticResource MainColor}"  
+                        md:HintAssist.IsFloating="True"
+                        />
+                    <Button Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Content="검색" 
+                        Width="60" 
+                        Margin="10 0" 
+                        Command="{Binding SearchCompany}" 
+                        CommandParameter="true"/>
+                </Grid>
+                
                 <ComboBox 
                       Grid.Row="1"
                       md:HintAssist.Hint="제품타입"
@@ -67,7 +81,7 @@
                     Grid.Row="3"
                     md:HintAssist.Hint="금액"
                     FontSize="14"  
-                    Text="{Binding Product.Value.Price.Value}"
+                    Text="{Binding Product.Value.Price.Value, StringFormat=\{0:N0\}}"
                     Margin="0 0 0 12"
                     Foreground="{StaticResource MainColor}"  
                     md:HintAssist.IsFloating="True"/>
