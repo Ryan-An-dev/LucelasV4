@@ -46,47 +46,64 @@
                     </DatePicker>
                 </Grid>
 
-                <GroupBox Header="고객인적사항" Margin="0 20 0 0" >
+                <GroupBox Header="고객인적사항" Margin="0 20 0 0">
                     <StackPanel>
+                        <Button 
+                            Margin="10 0 0 0"
+                            x:Name="EditMode"
+                            Visibility="{Binding IsNewContract.Value}"
+                            Content="{Binding ButtonName.Value}"
+                            CommandParameter="{Binding ElementName=EditMode, Path=Content}"
+                            Command="{Binding SetEditMode}" 
+                            Width="60" 
+                            HorizontalAlignment="Right" Cursor="Hand"/>
+                        
+                        
                         <StackPanel Orientation="Horizontal">
                             <TextBox MinWidth="320" Margin="0 0 10 12" 
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
-                                     x:Name="ContractorName"
-                            Text="{Binding Contract.Value.Contractor.Value.Name.Value,Mode=TwoWay}"
-                            Foreground="{StaticResource MainColor}"  
+                            x:Name="ContractorName"
+                            Text="{Binding Contract.Value.Contractor.Value.Name.Value}"
+                            Foreground="{StaticResource MainColor}"
                             md:HintAssist.IsFloating="True"/>
-                            <Button 
+                            <Button
                                 Margin="10 0 0 0"
                                 Content="검색"
                                 CommandParameter="{Binding ElementName=ContractorName, Path=Text}"
                                 Command="{Binding SearchName}" 
                                 Width="80" 
-                                HorizontalAlignment="Right"/>
+                                HorizontalAlignment="Right" Cursor="Hand"/>
                         </StackPanel>
                        
                         <TextBox 
+                            IsReadOnly="{Binding CustIsReadOnly.Value}"
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Phone.Value, Mode=TwoWay,StringFormat={}{0:###-####-####}}"
+                            Text="{Binding Contract.Value.Contractor.Value.Phone.Value}"
                             Margin="0 0 0 12"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox MinWidth="320" Margin="0 0 10 12" IsReadOnly="True"
-                            md:HintAssist.Hint="주소"
-                            FontSize="14"  
-                            Text="{Binding Contract.Value.Contractor.Value.Address.Value, Mode=TwoWay}"
-                            Foreground="{StaticResource MainColor}"  
-                            md:HintAssist.IsFloating="True"/>
-                            <Button 
-                                Margin="10 0 0 0"
-                                Content="검색"
-                                Command="{Binding SearchAddress}" 
-                                Width="80" 
-                                HorizontalAlignment="Right"/>
+                            <TextBox 
+                                Margin="0 0 10 12" IsReadOnly="True"
+                                md:HintAssist.Hint="주소"
+                                Width="320"
+                                FontSize="14"  
+                                Text="{Binding Contract.Value.Contractor.Value.Address.Value}"
+                                Foreground="{StaticResource MainColor}"  
+                                md:HintAssist.IsFloating="True"/>
+                            <Button
+                                IsEnabled="{Binding CustIsReadOnly.Value, Converter={StaticResource ReverseBool}}"
+                                 Margin="10 0 0 0"
+                                 Content="검색"
+                                 CommandParameter="{Binding ElementName=ContractorName, Path=Text}"
+                                 Command="{Binding SearchName}" 
+                                 Width="80" 
+                                 HorizontalAlignment="Right" Cursor="Hand"/>
                         </StackPanel>
                         <TextBox 
+                            IsReadOnly="{Binding CustIsReadOnly.Value}"
                             md:HintAssist.Hint="상세주소입력"
                             FontSize="14"  
                             Text="{Binding Contract.Value.Contractor.Value.Address1.Value, Mode=TwoWay}"

@@ -28,7 +28,7 @@ namespace CommonModel.Model
 
     public class FurnitureInventory: PrismCommonModelBase
     {
-        public ReactiveProperty<int> No { get; set; } // 가격
+        public ReactiveProperty<int> No { get; set; } // 순서
         public ReactiveProperty<string> Name { get; set; } //제품명
         public ReactiveProperty<int> Price { get; set; } // 가격
         public ReactiveProperty<int> Id { get; set; } // 아이디

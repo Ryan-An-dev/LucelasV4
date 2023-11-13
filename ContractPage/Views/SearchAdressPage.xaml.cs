@@ -14,5 +14,10 @@ namespace ContractPage.Views
         {
             InitializeComponent();
         }
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+           
+        }
     }
 }

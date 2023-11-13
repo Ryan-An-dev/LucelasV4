@@ -36,6 +36,8 @@ namespace ContractPage.ViewModels
             [Description("회사명")]
             CompanyName = 1,
         }
+        public DelegateCommand<Company> RowDoubleClick { get; set; } 
+
 
         public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; } //재품종류리스트가 가지고옴
         public ReactiveProperty<Visibility> SearchVisibility { get; set; } //로딩
@@ -126,11 +128,27 @@ namespace ContractPage.ViewModels
             this.TotalItemCountProduct.Subscribe(c => this.TotalPageProduct.Value = (c / this.ListCount.Value) + 1);//product
             CmdGoPageProduct = new DelegateCommand<object>(ExecCmdGoPageProduct);//product
 
-           
+            RowDoubleClick = new DelegateCommand<Company>(ExecDoubleClick);
             
             CountList.Add(30);
             CountList.Add(50);
             CountList.Add(100);
+        }
+
+        private void ExecDoubleClick(Company select)
+        {
+            using (var network = this.ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["page_unit"] = (this.ListCount.Value * CurrentPageProduct.Value) > this.TotalItemCountProduct.Value ? (this.ListCount.Value * CurrentPageProduct.Value) - this.TotalItemCountProduct.Value : this.ListCount.Value;
+                jobj["page_start_pos"] = (this.CurrentPageProduct.Value - 1) * this.ListCount.Value;
+                JObject inner = new JObject();
+                inner["company_name"] = select.CompanyName.Value;
+                jobj["search_option"] = inner;
+                network.repo.Read(jobj);
+                this.IsLoading.Value = true;
+            }
         }
 
         private void ExecCmdGoPageProduct(object param)

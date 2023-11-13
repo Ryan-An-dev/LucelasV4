@@ -15,6 +15,7 @@ using SettingPage;
 using MESPage;
 using DataAccess.NetWork;
 using LucelasV4.ViewModels;
+using CommonModule.Views;
 
 namespace LucelasV4
 {
@@ -106,9 +107,9 @@ namespace LucelasV4
             containerRegistry.Register<IProductCategoryRepository, ProductCategoryRepository>();
             containerRegistry.Register<IAccountRepository, AccountRepository>();
             containerRegistry.Register<IApiRepository, APIRepository>();
+            containerRegistry.RegisterDialogWindow<CommonDialogWindow>("CommonDialogWindow");
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
-            containerRegistry.RegisterDialog<SearchAdressPage>("SearchNamePage");
-
+            containerRegistry.RegisterDialog<SearchNamePage>("SearchNamePage");
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {

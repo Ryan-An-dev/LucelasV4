@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -24,6 +25,7 @@ namespace ContractPage.ViewModels
     {
         public AddressSearchManagerClass addrSearchManager { get; set; }
         public ReactiveCollection<AddressDetail> AddressDetails { get; set; }
+
         public IContainerProvider ContainerProvider { get; }
         public ReactiveProperty<ReceiptModel> args { get; set; }
         public AddressDetail SelectedItem { get; set; }
@@ -41,7 +43,7 @@ namespace ContractPage.ViewModels
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
-
+        public DelegateCommand<object> RowDoubleClick { get; set; }
         public SearchAdressPageViewModel(IContainerProvider con) : base()
         {
             this.ContainerProvider = con;
@@ -49,6 +51,12 @@ namespace ContractPage.ViewModels
             this.addrSearchManager = new AddressSearchManagerClass();
             AddressDetails = new ReactiveCollection<AddressDetail>().AddTo(disposable);
             this.args = new ReactiveProperty<ReceiptModel>().AddTo(disposable);
+            this.RowDoubleClick = new DelegateCommand<object>(RowDoubleClickEvent);
+        }
+
+        private void RowDoubleClickEvent(object para)
+        {
+            CloseDialog("true");
         }
 
         public SearchAdressPageViewModel()
@@ -101,7 +109,7 @@ namespace ContractPage.ViewModels
                     return;
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
-                p.Add("SelectedAddress", this.SelectedItem);
+                p.Add("object", this.SelectedItem);
                 temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")

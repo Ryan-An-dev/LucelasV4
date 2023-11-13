@@ -19,7 +19,7 @@ namespace DepositWithdrawal
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterDialog<FindItemPage>("FindItemPage");
-            containerRegistry.RegisterDialogWindow<CommonDialogWindow>("CommonDialogWindow");
+            
         }
     }
 }

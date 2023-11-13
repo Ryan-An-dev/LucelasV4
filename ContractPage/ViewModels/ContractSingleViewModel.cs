@@ -27,6 +27,27 @@ namespace ContractPage.ViewModels
 {
     public class ContractSingleViewModel : PrismCommonViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
+        /// <summary>
+        /// 새로운 계약 : Collapse  // 기존계약 : Visible
+        /// </summary>
+        public ReactiveProperty<Visibility> IsNewContract { get; set; }
+        /// <summary>
+        /// 새로운 계약 : Visible  // 기존계약 : Collapse
+        /// </summary>
+        public ReactiveProperty<Visibility> IsNewContractReverse { get; set; }
+        /// <summary>
+        /// 편집,완료 버튼
+        /// </summary>
+        public ReactiveProperty<string> ButtonName { get; set; }
+        /// <summary>
+        /// 인적사항 편집모드 버튼 커멘드
+        /// </summary>
+        public DelegateCommand<string> SetEditMode { get; set; }
+        /// <summary>
+        ///  편집모드 = false // 읽기전용 = true;
+        /// </summary>
+        public ReactiveProperty<bool> CustIsReadOnly { get; set; }
+
         public DelegateCommand SaveButton { get; }
         public ReactiveProperty<string> Title { get; } = new();
         private readonly CompositeDisposable _disposable = new();
@@ -42,6 +63,22 @@ namespace ContractPage.ViewModels
         public IDialogService dialogService { get; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
+            CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);
+            SetEditMode = new DelegateCommand<string>(ExecSetEditMode);
+            ButtonName = new ReactiveProperty<string>().AddTo(disposable);
+            IsNewContract = new ReactiveProperty<Visibility>().AddTo(disposable);
+            IsNewContractReverse = new ReactiveProperty<Visibility>().AddTo(disposable);
+            IsNewContract.Subscribe(x =>
+            {
+                if (x == Visibility.Collapsed) //신규 계약
+                {
+                    IsNewContractReverse.Value = Visibility.Visible;
+                }
+                else { //기존계약
+                    IsNewContractReverse.Value = Visibility.Collapsed;
+                    ButtonName.Value = "수정";
+                }
+            });
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
             SelectedPayment = new ReactiveProperty<Payment>().AddTo(disposable);
@@ -53,8 +90,35 @@ namespace ContractPage.ViewModels
             SearchAddress = new DelegateCommand(SearchAdressExcute);
             SearchName = new DelegateCommand(SearchNameExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
-            Title.Value = "신규등록";
+            Title.Value = "신규등록"; 
         }
+
+        private void ExecSetEditMode(string obj)
+        {
+            switch (obj) {
+                case "수정":
+                    CustIsReadOnly.Value = false; //편집모드 진입
+                    this.Contract.Value.Contractor.Value.ClearJson(); //변경내역 초기화
+                    ButtonName.Value = "완료";
+                    break;
+
+                case "완료":
+                    CustIsReadOnly.Value = true; //변경내역 저장 로직
+                    if (this.Contract.Value.Contractor.Value.isChanged) {
+                        using (var network = this.ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+                        {
+                            JObject jobj = new JObject();
+                            network.SetReceiver(this);
+                            jobj["customer_id"] = this.Contract.Value.Contractor.Value.Id.Value;
+                            jobj["changed_item"] = this.Contract.Value.Contractor.Value.ChangedItem;
+                            network.UpdateCustomerList(jobj);
+                        }
+                    }
+                    ButtonName.Value = "수정";
+                    break;
+            }
+        }
+
         private void ExecAddContractItemButton(string obj)
         {
             switch (obj) {
@@ -119,11 +183,11 @@ namespace ContractPage.ViewModels
             if (r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
+                if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
                     AddressDetail temp = null;
-                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null) {
                         this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
                     }
@@ -141,16 +205,15 @@ namespace ContractPage.ViewModels
             if (r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
+                if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
-                    AddressDetail temp = null;
+                    Customer temp = null;
                     r.Parameters.TryGetValue("SelectedAddress", out temp);
                     if (this.Contract.Value != null)
                     {
-                        this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
+                        this.Contract.Value.Contractor.Value = temp;
                     }
-
                 }
             }
             else
@@ -181,18 +244,15 @@ namespace ContractPage.ViewModels
             if (Contract == null)
             {
                 Title.Value = "신규계약 추가";
+                IsNewContract.Value = Visibility.Collapsed;
                 this.Contract.Value = new Contract();
             }
             else
             {
                 Title.Value = "계약 내역 수정";
-                
+                IsNewContract.Value = Visibility.Visible;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
-            //if (this.ReceiptModel.Value.ReceiptType.Value == ReceiptType.Cash)
-            //{
-            //    IsCashOnly.Value = true;
-            //}
         }
         private void SaveButtonExecute()
         {
@@ -214,7 +274,7 @@ namespace ContractPage.ViewModels
                 { // Update
                     if (this.Title.Value == "신규계약 추가") //신규등록일경우
                     {
-
+                        
                         if (this.Contract.Value.isChanged) {
                             network.CreateContractHistory(this.Contract.Value.GetChangedItem());
                         }

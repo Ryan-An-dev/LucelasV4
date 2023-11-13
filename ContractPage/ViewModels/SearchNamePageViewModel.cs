@@ -20,6 +20,7 @@ using MaterialDesignThemes.Wpf;
 using System.Text;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using LogWriter;
 
 namespace ContractPage.ViewModels
 {
@@ -39,7 +40,9 @@ namespace ContractPage.ViewModels
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
-
+        public DelegateCommand RowDoubleClick { get; }
+        
+        
         #region Paging Name
         public ReactiveProperty<int> CurrentPage { get; set; }
         public ReactiveProperty<int> TotalPage { get; set; }
@@ -50,22 +53,31 @@ namespace ContractPage.ViewModels
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         #endregion
 
-        public SearchNamePageViewModel(IContainerProvider con) : base()
+        public IDialogService dialogService { get; set; }
+
+        public SearchNamePageViewModel(IContainerProvider con,IDialogService DialogService) : base()
         {
+            this.dialogService = DialogService;
             this.ContainerProvider = con;
             this.Keyword = new ReactiveProperty<string>().AddTo(disposable);
             CustomerList = new ObservableCollection<Customer>();
             this.args = new ReactiveProperty<ReceiptModel>().AddTo(disposable);
-            this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable); //Company
-            this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
-            this.TotalPage = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
-            this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);//Company
-            this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);//Company
+            this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable);
+            this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            this.TotalPage = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);
             this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
-            CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);//Company
+            CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
             CountList.Add(30);
             CountList.Add(50);
             CountList.Add(100);
+            this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
+        }
+
+        private void RowDoubleClickEvent()
+        {
+            CloseDialog("true");
         }
 
         public SearchNamePageViewModel()
@@ -124,7 +136,7 @@ namespace ContractPage.ViewModels
                 jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject inner = new JObject();
-                inner["employee_name"] = value;
+                inner["customer_name"] = value;
                 jobj["search_option"] = inner;
                 network.GetCustomerList(jobj);
             }
@@ -149,7 +161,7 @@ namespace ContractPage.ViewModels
                     return;
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
-                p.Add("SelectedCustomer", this.SelectedItem);
+                p.Add("object", this.SelectedItem);
                 temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")
@@ -182,7 +194,10 @@ namespace ContractPage.ViewModels
         {
             Customer temp = null;
             parameters.TryGetValue("Contractor", out temp);
-            this.Keyword.Value=temp.Name.Value;
+            if (temp.Name.Value.Equals("")) {
+                return;
+            }
+            this.Keyword.Value= temp.Name.Value;
             SearchBase(this.Keyword.Value);
         }
 
@@ -190,41 +205,78 @@ namespace ContractPage.ViewModels
         {
             JObject jobj = null;
             string msg = Encoding.UTF8.GetString(packet.Body);
+
             try
             {
                 jobj = new JObject(JObject.Parse(msg));
             }
             catch (Exception e) { return; }
-
+            ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETCUSTOMERINFO: //데이터 조회 완료
                     if (jobj != null)
                     {
                         JArray jarr = new JArray();
-                        try { jarr = jobj["contractor"] as JArray; } catch (Exception e) { break; }
+                        try { jarr = jobj["customer_list"] as JArray; } catch (Exception e) { break; }
                         if (jarr == null)
                             return;
-                        foreach (JObject inner in jarr)
-                        {
-                            Customer customer = new Customer();
-                            if (inner["cui_id"] != null)
-                                customer.Id.Value = inner["cui_id"].ToObject<int>();
-                            if (inner["cui_name"] != null)
-                                customer.Name.Value = inner["cui_name"].ToString();
-                            if (inner["cui_phone"] != null)
-                                customer.Phone.Value = inner["cui_phone"].ToObject<string>();
-                            if (inner["cui_address"] != null)
-                                customer.Address.Value = inner["cui_address"].ToObject<string>();
-                            if (inner["cui_address_detail"] != null)
-                                customer.Address1.Value = inner["cui_address_detail"].ToObject<string>();
-                            if (inner["cui_memo"] != null)
-                                customer.Memo.Value = inner["cui_memo"].ToObject<string>();
 
-                            this.CustomerList.Add(customer);
+                        if (jarr.Count > 0)
+                        {
+                            foreach (JObject inner in jarr)
+                            {
+                                Customer customer = new Customer();
+                                if (inner["cui_id"] != null)
+                                    customer.Id.Value = inner["cui_id"].ToObject<int>();
+                                if (inner["cui_name"] != null)
+                                    customer.Name.Value = inner["cui_name"].ToString();
+                                if (inner["cui_phone"] != null)
+                                    customer.Phone.Value = inner["cui_phone"].ToObject<string>();
+                                if (inner["cui_address"] != null)
+                                    customer.Address.Value = inner["cui_address"].ToObject<string>();
+                                if (inner["cui_address_detail"] != null)
+                                    customer.Address1.Value = inner["cui_address_detail"].ToObject<string>();
+                                if (inner["cui_memo"] != null)
+                                    customer.Memo.Value = inner["cui_memo"].ToObject<string>();
+                                Application.Current.Dispatcher.BeginInvoke(() =>
+                                {
+                                    this.CustomerList.Add(customer);
+                                });
+                            }
+                        }
+                        else {
+                            DialogParameters dialogParameters = new DialogParameters();
+                            dialogParameters.Add("object", new Customer());
+                            dialogService.ShowDialog("CustomerAddPage", dialogParameters, r =>
+                            {
+                                try
+                                {
+                                    if (r.Result == ButtonResult.OK)
+                                    {
+                                        Customer item = r.Parameters.GetValue<Customer>("object");
+                                        if (item != null)
+                                        {
+                                            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+                                            {
+                                                network.SetReceiver(this);
+                                                JObject jobj = new JObject();
+                                                jobj["cui_id"] = (int)0;
+                                                jobj["cui_name"] = item.Name.Value;
+                                                jobj["cui_phone_num"] = item.Phone.Value;
+                                                jobj["cui_address"] = item.Address.Value;
+                                                jobj["cui_address_detail"] = item.Address1.Value;
+                                                jobj["cui_memo"] = item.Memo.Value;
+                                                network.CreateCustomerList(jobj);
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception) { }
+
+                            }, "CommonDialogWindow");
                         }
                     }
-
                     break;
             }
         }

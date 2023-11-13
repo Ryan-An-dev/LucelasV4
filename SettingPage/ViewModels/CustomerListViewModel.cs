@@ -1,6 +1,7 @@
 ﻿using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
+using LogWriter;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
@@ -51,8 +52,9 @@ namespace SettingPage.ViewModels
                 return;
             }
             string msg = Encoding.UTF8.GetString(packet.Body);
+            ErpLogWriter.LogWriter.Debug(msg);
             JObject jobject = new JObject(JObject.Parse(msg));
-            if (msg.Equals("null\n"))
+            if (!msg.Equals("null\n"))
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {

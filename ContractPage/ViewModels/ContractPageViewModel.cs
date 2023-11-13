@@ -29,7 +29,7 @@ namespace ContractPage.ViewModels
     public class ContractPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
-        
+
         public ReactiveProperty<string> SearchName { get; set; }
         public ReactiveProperty<DateTime> StartDate { get; set; }
         public ReactiveProperty<DateTime> EndDate { get; set; }
@@ -38,7 +38,7 @@ namespace ContractPage.ViewModels
         {
             get { return Enum.GetValues(typeof(FullyCompleted)).Cast<FullyCompleted>(); }
         }
-        
+
         #endregion
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
 
@@ -57,8 +57,9 @@ namespace ContractPage.ViewModels
         public ReactiveCollection<Contract> ContractItems { get; }
         public ReactiveProperty<Contract> SelectedItem { get; set; }
         private IContainerProvider ContainerProvider { get; }
+        public ReactiveCollection<FurnitureType> furnitureInfos { get; }
 
-        public ContractPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider):base(regionManager)
+        public ContractPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
@@ -144,6 +145,7 @@ namespace ContractPage.ViewModels
         }
         private void RowDoubleClickExecute()
         {
+            SelectedItem.Value.ClearJson();
             var p = new NavigationParameters();
             if (SelectedItem != null)
             {
@@ -162,7 +164,7 @@ namespace ContractPage.ViewModels
             this.TotalItemCount.Value = 0;
             SendData();
         }
-        
+
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
@@ -177,11 +179,11 @@ namespace ContractPage.ViewModels
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
             JObject jobj = null;
-            try { jobj = new JObject(JObject.Parse(msg)); } 
+            try { jobj = new JObject(JObject.Parse(msg)); }
             catch (Exception) {
                 return;
             }
-            
+
             ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
@@ -190,6 +192,33 @@ namespace ContractPage.ViewModels
                     break;
 
             }
+        }
+
+        private Customer SetCustomer(JObject jobj)
+        {
+            Customer customer = new Customer();
+            if (jobj["cui_id"] != null)
+                customer.Id.Value = jobj["cui_id"].ToObject<int>();
+            if (jobj["cui_name"] != null)
+                customer.Name.Value = jobj["cui_name"].ToObject<string>();
+            if (jobj["cui_phone"] != null)
+                customer.Phone.Value = jobj["cui_phone"].ToObject<string>();
+            if (jobj["cui_address"] != null)
+                customer.Address.Value = jobj["cui_address"].ToObject<string>();
+            if (jobj["cui_address_detail"] != null)
+                customer.Address1.Value = jobj["cui_address_detail"].ToObject<string>();
+            if (jobj["cui_memo"] != null)
+                customer.Memo.Value = jobj["cui_memo"].ToObject<string>();
+            return customer;
+        }
+
+        private FurnitureInventory SetProduct(JObject jobj) { 
+            FurnitureInventory inventory = new FurnitureInventory();
+            if (jobj["product_id"] != null)
+                inventory.Id.Value = jobj["product_id"].ToObject<int>();
+            //if (jobj["product_type"] != null)
+                //inventory.ProductType.Value = ()jobj["product_type"].ToObject<int>();
+            return inventory;
         }
         private void SetContractHistory(JObject msg)
         {
@@ -206,33 +235,47 @@ namespace ContractPage.ViewModels
                     if (msg["contract_history"] != null) {
                         foreach (JObject inner in msg["contract_history"] as JArray)
                         {
+                            Contract temp = new Contract();
                             int id = 0;
-                            //Customer Contractor = JsonSerializer.Deserialize<Customer>(inner["contractor"].ToString());
-                            
-                            //if (inner["contractor"] != null)
-                            //{
-                            //    if (inner["contractor"]["cui_id"] != null)
-                            //    {
-                            //        id = inner["cui_id"].ToObject<int>();
-                            //        Contractor = FindCustomer(id);
-                            //    }
-                            //}
-                            Contract temp = JsonSerializer.Deserialize<Contract>(inner.ToString());
+                            Customer Contractor = null;
+                            //고객정보 파싱 부분 
+                            if (inner["contractor"] != null) { 
+                                Contractor = SetCustomer(inner["contractor"] as JObject);
+                                Contractor.ClearJson();
+                            }
 
-                            //if (inner["create_time"] != null)
-                            //    temp.Month.Value = inner["create_time"].ToObject<DateTime>();
-                            //if (inner["con_id"] != null)
-                            //    temp.Id.Value = inner["con_id"].ToObject<int>();
-                            //if (inner["memo"] != null)
-                            //    temp.Memo.Value = inner["memo"].ToString();
-                            //if (inner["payment_complete"] != null)
-                            //    temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
-                            //if (Contractor != null)
-                            //    temp.Contractor.Value = Contractor;
-                            //if (inner["delivery_date"] != null)
-                            //    temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
-                            //if (inner["total"] != null)
-                            //    temp.Price.Value = inner["total"].ToObject<int>();
+                            //계약일자
+                            if (inner["create_time"] != null)
+                                temp.Month.Value = inner["create_time"].ToObject<DateTime>();
+
+                            //계약ID
+                            if (inner["con_id"] != null)
+                                temp.Id.Value = inner["con_id"].ToObject<int>();
+
+                            //계약 메모
+                            if (inner["memo"] != null)
+                                temp.Memo.Value = inner["memo"].ToString();
+
+                            //계약 금액 완료 유무
+                            if (inner["payment_complete"] != null)
+                                temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
+
+                            //고객 정보
+                            if (Contractor != null)
+                                temp.Contractor.Value = Contractor;
+
+                            //배송일자 
+                            if (inner["delivery_date"] != null)
+                                temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
+
+                            //최종금액
+                            if (inner["total"] != null)
+                                temp.Price.Value = inner["total"].ToObject<int>();
+
+                            //제품 
+                            if (inner["product"]!=null)
+
+
                             this.ContractItems.Add(temp);
                         }
                     }

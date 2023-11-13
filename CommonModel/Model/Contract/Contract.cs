@@ -72,12 +72,14 @@ namespace CommonModel.Model
             
         }
 
+
+        /// <summary>
+        /// 고객정보는 따로 Update한다.
+        /// 회사, 제품 역시 따로 Update한다.
+        /// </summary>
+        /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
         public JObject GetChangedItem()
         {
-            if (this.Contractor.Value.isChanged) {
-                ChangedItem["contractor"] =this.Contractor.Value.GetChangedItem();
-            }
-
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
                 if (item.isChanged) {
