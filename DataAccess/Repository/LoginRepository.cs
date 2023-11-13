@@ -37,9 +37,10 @@ namespace DataAccess.Repository
         {
             this.ip = ip;
             this.port = port;
-            this.NetManager.Connect(ip, port);
             this.id = id;
             this.pw = pw;
+
+            this.NetManager.Connect(ip, port);
         }
         public void TryLogin(string id, string pass)
         {
