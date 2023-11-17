@@ -404,8 +404,13 @@ namespace SettingPage.ViewModels
                     });
                     if (msg["category_list"] == null)
                         return;
-                    if (msg["history_count"] != null)
-                        this.ProductCategoryListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    if (msg["history_count"] != null) {
+                        if (ProductCategoryListViewModel != null)
+                        {
+                            this.ProductCategoryListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                        }
+                    }
+                       
                     JArray jarr = new JArray();
                     jarr = msg["category_list"] as JArray;
                     
@@ -420,6 +425,7 @@ namespace SettingPage.ViewModels
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             if (ProductCategoryListViewModel != null) {
+
                                 this.ProductCategoryListViewModel.List.Add(temp);
                             }
                             this.FurnitureInfos.Add(temp);
@@ -554,8 +560,14 @@ namespace SettingPage.ViewModels
                             temp.AccountSerial.Value = inner["account_serial"].ToObject<int>();
                         if (inner["account_type"] != null)
                             temp.Type.Value = (BankType)inner["account_type"].ToObject<int>();
-                        if (inner["last_update"]!=null)
-                            temp.LastUpdate.Value = inner["last_update"].ToObject<DateTime>();
+                        try {
+                            if (inner["last_update"] != null)
+                                temp.LastUpdate.Value = inner["last_update"].ToObject<DateTime>();
+                        }
+                        catch(Exception e){
+                            temp.LastUpdate.Value = null;
+                        }
+                        
                         temp.IsChecked.Value = true;
                         temp.No.Value = i++;
                         Application.Current.Dispatcher.Invoke(() =>

@@ -192,12 +192,12 @@ namespace ContractPage.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            Customer temp = null;
-            parameters.TryGetValue("Contractor", out temp);
-            if (temp.Name.Value.Equals("")) {
+            string temp = null;
+            parameters.TryGetValue("object", out temp);
+            if (string.IsNullOrEmpty(temp)) {
                 return;
             }
-            this.Keyword.Value= temp.Name.Value;
+            this.Keyword.Value= temp;
             SearchBase(this.Keyword.Value);
         }
 
@@ -219,10 +219,8 @@ namespace ContractPage.ViewModels
                     {
                         JArray jarr = new JArray();
                         try { jarr = jobj["customer_list"] as JArray; } catch (Exception e) { break; }
-                        if (jarr == null)
-                            return;
-
-                        if (jarr.Count > 0)
+                        
+                        if (jarr != null)
                         {
                             foreach (JObject inner in jarr)
                             {
@@ -231,8 +229,8 @@ namespace ContractPage.ViewModels
                                     customer.Id.Value = inner["cui_id"].ToObject<int>();
                                 if (inner["cui_name"] != null)
                                     customer.Name.Value = inner["cui_name"].ToString();
-                                if (inner["cui_phone"] != null)
-                                    customer.Phone.Value = inner["cui_phone"].ToObject<string>();
+                                if (inner["cui_phone_num"] != null)
+                                    customer.Phone.Value = inner["cui_phone_num"].ToObject<string>();
                                 if (inner["cui_address"] != null)
                                     customer.Address.Value = inner["cui_address"].ToObject<string>();
                                 if (inner["cui_address_detail"] != null)
@@ -248,33 +246,37 @@ namespace ContractPage.ViewModels
                         else {
                             DialogParameters dialogParameters = new DialogParameters();
                             dialogParameters.Add("object", new Customer());
-                            dialogService.ShowDialog("CustomerAddPage", dialogParameters, r =>
+                            Application.Current.Dispatcher.Invoke(() =>
                             {
-                                try
+                                dialogService.ShowDialog("CustomerAddPage", dialogParameters, r =>
                                 {
-                                    if (r.Result == ButtonResult.OK)
+                                    try
                                     {
-                                        Customer item = r.Parameters.GetValue<Customer>("object");
-                                        if (item != null)
+                                        if (r.Result == ButtonResult.OK)
                                         {
-                                            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+                                            Customer item = r.Parameters.GetValue<Customer>("object");
+                                            if (item != null)
                                             {
-                                                network.SetReceiver(this);
-                                                JObject jobj = new JObject();
-                                                jobj["cui_id"] = (int)0;
-                                                jobj["cui_name"] = item.Name.Value;
-                                                jobj["cui_phone_num"] = item.Phone.Value;
-                                                jobj["cui_address"] = item.Address.Value;
-                                                jobj["cui_address_detail"] = item.Address1.Value;
-                                                jobj["cui_memo"] = item.Memo.Value;
-                                                network.CreateCustomerList(jobj);
+                                                using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
+                                                {
+                                                    network.SetReceiver(this);
+                                                    JObject jobj = new JObject();
+                                                    jobj["cui_id"] = (int)0;
+                                                    jobj["cui_name"] = item.Name.Value;
+                                                    jobj["cui_phone_num"] = item.Phone.Value;
+                                                    jobj["cui_address"] = item.Address.Value;
+                                                    jobj["cui_address_detail"] = item.Address1.Value;
+                                                    jobj["cui_memo"] = item.Memo.Value;
+                                                    network.CreateCustomerList(jobj);
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                catch (Exception) { }
+                                    catch (Exception) { }
 
-                            }, "CommonDialogWindow");
+                                }, "CommonDialogWindow");
+                            });
+                            
                         }
                     }
                     break;

@@ -28,7 +28,7 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Name { get; set; } //사용자 지정 이름
         public ReactiveProperty<int> AccountSerial { get; set; } //DB 번호
         public ReactiveProperty<string> AccountNum { get; set; } //계좌 or 카드 번호
-        public ReactiveProperty<DateTime> LastUpdate { get; set; }
+        public ReactiveProperty<DateTime?> LastUpdate { get; set; }
         public ReactiveProperty<bool> IsChecked { get; set; }//선택됬는지 안됫는지
         public BankModel()
         {
@@ -38,7 +38,7 @@ namespace CommonModel.Model
             this.Name= new ReactiveProperty<string>().AddTo(disposable);
             this.AccountNum =  new ReactiveProperty<string>().AddTo(disposable);
             this.AccountSerial = new ReactiveProperty<int>().AddTo(disposable);
-            this.LastUpdate = new ReactiveProperty<DateTime>().AddTo(disposable);
+            this.LastUpdate = new ReactiveProperty<DateTime?>().AddTo(disposable);
             SetObserver();
         }
         public BankModel(BankType type, string name, int AccountSerial, string AccountNum)

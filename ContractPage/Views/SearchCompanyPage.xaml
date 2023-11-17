@@ -65,7 +65,7 @@
                     Foreground="{StaticResource MainColor}"
                     md:HintAssist.IsFloating="True">
                     <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding SearchExecute}" Key="Enter"/>
+                        <KeyBinding Command="{Binding SearchDialogCommand}" Key="Enter"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button 
@@ -151,7 +151,7 @@
                     CanUserAddRows="False"
                     Margin="10 10" 
                     ItemsSource="{Binding FurnitureList}"
-                    SelectedItem="{Binding SelectedFurniture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedFurniture.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     AutoGenerateColumns="False"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"
@@ -163,10 +163,10 @@
                                             Width="0.25*" IsReadOnly="True"/>
                         <DataGridTextColumn Header="제품명" Binding="{Binding Name.Value}" 
                                             Width="0.4*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="가격" Binding="{Binding Price.Value}" 
-                                            Width="0.2*" />
+                        <DataGridTextColumn Header="입고가격" Binding="{Binding Price.Value}" 
+                                            Width="0.2*" IsReadOnly="True"/>
                         <DataGridTextColumn Header="재고량" Binding="{Binding Count.Value}" 
-                                            Width="0.2*" />
+                                            Width="0.2*" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Height="40" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
@@ -207,15 +207,15 @@
                     Width="100"
                     Content="회사추가" 
                     Margin="10 0" 
-                    Command="{Binding CloseDialogCommand}" 
-                    CommandParameter="true"/>
+                    Command="{Binding AddPage}" 
+                    CommandParameter="AddCompany"/>
                 <Button 
                     Width="100"
                     Grid.Column="1"
                     Content="제품추가" 
                     Margin="10 0" 
-                    Command="{Binding CloseDialogCommand}" 
-                    CommandParameter="true"/>
+                    Command="{Binding AddPage}" 
+                    CommandParameter="AddProduct"/>
 
             </Grid>
 

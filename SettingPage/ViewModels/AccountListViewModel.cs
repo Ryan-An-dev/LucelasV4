@@ -84,7 +84,15 @@ namespace SettingPage.ViewModels
                                     temp.Name.Value = jobj["account_name"].ToString();
                                 if (jobj["account_num"] != null)
                                     temp.AccountNum.Value = jobj["account_num"].ToString();
-
+                                try
+                                {
+                                    if (jobj["last_update"] != null)
+                                        temp.LastUpdate.Value = jobj["last_update"].ToObject<DateTime>();
+                                }
+                                catch (Exception e)
+                                {
+                                    temp.LastUpdate.Value = null;
+                                }
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     List.Add(temp);

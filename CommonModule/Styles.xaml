@@ -159,4 +159,11 @@
             </Style>
         </Selector:DepositStyleSelector.CostDataStyle>
     </Selector:DepositStyleSelector>
+
+    <Style x:Key="RowButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Highlight}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
 </ResourceDictionary>

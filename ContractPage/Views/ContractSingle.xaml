@@ -7,7 +7,7 @@
              xmlns:views="clr-namespace:CommonModule.UserControls.Views;assembly=CommonModule"
 			 xmlns:val="clr-namespace:CommonModule.Validations;assembly=CommonModule"
 			 xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"     
-             Width="500"
+             Width="600"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml">
@@ -30,8 +30,9 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DatePicker  
-                        Width="460" HorizontalAlignment="Left" 
-                        md:HintAssist.Hint="판매날짜" FontSize="14" 
+                        Margin="0 10 0 0"
+                        HorizontalAlignment="Left" 
+                        md:HintAssist.Hint="판매날짜" FontSize="16" Width="150"
                         md:HintAssist.IsFloating="True"  
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
@@ -60,17 +61,21 @@
                         
                         
                         <StackPanel Orientation="Horizontal">
-                            <TextBox MinWidth="320" Margin="0 0 10 12" 
+                            <TextBox MinWidth="420" Margin="0 0 10 12" 
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
-                            x:Name="ContractorName"
+                            x:Name="Search"
                             Text="{Binding Contract.Value.Contractor.Value.Name.Value}"
                             Foreground="{StaticResource MainColor}"
-                            md:HintAssist.IsFloating="True"/>
+                            md:HintAssist.IsFloating="True">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding SearchName}" CommandParameter="{Binding ElementName=Search, Path=Text}" Key="Enter"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
                             <Button
                                 Margin="10 0 0 0"
                                 Content="검색"
-                                CommandParameter="{Binding ElementName=ContractorName, Path=Text}"
+                                CommandParameter="{Binding ElementName=Search, Path=Text}"
                                 Command="{Binding SearchName}" 
                                 Width="80" 
                                 HorizontalAlignment="Right" Cursor="Hand"/>
@@ -88,7 +93,7 @@
                             <TextBox 
                                 Margin="0 0 10 12" IsReadOnly="True"
                                 md:HintAssist.Hint="주소"
-                                Width="320"
+                                Width="420"
                                 FontSize="14"  
                                 Text="{Binding Contract.Value.Contractor.Value.Address.Value}"
                                 Foreground="{StaticResource MainColor}"  
@@ -135,18 +140,37 @@
                         <DataGrid 
                             x:Name="productgrid"
                             MinHeight="100"
+                            RowHeight="40"
                             Margin="5"
                             ItemsSource="{Binding Contract.Value.Product}"
                             SelectedItem="{Binding SelectedProduct.Value, Mode=TwoWay}"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
-                            IsReadOnly="True"
                             >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="회사명" Width="*"/>
-                                <DataGridTextColumn Header="제품타입" Width="*"/>
-                                <DataGridTextColumn Header="제품명" Width="*"/>
-                                <DataGridTextColumn Header="금액" Width="*"/>
+                                <DataGridTextColumn Header="제품명" Width="*" Binding="{Binding Name.Value}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="입고금액" Width="*" Binding="{Binding Price.Value ,StringFormat=\{0:N0\}}"
+                                                    IsReadOnly="True"/>
+                                <DataGridTextColumn Header="판매금액" Width="*" Binding="{Binding SellPrice.Value, StringFormat=\{0:N0\}}"
+                                                    />
+                                <DataGridTextColumn 
+                                    Header="수량"
+                                    Width="*" 
+                                    Binding="{Binding SellPrice.Value}"
+                                    >
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="비고" Width="90">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button 
+                                                VerticalAlignment="Center"
+                                                Width="55"
+                                                FontSize="10"
+                                                Content="수정"
+                                                />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
@@ -156,7 +180,7 @@
                                 FontSize="13" 
                                 FontWeight="Bold"/>
                             <TextBlock 
-                                Text="{Binding Cotract.Value.Price.Value, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding Cotract.Value.Price.Value, UpdateSourceTrigger=PropertyChanged ,StringFormat=\{0:N0\}}"
                                 Foreground="White" 
                                 FontSize="13" 
                                 FontWeight="Bold"/>

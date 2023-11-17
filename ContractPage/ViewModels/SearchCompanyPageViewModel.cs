@@ -93,10 +93,14 @@ namespace ContractPage.ViewModels
         public ReactiveProperty<int> TotalItemCountProduct { get; set; }
         public ReactiveProperty<int> FirstItemProduct { get; set; }
         public DelegateCommand<object> CmdGoPageProduct { get; }
-        #endregion
 
-        public SearchCompanyPageViewModel(IContainerProvider con) : base()
+        public DelegateCommand<string> AddPage{ get; }
+        #endregion
+        public IDialogService dialogService { get; set; }
+
+        public SearchCompanyPageViewModel(IContainerProvider con, DialogService dialogService) : base()
         {
+            this.dialogService = dialogService;
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
             this.ContainerProvider = con;
             this.Keyword = new ReactiveProperty<string>().AddTo(disposable);
@@ -108,6 +112,7 @@ namespace ContractPage.ViewModels
             this.SelectedFurniture = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             this.SelectedCompany = new ReactiveProperty<Company>().AddTo(disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            
             FurnitureInfos = temp.FurnitureInfos;
 
 
@@ -129,10 +134,82 @@ namespace ContractPage.ViewModels
             CmdGoPageProduct = new DelegateCommand<object>(ExecCmdGoPageProduct);//product
 
             RowDoubleClick = new DelegateCommand<Company>(ExecDoubleClick);
-            
+
+            AddPage = new DelegateCommand<string>(ExecAddPage);
             CountList.Add(30);
             CountList.Add(50);
             CountList.Add(100);
+        }
+
+        private void ExecAddPage(string type)
+        {
+            DialogParameters dialogParameters = new DialogParameters();
+            switch (type) {
+                case "AddProduct":
+                    dialogParameters.Add("object", new FurnitureInventory());
+
+                    dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
+                    {
+                        try
+                        {
+                            if (r.Result == ButtonResult.OK)
+                            {
+                                FurnitureInventory item = r.Parameters.GetValue<FurnitureInventory>("object");
+                                if (item != null)
+                                {
+                                    using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                                    {
+                                        network.SetReceiver(this);
+                                        JObject jobj = new JObject();
+                                        jobj["product_id"] = (int)0;
+                                        jobj["product_type"] = (int)item.ProductType.Value.Id.Value;
+                                        jobj["product_name"] = item.Name.Value;
+                                        jobj["product_price"] = item.Price.Value;
+                                        jobj["company_id"] = item.Company.Value.Id.Value;
+                                        network.Create(jobj);
+                                        IsLoading.Value = true;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception) { }
+
+                    }, "CommonDialogWindow");
+
+                    break;
+                case "AddCompany":
+                    
+                    dialogParameters.Add("object", new Company());
+                    dialogService.ShowDialog("CompanyAddPage", dialogParameters, r =>
+                    {
+                        try
+                        {
+                            if (r.Result == ButtonResult.OK)
+                            {
+                                Company item = r.Parameters.GetValue<Company>("object");
+                                if (item != null)
+                                {
+                                    using (var network = ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
+                                    {
+                                        network.SetReceiver(this);
+                                        JObject jobj = new JObject();
+                                        jobj["company_id"] = (int)0;
+                                        jobj["company_name"] = item.CompanyName.Value;
+                                        jobj["company_address_detail"] = item.CompanyAddressDetail.Value;
+                                        jobj["company_phone"] = item.CompanyPhone.Value;
+                                        jobj["company_address"] = item.CompanyAddress.Value;
+                                        network.Create(jobj);
+                                        IsLoading.Value = true;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception) { }
+
+                    }, "CommonDialogWindow");
+
+                    break;
+            }
         }
 
         private void ExecDoubleClick(Company select)
@@ -291,11 +368,11 @@ namespace ContractPage.ViewModels
 
             if (parameter?.ToLower() == "true")
             {
-                if (this.SelectedFurniture == null)
+                if (this.SelectedFurniture.Value == null)
                     return;
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
-                p.Add("SelectedFurniture", this.SelectedFurniture);
+                p.Add("object", this.SelectedFurniture.Value);
                 temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")

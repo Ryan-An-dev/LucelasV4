@@ -54,7 +54,7 @@ namespace ContractPage.ViewModels
         public ReactiveProperty<Contract> Contract { get; set; }
         public DelegateCommand DeleteButton { get; }
         public DelegateCommand SearchAddress { get; }
-        public DelegateCommand SearchName { get; }
+        public DelegateCommand<string> SearchName { get; }
         public DelegateCommand<string> AddContractItemButton { get; }
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
@@ -88,7 +88,7 @@ namespace ContractPage.ViewModels
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
             SearchAddress = new DelegateCommand(SearchAdressExcute);
-            SearchName = new DelegateCommand(SearchNameExcute);
+            SearchName = new DelegateCommand<string>(SearchNameExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록"; 
         }
@@ -148,11 +148,11 @@ namespace ContractPage.ViewModels
             if (r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedFurniture")) return;
+                if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
                     FurnitureInventory temp = null;
-                    r.Parameters.TryGetValue("SelectedFurniture", out temp);
+                    r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
                         this.Contract.Value.Product.Add(temp);
@@ -171,10 +171,10 @@ namespace ContractPage.ViewModels
             p.Add("Contractor", this.Contract.Value.Contractor.Value);
             this.dialogService.ShowDialog("SearchAdressPage", p, r => FindAddressItem(r), "CommonDialogWindow");
         }
-        private void SearchNameExcute()
+        private void SearchNameExcute(string name)
         {
             DialogParameters p = new DialogParameters();
-            p.Add("Contractor", this.Contract.Value.Contractor.Value);
+            p.Add("object", name);
             this.dialogService.ShowDialog("SearchNamePage", p, r => FindNameItem(r), "CommonDialogWindow");
         }
         private void FindAddressItem(IDialogResult r)

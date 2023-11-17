@@ -89,11 +89,11 @@ namespace SettingPage.ViewModels
             if (r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedAddress")) return;
+                if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
                     AddressDetail temp = null;
-                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    r.Parameters.TryGetValue("object", out temp);
                     if (temp != null)
                     {
                         Company.Value.CompanyAddress.Value = temp.도로명주소1;
