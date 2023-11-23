@@ -159,18 +159,6 @@
                                     Binding="{Binding SellPrice.Value}"
                                     >
                                 </DataGridTextColumn>
-                                <DataGridTemplateColumn Header="비고" Width="90">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button 
-                                                VerticalAlignment="Center"
-                                                Width="55"
-                                                FontSize="10"
-                                                Content="수정"
-                                                />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
@@ -213,40 +201,13 @@
                             Margin="5" 
                             ItemsSource="{Binding Contract.Value.Payment}"
                             SelectedItem="{Binding SelectedPayment.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            CanUserAddRows="False" RowHeight="60"
+                            CanUserAddRows="False" RowHeight="40" IsReadOnly="True"
                             AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="구분" Width="*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox
-                                                Style="{StaticResource MaterialDesignComboBox}" 
-                                                md:HintAssist.IsFloating="True" 
-                                                md:HintAssist.Hint="계약구분"
-                                                Foreground="{StaticResource MainColor}"
-                                                ItemsSource="{Binding PaymentTypeSelectValues}"
-                                                SelectedItem="{Binding PaymentType.Value}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="지불방식" Width="*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox
-                                                Style="{StaticResource MaterialDesignComboBox}" 
-                                                md:HintAssist.IsFloating="True" 
-                                                md:HintAssist.Hint="지불방식"
-                                                Foreground="{StaticResource MainColor}"
-                                                ItemsSource="{Binding PaymentMethodSelectValues}"
-                                                SelectedItem="{Binding PaymentMethod.Value}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn
-                                    Header="금액" 
-                                    Width="*" md:HintAssist.Hint="금액"
-                                    Binding="{Binding Price.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:N0\}}">
-                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
+                                <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
+                                <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding PaymentType.Value}"/>
+                                <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
                                 <DataGridTextColumn 
                                     HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
                                     Width="*" 
@@ -311,17 +272,15 @@
                 <GroupBox
                     Margin="0 20 0 0"
                     Header="판매자">
-                    <StackPanel>
-                        <Grid>
-                            <ComboBox  Style="{StaticResource MaterialDesignComboBox}" 
+                    <ComboBox  
+                        Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="판매자"
-                        Foreground="{StaticResource MainColor}">
-                                <ComboBoxItem>안성진</ComboBoxItem>
-                                <ComboBoxItem>이상우</ComboBoxItem>
-                            </ComboBox>
-                        </Grid>
-                    </StackPanel>
+                        Foreground="{StaticResource MainColor}"
+                        ItemsSource="{Binding EmployeeInfos, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding Contract.Value.Seller.Value}"
+                        DisplayMemberPath="Name.Value"
+                        />
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>

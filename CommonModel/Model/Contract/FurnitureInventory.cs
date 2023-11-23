@@ -35,8 +35,6 @@ namespace CommonModel.Model
         public ReactiveProperty<Company> Company { get; set; } //회사
         public ReactiveProperty<FurnitureType> ProductType { get; set; } //분류
 
-        public ReactiveProperty<int> SellPrice { get; set; } // 판매가격
-
         public ReactiveProperty<Purpose> Purpose; //재고 목적
 
         public ReactiveProperty<DateTime> StoreReachDate;//입고일
@@ -54,7 +52,6 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Company = new ReactiveProperty<Company>(new Model.Company()).AddTo(disposable);
             this.ProductType = new ReactiveProperty<FurnitureType>(new FurnitureType()).AddTo(disposable);
-            this.SellPrice = new ReactiveProperty<int>().AddTo(disposable);
             SetObserver();
         }
 
@@ -65,7 +62,6 @@ namespace CommonModel.Model
             this.Price.Subscribe(x => ChangedJson("product_price", x));
             this.ProductType.Subscribe(x => ChangedJson("product_type", x.Id));
             this.Purpose.Subscribe(x => ChangedJson("purpose", x));
-            this.SellPrice.Subscribe(x => ChangedJson("sell_price", x));
             this.StoreReachDate.Subscribe(x => ChangedJson("insert_date", x));
             this.Count.Subscribe(x => ChangedJson("count", x));
         }

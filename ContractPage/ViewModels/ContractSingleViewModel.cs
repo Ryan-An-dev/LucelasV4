@@ -60,6 +60,8 @@ namespace ContractPage.ViewModels
         public IContainerProvider ContainerProvider { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
         public ReactiveProperty<FurnitureInventory> SelectedProduct { get; set; }
+        public ReactiveCollection<Employee> EmployeeInfos { get; set; }
+        public ReactiveProperty<Employee> SelectedEmployee { get; set; }
         public IDialogService dialogService { get; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
@@ -90,7 +92,10 @@ namespace ContractPage.ViewModels
             SearchAddress = new DelegateCommand(SearchAdressExcute);
             SearchName = new DelegateCommand<string>(SearchNameExcute);
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
-            Title.Value = "신규등록"; 
+            Title.Value = "신규등록";
+            EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
+            SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
+
         }
 
         private void ExecSetEditMode(string obj)
@@ -129,16 +134,40 @@ namespace ContractPage.ViewModels
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     break;
                 case "AddPayment":
-                    Payment temp = new Payment();
-                    temp.SetObserver();
-                    this.Contract.Value.Payment.Add(temp);
+                    AddPaymentExcute();
                     break;
                 case "DeletePayment":
                     this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
                     break;
             }
         }
+        private void AddPaymentExcute()
+        {
+            DialogParameters p = new DialogParameters();
+            p.Add("object", new Payment());
+            this.dialogService.ShowDialog("AddPaymentPage", p, r => SetPayment(r), "CommonDialogWindow");
+        }
+        private void SetPayment(IDialogResult r)
+        {
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("object")) return;
+                else
+                {
+                    Payment temp = null;
+                    r.Parameters.TryGetValue("object", out temp);
+                    if (this.Contract.Value != null)
+                    {
+                        this.Contract.Value.Payment.Add(temp);
+                    }
+                }
+            }
+            else
+            {
 
+            }
+        }
         private void SearchCompanySelectExcute() {
             DialogParameters p = new DialogParameters();
             p.Add("Contractor", this.Contract.Value.Contractor.Value);
@@ -209,7 +238,7 @@ namespace ContractPage.ViewModels
                 else
                 {
                     Customer temp = null;
-                    r.Parameters.TryGetValue("SelectedAddress", out temp);
+                    r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
                         this.Contract.Value.Contractor.Value = temp;
@@ -236,11 +265,7 @@ namespace ContractPage.ViewModels
         {
             var Contract = navigationContext.Parameters["Contract"] as ReactiveProperty<Contract>;
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            //foreach (var item in temp.CategoryInfos)
-            //{
-            //    this.CategoryInfos.Add(item);
-            //}
-            //this.VisibilityContract.Value = Visibility.Visible; //contract 추가 
+            this.EmployeeInfos = temp.EmployeeInfos;
             if (Contract == null)
             {
                 Title.Value = "신규계약 추가";

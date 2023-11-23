@@ -51,8 +51,11 @@ namespace CommonModel.Model
 
         [JsonPropertyName("payment_completed")]
         public ReactiveProperty<Complete> PaymentCompleted { get; set; }
+
+        public ReactiveProperty<PayCardType>SelectedPayCard { get; set; }
         [JsonPropertyName("price")]
         public ReactiveProperty<int> Price { get; set; }
+
 
         public Payment() : base()
         {

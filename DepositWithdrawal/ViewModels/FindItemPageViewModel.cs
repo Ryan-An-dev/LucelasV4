@@ -172,12 +172,13 @@ namespace DepositWithdrawal.ViewModels
                         temp.Month.Value = inner["create_time"].ToObject<DateTime>();
                     if (inner["memo"] != null)
                         temp.Memo.Value = inner["memo"].ToString();
-                    if (inner["saler_id"] != null)
-                        temp.SalerId.Value = inner["saler_id"].ToObject<int>();
+                    //if (inner["saler_id"] != null)
+                    //    temp.Seller.Value = inner["saler_id"].ToObject<int>();
                     this.ContractItems.Add(temp);
                 }
             }
         }
+
 
         private Company MakeProductClass(int companyId, int productId)
         {

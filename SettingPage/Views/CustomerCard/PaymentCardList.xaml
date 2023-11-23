@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="SettingPage.Views.PaymentCardList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"            
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            mc:Ignorable="d" 
+            d:DesignHeight="400" d:DesignWidth="400"
+             xmlns:base="clr-namespace:PrsimCommonBase;assembly=PrsimCommonBase"
+             xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBox     
+            Grid.Column="0"
+            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
+            x:Name="Search"
+            md:HintAssist.Hint="입력" 
+            VerticalAlignment="Center"
+            FontSize="14"  
+            Text="{Binding Keyword.Value}"
+            Margin="10,0,0,0"
+            Foreground="{StaticResource MainColor}"
+            md:HintAssist.IsFloating="True">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding SearchExecute}" Key="Enter" CommandParameter="{Binding ElementName=Search, Path=Text}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+            <Button 
+                md:HintAssist.Hint="추가"
+                Content="{md:PackIcon Kind=Plus, Size=14}"
+                Command="{Binding AddDeleteButton}"
+                CommandParameter="Add"
+                Margin="5" Cursor="Hand"/>
+            <Button 
+                md:HintAssist.Hint="삭제"
+                Content="{md:PackIcon Kind=Minus, Size=14}"
+                Command="{Binding AddDeleteButton}"
+                CommandParameter="Delete"
+                Margin="5"/>
+        </StackPanel>
+        <DataGrid
+            Grid.ColumnSpan="2"
+            Grid.Row="1"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            AutoGenerateColumns="False" 
+            SelectedItem="{Binding SelectedItem.Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            CanUserAddRows="False"
+            Margin="10"
+            IsReadOnly="True"
+            x:Name="List"
+            HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="이름" Binding="{Binding Name.Value}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel  Grid.ColumnSpan="2" Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button 
+                Width="30" 
+                Height="30" 
+                Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
+                Margin="5 5 5 5" 
+                Foreground="{StaticResource MainColor}" 
+                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
+                />
+            <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} / {1}({2})">
+                        <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button 
+                Width="30" 
+                Height="30" 
+                Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
+                Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
+                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

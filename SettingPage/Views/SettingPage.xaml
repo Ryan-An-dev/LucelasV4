@@ -52,14 +52,14 @@
                 <GridSplitter Grid.Column="3"></GridSplitter>
                 <GridSplitter Grid.Column="3" Grid.Row="1"></GridSplitter>
                 <GridSplitter Grid.Column="5" Grid.Row="1"></GridSplitter>
-                <GroupBox Header="상품 카테고리 추가" Grid.Column="4" Margin="5 5" Grid.Row="0">
+                <GroupBox Header="상품 카테고리 추가"  Grid.Column="2" Grid.Row="1" Margin="5 5">
                     <local:ProductCategoryList DataContext="{Binding ProductCategoryListViewModel}"/>
                 </GroupBox>
                 <GroupBox Header="직원등록" Grid.Column="0" Margin="5 5" Grid.Row="1">
                     <local:EmployeeList DataContext="{Binding EmployeeListViewModel}"/>
                 </GroupBox>
                 <GridSplitter Grid.Column="1" Grid.Row="1"></GridSplitter>
-                <GroupBox Header="고객등록" Grid.Column="2" Grid.Row="1" Margin="5 5">
+                <GroupBox Header="고객등록" Grid.Column="4" Margin="5 5" Grid.Row="0">
                     <local:CustomerList DataContext="{Binding CustomerListViewModel}"/>
                 </GroupBox>
                 <GroupBox Header="계좌등록" Grid.Column="4" Grid.Row="1" Margin="5 5">
@@ -67,6 +67,9 @@
                 </GroupBox>
                 <GroupBox Header="API 등록" Grid.Column="0" Grid.Row="2" Margin="5 5">
                     <local:ApiList DataContext="{Binding ApiListViewModel}"/>
+                </GroupBox>
+                <GroupBox Header="고객 결제방식 등록" Grid.Column="2" Grid.Row="2" Margin="5 5">
+                    <local:PaymentCardList DataContext="{Binding PaymentCardListViewModel}"/>
                 </GroupBox>
             </Grid>
             

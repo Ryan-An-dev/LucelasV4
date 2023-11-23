@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class SettingRepository : ISettingRepository, ICMDReceiver , IDisposable
+    public class SettingRepository : ISettingRepository, ICMDReceiver, IDisposable
     {
         private SocketClientV2 NetManager;
 
@@ -71,6 +71,13 @@ namespace DataAccess.Repository
                 NetManager.Send(COMMAND.ProductCategoryList);
             }
         }
+        public void GetEmployeeList(JObject jobj)
+        {
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(jobj,COMMAND.GETEMPLOEEINFO);
+            }
+        }
 
         public void GetBankCardList()
         {
@@ -125,6 +132,14 @@ namespace DataAccess.Repository
         public void OnReceiveFail(object sender, Exception ex)
         {
             Console.WriteLine("OnReceiveFail");
+        }
+
+        public void GetCardTypeList(JObject msg)
+        {
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.GetCardTypeList);
+            }
         }
     }
 }

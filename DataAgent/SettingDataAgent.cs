@@ -21,11 +21,19 @@ namespace DataAgent
             this.repo = repo;
         }
 
+        public void GetCardTypeList(JObject jobj)
+        {
+            this.repo.GetCardTypeList(jobj);
+        }
+
         public void GetAccountList() {
             this.repo.GetBankCardList();
         }
         public void GetProductCategory() {
             this.repo.GetProductCategoryList();
+        }
+        public void GetEmployeeList(JObject jobj) {
+            this.repo.GetEmployeeList(jobj);
         }
         public void GetCustomerList() {
             this.repo.GetCustomerList();

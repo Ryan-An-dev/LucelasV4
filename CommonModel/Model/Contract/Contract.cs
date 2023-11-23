@@ -36,7 +36,7 @@ namespace CommonModel.Model
         [JsonPropertyName("memo")]
         public ReactiveProperty<string> Memo { get; set; } //메모
         [JsonPropertyName("saler_id")]
-        public ReactiveProperty<int> SalerId { get; set; } //판매자
+        public ReactiveProperty<Employee> Seller { get; set; } //판매자
 
         
         public Contract()
@@ -47,7 +47,7 @@ namespace CommonModel.Model
             this.Month = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
             this.Contractor = new ReactiveProperty<Customer>().AddTo(disposable);
             this.Delivery = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
-            this.SalerId = new ReactiveProperty<int>().AddTo(disposable);
+            this.Seller = new ReactiveProperty<Employee>(new Employee()).AddTo(disposable);
             this.Price = new ReactiveProperty<int>(0).AddTo(disposable);
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
@@ -65,13 +65,12 @@ namespace CommonModel.Model
         public override void SetObserver() {
             this.Month.Subscribe(x => ChangedJson("create_time", x));
             this.Price.Subscribe(x => ChangedJson("total", x));
-            this.SalerId.Subscribe(x => ChangedJson("saler_id", x));
+            this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
             this.Contractor.Value.SetObserver();
             
         }
-
 
         /// <summary>
         /// 고객정보는 따로 Update한다.
@@ -80,6 +79,16 @@ namespace CommonModel.Model
         /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
         public JObject GetChangedItem()
         {
+            
+            JObject contractor = new JObject();
+            contractor["cui_id"] = 0;
+            contractor["cui_name"] = this.Contractor.Value.Name.Value;
+            contractor["cui_phone"] = this.Contractor.Value.Phone.Value;
+            contractor["cui_address"] = this.Contractor.Value.Address.Value;
+            contractor["cui_address_detail"] = this.Contractor.Value.Address1.Value;
+            contractor["cui_memo"] = this.Contractor.Value.Memo.Value;
+            ChangedItem["contractor"] = contractor;
+
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
                 if (item.isChanged) {

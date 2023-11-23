@@ -29,6 +29,8 @@ namespace SettingPage.ViewModels
         public ReactiveCollection<BankModel> AccountInfos { get; set; }
         public ReactiveCollection<Customer> CustomerInfos { get; set; }
         public ReactiveCollection<CompanyList> CompanyInfos { get; set; }
+        public ReactiveCollection<Employee> EmployeeInfos { get; set; }
+        public ReactiveCollection<PayCardType> PayCardTypeInfos { get; set; }
 
         public DelegateCommand AddCompanyCommand { get; set; }
 
@@ -41,6 +43,10 @@ namespace SettingPage.ViewModels
 
         public ProductListViewModel ProductListViewModel { get; set; }
         public AccountListViewModel AccountListViewModel { get; set; }
+
+        public PaymentCardListViewModel PaymentCardListViewModel { get; set; }
+
+
 
         public ApiListViewModel ApiListViewModel { get; set; }
 
@@ -58,7 +64,7 @@ namespace SettingPage.ViewModels
             ProductListViewModel = new ProductListViewModel(ContainerProvider, regionManager, dialogService);
             AccountListViewModel = new AccountListViewModel(ContainerProvider, regionManager, dialogService);
             ApiListViewModel = new ApiListViewModel(ContainerProvider, regionManager, dialogService);
-
+            PaymentCardListViewModel = new PaymentCardListViewModel(ContainerProvider, regionManager, dialogService);
 
         }
         public SettingPageViewModel(IContainerRegistry containerProvider)
@@ -67,7 +73,9 @@ namespace SettingPage.ViewModels
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
+            this.EmployeeInfos = new ReactiveCollection<Employee>().AddTo(this.disposable);
             this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
+            this.PayCardTypeInfos = new ReactiveCollection<PayCardType>().AddTo(disposable);
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
@@ -79,6 +87,8 @@ namespace SettingPage.ViewModels
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
             this.dialogService = dialogService;
             this.ContainerProvider = containerProvider;
+            this.PayCardTypeInfos = new ReactiveCollection<PayCardType>().AddTo(disposable);
+            this.EmployeeInfos = new ReactiveCollection<Employee>().AddTo(this.disposable);
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
@@ -175,6 +185,9 @@ namespace SettingPage.ViewModels
                             SetApiList(jobj);
                             break;
 
+                        case COMMAND.GetCardTypeList:
+                            SetPayCardType(jobj);
+                            break;
                     }
                 } catch (Exception e) { }
                
@@ -220,7 +233,12 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
-                finally { IsLoading.Value = false; }
+                finally {
+                    if (this.CustomerListViewModel.ContainerProvider != null)
+                    {
+                        this.CustomerListViewModel.SendBasicData(this);
+                    }
+                }
             }
         }
 
@@ -270,7 +288,6 @@ namespace SettingPage.ViewModels
                     {
                         this.ApiListViewModel.SendBasicData(this);
                     }
-                    IsLoading.Value = false;
                 }
             }
         }
@@ -338,6 +355,55 @@ namespace SettingPage.ViewModels
                 }
             }
         }
+        private void SetPayCardType(JObject msg) {
+            if (msg.ToString().Trim() != string.Empty)
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (this.PaymentCardListViewModel != null)
+                            this.PaymentCardListViewModel.List.Clear();
+                        PayCardTypeInfos.Clear();
+                    });
+                    if (msg["card_company_list"] == null)
+                        return;
+                    JArray jarr = new JArray();
+                    jarr = msg["card_company_list"] as JArray;
+                    if (msg["history_count"] != null)
+                    {
+                        if (this.PaymentCardListViewModel != null)
+                            this.PaymentCardListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    }
+                    int i = 1;
+                    foreach (JObject jobj in jarr)
+                    {
+                        PayCardType temp = new PayCardType();
+                        temp.No.Value = i++;
+                        if (jobj["card_id"] != null)
+                            temp.Id.Value = jobj["card_id"].ToObject<int>();
+                        if (jobj["card_company_name"] != null)
+                            temp.Name.Value = jobj["card_company_name"].ToString();
+                        
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            if (PaymentCardListViewModel != null)
+                                this.PaymentCardListViewModel.List.Add(temp);
+                            PayCardTypeInfos.Add(temp);
+                        });
+
+                    }
+                }
+                catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                finally
+                {
+                    if (this.CompanyListViewModel != null)
+                    {
+                        this.CompanyListViewModel.SendBasicData(this);
+                    }
+                }
+            }
+        }
 
         private void SetEmployeeList(JObject msg)
         {
@@ -348,14 +414,18 @@ namespace SettingPage.ViewModels
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        this.EmployeeListViewModel.List.Clear();
+                        if(this.EmployeeListViewModel != null)
+                            this.EmployeeListViewModel.List.Clear();
+                        EmployeeInfos.Clear();
                     });
                     if (msg["employee_list"] == null)
                         return;
                     JArray jarr = new JArray();
                     jarr = msg["employee_list"] as JArray;
-                    if (msg["history_count"] != null)
-                        this.EmployeeListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    if (msg["history_count"] != null) { 
+                        if(this.EmployeeListViewModel != null)
+                            this.EmployeeListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    } 
                     int i = 1;
                     foreach (JObject jobj in jarr)
                     {
@@ -375,17 +445,20 @@ namespace SettingPage.ViewModels
                             temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            this.EmployeeListViewModel.List.Add(temp);
+                            if(EmployeeListViewModel != null)
+                                this.EmployeeListViewModel.List.Add(temp);
+                            EmployeeInfos.Add(temp);
                         });
 
                     }
                 }
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
                 finally {
-                    if (this.CompanyListViewModel.ContainerProvider != null)
-                    {
-                        this.CompanyListViewModel.SendBasicData(this);
-                    }
+                    JObject jobj = new JObject();
+                    jobj["page_unit"] = 30;
+                    jobj["page_start_pos"] = 0;
+                    jobj["all_mode"] = 1;
+                    network.GetCardTypeList(jobj);
                 }
             }
         }
@@ -434,10 +507,11 @@ namespace SettingPage.ViewModels
                     }
                 } catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString());  }
                 finally {
-                    if (this.CustomerListViewModel != null)
-                    {
-                        this.CustomerListViewModel.SendBasicData(this);
-                    }
+                    JObject jobj = new JObject();
+                    jobj["page_unit"] = 30;
+                    jobj["page_start_pos"] = 0;
+                    network.GetEmployeeList(jobj);
+                    
                 }
             }
         }
@@ -451,13 +525,13 @@ namespace SettingPage.ViewModels
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if (this.EmployeeListViewModel != null)
-                            this.EmployeeListViewModel.List.Clear();
+                        if (this.CustomerListViewModel != null)
+                            this.CustomerListViewModel.List.Clear();
                     });
                     if (msg["customer_list"] == null)
                         return;
                     if (msg["history_count"] != null)
-                        this.EmployeeListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                        this.CustomerListViewModel.TotalItemCount.Value = msg["history_count"].ToObject<int>();
                     int i = 1;
                     foreach (JObject inner in msg["customer_list"] as JArray)
                     {
@@ -483,10 +557,7 @@ namespace SettingPage.ViewModels
                 }
                 catch (Exception ex) { }
                 finally {
-                    if (this.EmployeeListViewModel.ContainerProvider != null)
-                    {
-                        this.EmployeeListViewModel.SendBasicData(this);
-                    }
+                    IsLoading.Value = false;
                 }
             }
         }

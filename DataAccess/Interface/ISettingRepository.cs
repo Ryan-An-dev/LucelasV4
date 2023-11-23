@@ -17,6 +17,10 @@ namespace DataAccess.Interface
         public void GetProductCategoryList();
         public void GetBankCardList();
         public void GetCustomerList();
+
+        public void GetEmployeeList(JObject msg);
+
+        public void GetCardTypeList(JObject msg);
         #endregion
 
         #region LIST CRUD

@@ -16,6 +16,7 @@ namespace DataAccess
         AccountLIst = 4,
         CategoryList = 5,
         ProductCategoryList = 6,
+        GetCardTypeList = 7,
         
         #endregion
 
