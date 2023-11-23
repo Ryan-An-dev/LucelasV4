@@ -28,14 +28,14 @@
 
             <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding }">
                 <StackPanel>
-                    <ComboBox x:Name="comboBox"
+                    <ComboBox x:Name="comboBox" Height="50"
                          Style="{StaticResource MaterialDesignComboBox}" 
                          md:HintAssist.IsFloating="True" 
                          md:HintAssist.Hint="계약구분"
                          Foreground="{StaticResource MainColor}"
                          ItemsSource="{Binding  SelectedItem.Value.PaymentTypeSelectValues}"
                          SelectedItem="{Binding SelectedItem.Value.PaymentType.Value}"/>
-                    <ComboBox
+                    <ComboBox Height="50"
                         x:Name="paymentmethod"
                         Grid.Row="1"
                         md:HintAssist.IsFloating="True" 
@@ -44,7 +44,7 @@
                         ItemsSource="{Binding  SelectedItem.Value.PaymentMethodSelectValues, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding  SelectedItem.Value.PaymentMethod.Value}">
                     </ComboBox>
-                    <ComboBox
+                    <ComboBox Height="50"
                         x:Name="card"
                         Grid.Row="2"
                         Style="{StaticResource MaterialDesignComboBox}" 
@@ -52,8 +52,9 @@
                         md:HintAssist.Hint="카드선택"
                         Foreground="{StaticResource MainColor}"
                         DisplayMemberPath="Name.Value"
+                        ItemsSource="{Binding PaymentCardList}"
                         SelectedItem="{Binding  SelectedItem.Value.SelectedPayCard.Value}"/>
-                    <TextBox
+                    <TextBox Height="40"
                         Foreground="{StaticResource MainColor}"
                         Grid.Row="3"
                         md:HintAssist.Hint="금액"
