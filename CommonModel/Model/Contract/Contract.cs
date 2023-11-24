@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
 
 namespace CommonModel.Model
 {
@@ -68,8 +69,12 @@ namespace CommonModel.Model
             this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
-            this.Contractor.Value.SetObserver();
-            
+            this.Contractor.Value.SetObserver();   
+        }
+        public void TotalPrice() {
+            foreach (ContractedProduct item in this.Product) {
+                Price.Value += item.SellPrice.Value;
+            }
         }
 
         /// <summary>

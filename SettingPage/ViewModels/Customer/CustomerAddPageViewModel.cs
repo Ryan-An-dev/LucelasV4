@@ -9,7 +9,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows;
 
 namespace SettingPage.ViewModels
 {
@@ -34,7 +36,11 @@ namespace SettingPage.ViewModels
 
         protected virtual void CloseDialog(string parameter)
         {
-
+            if (this.Customer.Value.ValidateAllProperties()) {
+                MessageBox.Show("재입력");
+                return;
+            }
+            //유효성검사
             DialogResult temp = null;
             ButtonResult result = ButtonResult.None;
             if (parameter?.ToLower() == "true")

@@ -50,9 +50,14 @@
                             md:HintAssist.Hint="이름"
                             FontSize="14"  
                             x:Name="ContractorName"
-                            Text="{Binding Employee.Value.Name.Value}"
                             Foreground="{StaticResource MainColor}"  
-                            md:HintAssist.IsFloating="True"/>
+                            md:HintAssist.IsFloating="True">
+                        <Binding Path="Employee.Value.Name.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:NotEmptyValidation/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
 
                     <TextBox 
                             md:HintAssist.Hint="번호"

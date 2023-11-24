@@ -2,6 +2,7 @@
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace PrsimCommonBase
 {
     public abstract class PrismCommonModelBase : BindableBase, IDisposable
     {
+        public List<ReactiveProperty<string>> _stringProperties = new List<ReactiveProperty<string>>();
+        public List<ReactiveProperty<int>> _intProperties = new List<ReactiveProperty<int>>();
+
         #region  프로퍼티
 
         protected CompositeDisposable disposable { get; }
@@ -22,7 +26,56 @@ namespace PrsimCommonBase
         public IRegionManager regionManager { get; } = null;
 
         #endregion
+        public void SetReactiveProperty<T>(ReactiveProperty<T> property ,string propertyName)
+        {
+            if (typeof(T) == typeof(string))
+            {
+                _stringProperties.Add(property as ReactiveProperty<string>);
+                property.SetValidateNotifyError(x =>
+                {
+                    // 유효성 검사 로직 추가
+                    if (string.IsNullOrEmpty(x as string))
+                    {
+                        return $"{propertyName}을(를) 입력하세요.";
+                    }
+                    return null; // 유효성 검사 통과
+                });
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                _intProperties.Add(property as ReactiveProperty<int>);
+                property.SetValidateNotifyError(x =>
+                {
+                    // 유효성 검사 로직 추가
+                    if (typeof(T) == typeof(int))
+                    {
+                        return $"{propertyName}을(를) 입력하세요.";
+                    }
+                    return null; // 유효성 검사 통과
+                });
+            }
+        }
 
+        public bool ValidateAllProperties()
+        {
+            bool check = false;
+            foreach (var property in _stringProperties) { 
+                property.ForceValidate();
+                check=property.HasErrors;
+                if (check) { 
+                    return true;
+                }
+            }
+            foreach (var property in _intProperties) { 
+                property.ForceValidate();
+                check = property.HasErrors;
+                if (check)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #region 생성자
         public PrismCommonModelBase()
         {

@@ -186,6 +186,7 @@ namespace ContractPage.ViewModels
                         ContractedProduct pro = new ContractedProduct();
                         pro.FurnitureInventory.Value = temp;
                         this.Contract.Value.Product.Add(pro);
+                        this.Contract.Value.TotalPrice();
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace CommonModule.Validations
 		public override ValidationResult Validate(object value, CultureInfo cultureInfo)
 		{
 			return string.IsNullOrWhiteSpace((value ?? "").ToString())
-				? new ValidationResult(false, "Field is required.")
+				? new ValidationResult(false, "필수입력항목입니다.")
 				: ValidationResult.ValidResult;
 		}
 	}
