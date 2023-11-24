@@ -55,6 +55,17 @@ namespace CommonModel.Model
             SetObserver();
         }
 
+        public JObject MakeJson()
+        {
+            JObject jobj = new JObject();
+            jobj["company_id"] = (int)this.Company.Value.Id.Value;
+            jobj["product_name"] = this.Name.Value;
+            jobj["product_price"] = (int)Price.Value;
+            jobj["product_type"] = (int)this.ProductType.Value.Id.Value;
+            jobj["purpose"] = (int)this.Purpose.Value;
+            return jobj;
+        }
+
         public override void SetObserver()
         {
             this.Company.Subscribe(x => ChangedJson("company_id", x.Id));

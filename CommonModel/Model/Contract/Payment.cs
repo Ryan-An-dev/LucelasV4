@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CommonModel.Model
 {
@@ -56,22 +57,46 @@ namespace CommonModel.Model
         [JsonPropertyName("price")]
         public ReactiveProperty<int> Price { get; set; }
 
+        public ReactiveProperty<Visibility> cardVisibility { get; set; }
 
         public Payment() : base()
         {
             this.PaymentType = new ReactiveProperty<PaymentType>().AddTo(disposable);
-            this.PaymentMethod = new ReactiveProperty<ReceiptType>().AddTo(disposable);
+            this.PaymentMethod = new ReactiveProperty<ReceiptType>(0).AddTo(disposable);
             this.PaymentCompleted = new ReactiveProperty<Complete>().AddTo(disposable);
+            this.SelectedPayCard = new ReactiveProperty<PayCardType>(new PayCardType()).AddTo(disposable);
             this.Price= new ReactiveProperty<int>(0).AddTo(disposable);
+            this.cardVisibility = new ReactiveProperty<Visibility>(System.Windows.Visibility.Collapsed).AddTo(disposable);
             SetObserver();
+        }
+        private void multiObserver(string name , ReceiptType x) {
+            ChangedJson(name, x);
+            if (x == (ReceiptType)2)
+            {
+                cardVisibility.Value = System.Windows.Visibility.Visible;
+            }
+            else {
+                cardVisibility.Value = System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        public JObject MakeJson() {
+            JObject jobj = new JObject();
+            jobj["payment_type"] = (int)this.PaymentType.Value;
+            jobj["payment_completed"] = (int)this.PaymentCompleted.Value;
+            jobj["paymennt_method"] = (int)this.PaymentMethod.Value;
+            jobj["price"] = (int)this.Price.Value;
+            jobj["payment_card"] = (int)this.SelectedPayCard.Value.Id.Value;
+            return jobj;
         }
 
         public override void SetObserver()
         {
             this.PaymentType.Subscribe(x => ChangedJson("payment_type", x));
-            this.PaymentMethod.Subscribe(x => ChangedJson("payment_method", x));
+            this.PaymentMethod.Subscribe(x => multiObserver("paymennt_method", x));
             this.PaymentCompleted.Subscribe(x => ChangedJson("payment_completed", x));
             this.Price.Subscribe(x => ChangedJson("price", x));
+            this.SelectedPayCard.Subscribe(x => ChangedJson("payment_card", x.Id.Value));
         }
     }
 }

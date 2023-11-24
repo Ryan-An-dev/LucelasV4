@@ -15,24 +15,33 @@ namespace CommonModel.Model
     public class ContractedProduct: PrismCommonModelBase
     {
         public ReactiveProperty<int> No { get; set; } // 순서
-        public ReactiveProperty<FurnitureInventory> Product { get; set; }
+        public ReactiveProperty<FurnitureInventory> FurnitureInventory { get; set; }
 
-        public ReactiveProperty<int> Price { get; set; } // 판매가격
+        public ReactiveProperty<int> SellPrice { get; set; } // 판매가격
 
-        public ReactiveProperty<int> Count;//주문수량
+        public ReactiveProperty<int> SellCount { get; set; }//주문수량
 
         public ContractedProduct() : base()
         {
             this.No = new ReactiveProperty<int>().AddTo(disposable);
-            this.Count = new ReactiveProperty<int>().AddTo(this.disposable);
-            this.Price = new ReactiveProperty<int>().AddTo(this.disposable);
+            this.SellCount = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            this.SellPrice = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            this.FurnitureInventory = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             SetObserver();
+        }
+        public JObject MakeJson()
+        {
+            JObject jobj = new JObject();
+            jobj["product_info"] = this.FurnitureInventory.Value.MakeJson();
+            jobj["sell_price"] = this.SellPrice.Value;
+            jobj["order_count"] = this.SellCount.Value;
+            return jobj;
         }
 
         public override void SetObserver()
         {
-            this.Price.Subscribe(x => ChangedJson("sell_price", x));
-            this.Count.Subscribe(x => ChangedJson("order_count", x));
+            this.SellPrice.Subscribe(x => ChangedJson("sell_price", x));
+            this.SellCount.Subscribe(x => ChangedJson("order_count", x));
         }
     }
 }

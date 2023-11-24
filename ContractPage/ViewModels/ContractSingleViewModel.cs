@@ -59,7 +59,7 @@ namespace ContractPage.ViewModels
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
-        public ReactiveProperty<FurnitureInventory> SelectedProduct { get; set; }
+        public ReactiveProperty<ContractedProduct> SelectedProduct { get; set; }
         public ReactiveCollection<Employee> EmployeeInfos { get; set; }
         public ReactiveProperty<Employee> SelectedEmployee { get; set; }
         public IDialogService dialogService { get; }
@@ -84,7 +84,7 @@ namespace ContractPage.ViewModels
             ContainerProvider = containerProvider;
             this.dialogService = dialogService;
             SelectedPayment = new ReactiveProperty<Payment>().AddTo(disposable);
-            SelectedProduct = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
+            SelectedProduct = new ReactiveProperty<ContractedProduct>().AddTo(disposable);
             AddContractItemButton = new DelegateCommand<string>(ExecAddContractItemButton);
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
@@ -95,7 +95,6 @@ namespace ContractPage.ViewModels
             Title.Value = "신규등록";
             EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
-
         }
 
         private void ExecSetEditMode(string obj)
@@ -170,7 +169,7 @@ namespace ContractPage.ViewModels
         }
         private void SearchCompanySelectExcute() {
             DialogParameters p = new DialogParameters();
-            p.Add("Contractor", this.Contract.Value.Contractor.Value);
+            p.Add("object", null);
             this.dialogService.ShowDialog("SearchCompanyPage", p, r => SetProduct(r), "CommonDialogWindow");
         }
         private void SetProduct(IDialogResult r) {
@@ -184,7 +183,9 @@ namespace ContractPage.ViewModels
                     r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
-                        this.Contract.Value.Product.Add(temp);
+                        ContractedProduct pro = new ContractedProduct();
+                        pro.FurnitureInventory.Value = temp;
+                        this.Contract.Value.Product.Add(pro);
                     }
                 }
             }

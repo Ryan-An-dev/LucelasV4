@@ -32,7 +32,7 @@ namespace CommonModel.Model
         [JsonPropertyName("payment")]
         public ReactiveCollection<Payment> Payment { get; set; } //지불 클래스
         [JsonPropertyName("product")]
-        public ReactiveCollection<FurnitureInventory> Product { get; set; } //주문 상품 클래스
+        public ReactiveCollection<ContractedProduct> Product { get; set; } //주문 상품 클래스
         [JsonPropertyName("memo")]
         public ReactiveProperty<string> Memo { get; set; } //메모
         [JsonPropertyName("saler_id")]
@@ -52,7 +52,7 @@ namespace CommonModel.Model
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
-            this.Product = new ReactiveCollection<FurnitureInventory>().AddTo(disposable);
+            this.Product = new ReactiveCollection<ContractedProduct>().AddTo(disposable);
             this.Contractor.Value = new Customer();
             SetObserver();
         }
@@ -79,9 +79,8 @@ namespace CommonModel.Model
         /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
         public JObject GetChangedItem()
         {
-            
             JObject contractor = new JObject();
-            contractor["cui_id"] = 0;
+            contractor["cui_id"] = this.Contractor.Value.Id.Value;
             contractor["cui_name"] = this.Contractor.Value.Name.Value;
             contractor["cui_phone"] = this.Contractor.Value.Phone.Value;
             contractor["cui_address"] = this.Contractor.Value.Address.Value;
@@ -91,20 +90,17 @@ namespace CommonModel.Model
 
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
-                if (item.isChanged) {
-                    jarrPayment.Add(item.GetChangedItem());
-                }
+                jarrPayment.Add(item.MakeJson());
             }
             if(jarrPayment.Count>0)
                 ChangedItem["payment"] = jarrPayment;
 
-            JArray jarrProduct = null;
-            foreach (FurnitureInventory item in Product)
+            JArray jarrProduct = new JArray();
+            foreach (ContractedProduct item in Product)
             {
                 if (item.isChanged)
                 {
-                    jarrProduct = new JArray();
-                    jarrProduct.Add(item.GetChangedItem());
+                    jarrProduct.Add(item.MakeJson());
                 }
             }
             if (jarrProduct != null)

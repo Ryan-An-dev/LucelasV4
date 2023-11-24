@@ -435,6 +435,7 @@ namespace ContractPage.ViewModels
                 case COMMAND.GETPRODUCTINFO:
                     if (jobj["product_list"] == null)
                         return;
+
                     foreach (JObject jobject in jobj["product_list"] as JArray)
                     {
                         FurnitureInventory temp = SetProductInfo(jobject);

@@ -46,7 +46,8 @@
                     </ComboBox>
                     <ComboBox Height="50"
                         x:Name="card"
-                        Grid.Row="2"
+                        Grid.Row="2" 
+                        Visibility="{Binding SelectedItem.Value.cardVisibility.Value}"
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="카드선택"
