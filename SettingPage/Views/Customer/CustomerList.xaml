@@ -68,8 +68,8 @@
                 <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}"/>
                 <DataGridTextColumn Width="0.2*" Header="이름" Binding="{Binding Name.Value}"/>
                 <DataGridTextColumn Width="0.2*" Header="번호" Binding="{Binding Phone.Value}"/>
-                <DataGridTextColumn Width="0.2*" Header="주소" Binding="{Binding CompanyName.Value}"/>
-                <DataGridTextColumn Width="0.2*" Header="구매일자" Binding="{Binding CompanyName.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="주소" Binding="{Binding Address.Value}"/>
+                <DataGridTextColumn Width="0.2*" Header="구매일자" />
             </DataGrid.Columns>
         </DataGrid>
 

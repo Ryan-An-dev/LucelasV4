@@ -17,8 +17,6 @@ namespace CommonModel.Model
         public ReactiveProperty<int> No { get; set; }
 
         [JsonPropertyName("cui_name")]
-        [Required(ErrorMessage = "이름을 입력하세요.")]
-        [StringLength(10,ErrorMessage ="최대10자 이내로 작성해주세요.")]
         public ReactiveProperty<string> Name { get; set; }
 
         [JsonPropertyName("cui_phone")]
@@ -33,18 +31,21 @@ namespace CommonModel.Model
 
         [JsonPropertyName("cui_memo")]
         public ReactiveProperty<string> Memo { get; set; }
+
+
         [JsonPropertyName("cui_id")]
         public ReactiveProperty<int> Id { get; set; }
 
         public Customer()
         {
-            this.No = new ReactiveProperty<int>().AddTo(disposable);
-            this.Id = new ReactiveProperty<int>().AddTo(disposable);
-            this.Name = new ReactiveProperty<string>().AddTo(disposable);
-            this.Phone = new ReactiveProperty<string>().AddTo(disposable);
-            this.Address = new ReactiveProperty<string>().AddTo(disposable);
-            this.Memo = new ReactiveProperty<string>().AddTo(disposable);
-            this.Address1  = new ReactiveProperty<string>().AddTo(disposable);
+            this.No = new ReactiveProperty<int>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Id = new ReactiveProperty<int>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Name = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Phone = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Address = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Memo = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+            this.Address1  = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
+
             SetObserver();
             SetValidation();
         }

@@ -36,17 +36,20 @@ namespace SettingPage.ViewModels
 
         protected virtual void CloseDialog(string parameter)
         {
-            if (this.Customer.Value.ValidateAllProperties()) {
-                MessageBox.Show("재입력");
-                return;
-            }
+            
             //유효성검사
             DialogResult temp = null;
             ButtonResult result = ButtonResult.None;
             if (parameter?.ToLower() == "true")
             {
+                
                 if (this.Customer.Value == null)
                     return;
+                if (this.Customer.Value.ValidateAllProperties())
+                {
+                    MessageBox.Show("재입력");
+                    return;
+                }
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.Customer.Value);

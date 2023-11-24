@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-
+using System.Reactive.Linq;
 
 namespace PrsimCommonBase
 {
@@ -15,6 +15,7 @@ namespace PrsimCommonBase
     {
         public List<ReactiveProperty<string>> _stringProperties = new List<ReactiveProperty<string>>();
         public List<ReactiveProperty<int>> _intProperties = new List<ReactiveProperty<int>>();
+        public List<ReactiveProperty<DateTime>> _dateTimeProperties = new List<ReactiveProperty<DateTime>>();
 
         #region  프로퍼티
 
@@ -24,7 +25,6 @@ namespace PrsimCommonBase
         public bool isChanged { get; set; }
         public JObject ChangedItem { get; set; } = new JObject();
         public IRegionManager regionManager { get; } = null;
-
         #endregion
         public void SetReactiveProperty<T>(ReactiveProperty<T> property ,string propertyName)
         {
@@ -39,7 +39,7 @@ namespace PrsimCommonBase
                         return $"{propertyName}을(를) 입력하세요.";
                     }
                     return null; // 유효성 검사 통과
-                });
+                }).Skip(1);
             }
             else if (typeof(T) == typeof(int))
             {
@@ -52,7 +52,20 @@ namespace PrsimCommonBase
                         return $"{propertyName}을(를) 입력하세요.";
                     }
                     return null; // 유효성 검사 통과
-                });
+                }).Skip(1);
+            }
+            else if (typeof(T) == typeof(DateTime)) {
+                _dateTimeProperties.Add(property as ReactiveProperty<DateTime>);
+                property.SetValidateNotifyError(x =>
+                {
+                    // 유효성 검사 로직 추가
+                    if (typeof(T) == typeof(DateTime))
+                    {
+                        return $"{propertyName}을(를) 입력하세요.";
+                    }
+                    return null; // 유효성 검사 통과
+                }).Skip(1);
+
             }
         }
 
@@ -62,17 +75,10 @@ namespace PrsimCommonBase
             foreach (var property in _stringProperties) { 
                 property.ForceValidate();
                 check=property.HasErrors;
-                if (check) { 
-                    return true;
-                }
             }
             foreach (var property in _intProperties) { 
                 property.ForceValidate();
                 check = property.HasErrors;
-                if (check)
-                {
-                    return true;
-                }
             }
             return false;
         }
