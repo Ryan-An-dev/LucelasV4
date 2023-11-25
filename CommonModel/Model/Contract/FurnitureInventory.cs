@@ -30,7 +30,7 @@ namespace CommonModel.Model
     {
         public ReactiveProperty<int> No { get; set; } // 순서
         public ReactiveProperty<string> Name { get; set; } //제품명
-        public ReactiveProperty<int> Price { get; set; } // 입고가격
+        public ReactiveProperty<int> Price { get; set; } // 매입단가
         public ReactiveProperty<int> Id { get; set; } // 아이디
         public ReactiveProperty<Company> Company { get; set; } //회사
         public ReactiveProperty<FurnitureType> ProductType { get; set; } //분류
@@ -44,15 +44,18 @@ namespace CommonModel.Model
         public FurnitureInventory() : base()
         {
             this.No = new ReactiveProperty<int>().AddTo(disposable);
-            this.Purpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
-            this.StoreReachDate = new ReactiveProperty<DateTime>().AddTo(this.disposable);
-            this.Count = new ReactiveProperty<int>().AddTo(this.disposable);
-            this.Name = new ReactiveProperty<string>("").AddTo(disposable);
-            this.Price = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
-            this.Company = new ReactiveProperty<Company>(new Model.Company()).AddTo(disposable);
-            this.ProductType = new ReactiveProperty<FurnitureType>(new FurnitureType()).AddTo(disposable);
+            this.Purpose = CreateProperty<Purpose>("목적");
+            this.StoreReachDate = CreateProperty<DateTime>("입고일");
+            this.Count= CreateProperty<int>("수량");
+            this.Name = CreateProperty<string>("이름");
+            this.Price = CreateProperty<int>("매입단가");
+            this.Company = CreateProperty<Company>("회사");
+            this.ProductType = CreateProperty<FurnitureType>("제품타입");
             SetObserver();
+        }
+        public void EnumAndClass() {
+        
         }
 
         public JObject MakeJson()

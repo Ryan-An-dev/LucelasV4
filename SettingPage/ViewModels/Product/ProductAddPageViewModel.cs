@@ -1,4 +1,5 @@
 ﻿using CommonModel.Model;
+using CommonModule.Views;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
@@ -21,8 +22,6 @@ namespace SettingPage.ViewModels
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
         public ReactiveProperty<FurnitureInventory> Product { get; set; }
         public ObservableCollection<FurnitureType> FurnitureType { get; set; }
-        public IContainerProvider ContainerProvider { get; set; }
-        public IDialogService dialogService { get; set; }
 
         private DelegateCommand<string> _SearchCompany;
         public DelegateCommand<string> SearchCompany =>
@@ -30,7 +29,7 @@ namespace SettingPage.ViewModels
 
         private void ExecSearchCompany(string obj)
         {
-            dialogService.ShowDialog("CompanySearchList", null, r =>
+            DialogService.ShowDialog("CompanySearchList", null, r =>
             {
                 try
                 {
@@ -47,12 +46,10 @@ namespace SettingPage.ViewModels
 
             }, "CommonDialogWindow");
         }
-        public ProductAddPageViewModel(IContainerProvider con,IDialogService dialogService)
+        public ProductAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
-            this.dialogService = dialogService;
-            this.ContainerProvider = con;
             Product = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = con.Resolve<SettingPageViewModel>("GlobalData");
             this.FurnitureType = temp.FurnitureInfos;
             
         }
@@ -70,6 +67,11 @@ namespace SettingPage.ViewModels
             {
                 if (this.Product.Value == null)
                     return;
+                if (this.Product.Value.ValidateAllProperties())
+                {
+                    con.Resolve<AlertWindow1>().Show();
+                    return;
+                }
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.Product.Value);

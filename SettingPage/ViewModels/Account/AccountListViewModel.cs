@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;

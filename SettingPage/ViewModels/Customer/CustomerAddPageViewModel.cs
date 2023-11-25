@@ -1,7 +1,9 @@
 ﻿using AddressSearchManager.Models;
 using CommonModel.Model;
+using CommonModule.Views;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -9,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
@@ -18,14 +21,14 @@ namespace SettingPage.ViewModels
     public class CustomerAddPageViewModel : PrismCommonViewModelBase, IDialogAware
     {
         public DelegateCommand SearchAddress { get; }
-        IDialogService DialogService;
+
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+
         public ReactiveProperty<Customer> Customer { get; set; }
-        public CustomerAddPageViewModel(IDialogService _DialogService)
+        public CustomerAddPageViewModel(IDialogService _DialogService,IContainerProvider con):base(_DialogService, con)
         {
-            DialogService = _DialogService;
             SearchAddress = new DelegateCommand(SearchAdressExcute);
             Customer = new ReactiveProperty<Customer>().AddTo(disposable);
         }
@@ -47,7 +50,7 @@ namespace SettingPage.ViewModels
                     return;
                 if (this.Customer.Value.ValidateAllProperties())
                 {
-                    MessageBox.Show("재입력");
+                    con.Resolve<AlertWindow1>().Show();
                     return;
                 }
                 result = ButtonResult.OK;

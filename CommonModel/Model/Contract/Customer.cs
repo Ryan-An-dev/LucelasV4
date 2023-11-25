@@ -32,7 +32,6 @@ namespace CommonModel.Model
         [JsonPropertyName("cui_memo")]
         public ReactiveProperty<string> Memo { get; set; }
 
-
         [JsonPropertyName("cui_id")]
         public ReactiveProperty<int> Id { get; set; }
 
@@ -40,23 +39,14 @@ namespace CommonModel.Model
         {
             this.No = new ReactiveProperty<int>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
             this.Id = new ReactiveProperty<int>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-            this.Name = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-            this.Phone = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-            this.Address = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-            this.Memo = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-            this.Address1  = new ReactiveProperty<string>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
-
+            this.Name = CreateProperty<string>("이름");
+            this.Phone = CreateProperty<string>("번호");
+            this.Address = CreateProperty<string>("주소");
+            this.Memo = CreateProperty<string>("메모");
+            this.Address1 = CreateProperty<string>("상세주소");
             SetObserver();
-            SetValidation();
         }
-        public void SetValidation() {
-            SetReactiveProperty(Name, "이름");
-            SetReactiveProperty(Phone, "번호");
-            SetReactiveProperty(Address, "주소");
-            SetReactiveProperty(Memo, "메모");
-            SetReactiveProperty(Address1, "상세주소");
-
-        }
+       
         public override void SetObserver()
         {
             this.Name.Subscribe(x => ChangedJson("cui_name", x));

@@ -1,6 +1,8 @@
 ﻿using CommonModel.Model;
+using CommonModule.Views;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -20,7 +22,7 @@ namespace SettingPage.ViewModels
 
         public ReactiveProperty<FurnitureType> Category { get; set; }
 
-        public ProductCategoryAddPageViewModel()
+        public ProductCategoryAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
             Category = new ReactiveProperty<FurnitureType>().AddTo(disposable);
         }
@@ -38,6 +40,11 @@ namespace SettingPage.ViewModels
             {
                 if (this.Category.Value == null)
                     return;
+                if (this.Category.Value.ValidateAllProperties())
+                {
+                    con.Resolve<AlertWindow1>().Show();
+                    return;
+                }
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.Category.Value);

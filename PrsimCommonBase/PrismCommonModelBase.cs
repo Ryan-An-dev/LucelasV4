@@ -3,6 +3,8 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,22 +18,19 @@ namespace PrsimCommonBase
         public List<ReactiveProperty<string>> _stringProperties = new List<ReactiveProperty<string>>();
         public List<ReactiveProperty<int>> _intProperties = new List<ReactiveProperty<int>>();
         public List<ReactiveProperty<DateTime>> _dateTimeProperties = new List<ReactiveProperty<DateTime>>();
-
-        #region  프로퍼티
-
         protected CompositeDisposable disposable { get; }
             = new CompositeDisposable();
         public bool isinit { get; set; } = true;
         public bool isChanged { get; set; }
         public JObject ChangedItem { get; set; } = new JObject();
         public IRegionManager regionManager { get; } = null;
-        #endregion
-        public void SetReactiveProperty<T>(ReactiveProperty<T> property ,string propertyName)
-        {
+        public ReactiveProperty<T> CreateProperty<T>(string propertyName) {
+            ReactiveProperty<T> temp = null;
+            temp = new ReactiveProperty<T>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
             if (typeof(T) == typeof(string))
             {
-                _stringProperties.Add(property as ReactiveProperty<string>);
-                property.SetValidateNotifyError(x =>
+                _stringProperties.Add(temp as ReactiveProperty<string>);
+                temp.SetValidateNotifyError(x =>
                 {
                     // 유효성 검사 로직 추가
                     if (string.IsNullOrEmpty(x as string))
@@ -39,48 +38,70 @@ namespace PrsimCommonBase
                         return $"{propertyName}을(를) 입력하세요.";
                     }
                     return null; // 유효성 검사 통과
-                }).Skip(1);
+                });
             }
             else if (typeof(T) == typeof(int))
             {
-                _intProperties.Add(property as ReactiveProperty<int>);
-                property.SetValidateNotifyError(x =>
+                _intProperties.Add(temp as ReactiveProperty<int>);
+                temp.SetValidateNotifyError(x =>
                 {
-                    // 유효성 검사 로직 추가
-                    if (typeof(T) == typeof(int))
+                    if (x != null)
                     {
-                        return $"{propertyName}을(를) 입력하세요.";
+                        // 유효성 검사 로직 추가
+                        if (typeof(T) == typeof(int))
+                        {
+                            if (!int.TryParse(x.ToString(), out int intValue))
+                            {
+                                return $"{propertyName}의 숫자만 입력가능합니다.";
+                            }
+                            if (intValue <= 0)
+                            {
+                                return $"{propertyName}의 값은 0보다 커야 합니다.";
+                            }
+                            return null;
+                        }
                     }
+
                     return null; // 유효성 검사 통과
-                }).Skip(1);
+                });
             }
-            else if (typeof(T) == typeof(DateTime)) {
-                _dateTimeProperties.Add(property as ReactiveProperty<DateTime>);
-                property.SetValidateNotifyError(x =>
+            else if (typeof(T) == typeof(DateTime))
+            {
+                _dateTimeProperties.Add(temp as ReactiveProperty<DateTime>);
+                temp.SetValidateNotifyError(x =>
                 {
                     // 유효성 검사 로직 추가
                     if (typeof(T) == typeof(DateTime))
                     {
-                        return $"{propertyName}을(를) 입력하세요.";
+                        if (x == null)
+                        {
+                            return $"{propertyName}을(를) 입력하세요.";
+                        }
                     }
                     return null; // 유효성 검사 통과
-                }).Skip(1);
-
+                });
             }
+            return temp;
         }
+        
 
         public bool ValidateAllProperties()
         {
             bool check = false;
             foreach (var property in _stringProperties) { 
                 property.ForceValidate();
-                check=property.HasErrors;
+                check |= property.HasErrors;
             }
             foreach (var property in _intProperties) { 
                 property.ForceValidate();
-                check = property.HasErrors;
+                check |= property.HasErrors;
             }
-            return false;
+            foreach (var property in _dateTimeProperties)
+            {
+                property.ForceValidate();
+                check |= property.HasErrors;
+            }
+            return check;
         }
         #region 생성자
         public PrismCommonModelBase()

@@ -1,7 +1,9 @@
 ﻿using AddressSearchManager.Models;
 using CommonModel.Model;
+using CommonModule.Views;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -20,7 +22,7 @@ namespace SettingPage.ViewModels
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
         public ReactiveProperty<BankModel> BankModel { get; set; }
-        public AccountAddPageViewModel(IDialogService _DialogService)
+        public AccountAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
             DialogService = _DialogService;
             BankModel = new ReactiveProperty<BankModel>().AddTo(disposable);
@@ -39,6 +41,11 @@ namespace SettingPage.ViewModels
             {
                 if (this.BankModel.Value == null)
                     return;
+                if (this.BankModel.Value.ValidateAllProperties())
+                {
+                    con.Resolve<AlertWindow1>().Show();
+                    return;
+                }
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.BankModel.Value);

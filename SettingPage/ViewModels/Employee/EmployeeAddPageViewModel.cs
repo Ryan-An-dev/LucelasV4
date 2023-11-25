@@ -1,7 +1,9 @@
 ﻿using AddressSearchManager.Models;
 using CommonModel.Model;
+using CommonModule.Views;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using PrsimCommonBase;
@@ -20,11 +22,9 @@ namespace SettingPage.ViewModels
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
         public ReactiveProperty<Employee> Employee { get; set; }
         public DelegateCommand SearchAddress { get; }
-        IDialogService DialogService;
 
-        public EmployeeAddPageViewModel(IDialogService dialogService)
+        public EmployeeAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
-            DialogService = dialogService;
             Employee = new ReactiveProperty<Employee>().AddTo(disposable);
             SearchAddress = new DelegateCommand(SearchAdressExcute);
         }
@@ -42,6 +42,11 @@ namespace SettingPage.ViewModels
             {
                 if (this.Employee.Value == null)
                     return;
+                if (this.Employee.Value.ValidateAllProperties())
+                {
+                    con.Resolve<AlertWindow1>().Show();
+                    return;
+                }
                 result = ButtonResult.OK;
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.Employee.Value);
