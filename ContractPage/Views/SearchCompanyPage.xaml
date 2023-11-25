@@ -157,7 +157,7 @@
                     HorizontalScrollBarVisibility="Auto"
                     >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="회사명" Binding="{Binding Company.Value.Name.Value}" 
+                        <DataGridTextColumn Header="회사명" Binding="{Binding Company.Value.CompanyName.Value}" 
                                             Width="0.24*" IsReadOnly="True"/>
                         <DataGridTextColumn Header="제품타입" Binding="{Binding ProductType.Value.Name.Value}" 
                                             Width="0.25*" IsReadOnly="True"/>

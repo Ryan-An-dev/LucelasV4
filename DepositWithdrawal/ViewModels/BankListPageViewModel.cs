@@ -38,7 +38,6 @@ namespace DepositWithdrawal.ViewModels
         public ReactiveProperty<DateTime> EndDate { get; set; }
         public ReactiveCollection<ReceiptModel> ReceiptItems { get; set; } //Receipt List 표현
         public ReactiveCollection<BankModel> BankList { get; set; } //할당된 은행계좌 리스트
-        public ReactiveCollection<CompanyList> CompanyList { get; set; }
         public ReactiveProperty<ReceiptModel> SelectedItem { get; set; }
         public ReactiveCollection<CategoryInfo> CategoryList { get; set; }
         public ReactiveProperty<bool> IsCategoryChecked { get; set; }
@@ -96,7 +95,6 @@ namespace DepositWithdrawal.ViewModels
             this.Working = new ReactiveProperty<bool>(false).AddTo(this.disposable);
             this.ReceiptItems = new ReactiveCollection<ReceiptModel>().AddTo(this.disposable);
             this.CategoryList = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
-            this.CompanyList = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.CompletedCheck = new ReactiveProperty<bool>(false).AddTo(this.disposable);
             this.SelectedItem = new ReactiveProperty<ReceiptModel>().AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);

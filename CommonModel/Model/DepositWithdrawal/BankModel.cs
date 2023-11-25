@@ -35,8 +35,8 @@ namespace CommonModel.Model
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.IsChecked = new ReactiveProperty<bool>().AddTo(disposable);
             this.Type = new ReactiveProperty<BankType>().AddTo(disposable); 
-            this.Name= new ReactiveProperty<string>().AddTo(disposable);
-            this.AccountNum =  new ReactiveProperty<string>().AddTo(disposable);
+            this.Name= CreateProperty<string>("이름");
+            this.AccountNum = CreateProperty<string>("계좌번호");
             this.AccountSerial = new ReactiveProperty<int>().AddTo(disposable);
             this.LastUpdate = new ReactiveProperty<DateTime?>().AddTo(disposable);
             SetObserver();

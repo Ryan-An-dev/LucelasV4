@@ -24,13 +24,13 @@ namespace CommonModel.Model
         {
             No = new ReactiveProperty<int>().AddTo(disposable);
             Id = new ReactiveProperty<int>().AddTo(disposable);
-            Name = new ReactiveProperty<string>().AddTo(disposable);
-            Phone = new ReactiveProperty<string>().AddTo(disposable);
-            Address = new ReactiveProperty<string>().AddTo(disposable);
-            AddressDetail = new ReactiveProperty<string>().AddTo(disposable);
-            StartWorkTime = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
-            BirthDay  = new ReactiveProperty<DateTime>(new DateTime(1991,01,01)).AddTo(disposable);
-            Memo = new ReactiveProperty<string>().AddTo(disposable);
+            Name = CreateProperty<string>("이름");
+            Phone = CreateProperty<string>("번호");
+            Address = CreateProperty<string>("주소");
+            AddressDetail = CreateProperty<string>("상세주소");
+            StartWorkTime = CreateProperty<DateTime>("시작일");
+            BirthDay  = CreateProperty<DateTime>("생일");
+            Memo = CreateProperty<string>("메모");
             SetObserver();
         }
         public override void SetObserver()

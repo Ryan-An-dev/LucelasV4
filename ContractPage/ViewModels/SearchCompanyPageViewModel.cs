@@ -63,12 +63,12 @@ namespace ContractPage.ViewModels
 
         public event Action<IDialogResult> RequestClose;
 
-        public ReactiveCollection<FurnitureInventory> FurnitureList { get; set; } //재고 리스트
+        public ReactiveCollection<Product> FurnitureList { get; set; } //재고 리스트
 
         public ReactiveCollection<Company>CompanyList { get; set; } //회사 리스트
 
         //선택된 제품
-        public ReactiveProperty<FurnitureInventory> SelectedFurniture { get; set; }
+        public ReactiveProperty<Product> SelectedFurniture { get; set; }
         //선택된 회사 
         public ReactiveProperty<Company>SelectedCompany { get; set; }
 
@@ -103,12 +103,12 @@ namespace ContractPage.ViewModels
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
             this.ContainerProvider = con;
             this.Keyword = new ReactiveProperty<string>().AddTo(disposable);
-            this.FurnitureList = new ReactiveCollection<FurnitureInventory>().AddTo(disposable);
+            this.FurnitureList = new ReactiveCollection<Product>().AddTo(disposable);
             this.CompanyList = new ReactiveCollection<Company>().AddTo(disposable);
             this.CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(0).AddTo(disposable);
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
-            this.SelectedFurniture = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
+            this.SelectedFurniture = new ReactiveProperty<Product>().AddTo(disposable);
             this.SelectedCompany = new ReactiveProperty<Company>().AddTo(disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             
@@ -145,7 +145,7 @@ namespace ContractPage.ViewModels
             DialogParameters dialogParameters = new DialogParameters();
             switch (type) {
                 case "AddProduct":
-                    dialogParameters.Add("object", new FurnitureInventory());
+                    dialogParameters.Add("object", new Product());
 
                     dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
                     {
@@ -153,7 +153,7 @@ namespace ContractPage.ViewModels
                         {
                             if (r.Result == ButtonResult.OK)
                             {
-                                FurnitureInventory item = r.Parameters.GetValue<FurnitureInventory>("object");
+                                Product item = r.Parameters.GetValue<Product>("object");
                                 if (item != null)
                                 {
                                     using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
@@ -437,7 +437,7 @@ namespace ContractPage.ViewModels
 
                     foreach (JObject jobject in jobj["product_list"] as JArray)
                     {
-                        FurnitureInventory temp = SetProductInfo(jobject);
+                        Product temp = SetProductInfo(jobject);
                         Application.Current.Dispatcher.Invoke(() => {
                             this.FurnitureList.Add(temp);
                         });
@@ -450,13 +450,12 @@ namespace ContractPage.ViewModels
             }
         }
 
-        private FurnitureInventory SetProductInfo(JObject jobj)
+        private Product SetProductInfo(JObject jobj)
         {
-            FurnitureInventory inventory = new FurnitureInventory();
+            Product inventory = new Product();
             if (jobj["company"] != null)
                 inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
-            if (jobj["count"] != null)
-                inventory.Count.Value = jobj["count"].ToObject<int>();
+            
             if (jobj["product_type"] != null)
                 inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)

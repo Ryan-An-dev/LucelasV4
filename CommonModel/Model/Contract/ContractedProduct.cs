@@ -14,7 +14,7 @@ namespace CommonModel.Model
     public class ContractedProduct: PrismCommonModelBase
     {
         public ReactiveProperty<int> No { get; set; } // 순서
-        public ReactiveProperty<FurnitureInventory> FurnitureInventory { get; set; }
+        public ReactiveProperty<Product> FurnitureInventory { get; set; }
 
         public ReactiveProperty<int> SellPrice { get; set; } // 판매가격
 
@@ -23,9 +23,9 @@ namespace CommonModel.Model
         public ContractedProduct() : base()
         {
             this.No = new ReactiveProperty<int>().AddTo(disposable);
-            this.SellCount = new ReactiveProperty<int>(0).AddTo(this.disposable);
-            this.SellPrice = new ReactiveProperty<int>(0).AddTo(this.disposable);
-            this.FurnitureInventory = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
+            this.SellCount = CreateProperty<int>("수량");
+            this.SellPrice = CreateProperty<int>("판매금액");
+            this.FurnitureInventory = new ReactiveProperty<Product>().AddTo(disposable);
             SetObserver();
         }
         public JObject MakeJson()

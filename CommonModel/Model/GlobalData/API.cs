@@ -37,8 +37,8 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Type = new ReactiveProperty<APIType>().AddTo(disposable);
-            this.ApiKey = new ReactiveProperty<string>().AddTo(disposable);
-            this.CertNum = new ReactiveProperty<string>().AddTo(disposable);
+            this.ApiKey = CreateProperty<string>("API KEY");
+            this.CertNum = CreateProperty<string>("사업자번호");
             this.ApiID = new ReactiveProperty<string>().AddTo(disposable);
             SetObserver();
         }

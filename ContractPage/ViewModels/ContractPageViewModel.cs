@@ -212,13 +212,12 @@ namespace ContractPage.ViewModels
             return customer;
         }
 
-        private FurnitureInventory SetProduct(JObject jobj) { 
-            FurnitureInventory inventory = new FurnitureInventory();
-            if (jobj["product_id"] != null)
-                inventory.Id.Value = jobj["product_id"].ToObject<int>();
+        private ContractedProduct SetProduct(JObject jobj) {
+            ContractedProduct ContractedProduct = new ContractedProduct();
+            
             //if (jobj["product_type"] != null)
                 //inventory.ProductType.Value = ()jobj["product_type"].ToObject<int>();
-            return inventory;
+            return ContractedProduct;
         }
         private void SetContractHistory(JObject msg)
         {

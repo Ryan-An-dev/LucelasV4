@@ -18,7 +18,7 @@ namespace CommonModel.Model
         public PayCardType() : base()
         {
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
-            this.Name = new ReactiveProperty<string>().AddTo(disposable);
+            this.Name = CreateProperty<string>("이름");
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             SetObserver();
         }

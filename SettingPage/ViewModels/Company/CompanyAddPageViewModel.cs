@@ -44,6 +44,7 @@ namespace SettingPage.ViewModels
                     return;
                 if (this.Company.Value.ValidateAllProperties())
                 {
+                    
                     con.Resolve<AlertWindow1>().Show();
                     return;
                 }

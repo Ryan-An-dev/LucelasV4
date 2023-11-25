@@ -28,7 +28,6 @@ namespace SettingPage.ViewModels
         public ReactiveCollection<CategoryInfo> CategoryInfos { get; set; }
         public ReactiveCollection<BankModel> AccountInfos { get; set; }
         public ReactiveCollection<Customer> CustomerInfos { get; set; }
-        public ReactiveCollection<CompanyList> CompanyInfos { get; set; }
         public ReactiveCollection<Employee> EmployeeInfos { get; set; }
         public ReactiveCollection<PayCardType> PayCardTypeInfos { get; set; }
 
@@ -74,7 +73,6 @@ namespace SettingPage.ViewModels
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.EmployeeInfos = new ReactiveCollection<Employee>().AddTo(this.disposable);
-            this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.PayCardTypeInfos = new ReactiveCollection<PayCardType>().AddTo(disposable);
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
@@ -93,7 +91,6 @@ namespace SettingPage.ViewModels
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
-            this.CompanyInfos = new ReactiveCollection<CompanyList>().AddTo(this.disposable);
             this.AddCompanyCommand = new DelegateCommand(ExecAddCompanyCommand);
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
@@ -262,12 +259,10 @@ namespace SettingPage.ViewModels
                     int i = 1;
                     foreach (JObject jobj in jarr)
                     {
-                        FurnitureInventory inventory = new FurnitureInventory();
+                        Product inventory = new Product();
                         inventory.No.Value = i++;
                         if (jobj["company"] != null)
                             inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
-                        if (jobj["count"] != null)
-                            inventory.Count.Value = jobj["count"].ToObject<int>();
                         if (jobj["product_type"] != null)
                             inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
                         if (jobj["product_name"] != null)

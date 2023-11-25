@@ -84,31 +84,6 @@ namespace CommonModel
                     return null; // 유효성 검사 통과
                 });
             }
-            else if (typeof(T).IsSubclassOf(typeof(PrismCommonModelBase)))
-            {
-                _objectProperties.Add(temp as ReactiveProperty<PrismCommonModelBase>);
-                temp.SetValidateNotifyError(x =>
-                {
-                    if (x == null)
-                    {
-                        return $"{propertyName}을(를) 입력하세요.";
-                    }
-
-                    return null; // 유효성 검사 통과
-                });
-            }
-            else if (typeof(T) == typeof(Enum)) {
-                _enumProperties.Add(temp as ReactiveProperty<Enum>);
-                temp.SetValidateNotifyError(x =>
-                {
-                    if (x == null)
-                    {
-                        return $"{propertyName}을(를) 입력하세요.";
-                    }
-
-                    return null; // 유효성 검사 통과
-                });
-            }
             return temp;
         }
         
@@ -129,18 +104,13 @@ namespace CommonModel
                 property.ForceValidate();
                 check |= property.HasErrors;
             }
-            //foreach (ReactiveProperty<PrismCommonModelBase> property in _objectProperties)
-            //{
-            //    if (property is ReactiveProperty<Company>) { 
-            //        property.ForceValidate();
-            //    }
-            //    check |= property.HasErrors;
-            //}
-            //foreach (var property in _enumProperties)
-            //{
-            //    property.ForceValidate();
-            //    check |= property.HasErrors;
-            //}
+            foreach (ReactiveProperty<PrismCommonModelBase> property in _objectProperties)
+            {
+                {
+                    property.ForceValidate();
+                }
+                check |= property.HasErrors;
+            }
             return check;
         }
         #region 생성자

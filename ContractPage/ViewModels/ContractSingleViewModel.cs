@@ -179,7 +179,7 @@ namespace ContractPage.ViewModels
                 if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
-                    FurnitureInventory temp = null;
+                    Product temp = null;
                     r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
@@ -222,7 +222,6 @@ namespace ContractPage.ViewModels
                     if (this.Contract.Value != null) {
                         this.Contract.Value.Contractor.Value.Address.Value = temp.도로명주소1;
                     }
-                    
                 }
             }
             else

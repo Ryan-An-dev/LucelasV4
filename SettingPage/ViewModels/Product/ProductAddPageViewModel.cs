@@ -20,7 +20,7 @@ namespace SettingPage.ViewModels
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
-        public ReactiveProperty<FurnitureInventory> Product { get; set; }
+        public ReactiveProperty<Product> Product { get; set; }
         public ObservableCollection<FurnitureType> FurnitureType { get; set; }
 
         private DelegateCommand<string> _SearchCompany;
@@ -48,7 +48,7 @@ namespace SettingPage.ViewModels
         }
         public ProductAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
-            Product = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
+            Product = new ReactiveProperty<Product>().AddTo(disposable);
             SettingPageViewModel temp = con.Resolve<SettingPageViewModel>("GlobalData");
             this.FurnitureType = temp.FurnitureInfos;
             
@@ -67,8 +67,14 @@ namespace SettingPage.ViewModels
             {
                 if (this.Product.Value == null)
                     return;
-                if (this.Product.Value.ValidateAllProperties())
+
+                bool Check = false;
+                this.Product.Value.Company.ForceValidate();
+                Check |= this.Product.Value.Company.HasErrors;
+                Check |= this.Product.Value.ValidateAllProperties();
+                if (Check)
                 {
+                    
                     con.Resolve<AlertWindow1>().Show();
                     return;
                 }
@@ -102,7 +108,7 @@ namespace SettingPage.ViewModels
         {
             if (parameters.ContainsKey("object"))
             {
-                FurnitureInventory Product = null;
+                Product Product = null;
                 parameters.TryGetValue("object", out Product);
                 if (Product != null)
                 {

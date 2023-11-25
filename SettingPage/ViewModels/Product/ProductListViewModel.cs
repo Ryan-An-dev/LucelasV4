@@ -123,12 +123,10 @@ namespace SettingPage.ViewModels
 
                             foreach (JObject jobj in jarr)
                             {
-                                FurnitureInventory inventory = new FurnitureInventory();
+                                Product inventory = new Product();
                                 inventory.No.Value = i++;
                                 if (jobj["company"] != null)
                                     inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
-                                if (jobj["count"] != null)
-                                    inventory.Count.Value = jobj["count"].ToObject<int>();
                                 if (jobj["product_type"] != null)
                                     inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
                                 if (jobj["product_name"] != null)
@@ -155,7 +153,7 @@ namespace SettingPage.ViewModels
         public override void AddButtonClick()
         {
             DialogParameters dialogParameters = new DialogParameters();
-            dialogParameters.Add("object", new FurnitureInventory());
+            dialogParameters.Add("object", new Product());
 
             dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
             {
@@ -163,7 +161,7 @@ namespace SettingPage.ViewModels
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        FurnitureInventory item = r.Parameters.GetValue<FurnitureInventory>("object");
+                        Product item = r.Parameters.GetValue<Product>("object");
                         if (item != null)
                         {
                             using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
@@ -192,8 +190,8 @@ namespace SettingPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["aci_id"] = (int)(selecteditem as FurnitureInventory).Company.Value.Id.Value;
-                jobj["acpi_id"] = (int)(selecteditem as FurnitureInventory).Id.Value;
+                jobj["aci_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
+                jobj["acpi_id"] = (int)(selecteditem as Product).Id.Value;
                 network.Delete(jobj);
                 IsLoading.Value = true;
             }
@@ -203,7 +201,7 @@ namespace SettingPage.ViewModels
         {
             DialogParameters dialogParameters = new DialogParameters();
             SelectedItem.Value.ClearJson();
-            dialogParameters.Add("object", SelectedItem.Value as FurnitureInventory);
+            dialogParameters.Add("object", SelectedItem.Value as Product);
 
             dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
             {
@@ -211,7 +209,7 @@ namespace SettingPage.ViewModels
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        FurnitureInventory item = r.Parameters.GetValue<FurnitureInventory>("object");
+                        Product item = r.Parameters.GetValue<Product>("object");
                         if (item != null)
                         {
                             using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())

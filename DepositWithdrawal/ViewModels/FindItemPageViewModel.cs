@@ -154,7 +154,7 @@ namespace DepositWithdrawal.ViewModels
                             int ProductId = 0;
                             if (Company["acpi_id"] != null)
                                 ProductId = Company["acpi_id"].ToObject<int>();
-                            Company item = MakeProductClass(CompanyId,ProductId);
+                            //Company item = MakeProductClass(CompanyId,ProductId);
                             //temp.Product.Add(item);
                         }
                     }
@@ -180,15 +180,15 @@ namespace DepositWithdrawal.ViewModels
         }
 
 
-        private Company MakeProductClass(int companyId, int productId)
-        {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            CompanyList item = temp.CompanyInfos.First(c => c.Id.Value == companyId);
-            Product product = item.ProductList.First(c => c.ProductId.Value == productId);
-            Company company = new Company(item.Id.Value,item.CompanyName.Value);
-            //company.Product.Value = product.Clone();
-            return company;
-        }
+        //private Company MakeProductClass(int companyId, int productId)
+        //{
+        //    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+        //    //CompanyList item = temp.CompanyInfos.First(c => c.Id.Value == companyId);
+        //    //Product product = item.ProductList.First(c => c.ProductId.Value == productId);
+        //    //Company company = new Company(item.Id.Value,item.CompanyName.Value);
+        //    //company.Product.Value = product.Clone();
+        //    return company;
+        //}
 
         public Customer FindCustomer(int id)
         {
