@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -54,10 +53,6 @@ namespace CommonModel.Model
             this.ProductType = CreateProperty<FurnitureType>("제품타입");
             SetObserver();
         }
-        public void EnumAndClass() {
-        
-        }
-
         public JObject MakeJson()
         {
             JObject jobj = new JObject();

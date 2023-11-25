@@ -1,4 +1,5 @@
 ﻿using AddressSearchManager.Models;
+using CommonModel;
 using CommonModel.Model;
 using CommonModule.Views;
 using Newtonsoft.Json.Linq;
@@ -6,7 +7,6 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;

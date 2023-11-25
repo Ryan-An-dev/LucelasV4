@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using CommonModel;
+using DataAccess;
 using DataAccess.Interface;
 using DataAccess.NetWork;
 using DataAccess.Repository;
@@ -7,7 +8,6 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;

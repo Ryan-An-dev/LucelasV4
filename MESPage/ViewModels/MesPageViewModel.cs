@@ -1,10 +1,10 @@
-﻿using DataAccess;
+﻿using CommonModel;
+using DataAccess;
 using DataAccess.NetWork;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using PrsimCommonBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

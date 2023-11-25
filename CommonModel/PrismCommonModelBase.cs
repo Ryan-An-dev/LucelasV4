@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CommonModel.Model;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -11,13 +12,15 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-namespace PrsimCommonBase
+namespace CommonModel
 {
     public abstract class PrismCommonModelBase : BindableBase, IDisposable
     {
         public List<ReactiveProperty<string>> _stringProperties = new List<ReactiveProperty<string>>();
         public List<ReactiveProperty<int>> _intProperties = new List<ReactiveProperty<int>>();
         public List<ReactiveProperty<DateTime>> _dateTimeProperties = new List<ReactiveProperty<DateTime>>();
+        public List<ReactiveProperty<PrismCommonModelBase>> _objectProperties = new List<ReactiveProperty<PrismCommonModelBase>>();
+        public List<ReactiveProperty<Enum>> _enumProperties = new List<ReactiveProperty<Enum>>();
         protected CompositeDisposable disposable { get; }
             = new CompositeDisposable();
         public bool isinit { get; set; } = true;
@@ -81,6 +84,31 @@ namespace PrsimCommonBase
                     return null; // 유효성 검사 통과
                 });
             }
+            else if (typeof(T).IsSubclassOf(typeof(PrismCommonModelBase)))
+            {
+                _objectProperties.Add(temp as ReactiveProperty<PrismCommonModelBase>);
+                temp.SetValidateNotifyError(x =>
+                {
+                    if (x == null)
+                    {
+                        return $"{propertyName}을(를) 입력하세요.";
+                    }
+
+                    return null; // 유효성 검사 통과
+                });
+            }
+            else if (typeof(T) == typeof(Enum)) {
+                _enumProperties.Add(temp as ReactiveProperty<Enum>);
+                temp.SetValidateNotifyError(x =>
+                {
+                    if (x == null)
+                    {
+                        return $"{propertyName}을(를) 입력하세요.";
+                    }
+
+                    return null; // 유효성 검사 통과
+                });
+            }
             return temp;
         }
         
@@ -101,6 +129,18 @@ namespace PrsimCommonBase
                 property.ForceValidate();
                 check |= property.HasErrors;
             }
+            //foreach (ReactiveProperty<PrismCommonModelBase> property in _objectProperties)
+            //{
+            //    if (property is ReactiveProperty<Company>) { 
+            //        property.ForceValidate();
+            //    }
+            //    check |= property.HasErrors;
+            //}
+            //foreach (var property in _enumProperties)
+            //{
+            //    property.ForceValidate();
+            //    check |= property.HasErrors;
+            //}
             return check;
         }
         #region 생성자

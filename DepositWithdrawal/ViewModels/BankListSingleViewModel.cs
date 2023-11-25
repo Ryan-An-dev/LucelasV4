@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using ControlzEx.Standard;
 using DataAccess;
 using DataAccess.NetWork;
@@ -11,7 +12,6 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;

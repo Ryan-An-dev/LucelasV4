@@ -1,9 +1,8 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using PrsimCommonBase;
 
-namespace PrsimCommonBase
+namespace CommonModel
 {
     public class PrsimCommonBaseModule : IModule
     {

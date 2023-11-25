@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;
@@ -8,7 +9,7 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using PrsimCommonBase;
+using CommonModel;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;

@@ -1,9 +1,9 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;

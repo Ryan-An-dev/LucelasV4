@@ -1,4 +1,5 @@
-﻿using CommonModel.Model;
+﻿using CommonModel;
+using CommonModel.Model;
 using ContractPage.Views;
 using DataAccess;
 using DataAccess.NetWork;
@@ -9,7 +10,6 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;

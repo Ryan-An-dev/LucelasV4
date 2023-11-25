@@ -6,7 +6,6 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using PrsimCommonBase;
 using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using LogWriter;
+using CommonModel;
 
 namespace ContractPage.ViewModels
 {

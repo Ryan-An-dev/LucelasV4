@@ -5,7 +5,7 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using PrsimCommonBase;
+using CommonModel;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;

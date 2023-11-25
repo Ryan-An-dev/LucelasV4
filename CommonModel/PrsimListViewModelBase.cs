@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrsimCommonBase
+namespace CommonModel
 {
     public enum MovePageType { Next = 1, Prev }
     public abstract class PrsimListViewModelBase : PrismCommonViewModelBase

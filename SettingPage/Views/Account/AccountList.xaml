@@ -6,7 +6,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             mc:Ignorable="d" 
             d:DesignHeight="400" d:DesignWidth="400"
-             xmlns:base="clr-namespace:PrsimCommonBase;assembly=PrsimCommonBase"
+             xmlns:base="clr-namespace:CommonModel;assembly=CommonModel"
              xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>

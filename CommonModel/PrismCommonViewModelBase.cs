@@ -12,7 +12,7 @@ using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrsimCommonBase
+namespace CommonModel
 {
     public abstract class PrismCommonViewModelBase : BindableBase, IDisposable
     {
