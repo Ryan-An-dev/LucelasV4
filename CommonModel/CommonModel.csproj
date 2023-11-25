@@ -13,8 +13,8 @@
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PrsimCommonBase\PrsimCommonBase.csproj" />
+    <PackageReference Include="ReactiveProperty" Version="9.3.4" />
+    <PackageReference Include="ReactiveProperty.Core" Version="9.3.4" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="9.3.4" />
   </ItemGroup>
 </Project>

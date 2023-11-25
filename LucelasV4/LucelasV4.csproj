@@ -14,9 +14,9 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty" Version="8.1.2" />
-    <PackageReference Include="ReactiveProperty.Core" Version="8.1.2" />
-    <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
+    <PackageReference Include="ReactiveProperty" Version="9.3.4" />
+    <PackageReference Include="ReactiveProperty.Core" Version="9.3.4" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="9.3.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />

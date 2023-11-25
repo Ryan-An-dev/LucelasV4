@@ -9,13 +9,12 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty" Version="8.1.2" />
-    <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
+    <PackageReference Include="ReactiveProperty" Version="9.3.4" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="9.3.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />
     <ProjectReference Include="..\DataAgent\DataAgent.csproj" />
-    <ProjectReference Include="..\PrsimCommonBase\PrsimCommonBase.csproj" />
   </ItemGroup>
 </Project>
