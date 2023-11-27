@@ -67,8 +67,20 @@ namespace CommonModel.Model
             this.Price.Subscribe(x => ChangedJson("total", x));
             this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
-            this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
-            this.Contractor.Value.SetObserver();   
+            this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
+            this.Contractor.Value.SetObserver();
+        }
+        public void ChangedDelevery(string name, object value)
+        {
+            if (value != null)
+            {
+                if (value is int)
+                {
+                    DateTime time = (DateTime)value;
+                    ChangedItem[name] = time.ToString("yyyy-MM-dd-HH-mm");
+                }
+                isChanged = true;
+            }
         }
         public void TotalPrice(int temp) {
             int temper = 0; 
@@ -111,6 +123,7 @@ namespace CommonModel.Model
             }
             if (jarrProduct != null)
                 ChangedItem["product"] = jarrProduct;
+            
 
             return ChangedItem;
         }
