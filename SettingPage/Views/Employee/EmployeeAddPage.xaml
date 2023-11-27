@@ -37,7 +37,7 @@
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True">
                                 <Binding.ValidationRules>
                                     <val:NotEmptyValidation/>
                                     <val:FutureDateValidation/>
@@ -52,7 +52,7 @@
                             x:Name="ContractorName"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True">
-                        <Binding Path="Employee.Value.Name.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding Path="Employee.Value.Name.Value" NotifyOnValidationError="True">
                             <Binding.ValidationRules>
                                 <val:NotEmptyValidation/>
                             </Binding.ValidationRules>
@@ -72,7 +72,7 @@
                         Foreground="{StaticResource MainColor}" 
                         BorderBrush="{StaticResource MainColor}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="Employee.Value.StartWorkTime.Value" NotifyOnValidationError="True">
                                 <Binding.ValidationRules>
                                     <val:FutureDateValidation/>
                                 </Binding.ValidationRules>

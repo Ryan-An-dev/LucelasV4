@@ -47,47 +47,63 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.GETCUSTOMERINFO)
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATECUSTOMERINFO
+                || packet.Header.CMD > (ushort)COMMAND.DELETECUSTOMERINFO)
             {
                 return;
             }
-            string msg = Encoding.UTF8.GetString(packet.Body);
-            ErpLogWriter.LogWriter.Debug(msg);
-            JObject jobject = new JObject(JObject.Parse(msg));
-            if (!msg.Equals("null\n"))
+            switch (packet.Header.CMD)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    List.Clear();
-                });
-                if (jobject["customer_list"] == null)
-                    return;
-                JArray jarr = new JArray();
-                jarr = jobject["customer_list"] as JArray;
-                if (jobject["history_count"] != null)
-                    TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
-                foreach (JObject inner in jobject["customer_list"] as JArray)
-                {
-                    Customer temp = new Customer();
-                    temp.No.Value = i++;
-                    if (inner["cui_id"] != null)
-                        temp.Id.Value = inner["cui_id"].ToObject<int>();
-                    if (inner["cui_name"] != null)
-                        temp.Name.Value = inner["cui_name"].ToString().Trim();
-                    if (inner["cui_phone_num"] != null)
-                        temp.Phone.Value = inner["cui_phone_num"].ToString().Trim();
-                    if (inner["cui_address"] != null)
-                        temp.Address.Value = inner["cui_address"].ToString().Trim();
-                    if (inner["cui_address_detail"] != null)
-                        temp.Address1.Value = inner["cui_address_detail"].ToString().Trim();
-                    if (inner["cui_memo"] != null)
-                        temp.Memo.Value = inner["cui_memo"].ToString().Trim();
-                    Application.Current.Dispatcher.Invoke(() =>
+                case (ushort)COMMAND.CREATECUSTOMERINFO:
+                case (ushort)COMMAND.DELETECUSTOMERINFO:
+                case (ushort)COMMAND.UPDATECUSTOMERINFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.GETCUSTOMERINFO:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
                     {
-                       List.Add(temp);
-                    });
-                }
+                        return;
+                    }
+                    if (!msg.Equals("null\n"))
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            List.Clear();
+                        });
+                        if (jobject["customer_list"] == null)
+                            return;
+                        JArray jarr = new JArray();
+                        jarr = jobject["customer_list"] as JArray;
+                        if (jobject["history_count"] != null)
+                            TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
+                        foreach (JObject inner in jobject["customer_list"] as JArray)
+                        {
+                            Customer temp = new Customer();
+                            temp.No.Value = i++;
+                            if (inner["cui_id"] != null)
+                                temp.Id.Value = inner["cui_id"].ToObject<int>();
+                            if (inner["cui_name"] != null)
+                                temp.Name.Value = inner["cui_name"].ToString().Trim();
+                            if (inner["cui_phone_num"] != null)
+                                temp.Phone.Value = inner["cui_phone_num"].ToString().Trim();
+                            if (inner["cui_address"] != null)
+                                temp.Address.Value = inner["cui_address"].ToString().Trim();
+                            if (inner["cui_address_detail"] != null)
+                                temp.Address1.Value = inner["cui_address_detail"].ToString().Trim();
+                            if (inner["cui_memo"] != null)
+                                temp.Memo.Value = inner["cui_memo"].ToString().Trim();
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                List.Add(temp);
+                            });
+                        }
+                    }
+                    break;
             }
         }
 

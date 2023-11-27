@@ -45,21 +45,27 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.GETCOMPANYINFO)
-            {
-                return;
-            }
             string msg = Encoding.UTF8.GetString(packet.Body);
-            JObject jobject = null;
-            try { jobject = new JObject(JObject.Parse(msg)); }
-            catch (Exception)
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATECOMPANYINFO
+                || packet.Header.CMD > (ushort)COMMAND.DELETECOMPANYINFO)
             {
                 return;
             }
-            ErpLogWriter.LogWriter.Trace(jobject.ToString());
-            switch ((COMMAND)packet.Header.CMD)
+            switch (packet.Header.CMD)
             {
-                case COMMAND.GETCOMPANYINFO: //데이터 조회
+                case (ushort)COMMAND.CREATECOMPANYINFO:
+                case (ushort)COMMAND.DELETECOMPANYINFO:
+                case (ushort)COMMAND.UPDATECOMPANYINFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.GETCOMPANYINFO:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
+                    {
+                        return;
+                    }
                     Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
@@ -69,9 +75,9 @@ namespace SettingPage.ViewModels
                                 return;
                             JArray jarr = new JArray();
                             jarr = jobject["company_list"] as JArray;
-                            if(jobject["history_count"] != null)
+                            if (jobject["history_count"] != null)
                                 TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value -1) + 1;
+                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
                             foreach (JObject jobj in jarr)
                             {
                                 Company temp = new Company();

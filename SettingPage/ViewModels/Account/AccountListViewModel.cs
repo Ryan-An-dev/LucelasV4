@@ -45,21 +45,28 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.AccountLIst)
-            {
-                return;
-            }
             string msg = Encoding.UTF8.GetString(packet.Body);
-            JObject jobject = null;
-            try { jobject = new JObject(JObject.Parse(msg)); }
-            catch (Exception)
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATE_ACCOUNT_INFO
+                || packet.Header.CMD > (ushort)COMMAND.DELETE_ACCOUNT_INFO
+                || packet.Header.CMD == (ushort)COMMAND.AccountLIst)
             {
                 return;
             }
-            ErpLogWriter.LogWriter.Trace(jobject.ToString());
-            switch ((COMMAND)packet.Header.CMD)
+            switch (packet.Header.CMD)
             {
-                case COMMAND.AccountLIst: //데이터 조회
+                case (ushort)COMMAND.CREATE_ACCOUNT_INFO:
+                case (ushort)COMMAND.DELETE_ACCOUNT_INFO:
+                case (ushort)COMMAND.UPDATE_ACCOUNT_INFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.AccountLIst:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
+                    {
+                        return;
+                    }
                     Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
@@ -102,7 +109,7 @@ namespace SettingPage.ViewModels
                         }
                         catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
                     }
-                    break;
+                 break;
             }
         }
 

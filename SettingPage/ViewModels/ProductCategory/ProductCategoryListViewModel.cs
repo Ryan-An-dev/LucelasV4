@@ -68,41 +68,55 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.ProductCategoryList)
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATE_PRODUCTCATEGORY_INFO
+                || packet.Header.CMD > (ushort)COMMAND.DELETE_PRODUCTCATEGORY_INFO
+                || packet.Header.CMD == (ushort)COMMAND.ProductCategoryList)
             {
                 return;
             }
-            string msg = Encoding.UTF8.GetString(packet.Body);
-            if (!msg.Contains("null"))
+            switch (packet.Header.CMD)
             {
-                JObject body = new JObject(JObject.Parse(msg));
-                ErpLogWriter.LogWriter.Trace(body.ToString());
-                Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
-                if (body.ToString().Trim() != string.Empty)
-                {
-                    try
+                case (ushort)COMMAND.CREATE_PRODUCTCATEGORY_INFO:
+                case (ushort)COMMAND.DELETE_PRODUCTCATEGORY_INFO:
+                case (ushort)COMMAND.UPDATE_PRODUCTCATEGORY_INFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.ProductCategoryList:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
                     {
-                        if (body["category_list"] == null)
-                            return;
-                        JArray jarr = new JArray();
-                        jarr = body["category_list"] as JArray;
-                        if (body["history_count"] != null)
-                            TotalItemCount.Value = body["history_count"].ToObject<int>();
-                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
-                        foreach (JObject jobj in jarr)
-                        {
-                            FurnitureType temp = new FurnitureType();
-                            if (jobj["product_type_id"] != null)
-                                temp.Id.Value = jobj["product_type_id"].ToObject<int>();
-                            if (jobj["product_type_name"] != null)
-                                temp.Name.Value = jobj["product_type_name"].ToString();
-                            temp.No.Value = i++;
-                            this.List.Add(temp);
-                        }
-                        IsLoading.Value = false;
+                        return;
                     }
-                    catch (Exception) { IsLoading.Value = false; }
-                }
+                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    if (jobject.ToString().Trim() != string.Empty)
+                    {
+                        try
+                        {
+                            if (jobject["category_list"] == null)
+                                return;
+                            JArray jarr = new JArray();
+                            jarr = jobject["category_list"] as JArray;
+                            if (jobject["history_count"] != null)
+                                TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
+                            foreach (JObject jobj in jarr)
+                            {
+                                FurnitureType temp = new FurnitureType();
+                                if (jobj["product_type_id"] != null)
+                                    temp.Id.Value = jobj["product_type_id"].ToObject<int>();
+                                if (jobj["product_type_name"] != null)
+                                    temp.Name.Value = jobj["product_type_name"].ToString();
+                                temp.No.Value = i++;
+                                this.List.Add(temp);
+                            }
+                            IsLoading.Value = false;
+                        }
+                        catch (Exception) { IsLoading.Value = false; }
+                    }
+                break;
             }
         }
 

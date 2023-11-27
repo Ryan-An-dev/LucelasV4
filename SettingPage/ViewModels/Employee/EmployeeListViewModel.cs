@@ -56,47 +56,59 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.GETEMPLOEEINFO)
+            string msg = Encoding.UTF8.GetString(packet.Body);
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATEEMPLOEEINFO 
+                || packet.Header.CMD > (ushort)COMMAND.DELETEEMPLOEEINFO)
             {
                 return;
             }
-            string msg = Encoding.UTF8.GetString(packet.Body);
-            JObject jobject = new JObject(JObject.Parse(msg));
-            if (!msg.Contains("null"))
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    List.Clear();
-                });
-                if (jobject["employee_list"] == null)
-                    return;
-                JArray jarr = new JArray();
-                jarr = jobject["employee_list"] as JArray;
-                if (jobject["history_count"] != null)
-                    TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
-                foreach (JObject jobj in jarr)
-                {
-                    Employee temp = new Employee();
-                    temp.No.Value = i++;
-                    if (jobj["employee_id"] != null)
-                        temp.Id.Value = jobj["employee_id"].ToObject<int>();
-                    if (jobj["employee_name"] != null)
-                        temp.Name.Value = jobj["employee_name"].ToString();
-                    if (jobj["employee_phone"] != null)
-                        temp.Phone.Value = jobj["employee_phone"].ToString();
-                    if (jobj["employee_start"] != null)
-                        temp.StartWorkTime.Value = jobj["employee_start"].ToObject<DateTime>();
-                    if (jobj["employee_address"] != null)
-                        temp.Address.Value = jobj["employee_address"].ToString();
-                    if (jobj["employee_address_detail"] != null)
-                        temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
-                    Application.Current.Dispatcher.Invoke(() =>
+            switch (packet.Header.CMD) {
+                case (ushort)COMMAND.CREATEEMPLOEEINFO:
+                case (ushort)COMMAND.DELETEEMPLOEEINFO:
+                case (ushort)COMMAND.UPDATEEMPLOEEINFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.GETEMPLOEEINFO:
+                    JObject jobject = new JObject(JObject.Parse(msg));
+                    if (!msg.Contains("null"))
                     {
-                        List.Add(temp);
-                    });
-                }
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            List.Clear();
+                        });
+                        if (jobject["employee_list"] == null)
+                            return;
+                        JArray jarr = new JArray();
+                        jarr = jobject["employee_list"] as JArray;
+                        if (jobject["history_count"] != null)
+                            TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+                        int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
+                        foreach (JObject jobj in jarr)
+                        {
+                            Employee temp = new Employee();
+                            temp.No.Value = i++;
+                            if (jobj["employee_id"] != null)
+                                temp.Id.Value = jobj["employee_id"].ToObject<int>();
+                            if (jobj["employee_name"] != null)
+                                temp.Name.Value = jobj["employee_name"].ToString();
+                            if (jobj["employee_phone"] != null)
+                                temp.Phone.Value = jobj["employee_phone"].ToString();
+                            if (jobj["employee_start"] != null)
+                                temp.StartWorkTime.Value = jobj["employee_start"].ToObject<DateTime>();
+                            if (jobj["employee_address"] != null)
+                                temp.Address.Value = jobj["employee_address"].ToString();
+                            if (jobj["employee_address_detail"] != null)
+                                temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                List.Add(temp);
+                            });
+                        }
+                    }
+                    break;
             }
+            
         }
 
         public void OnSent()

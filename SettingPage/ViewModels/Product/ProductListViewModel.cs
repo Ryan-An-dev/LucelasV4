@@ -90,23 +90,30 @@ namespace SettingPage.ViewModels
 
         public void OnRceivedData(ErpPacket packet)
         {
-            if (packet.Header.CMD != (ushort)COMMAND.GETPRODUCTINFO)
-            {
-                return;
-            }
             string msg = Encoding.UTF8.GetString(packet.Body);
-            JObject jobject = null;
-            try { jobject = new JObject(JObject.Parse(msg)); }
-            catch (Exception)
+            ErpLogWriter.LogWriter.Debug(msg);
+            if (packet.Header.CMD < (ushort)COMMAND.CREATEPRODUCTINFO
+                || packet.Header.CMD > (ushort)COMMAND.DELETEPRODUCTINFO)
             {
                 return;
             }
-            ErpLogWriter.LogWriter.Trace(jobject.ToString());
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            FurnitureInfos = temp.FurnitureInfos;
-            switch ((COMMAND)packet.Header.CMD)
+            switch (packet.Header.CMD)
             {
-                case COMMAND.GETPRODUCTINFO: //데이터 조회
+                case (ushort)COMMAND.CREATEPRODUCTINFO:
+                case (ushort)COMMAND.DELETEPRODUCTINFO:
+                case (ushort)COMMAND.UPDATEPRODUCTINFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case (ushort)COMMAND.GETPRODUCTINFO:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                    ErpLogWriter.LogWriter.Trace(jobject.ToString());
+                    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                    FurnitureInfos = temp.FurnitureInfos;
                     Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
@@ -118,7 +125,7 @@ namespace SettingPage.ViewModels
                             jarr = jobject["product_list"] as JArray;
                             if (jobject["history_count"] != null)
                                 TotalItemCount.Value = jobject["history_count"].ToObject<int>();
-                            
+
                             int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
 
                             foreach (JObject jobj in jarr)
