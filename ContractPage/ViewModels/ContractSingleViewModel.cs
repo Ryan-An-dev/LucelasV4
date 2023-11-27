@@ -97,6 +97,7 @@ namespace ContractPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
         }
 
+        
         private void ExecSetEditMode(string obj)
         {
             switch (obj) {
@@ -142,8 +143,13 @@ namespace ContractPage.ViewModels
         }
         private void AddPaymentExcute()
         {
+            int total = this.Contract.Value.Price.Value;
+            foreach (Payment inner in this.Contract.Value.Payment) {
+                total-=inner.Price.Value;
+            }
             DialogParameters p = new DialogParameters();
             p.Add("object", new Payment());
+            p.Add("total", total);
             this.dialogService.ShowDialog("AddPaymentPage", p, r => SetPayment(r), "CommonDialogWindow");
         }
         private void SetPayment(IDialogResult r)
@@ -184,9 +190,10 @@ namespace ContractPage.ViewModels
                     if (this.Contract.Value != null)
                     {
                         ContractedProduct pro = new ContractedProduct();
+                        pro.ForTotal += this.Contract.Value.TotalPrice;
+                        pro.SetSub();
                         pro.FurnitureInventory.Value = temp;
                         this.Contract.Value.Product.Add(pro);
-                        this.Contract.Value.TotalPrice();
                     }
                 }
             }

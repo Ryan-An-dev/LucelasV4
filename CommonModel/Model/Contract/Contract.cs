@@ -70,10 +70,12 @@ namespace CommonModel.Model
             this.Delivery.Subscribe(x => ChangedJson("delivery_date", x));
             this.Contractor.Value.SetObserver();   
         }
-        public void TotalPrice() {
+        public void TotalPrice(int temp) {
+            int temper = 0; 
             foreach (ContractedProduct item in this.Product) {
-                Price.Value += item.SellPrice.Value;
+                temper+=item.total.Value;
             }
+            this.Price.Value = temper;
         }
 
         /// <summary>

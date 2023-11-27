@@ -38,8 +38,11 @@ namespace ContractPage.ViewModels
 
         public IContainerProvider containerProvider { get; set; }
 
+        public ReactiveProperty<int> RemainPrice { get; set; }    
+
         public AddPaymentPageViewModel(IContainerProvider ContainerProvider) :base()
         {
+            this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);
             PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
             SelectedItem = new ReactiveProperty<Payment>().AddTo(disposable);
             SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
@@ -92,11 +95,14 @@ namespace ContractPage.ViewModels
             if (parameters.ContainsKey("object"))
             {
                 Payment payment = null;
+                int remain_price = 0;
                 parameters.TryGetValue("object", out payment);
+                parameters.TryGetValue("total", out remain_price);
                 if (payment != null)
                 {
                     this.SelectedItem.Value = payment;
                 }
+                this.RemainPrice.Value = remain_price;
             }
         }
     }

@@ -147,6 +147,7 @@
     </Style>
 
     <local:ReverseBoolConverter x:Key="ReverseBool"/>
+    
     <Selector:DepositStyleSelector x:Key="DepositCellStyleSelector">
         <Selector:DepositStyleSelector.IncomeDataStyle>
             <Style TargetType="DataGridRow">
@@ -166,4 +167,6 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Padding" Value="0"/>
     </Style>
+    
+    
 </ResourceDictionary>

@@ -28,6 +28,17 @@
 
             <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding }">
                 <StackPanel>
+                    <StackPanel Height="40" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <TextBlock
+                            Text="남은금액 : "
+                            Foreground="{StaticResource MainColor}"
+                            />
+                        <TextBlock
+                            Text="{Binding RemainPrice.Value, StringFormat=\{0:N0\}}"
+                            Foreground="DarkRed"
+                            />  
+                    </StackPanel>
+                    
                     <ComboBox x:Name="comboBox" Height="50"
                          Style="{StaticResource MaterialDesignComboBox}" 
                          md:HintAssist.IsFloating="True" 

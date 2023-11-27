@@ -268,6 +268,8 @@ namespace ContractPage.ViewModels
                                                     jobj["cui_address_detail"] = item.Address1.Value;
                                                     jobj["cui_memo"] = item.Memo.Value;
                                                     network.CreateCustomerList(jobj);
+                                                    this.Keyword.Value = item.Name.Value;
+                                                    SearchBase(item.Name.Value);
                                                 }
                                             }
                                         }
