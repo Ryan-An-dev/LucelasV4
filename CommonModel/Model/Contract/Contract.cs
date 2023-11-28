@@ -65,7 +65,7 @@ namespace CommonModel.Model
         public override void SetObserver() {
             this.Month.Subscribe(x => ChangedJson("create_time", x));
             this.Price.Subscribe(x => ChangedJson("total", x));
-            this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id));
+            this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id.Value));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
             this.Contractor.Value.SetObserver();
