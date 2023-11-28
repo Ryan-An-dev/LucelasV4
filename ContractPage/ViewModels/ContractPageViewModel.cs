@@ -29,7 +29,7 @@ namespace ContractPage.ViewModels
     public class ContractPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
-
+        public ReactiveProperty<string> SearchPhone { get; set; }
         public ReactiveProperty<string> SearchName { get; set; }
         public ReactiveProperty<DateTime> StartDate { get; set; }
         public ReactiveProperty<DateTime> EndDate { get; set; }
@@ -41,7 +41,7 @@ namespace ContractPage.ViewModels
 
         #endregion
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
-
+        public DelegateCommand SearchButton { get; }
 
         #region Paging
         public ReactiveProperty<int> CurrentPage { get; set; }
@@ -72,16 +72,30 @@ namespace ContractPage.ViewModels
             this.SearchName = new ReactiveProperty<string>("").AddTo(this.disposable);
             this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);
             this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);
+            this.SearchButton = new DelegateCommand(SearchContractExecute);
+            this.SearchPhone = new ReactiveProperty<string>().AddTo(this.disposable);
             NewButton = new DelegateCommand(NewButtonExecute);
             RowDoubleClick = new DelegateCommand(RowDoubleClickExecute);
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
+            furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
 
+
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            if (temp.FurnitureInfos.Count > 0) {
+                this.furnitureInfos = temp.FurnitureInfos;
+            }
             this.CountList.Add(30);
             this.CountList.Add(50);
             this.CountList.Add(70);
             this.CountList.Add(100);
         }
+
+        private void SearchContractExecute()
+        {
+            SendData();
+        }
+
         private void ExecCmdGoPage(object param)
         {
             MovePageType moveType = (MovePageType)param;
@@ -113,13 +127,15 @@ namespace ContractPage.ViewModels
                 network.SetReceiver(this);
                 //accountList, CategoryList, ProductList 기본으로 요청하기
                 JObject jobj = new JObject();
-                jobj["next_preview"] = (int)param;
-                jobj["con_name"] = this.SearchName.Value;
-                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? (this.ListCount.Value * CurrentPage.Value) - this.TotalItemCount.Value : this.ListCount.Value;
+                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
-                jobj["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                jobj["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                jobj["complete"] = (int)this.SearchFullyCompleted.Value;
+                JObject search = new JObject();
+                search["cui_name"] = this.SearchName.Value;
+                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["complete"] = (int)this.SearchFullyCompleted.Value;
+                search["cui_phone"] = this.SearchPhone.Value;
+                jobj["search_option"] = search;
                 network.GetContractList(jobj);
             }
         }
@@ -129,12 +145,15 @@ namespace ContractPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["con_name"] = this.SearchName.Value;
-                jobj["page_unit"] = (this.ListCount.Value * CurrentPage.Value) > this.TotalItemCount.Value ? this.TotalItemCount.Value - (this.ListCount.Value * (CurrentPage.Value - 1)) : this.ListCount.Value;
+                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
-                jobj["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                jobj["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                jobj["complete"] = (int)this.SearchFullyCompleted.Value;
+                JObject search = new JObject();
+                search["cui_name"] = this.SearchName.Value;
+                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["complete"] = (int)this.SearchFullyCompleted.Value;
+                search["cui_phone"] = this.SearchPhone.Value;
+                jobj["search_option"] = search;
                 network.GetContractList(jobj);
             }
         }
@@ -213,12 +232,51 @@ namespace ContractPage.ViewModels
         }
 
         private ContractedProduct SetProduct(JObject jobj) {
-            ContractedProduct ContractedProduct = new ContractedProduct();
-            
-            //if (jobj["product_type"] != null)
-                //inventory.ProductType.Value = ()jobj["product_type"].ToObject<int>();
-            return ContractedProduct;
+            ContractedProduct contractedProduct = new ContractedProduct();
+            if (jobj["sell_price"] != null)
+                contractedProduct.SellPrice.Value = jobj["sell_price"].ToObject<int>();
+            if (jobj["order_count"] != null)
+                contractedProduct.SellCount.Value = jobj["order_count"].ToObject<int>();
+            if (jobj["product_info"] != null) {
+                contractedProduct.FurnitureInventory.Value = SetProductInfo(jobj["product_info"] as JObject);
+            }
+
+            return contractedProduct;
         }
+        private Product SetProductInfo(JObject jobj) {
+            Product product = new Product();
+            if (jobj["acpi_id"] != null)
+                product.Id.Value = jobj["acpi_id"].ToObject<int>();
+            if (jobj["product_type"] != null)
+                product.ProductType.Value = GetProductType(jobj["product_type"].ToObject<int>());
+            if (jobj["product_name"] != null)
+                product.Name.Value = jobj["product_name"].ToObject<string>();
+            if (jobj["company"] != null)
+                product.Company.Value = SetCompany(jobj["company"]as JObject);
+            return product;
+        }
+
+        private Company SetCompany(JObject jobj) {
+
+            Company temp = new Company();
+            if (jobj["company_name"] != null)
+                temp.CompanyName.Value = jobj["company_name"].ToString();
+            if (jobj["company_phone"] != null)
+                temp.CompanyPhone.Value = jobj["company_phone"].ToString();
+            if (jobj["company_id"] != null)
+                temp.Id.Value = jobj["company_id"].ToObject<int>();
+            if (jobj["company_address"] != null)
+                temp.CompanyAddress.Value = jobj["company_address"].ToString();
+            if (jobj["company_address_detail"] != null)
+                temp.CompanyAddressDetail.Value = jobj["company_address_detail"].ToString();
+            return temp;
+            
+        }
+
+        private FurnitureType GetProductType(int id) {
+            return this.furnitureInfos.FirstOrDefault(x => x.Id.Value == id);
+        }
+
         private void SetContractHistory(JObject msg)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -249,7 +307,7 @@ namespace ContractPage.ViewModels
 
                             //계약ID
                             if (inner["con_id"] != null)
-                                temp.Id.Value = inner["con_id"].ToObject<int>();
+                                temp.Seller.Value = FindEmployee(inner["con_id"].ToObject<int>());
 
                             //계약 메모
                             if (inner["memo"] != null)
@@ -272,9 +330,12 @@ namespace ContractPage.ViewModels
                                 temp.Price.Value = inner["total"].ToObject<int>();
 
                             //제품 
-                            if (inner["product"]!=null)
-
-
+                            if (inner["product_list"] != null)
+                            {
+                                foreach (JObject con in inner["product_list"] as JArray) {
+                                    temp.Product.Add(SetProduct(con));
+                                }
+                            }
                             this.ContractItems.Add(temp);
                         }
                     }
@@ -282,18 +343,14 @@ namespace ContractPage.ViewModels
                 catch (Exception ex) { }
             }
         }
-        public Customer FindCustomer(int id)
+
+        private Employee FindEmployee(int id)
         {
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            Customer item = temp.CustomerInfos.First(c => c.Id.Value == id);
+            Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
             return item;
         }
-        //public Product FindProduct(int cpid,int pdid)
-        //{
-        //    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-        //    Company item = temp.CompanyInfos.First(c => c.Id.Value == cpid);
-        //    return item;
-        //}
+       
         public void OnConnected()
         {
             

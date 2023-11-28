@@ -270,7 +270,7 @@
                             md:HintAssist.Hint="특이사항"
                             FontSize="12"  
                             Margin="7 12 0 12"
-                            Text="{Binding Contract.Value.Memo.Value, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding Contract.Value.Memo.Value}"
                             Foreground="{StaticResource MainColor}"  
                             md:HintAssist.IsFloating="True"/>
                     </StackPanel>

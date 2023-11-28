@@ -46,6 +46,7 @@ namespace SettingPage.ViewModels
                 jobj["next_preview"] = (int)0;
                 jobj["page_unit"] = (ListCount.Value);
                 jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["all_mode"] = 1;
                 network.GetEmployeeList(jobj);
             }
         }

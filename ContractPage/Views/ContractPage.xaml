@@ -41,7 +41,7 @@
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
                     <TextBox 
                         md:HintAssist.Hint="이름"  MinWidth="100"
-                        Text="{Binding Name.Value}" 
+                        Text="{Binding SearchName.Value}" 
                         Margin="0 0 8 0" 
                         md:HintAssist.IsFloating="True" 
                         Cursor="IBeam" 
@@ -49,7 +49,7 @@
 
                     <TextBox 
                         md:HintAssist.Hint="번호 4자리"  MinWidth="100"
-                        Text="{Binding Phone.Value}" 
+                        Text="{Binding SearchPhone.Value}" 
                         Margin="0 0 8 0" 
                         md:HintAssist.IsFloating="True" 
                         Cursor="IBeam" 
@@ -57,7 +57,7 @@
                     
                     <ComboBox
                         ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchFullyCompleted.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SearchFullyCompleted.Value}"
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="완료유/무"

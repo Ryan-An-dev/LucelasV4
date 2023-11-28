@@ -505,6 +505,7 @@ namespace SettingPage.ViewModels
                     JObject jobj = new JObject();
                     jobj["page_unit"] = 30;
                     jobj["page_start_pos"] = 0;
+                    jobj["all_mode"] = 1;
                     network.GetEmployeeList(jobj);
                     
                 }
