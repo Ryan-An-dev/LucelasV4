@@ -43,8 +43,8 @@ namespace CommonModel
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Purpose = new ReactiveProperty<Purpose>().AddTo(disposable);
-            this.StoreReachDate = new ReactiveProperty<DateTime>().AddTo(disposable);
-            this.Count = new ReactiveProperty<int>().AddTo(disposable);
+            this.StoreReachDate = CreateDateTimeProperty("입고일");
+            this.Count = CreateProperty<int>("재고수량");
             SetObserver();
         }
         public JObject MakeJson()

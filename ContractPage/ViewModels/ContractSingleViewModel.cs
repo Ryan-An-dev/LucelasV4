@@ -94,6 +94,7 @@ namespace ContractPage.ViewModels
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
             EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
+
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
         }
 
@@ -262,7 +263,7 @@ namespace ContractPage.ViewModels
         {
             _disposable.Dispose();
         }
-        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+        public bool IsNavigationTarget(NavigationContext navigationContext) => false;
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
@@ -273,7 +274,10 @@ namespace ContractPage.ViewModels
         {
             var Contract = navigationContext.Parameters["Contract"] as ReactiveProperty<Contract>;
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            this.EmployeeInfos = temp.EmployeeInfos;
+            foreach (Employee emp in temp.EmployeeInfos) {
+                this.EmployeeInfos.Add(emp);
+            }
+            
             if (Contract == null)
             {
                 Title.Value = "신규계약 추가";

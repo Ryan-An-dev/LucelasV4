@@ -27,6 +27,27 @@ namespace CommonModel
         public bool isChanged { get; set; }
         public JObject ChangedItem { get; set; } = new JObject();
         public IRegionManager regionManager { get; } = null;
+        public ReactiveProperty<DateTime> CreateDateTimeProperty(string propertyName) 
+        {
+            ReactiveProperty<DateTime> temp = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
+            if (typeof(DateTime) == typeof(DateTime))
+            {
+                _dateTimeProperties.Add(temp);
+                temp.SetValidateNotifyError(x =>
+                {
+                    // 유효성 검사 로직 추가
+                    if (typeof(DateTime) == typeof(DateTime))
+                    {
+                        if (x == null)
+                        {
+                            return $"{propertyName}을(를) 입력하세요.";
+                        }
+                    }
+                    return null; // 유효성 검사 통과
+                });
+            }
+            return temp;
+        }
         public ReactiveProperty<T> CreateProperty<T>(string propertyName) {
             ReactiveProperty<T> temp = null;
             temp = new ReactiveProperty<T>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable);
@@ -68,22 +89,7 @@ namespace CommonModel
                     return null; // 유효성 검사 통과
                 });
             }
-            else if (typeof(T) == typeof(DateTime))
-            {
-                _dateTimeProperties.Add(temp as ReactiveProperty<DateTime>);
-                temp.SetValidateNotifyError(x =>
-                {
-                    // 유효성 검사 로직 추가
-                    if (typeof(T) == typeof(DateTime))
-                    {
-                        if (x == null)
-                        {
-                            return $"{propertyName}을(를) 입력하세요.";
-                        }
-                    }
-                    return null; // 유효성 검사 통과
-                });
-            }
+            
             return temp;
         }
         

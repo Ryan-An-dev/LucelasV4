@@ -20,7 +20,7 @@ namespace CommonModel.Model
         [JsonPropertyName("create_time")]
         public ReactiveProperty<DateTime> Month { get; set; } //계약 생성 날짜
         [JsonPropertyName("delivery_date")]
-        public ReactiveProperty<DateTime> Delivery { get; set; } //배송일자
+        public ReactiveProperty<System.DateTime> Delivery { get; set; } //배송일자
         [JsonPropertyName("contractor")]
         public ReactiveProperty<Customer> Contractor { get; set; } //주문자
 
@@ -44,9 +44,9 @@ namespace CommonModel.Model
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);
-            this.Month = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
+            this.Month = CreateDateTimeProperty("delivery_date");
             this.Contractor = new ReactiveProperty<Customer>().AddTo(disposable);
-            this.Delivery = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(disposable);
+            this.Delivery = CreateDateTimeProperty("delivery_date");
             this.Seller = new ReactiveProperty<Employee>(new Employee()).AddTo(disposable);
             this.Price = new ReactiveProperty<int>(0).AddTo(disposable);
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
@@ -74,7 +74,7 @@ namespace CommonModel.Model
         {
             if (value != null)
             {
-                if (value is int)
+                if (value is DateTime)
                 {
                     DateTime time = (DateTime)value;
                     ChangedItem[name] = time.ToString("yyyy-MM-dd-HH-mm");

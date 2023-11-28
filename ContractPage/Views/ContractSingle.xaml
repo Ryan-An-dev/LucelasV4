@@ -284,7 +284,7 @@
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="판매자"
                         Foreground="{StaticResource MainColor}"
-                        ItemsSource="{Binding EmployeeInfos, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding EmployeeInfos}"
                         SelectedItem="{Binding Contract.Value.Seller.Value}"
                         DisplayMemberPath="Name.Value"
                         />

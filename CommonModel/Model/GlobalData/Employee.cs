@@ -28,8 +28,8 @@ namespace CommonModel.Model
             Phone = CreateProperty<string>("번호");
             Address = CreateProperty<string>("주소");
             AddressDetail = CreateProperty<string>("상세주소");
-            StartWorkTime = CreateProperty<DateTime>("시작일");
-            BirthDay  = CreateProperty<DateTime>("생일");
+            StartWorkTime = CreateDateTimeProperty("시작일");
+            BirthDay  = CreateDateTimeProperty("생일");
             Memo = CreateProperty<string>("메모");
             SetObserver();
         }
