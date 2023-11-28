@@ -455,7 +455,8 @@ namespace ContractPage.ViewModels
             Product inventory = new Product();
             if (jobj["company"] != null)
                 inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
-            
+            if (jobj["product_id"] != null)
+                inventory.Id.Value = jobj["product_id"].ToObject<int>();
             if (jobj["product_type"] != null)
                 inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)
