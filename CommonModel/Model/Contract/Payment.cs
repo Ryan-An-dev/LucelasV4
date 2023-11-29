@@ -83,7 +83,7 @@ namespace CommonModel.Model
             JObject jobj = new JObject();
             jobj["payment_type"] = (int)this.PaymentType.Value;
             jobj["payment_completed"] = (int)this.PaymentCompleted.Value;
-            jobj["paymennt_method"] = (int)this.PaymentMethod.Value;
+            jobj["payment_method"] = (int)this.PaymentMethod.Value;
             jobj["price"] = (int)this.Price.Value;
             jobj["payment_card"] = (int)this.SelectedPayCard.Value.Id.Value;
             return jobj;
@@ -92,7 +92,7 @@ namespace CommonModel.Model
         public override void SetObserver()
         {
             this.PaymentType.Subscribe(x => ChangedJson("payment_type", x));
-            this.PaymentMethod.Subscribe(x => multiObserver("paymennt_method", x));
+            this.PaymentMethod.Subscribe(x => multiObserver("payment_method", x));
             this.PaymentCompleted.Subscribe(x => ChangedJson("payment_completed", x));
             this.Price.Subscribe(x => ChangedJson("price", x));
             this.SelectedPayCard.Subscribe(x => ChangedJson("payment_card", x.Id.Value));

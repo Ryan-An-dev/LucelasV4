@@ -254,6 +254,8 @@ namespace ContractPage.ViewModels
                 product.ProductType.Value = GetProductType(jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)
                 product.Name.Value = jobj["product_name"].ToObject<string>();
+            if (jobj["product_price"] != null)
+                product.Price.Value = jobj["product_price"].ToObject<int>();
             if (jobj["company"] != null)
                 product.Company.Value = SetCompany(jobj["company"]as JObject);
             return product;
@@ -359,6 +361,36 @@ namespace ContractPage.ViewModels
                                 temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
 
 
+                            //계약금,잔금 부분
+                            if (inner["payment"] != null)
+                            {
+
+                                foreach (JObject jobj in inner["payment"] as JArray)
+                                {
+                                    Payment pay = new Payment();
+                                    if (jobj["payment_type"] != null)
+                                        pay.PaymentType.Value = (PaymentType)jobj["payment_type"].ToObject<int>();
+                                    if (jobj["payment_completed"] != null)
+                                        pay.PaymentCompleted.Value = (Complete)jobj["payment_completed"].ToObject<int>();
+                                    if (jobj["payment_method"] != null)
+                                        pay.PaymentMethod.Value = (ReceiptType)jobj["payment_method"].ToObject<int>();
+                                    if (jobj["price"] != null)
+                                        pay.Price.Value = jobj["price"].ToObject<int>();
+
+                                    if (jobj["payment_card"] != null)
+                                    {
+                                        int paycard_id = jobj["payment_card"].ToObject<int>();
+                                        if (paycard_id != 0) {
+                                            SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                                            PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
+                                            if (item != null)
+                                                pay.SelectedPayCard.Value = item;
+                                        }
+                                    }
+                                    temp.Payment.Add(pay);
+                                }
+
+                            }
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 this.ContractItems.Add(temp);
