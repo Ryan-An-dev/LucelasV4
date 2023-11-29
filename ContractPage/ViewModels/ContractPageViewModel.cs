@@ -299,6 +299,9 @@ namespace ContractPage.ViewModels
                             int id = 0;
                             temp.ListNo.Value = i;
                             Customer Contractor = null;
+
+                            if (inner["con_id"] != null)
+                                temp.Id.Value = inner["con_id"].ToObject<int>();
                             //고객정보 파싱 부분 
                             if (inner["contractor"] != null) { 
                                 Contractor = SetCustomer(inner["contractor"] as JObject);
@@ -310,8 +313,8 @@ namespace ContractPage.ViewModels
                                 temp.Month.Value = inner["create_time"].ToObject<DateTime>();
 
                             //계약ID
-                            if (inner["con_id"] != null)
-                                temp.Seller.Value = FindEmployee(inner["con_id"].ToObject<int>());
+                            if (inner["seller_id"] != null)
+                                temp.Seller.Value = FindEmployee(inner["seller_id"].ToObject<int>());
 
                             //계약 메모
                             if (inner["memo"] != null)
@@ -354,11 +357,18 @@ namespace ContractPage.ViewModels
                             }
                             if (inner["payment_complete"] != null)
                                 temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
-                            this.ContractItems.Add(temp);
+
+
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                this.ContractItems.Add(temp);
+                            });
                         }
                     }
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) {
+                    ErpLogWriter.LogWriter.Trace(ex.ToString());
+                }
             }
         }
 
