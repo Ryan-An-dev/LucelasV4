@@ -171,7 +171,7 @@ namespace ContractPage.ViewModels
             var p = new NavigationParameters();
             if (SelectedItem != null)
             {
-                p.Add(nameof(Contract), SelectedItem);
+                p.Add(nameof(Contract), SelectedItem.Value);
             }
 
             regionManager.RequestNavigate("ContractSingleRegion", nameof(ContractSingle), p);

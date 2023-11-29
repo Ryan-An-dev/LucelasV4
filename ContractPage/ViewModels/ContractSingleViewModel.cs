@@ -272,11 +272,12 @@ namespace ContractPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            var Contract = navigationContext.Parameters["Contract"] as ReactiveProperty<Contract>;
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            foreach (Employee emp in temp.EmployeeInfos) {
+            foreach (Employee emp in temp.EmployeeInfos)
+            {
                 this.EmployeeInfos.Add(emp);
             }
+            Contract contract = navigationContext.Parameters["Contract"] as Contract;
             
             if (Contract == null)
             {
@@ -288,6 +289,7 @@ namespace ContractPage.ViewModels
             {
                 Title.Value = "계약 내역 수정";
                 IsNewContract.Value = Visibility.Visible;
+                this.Contract.Value = contract;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
         }

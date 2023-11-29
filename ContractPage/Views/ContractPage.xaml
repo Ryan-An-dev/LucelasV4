@@ -162,11 +162,7 @@
                         Binding="{Binding Contractor.Value.Phone.Value}"
                         Header="고객번호" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
-                    <DataGridTextColumn 
-                        Width="0.1*"
-                        Binding="{Binding Month.Value, StringFormat=yy-MM-dd}"
-                        Header="계약일" 
-                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    
                     <DataGridTextColumn 
                         Width="0.2*"
                         Binding="{Binding ProductNameCombine.Value}" 
@@ -178,15 +174,20 @@
                         Header="금액" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                           Width="0.1*"
-                        Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
-                        Header="배송일" 
-                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
-                    <DataGridTextColumn 
                          Width="0.1*"
                          Binding="{Binding Seller.Value.Name.Value}" 
                          Header="판매직원"
                          ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    <DataGridTextColumn 
+                        Width="0.1*"
+                        Binding="{Binding Month.Value, StringFormat=yy-MM-dd}"
+                        Header="계약일" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    <DataGridTextColumn 
+                        Width="0.1*"
+                        Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
+                        Header="배송일" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
                         Binding="{Binding FullyCompleted.Value}"
