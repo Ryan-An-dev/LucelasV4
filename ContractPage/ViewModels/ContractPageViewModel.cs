@@ -243,15 +243,12 @@ namespace ContractPage.ViewModels
             if (jobj["product_info"] != null) {
                 contractedProduct.FurnitureInventory.Value = SetProductInfo(jobj["product_info"] as JObject);
             }
-            
-            
-
             return contractedProduct;
         }
         private Product SetProductInfo(JObject jobj) {
             Product product = new Product();
-            if (jobj["acpi_id"] != null)
-                product.Id.Value = jobj["acpi_id"].ToObject<int>();
+            if (jobj["product_id"] != null)
+                product.Id.Value = jobj["product_id"].ToObject<int>();
             if (jobj["product_type"] != null)
                 product.ProductType.Value = GetProductType(jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)
@@ -374,6 +371,8 @@ namespace ContractPage.ViewModels
                                 foreach (JObject jobj in inner["payment"] as JArray)
                                 {
                                     Payment pay = new Payment();
+                                    if (jobj["payment_id"] != null)
+                                        pay.PaymentId.Value = jobj["payment_id"].ToObject<int>();
                                     if (jobj["payment_type"] != null)
                                         pay.PaymentType.Value = (PaymentType)jobj["payment_type"].ToObject<int>();
                                     if (jobj["payment_completed"] != null)

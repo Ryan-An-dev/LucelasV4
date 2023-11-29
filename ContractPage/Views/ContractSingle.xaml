@@ -62,7 +62,7 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBox 
                                 MinWidth="420" Margin="0 0 10 12" 
-                                IsReadOnly="{Binding CustIsReadOnly.Value}"
+                                IsEnabled="{Binding CustIsReadOnly.Value}"
                                 md:HintAssist.Hint="이름"
                                 FontSize="14"  
                                 x:Name="Search"
@@ -78,7 +78,7 @@
                                 </Binding>
                             </TextBox>
                             <Button
-                                IsEnabled="{Binding CustIsReadOnly.Value, Converter={StaticResource ReverseBool}}"
+                                IsEnabled="{Binding CustIsReadOnly.Value}"
                                 Margin="10 0 0 0"
                                 Content="검색"
                                 CommandParameter="{Binding Text, ElementName=Search}"

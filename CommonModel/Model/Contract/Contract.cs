@@ -73,7 +73,7 @@ namespace CommonModel.Model
             this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id.Value));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
-            this.Contractor.Value.SetObserver();
+            this.Contractor.Subscribe(x => ChangedJson("cui_id", x.Id.Value));
         }
         public void ChangedDelevery(string name, object value)
         {
@@ -94,14 +94,22 @@ namespace CommonModel.Model
             }
             this.Price.Value = temper;
         }
-
         /// <summary>
-        /// 고객정보는 따로 Update한다.
-        /// 회사, 제품 역시 따로 Update한다.
+        /// 현재 정보 모두 파싱해서 내리는 곳
+        /// 
         /// </summary>
-        /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
-        public JObject GetChangedItem()
+        /// <returns></returns>
+        public JObject MakeJson()
         {
+            JObject NewObject = new JObject();
+
+            NewObject["create_time"] = this.Month.Value.ToString("yyyy-MM-dd");
+            NewObject["total"] = this.Price.Value;
+            NewObject["seller_id"] = this.Seller.Value.Id.Value;
+            NewObject["memo"] = this.Memo.Value;
+            NewObject["delivery_date"] = this.Delivery.Value.ToString("yyyy-MM-dd-HH-mm");
+
+            //고객
             JObject contractor = new JObject();
             contractor["cui_id"] = this.Contractor.Value.Id.Value;
             contractor["cui_name"] = this.Contractor.Value.Name.Value;
@@ -109,14 +117,76 @@ namespace CommonModel.Model
             contractor["cui_address"] = this.Contractor.Value.Address.Value;
             contractor["cui_address_detail"] = this.Contractor.Value.Address1.Value;
             contractor["cui_memo"] = this.Contractor.Value.Memo.Value;
-            ChangedItem["contractor"] = contractor;
+            NewObject["contractor"] = contractor;
+
+
+            //페이먼트
+            JArray jarrPayment = new JArray();
+            foreach (Payment item in Payment)
+            {
+                jarrPayment.Add(item.MakeJson());
+            }
+            if (jarrPayment.Count > 0)
+                NewObject["payment"] = jarrPayment;
+
+
+            //제품
+            JArray jarrProduct = new JArray();
+            foreach (ContractedProduct item in Product)
+            {
+                jarrProduct.Add(item.MakeJson());
+            }
+            if (jarrProduct != null)
+                NewObject["product"] = jarrProduct;
+
+            return NewObject;
+        }
+        /// <summary>
+        /// 고객정보는 따로 Update한다.
+        /// 회사, 제품 역시 따로 Update한다.
+        /// </summary>
+        /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
+        public JObject GetChangedItem()
+        {
+            //계약자 자체가 바뀐경우 
+            //이때는 바뀐 id 를 줘야한다.
+
+            //기존계약자의 내용만 수정한경우 
+            //--이거는 따로 처리되어서 상관없다.
 
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
-                jarrPayment.Add(item.MakeJson());
+                JObject jobj = new JObject();
+                if (item.isChanged && item.PaymentId.Value == 0) //신규 생성
+                {
+                    jobj["payment_id"] = item.PaymentId.Value;
+                    jobj["changed_item"] = item.MakeJson();
+                }
+                if (item.isChanged && item.PaymentId.Value != 0) //기존 수정
+                {
+                    jobj["payment_id"] = item.PaymentId.Value;
+                    jobj["changed_item"] = item.ChangedItem;
+                }
+                if (ChangedItem["payment"] == null) {
+                    jarrPayment.Add(jobj);
+                    ChangedItem["payment"] = jarrPayment;
+                }
+                else{
+                    (ChangedItem["payment"] as JArray).Add(jobj);
+                }
+                
             }
-            if(jarrPayment.Count>0)
-                ChangedItem["payment"] = jarrPayment;
+
+            if (jarrPayment.Count > 0) {
+                if (ChangedItem["payment"] == null)
+                {
+                    ChangedItem["payment"] = jarrPayment;
+                }
+                else{
+                    
+                }
+            }
+                
 
             JArray jarrProduct = new JArray();
             foreach (ContractedProduct item in Product)

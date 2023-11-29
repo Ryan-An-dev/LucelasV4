@@ -31,6 +31,7 @@ namespace CommonModel.Model
 
     public class Payment : PrismCommonModelBase
     {
+        public ReactiveProperty<AddDelete> Action { get; set; }
         public IEnumerable<PaymentType> PaymentTypeSelectValues //검색옵션
         {
             get { return Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>(); }
@@ -43,7 +44,7 @@ namespace CommonModel.Model
         {
             get { return Enum.GetValues(typeof(Complete)).Cast<Complete>(); }
         }
-
+        public ReactiveProperty<int> PaymentId { get; set; }
         [JsonPropertyName("payment_method")]
         public ReactiveProperty<ReceiptType> PaymentMethod { get; set; } //계좌, 카드 , 계좌이체 , 현금
         [JsonPropertyName("payment_type")]
@@ -60,6 +61,8 @@ namespace CommonModel.Model
 
         public Payment() : base()
         {
+            this.Action = new ReactiveProperty<AddDelete>(AddDelete.Add).AddTo(disposable);
+            this.PaymentId = new ReactiveProperty<int>().AddTo(disposable);
             this.PaymentType = new ReactiveProperty<PaymentType>().AddTo(disposable);
             this.PaymentMethod = new ReactiveProperty<ReceiptType>(0).AddTo(disposable);
             this.PaymentCompleted = new ReactiveProperty<Complete>().AddTo(disposable);
@@ -69,7 +72,7 @@ namespace CommonModel.Model
             SetObserver();
         }
         private void multiObserver(string name , ReceiptType x) {
-            ChangedJson(name, x);
+            ChangedJsonADD(name, x);
             if (x == (ReceiptType)2)
             {
                 cardVisibility.Value = System.Windows.Visibility.Visible;
@@ -79,8 +82,40 @@ namespace CommonModel.Model
             }
         }
 
+        public void ChangedJsonADD(string name, object value)
+        {
+            if (value != null)
+            {
+                if (value is int)
+                {
+                    ChangedItem[name] = (int)value;
+                }
+                else if (value is string)
+                {
+                    ChangedItem[name] = value.ToString();
+                }
+                else if (value is JToken)
+                {
+                    ChangedItem[name] = value.ToString();
+                }
+                else if (value is Enum)
+                {
+                    ChangedItem[name] = (int)value;
+                }
+                else if (value is DateTime)
+                {
+                    DateTime time = (DateTime)value;
+                    ChangedItem[name] = time.ToString("yyyy-MM-dd");
+                }
+                if(this.PaymentId.Value != 0)
+                    this.Action.Value = AddDelete.Update;
+                isChanged = true;
+            }
+        }
+
         public JObject MakeJson() {
             JObject jobj = new JObject();
+            jobj["action"] = (int)this.Action.Value;
             jobj["payment_type"] = (int)this.PaymentType.Value;
             jobj["payment_completed"] = (int)this.PaymentCompleted.Value;
             jobj["payment_method"] = (int)this.PaymentMethod.Value;
@@ -91,11 +126,12 @@ namespace CommonModel.Model
 
         public override void SetObserver()
         {
-            this.PaymentType.Subscribe(x => ChangedJson("payment_type", x));
+            this.PaymentType.Subscribe(x => ChangedJsonADD("payment_type", x));
             this.PaymentMethod.Subscribe(x => multiObserver("payment_method", x));
-            this.PaymentCompleted.Subscribe(x => ChangedJson("payment_completed", x));
-            this.Price.Subscribe(x => ChangedJson("price", x));
-            this.SelectedPayCard.Subscribe(x => ChangedJson("payment_card", x.Id.Value));
+            this.PaymentCompleted.Subscribe(x => ChangedJsonADD("payment_completed", x));
+            this.Price.Subscribe(x => ChangedJsonADD("price", x));
+            this.Action.Subscribe(x => ChangedJson("action", x));
+            this.SelectedPayCard.Subscribe(x => ChangedJsonADD("payment_card", x.Id.Value));
         }
     }
 }

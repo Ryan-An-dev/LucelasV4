@@ -25,6 +25,7 @@ using System.Windows.Controls;
 
 namespace ContractPage.ViewModels
 {
+    
     public class ContractSingleViewModel : PrismCommonViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
         /// <summary>
@@ -94,7 +95,6 @@ namespace ContractPage.ViewModels
             Contract = new ReactiveProperty<Contract>().AddTo(disposable);
             Title.Value = "신규등록";
             EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
-
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
         }
 
@@ -115,7 +115,7 @@ namespace ContractPage.ViewModels
                         {
                             JObject jobj = new JObject();
                             network.SetReceiver(this);
-                            jobj["customer_id"] = this.Contract.Value.Contractor.Value.Id.Value;
+                            jobj["cui_id"] = this.Contract.Value.Contractor.Value.Id.Value;
                             jobj["changed_item"] = this.Contract.Value.Contractor.Value.ChangedItem;
                             network.UpdateCustomerList(jobj);
                         }
@@ -132,12 +132,53 @@ namespace ContractPage.ViewModels
                     SearchCompanySelectExcute();
                     break;
                 case "DeleteProduct":
+                    JObject jobj = new JObject();
+                    int id = this.SelectedProduct.Value.Id.Value;
+                    if (id == 0)
+                    {
+                        this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
+                        return;
+                    }
+                    jobj["product_id"] = id;
+                    JObject inner = new JObject();
+                    inner["action"] = 2;
+                    jobj["changed_item"] = inner;
+                    if (this.Contract.Value.ChangedItem["product_list"] == null)
+                    {
+                        JArray jarr = new JArray();
+                        jarr.Add(jobj);
+                        this.Contract.Value.ChangedItem["product_list"] = jarr;
+                    }
+                    else
+                    {
+                        (this.Contract.Value.ChangedItem["product_list"] as JArray).Add(jobj);
+                    }
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     break;
                 case "AddPayment":
                     AddPaymentExcute();
                     break;
                 case "DeletePayment":
+                    JObject jobject = new JObject();
+                    int pay_id = this.SelectedPayment.Value.PaymentId.Value;
+                    if (pay_id == 0) {
+                        this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
+                        return;
+                    }
+                    jobject["payment_id"] = pay_id;
+                    JObject inner_pay = new JObject();
+                    inner_pay["action"] = 2;
+                    jobject["changed_item"] = inner_pay;
+
+                    if (this.Contract.Value.ChangedItem["payment"] == null)
+                    {
+                        JArray jarr = new JArray();
+                        jarr.Add(jobject);
+                        this.Contract.Value.ChangedItem["payment"] =jarr;
+                    }
+                    else {
+                        (this.Contract.Value.ChangedItem["payment"] as JArray).Add(jobject);
+                    }
                     this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
                     break;
             }
@@ -191,6 +232,7 @@ namespace ContractPage.ViewModels
                     if (this.Contract.Value != null)
                     {
                         ContractedProduct pro = new ContractedProduct();
+                        pro.Action.Value = AddDelete.Add;
                         pro.ForTotal += this.Contract.Value.TotalPrice;
                         pro.SetSub();
                         pro.FurnitureInventory.Value = temp;
@@ -251,6 +293,7 @@ namespace ContractPage.ViewModels
                     if (this.Contract.Value != null)
                     {
                         this.Contract.Value.Contractor.Value = temp;
+                        this.Contract.Value.Contractor.Value.ClearJson();
                     }
                 }
             }
@@ -279,7 +322,7 @@ namespace ContractPage.ViewModels
             }
             Contract contract = navigationContext.Parameters["Contract"] as Contract;
             
-            if (Contract == null)
+            if (contract == null)
             {
                 Title.Value = "신규계약 추가";
                 IsNewContract.Value = Visibility.Collapsed;
@@ -315,24 +358,23 @@ namespace ContractPage.ViewModels
                     {
                         
                         if (this.Contract.Value.isChanged) {
-                            network.CreateContractHistory(this.Contract.Value.GetChangedItem());
+                            network.CreateContractHistory(this.Contract.Value.MakeJson());
                         }
                     }
                     else
                     { //내역수정일경우
-                        //if (this.Contract.Value.IsChanged.Value)
-                        //{
-                        //    JObject inner = new JObject();
-                        //    inner["shi_id"] = this.Contract.Value.ReceiptNo.Value;
-                        //    inner["changed_property"] = this.Contract.Value.ChangedItem;
-                        //    jobj["update_history"] = inner;
-                        //    network.UpdateContract(jobj);
-                        //}
+                        if (this.Contract.Value.isChanged)
+                        {
+                            JObject inner = new JObject();
+                            inner["con_id"] = this.Contract.Value.Id.Value;
+                            inner["changed_item"] = this.Contract.Value.GetChangedItem();
+                            network.UpdateContract(inner);
+                        }
                     }
                 }
                 else
                 {
-                    jobj["delete_history"] = this.Contract.Value.Id.Value;
+                    jobj["con_id"] = this.Contract.Value.Id.Value;
                     network.DeleteContract(jobj);
                 }
             }
