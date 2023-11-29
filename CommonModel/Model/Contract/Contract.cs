@@ -55,7 +55,6 @@ namespace CommonModel.Model
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
             this.Product = new ReactiveCollection<ContractedProduct>().AddTo(disposable);
-            
             ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
             
             this.Contractor.Value = new Customer();
@@ -65,7 +64,6 @@ namespace CommonModel.Model
         {
             ChangedItem.RemoveAll();
             isChanged = false;
-
         }
         public override void SetObserver() {
             this.Month.Subscribe(x => ChangedJson("create_time", x));
@@ -74,6 +72,7 @@ namespace CommonModel.Model
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
             this.Contractor.Subscribe(x => ChangedJson("cui_id", x.Id.Value));
+            this.Payment.ToObservable().Subscribe(updatedItems => { isChanged = true; });
         }
         public void ChangedDelevery(string name, object value)
         {

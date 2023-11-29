@@ -3,6 +3,7 @@ using CommonModel;
 using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
+using LogWriter;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -129,6 +130,7 @@ namespace ContractPage.ViewModels
         {
             switch (obj) {
                 case "AddProduct":
+                    this.Contract.Value.isChanged = true;
                     SearchCompanySelectExcute();
                     break;
                 case "DeleteProduct":
@@ -154,8 +156,10 @@ namespace ContractPage.ViewModels
                         (this.Contract.Value.ChangedItem["product_list"] as JArray).Add(jobj);
                     }
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
+                    this.Contract.Value.isChanged = true;
                     break;
                 case "AddPayment":
+                    this.Contract.Value.isChanged = true;
                     AddPaymentExcute();
                     break;
                 case "DeletePayment":
@@ -180,6 +184,7 @@ namespace ContractPage.ViewModels
                         (this.Contract.Value.ChangedItem["payment"] as JArray).Add(jobject);
                     }
                     this.Contract.Value.Payment.Remove(this.SelectedPayment.Value);
+                    this.Contract.Value.isChanged = true;
                     break;
             }
         }
@@ -206,6 +211,7 @@ namespace ContractPage.ViewModels
                     r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
+                        this.Contract.Value.isChanged = true;
                         this.Contract.Value.Payment.Add(temp);
                     }
                 }
@@ -368,6 +374,7 @@ namespace ContractPage.ViewModels
                             JObject inner = new JObject();
                             inner["con_id"] = this.Contract.Value.Id.Value;
                             inner["changed_item"] = this.Contract.Value.GetChangedItem();
+                            ErpLogWriter.LogWriter.Debug(inner);
                             network.UpdateContract(inner);
                         }
                     }
