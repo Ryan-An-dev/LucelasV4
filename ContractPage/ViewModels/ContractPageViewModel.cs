@@ -243,6 +243,8 @@ namespace ContractPage.ViewModels
             if (jobj["product_info"] != null) {
                 contractedProduct.FurnitureInventory.Value = SetProductInfo(jobj["product_info"] as JObject);
             }
+            
+            
 
             return contractedProduct;
         }
@@ -335,28 +337,32 @@ namespace ContractPage.ViewModels
                                 temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
 
                             //최종금액
-                            if (inner["total"] != null)
-                                temp.Price.Value = inner["total"].ToObject<int>();
+                         
 
                             //제품 
                             if (inner["product_list"] != null)
                             {
                                 foreach (JObject con in inner["product_list"] as JArray) {
-                                    temp.Product.Add(SetProduct(con));
+                                    ContractedProduct contractproduct = SetProduct(con);
+                                    contractproduct.ForTotal += temp.TotalPrice;
+                                    contractproduct.SetSub();
+                                    temp.Product.Add(contractproduct);
                                 }
                                 string combine = "";
                                 foreach (ContractedProduct item in temp.Product) {
                                     if (combine != string.Empty) {
                                         combine += ", ";
                                     }
-                                    combine += "{" + 
+                                    combine += 
                                         item.FurnitureInventory.Value.ProductType.Value.Name.Value + " : "
                                         + item.FurnitureInventory.Value.Name.Value 
                                         + "(" +item.SellCount.Value + "개)"
-                                        + "}";
+                                        ;
                                 }
                                 temp.ProductNameCombine.Value = combine;
                             }
+                            if (inner["total"] != null)
+                                temp.Price.Value = inner["total"].ToObject<int>();
                             if (inner["payment_complete"] != null)
                                 temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
 

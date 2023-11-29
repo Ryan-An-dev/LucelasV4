@@ -170,7 +170,7 @@
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
-                        Binding="{Binding Price.Value}" 
+                        Binding="{Binding Price.Value ,StringFormat=\{0:N0\}}" 
                         Header="금액" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
@@ -186,7 +186,7 @@
                     <DataGridTextColumn 
                         Width="0.1*"
                         Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
-                        Header="배송일" 
+                        Header="배송요청시간" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
