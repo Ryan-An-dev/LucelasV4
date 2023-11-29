@@ -22,6 +22,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace ContractPage.ViewModels
 {
@@ -79,7 +80,7 @@ namespace ContractPage.ViewModels
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
-
+            SelectedItem = new ReactiveProperty<Contract>().AddTo(disposable);
 
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             if (temp.FurnitureInfos.Count > 0) {
@@ -164,6 +165,8 @@ namespace ContractPage.ViewModels
         }
         private void RowDoubleClickExecute()
         {
+            if (SelectedItem.Value == null)
+                return;
             SelectedItem.Value.ClearJson();
             var p = new NavigationParameters();
             if (SelectedItem != null)
@@ -294,6 +297,7 @@ namespace ContractPage.ViewModels
                         {
                             Contract temp = new Contract();
                             int id = 0;
+                            temp.ListNo.Value = i;
                             Customer Contractor = null;
                             //고객정보 파싱 부분 
                             if (inner["contractor"] != null) { 
@@ -335,7 +339,21 @@ namespace ContractPage.ViewModels
                                 foreach (JObject con in inner["product_list"] as JArray) {
                                     temp.Product.Add(SetProduct(con));
                                 }
+                                string combine = "";
+                                foreach (ContractedProduct item in temp.Product) {
+                                    if (combine != string.Empty) {
+                                        combine += ", ";
+                                    }
+                                    combine += "{" + 
+                                        item.FurnitureInventory.Value.ProductType.Value.Name.Value + " : "
+                                        + item.FurnitureInventory.Value.Name.Value 
+                                        + "(" +item.SellCount.Value + "개)"
+                                        + "}";
+                                }
+                                temp.ProductNameCombine.Value = combine;
                             }
+                            if (inner["payment_complete"] != null)
+                                temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
                             this.ContractItems.Add(temp);
                         }
                     }

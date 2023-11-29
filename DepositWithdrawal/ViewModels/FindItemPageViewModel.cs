@@ -39,7 +39,6 @@ namespace DepositWithdrawal.ViewModels
 
         protected virtual void CloseDialog(string parameter)
         {
-
             DialogResult temp = null;
             ButtonResult result = ButtonResult.None;
             

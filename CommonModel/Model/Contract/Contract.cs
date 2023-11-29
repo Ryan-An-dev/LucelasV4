@@ -38,6 +38,8 @@ namespace CommonModel.Model
         [JsonPropertyName("saler_id")]
         public ReactiveProperty<Employee> Seller { get; set; } //판매자
 
+        public ReactiveProperty<string> ProductNameCombine { get; set; }
+
         
         public Contract()
         {
@@ -53,6 +55,9 @@ namespace CommonModel.Model
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
             this.Product = new ReactiveCollection<ContractedProduct>().AddTo(disposable);
+            
+            ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
+            
             this.Contractor.Value = new Customer();
             SetObserver();
         }
