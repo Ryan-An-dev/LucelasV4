@@ -224,7 +224,7 @@ namespace ContractPage.ViewModels
         private void SearchCompanySelectExcute() {
             DialogParameters p = new DialogParameters();
             p.Add("object", null);
-            this.dialogService.ShowDialog("SearchCompanyPage", p, r => SetProduct(r), "CommonDialogWindow");
+            this.dialogService.ShowDialog("FindInventoryItem", p, r => SetProduct(r), "CommonDialogWindow");
         }
         private void SetProduct(IDialogResult r) {
             if (r == null) return;

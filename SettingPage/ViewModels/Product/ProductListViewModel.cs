@@ -206,6 +206,8 @@ namespace SettingPage.ViewModels
 
         public override void RowDoubleClickEvent()
         {
+            if (SelectedItem.Value == null)
+                return;
             DialogParameters dialogParameters = new DialogParameters();
             SelectedItem.Value.ClearJson();
             dialogParameters.Add("object", SelectedItem.Value as Product);

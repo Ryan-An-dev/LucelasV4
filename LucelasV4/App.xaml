@@ -24,7 +24,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="MainColor" Color="#7368ff"/>
+            <SolidColorBrush x:Key="MainColor" Color="#A19AFF"/>
             <SolidColorBrush x:Key="textColor" Color="#edeeee"/>
             <Style x:Key="menubutton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
@@ -67,7 +67,7 @@
             </Style>
 
             <Style x:Key="searchTextBox" TargetType="TextBox">
-                <Setter Property="Background" Value="#1e2e44" />
+                <Setter Property="Background" Value="#19191A" />
                 <Setter Property="Foreground" Value="#9ea4ad" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="12" />
@@ -154,7 +154,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="#1e2e44" />
+                        <Setter Property="Foreground" Value="#19191A" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -179,7 +179,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="#1e2e44" />
+                        <Setter Property="Foreground" Value="#19191A" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -193,7 +193,7 @@
             </Style>
 
             <Style x:Key="mainBorder" TargetType="Border">
-                <Setter Property="Background" Value="#1e2e44" />
+                <Setter Property="Background" Value="#111112" />
                 <Setter Property="Padding" Value="20" />
                 <Setter Property="CornerRadius" Value="10" />
             </Style>
@@ -212,7 +212,6 @@
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="#2e3966" />
-
                     </Trigger>
                 </Style.Triggers>
             </Style>

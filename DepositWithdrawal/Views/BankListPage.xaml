@@ -29,7 +29,11 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="입출금 내역 분류" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
+                <TextBlock Grid.Column="0" 
+                           Text="입출금 내역 분류" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource MainColor}"/>
                 <ComboBox
                         Grid.Column="2"
                         HorizontalAlignment="Right"

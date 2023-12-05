@@ -12,7 +12,7 @@
     <Window.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
     </Window.Resources>
-    <Border CornerRadius="25" Background="#151f2d" >
+    <Border CornerRadius="25" Background="#1A1A1C" >
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Border Background="#1e2e44" CornerRadius="25 0 0 25" Grid.RowSpan="3">
+            <Border Background="#19191A" CornerRadius="25 0 0 25" Grid.RowSpan="3">
                 <Grid>
                     <StackPanel VerticalAlignment="Top" Orientation="Vertical">
                         <!--Ellipses-->
@@ -103,7 +103,7 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <Grid Grid.Column="1"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" Width="auto" Background="#151f2d">
+            <Grid Grid.Column="1"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" Width="auto" Background="#1A1A1C">
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource MaterialDesignToolButton}" Width="40" Height="40" Margin="0 0 10 0"  PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown">
                         <md:PackIcon Kind="Minimize" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="{StaticResource MainColor}"/>

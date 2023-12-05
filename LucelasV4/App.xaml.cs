@@ -80,7 +80,7 @@ namespace LucelasV4
             regMan.RegisterForNavigation<ContractPage.Views.ContractSingle>();
             regMan.RegisterForNavigation<ContractPage.Views.SearchAdressPage>();
             regMan.RegisterForNavigation<ContractPage.Views.SearchNamePage>();
-            regMan.RegisterForNavigation<ContractPage.Views.SearchCompanyPage>();
+            regMan.RegisterForNavigation<ContractPage.Views.FindInventoryItem>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListPage>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.BankListSingle>();
             regMan.RegisterForNavigation<DepositWithdrawal.Views.FindItemPage>();

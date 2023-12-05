@@ -15,7 +15,7 @@
     <b:Interaction.Behaviors>
         <behavior:ValidationErrorBehavior x:Name="Behavior"/>
     </b:Interaction.Behaviors>
-    <DockPanel Background="#1e2e44">
+    <DockPanel Background="#19191A">
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" DockPanel.Dock="Top" Margin="20 8 20 0"/>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="20 0 20 0" >
             <DatePicker 
