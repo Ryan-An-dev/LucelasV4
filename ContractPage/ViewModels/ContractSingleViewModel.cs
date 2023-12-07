@@ -132,6 +132,8 @@ namespace ContractPage.ViewModels
                 case "AddProduct":
                     this.Contract.Value.isChanged = true;
                     SearchCompanySelectExcute();
+                    this.Contract.Value.TotalPrice();
+                    ProductMemoCombine();
                     break;
                 case "DeleteProduct":
                     JObject jobj = new JObject();
@@ -157,6 +159,8 @@ namespace ContractPage.ViewModels
                     }
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     this.Contract.Value.isChanged = true;
+                    this.Contract.Value.TotalPrice();
+                    ProductMemoCombine();
                     break;
                 case "AddPayment":
                     this.Contract.Value.isChanged = true;
@@ -221,9 +225,16 @@ namespace ContractPage.ViewModels
 
             }
         }
+        private void ProductMemoCombine() {
+            this.Contract.Value.ProductMemoCombine.Value = "";
+            foreach (ContractedProduct temp in this.Contract.Value.Product) {
+                this.Contract.Value.ProductMemoCombine.Value +="["+temp.FurnitureInventory.Value.Name.Value +"]" +"\r\n" + temp.Memo.Value+"\r\n"+"\r\n";
+            }
+        }
         private void SearchCompanySelectExcute() {
             DialogParameters p = new DialogParameters();
-            p.Add("object", null);
+            ContractedProduct temp =new ContractedProduct();
+            p.Add("object", temp);
             this.dialogService.ShowDialog("FindInventoryItem", p, r => SetProduct(r), "CommonDialogWindow");
         }
         private void SetProduct(IDialogResult r) {
@@ -233,16 +244,12 @@ namespace ContractPage.ViewModels
                 if (!r.Parameters.ContainsKey("object")) return;
                 else
                 {
-                    Product temp = null;
+                    ContractedProduct temp = null;
                     r.Parameters.TryGetValue("object", out temp);
                     if (this.Contract.Value != null)
                     {
-                        ContractedProduct pro = new ContractedProduct();
-                        pro.Action.Value = AddDelete.Add;
-                        pro.ForTotal += this.Contract.Value.TotalPrice;
-                        pro.SetSub();
-                        pro.FurnitureInventory.Value = temp;
-                        this.Contract.Value.Product.Add(pro);
+                        temp.Action.Value = AddDelete.Add;
+                        this.Contract.Value.Product.Add(temp);
                     }
                 }
             }

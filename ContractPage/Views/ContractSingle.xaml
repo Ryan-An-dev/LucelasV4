@@ -163,9 +163,11 @@
                                     Width="*" Binding="{Binding FurnitureInventory.Value.Price.Value, StringFormat=\{0:N0\}}"       
                                     IsReadOnly="True"/>
                                 <DataGridTextColumn 
+                                    IsReadOnly="True"
                                     Header="판매금액" Width="*"
                                     Binding="{Binding SellPrice.Value, StringFormat=\{0:N0\}}"/>
                                 <DataGridTextColumn 
+                                    IsReadOnly="True"
                                     Header="수량"
                                     Width="*" 
                                     Binding="{Binding SellCount.Value}"/>
@@ -183,6 +185,17 @@
                                 FontSize="13" 
                                 FontWeight="Bold"/>
                         </StackPanel>
+                        <TextBox 
+                            Margin="10 0 10 12"
+                            IsReadOnly="True"
+                            md:HintAssist.Hint="제품 특이사항"
+                            FontSize="14"  
+                            Height="130"
+                            TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                            Text="{Binding Contract.Value.ProductMemoCombine.Value}"
+                            Foreground="{StaticResource MainColor}"  
+                            md:HintAssist.IsFloating="True"
+                            />
                     </StackPanel>
 
                 </GroupBox>

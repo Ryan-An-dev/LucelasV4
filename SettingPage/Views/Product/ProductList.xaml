@@ -66,7 +66,8 @@
                 CommandParameter="Delete"
                 Margin="5"/>
         </StackPanel>
-        <DataGrid  
+        
+        <DataGrid
             Grid.ColumnSpan="2"
             x:Name="List"
             VirtualizingStackPanel.IsVirtualizing="True"

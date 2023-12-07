@@ -1,4 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using CommonModel;
+using Prism.Commands;
+using Reactive.Bindings;
+using SettingPage.ViewModels;
+using System;
+using System.Runtime.Intrinsics.Arm;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace SettingPage.Views
 {

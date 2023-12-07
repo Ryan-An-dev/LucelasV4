@@ -89,11 +89,11 @@
                     <Button 
                         Content="{md:PackIcon Kind=Search}" 
                         Padding="0" 
-                        Height="25" 
+                        Height="40"  Margin="30 0 8 0"
                         Width="40"
                         VerticalAlignment="Bottom" 
                         Cursor="Hand" 
-                        Command="{Binding SearchButton}" Margin="0 0 8 0"/>
+                        Command="{Binding SearchButton}" />
                 </StackPanel>
                 <Button DockPanel.Dock="Right" 
                         HorizontalAlignment="Right"

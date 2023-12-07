@@ -280,7 +280,14 @@ namespace ContractPage.ViewModels
         private FurnitureType GetProductType(int id) {
             return this.furnitureInfos.FirstOrDefault(x => x.Id.Value == id);
         }
-
+        private void ProductMemoCombine(Contract temper)
+        {
+            temper.ProductMemoCombine.Value = "";
+            foreach (ContractedProduct temp in temper.Product)
+            {
+                temper.ProductMemoCombine.Value += "[" + temp.FurnitureInventory.Value.Name.Value + "]" + "\r\n" + temp.Memo.Value + "\r\n";
+            }
+        }
         private void SetContractHistory(JObject msg)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -340,11 +347,10 @@ namespace ContractPage.ViewModels
                             if (inner["product_list"] != null)
                             {
                                 foreach (JObject con in inner["product_list"] as JArray) {
-                                    ContractedProduct contractproduct = SetProduct(con);
-                                    contractproduct.ForTotal += temp.TotalPrice;
-                                    contractproduct.SetSub();
+                                    ContractedProduct contractproduct = SetProduct(con);    
                                     temp.Product.Add(contractproduct);
                                 }
+                                temp.TotalPrice();
                                 string combine = "";
                                 foreach (ContractedProduct item in temp.Product) {
                                     if (combine != string.Empty) {
@@ -357,6 +363,7 @@ namespace ContractPage.ViewModels
                                         ;
                                 }
                                 temp.ProductNameCombine.Value = combine;
+                                ProductMemoCombine(temp);
                             }
                             if (inner["total"] != null)
                                 temp.Price.Value = inner["total"].ToObject<int>();

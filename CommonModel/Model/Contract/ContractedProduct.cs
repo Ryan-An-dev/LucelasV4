@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,6 @@ namespace CommonModel.Model
     {
         public ReactiveProperty<AddDelete> Action { get; set; }
 
-        public event Action<int> ForTotal;
         public ReactiveProperty<int> Id { get; set; } //id
         
         public ReactiveProperty<int> No { get; set; } // 순서
@@ -31,6 +31,8 @@ namespace CommonModel.Model
         public ReactiveProperty<int> SellCount { get; set; }//주문수량
         public ReactiveProperty<int> total { get; set; } //개별 물건의 총량
 
+        public ReactiveProperty<string> Memo { get; set; } //메모
+
         public ContractedProduct() : base()
         {
             this.total = new ReactiveProperty<int>().AddTo(disposable);
@@ -40,6 +42,7 @@ namespace CommonModel.Model
             this.SellPrice = CreateProperty<int>("판매금액");
             this.FurnitureInventory = new ReactiveProperty<Product>().AddTo(disposable);
             this.Action = new ReactiveProperty<AddDelete>(AddDelete.Add).AddTo(disposable);
+            this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             SetObserver();
         }
         public JObject MakeJson()
@@ -49,6 +52,7 @@ namespace CommonModel.Model
             jobj["product_info"] = this.FurnitureInventory.Value.MakeJson();
             jobj["sell_price"] = this.SellPrice.Value;
             jobj["order_count"] = this.SellCount.Value;
+            jobj["memo"] = this.Memo.Value;
             jobj["product_action"] = (int)this.Action.Value;
             return jobj;
         }
@@ -64,11 +68,9 @@ namespace CommonModel.Model
         public override void SetObserver()
         {
             this.SellPrice.Subscribe(x=> GetTotal("sell_price",x));
+            this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.SellCount.Subscribe(x => GetTotal("order_count", x));
             this.Action.Subscribe(x => ChangedJson("action", (int)x));
-        }
-        public void SetSub() {
-            this.total.Subscribe(x => ForTotal(x));
         }
     }
 }

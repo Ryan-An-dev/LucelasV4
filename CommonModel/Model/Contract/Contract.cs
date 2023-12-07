@@ -40,7 +40,8 @@ namespace CommonModel.Model
 
         public ReactiveProperty<string> ProductNameCombine { get; set; }
 
-        
+        public ReactiveProperty<string> ProductMemoCombine { get; set; }
+
         public Contract()
         {
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
@@ -56,7 +57,7 @@ namespace CommonModel.Model
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
             this.Product = new ReactiveCollection<ContractedProduct>().AddTo(disposable);
             ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
-            
+            ProductMemoCombine = new ReactiveProperty<string>().AddTo(disposable);
             this.Contractor.Value = new Customer();
             SetObserver();
         }
@@ -86,7 +87,7 @@ namespace CommonModel.Model
                 isChanged = true;
             }
         }
-        public void TotalPrice(int temp) {
+        public void TotalPrice() {
             int temper = 0; 
             foreach (ContractedProduct item in this.Product) {
                 temper+=item.total.Value;

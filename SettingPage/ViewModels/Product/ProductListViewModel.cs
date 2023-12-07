@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SettingPage.ViewModels
 {
@@ -28,7 +29,7 @@ namespace SettingPage.ViewModels
         {
             get { return Enum.GetValues(typeof(CompanyProductSelect)).Cast<CompanyProductSelect>(); }
         }
-        
+        public ReactiveCommand List_MouseDoubleClick { get; set; }
 
         [TypeConverter(typeof(EnumDescriptionTypeConverter))]
         public enum CompanyProductSelect
@@ -41,6 +42,7 @@ namespace SettingPage.ViewModels
         public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; }
         public ProductListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
+            List_MouseDoubleClick = new ReactiveCommand().WithSubscribe(()=> RowDoubleClickEvent()).AddTo(disposable);
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
         }

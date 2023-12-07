@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using ContractPage.ViewModels;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace ContractPage.Views
 {
@@ -11,5 +13,17 @@ namespace ContractPage.Views
         {
             InitializeComponent();
         }
+
+        //private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+
+        //    if (DataContext is FindInventoryItemViewModel viewModel)
+        //    {
+        //        if (viewModel.SelectedFurniture.Value != null)
+        //        {
+        //            viewModel.SelectedFurniture.Value.Memo.Value = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd).Text;
+        //        }
+        //    }
+        //}
     }
 }

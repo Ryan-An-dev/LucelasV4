@@ -6,6 +6,7 @@
              xmlns:prism="http://prismlibrary.com/"       
              xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"           
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              mc:Ignorable="d" 
@@ -45,7 +46,8 @@
                             <local:CompanyList DataContext="{Binding CompanyListViewModel}"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <local:ProductList DataContext="{Binding ProductListViewModel}"/>
+                            <local:ProductList
+                                DataContext="{Binding ProductListViewModel}"/>
                         </Grid>
                     </Grid>
                 </GroupBox>
