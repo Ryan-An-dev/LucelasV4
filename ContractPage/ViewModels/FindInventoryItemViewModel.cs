@@ -103,6 +103,11 @@ namespace ContractPage.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             SelectedFurniture.Value = parameters.GetValue<ContractedProduct>("object");
+            if (SelectedFurniture.Value.FurnitureInventory.Value != null) { 
+                this.SelectedItem.Value = SelectedFurniture.Value.FurnitureInventory.Value;
+                SearchTitle(SelectedFurniture.Value.FurnitureInventory.Value.Name.Value);
+            }
+
         }
         private Company SetCompanyInfo(JObject jobj)
         {

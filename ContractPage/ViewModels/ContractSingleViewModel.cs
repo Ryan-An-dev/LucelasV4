@@ -65,8 +65,11 @@ namespace ContractPage.ViewModels
         public ReactiveCollection<Employee> EmployeeInfos { get; set; }
         public ReactiveProperty<Employee> SelectedEmployee { get; set; }
         public IDialogService dialogService { get; }
+        public ReactiveProperty<PrismCommonModelBase> SelectedItem { get; set; }
+        public DelegateCommand RowDoubleClick { get; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
+            this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);
             SetEditMode = new DelegateCommand<string>(ExecSetEditMode);
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
@@ -97,9 +100,41 @@ namespace ContractPage.ViewModels
             Title.Value = "신규등록";
             EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
+            this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
+        }
+        public void RowDoubleClickEvent()
+        {
+            if (SelectedItem.Value == null)
+                return;
+            DialogParameters dialogParameters = new DialogParameters();
+            SelectedItem.Value.ClearJson();
+            dialogParameters.Add("object", SelectedItem.Value as ContractedProduct);
+
+            dialogService.ShowDialog("FindInventoryItem", dialogParameters, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        ContractedProduct item = r.Parameters.GetValue<ContractedProduct>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["changed_item"] = item.ChangedItem;
+                                jobj["product_id"] = item.Id.Value;
+                                network.Update(jobj);
+                            }
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
         }
 
-        
         private void ExecSetEditMode(string obj)
         {
             switch (obj) {

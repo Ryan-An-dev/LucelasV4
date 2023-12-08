@@ -47,23 +47,34 @@
                         </DatePicker.SelectedDate>
                     </DatePicker>
                 </Grid>
-
-                <GroupBox Header="고객인적사항" Margin="0 20 0 0">
-                    <StackPanel>
-                        <Button 
-                            Margin="10 0 0 0"
-                            x:Name="EditMode"
-                            Visibility="{Binding IsNewContract.Value}"
-                            Content="{Binding ButtonName.Value}"
-                            CommandParameter="{Binding Content, ElementName=EditMode}"
-                            Command="{Binding SetEditMode}" 
-                            Width="60" 
-                            HorizontalAlignment="Right" Cursor="Hand"/>
-
+                
+                <GroupBox Margin="0 20 0 0" x:Name="custGroup">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" Width="540">
+                            <TextBlock 
+                                VerticalAlignment="Center"
+                                Text="고객인적사항" 
+                                FontSize="14" 
+                                FontWeight="Bold" 
+                                Foreground="{StaticResource MainColor}"/>
+                            <Button
+                               BorderThickness="2"
+                               BorderBrush="AliceBlue"
+                               Margin="380 0 0 0"
+                               x:Name="EditMode"
+                               Visibility="{Binding IsNewContract.Value}"
+                               Content="{Binding ButtonName.Value}"
+                               CommandParameter="{Binding Content, ElementName=EditMode}"
+                               Command="{Binding SetEditMode}" 
+                               Width="60" 
+                               Height="34"
+                               Cursor="Hand" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel IsEnabled="{Binding CustIsReadOnly.Value , Converter={StaticResource ReverseBool}}">
                         <StackPanel Orientation="Horizontal">
                             <TextBox 
-                                MinWidth="420" Margin="0 0 10 12" 
-                                IsEnabled="{Binding CustIsReadOnly.Value}"
+                                MinWidth="420" Margin="0 0 10 12"
                                 md:HintAssist.Hint="이름"
                                 FontSize="14"  
                                 x:Name="Search"
@@ -79,7 +90,6 @@
                                 </Binding>
                             </TextBox>
                             <Button
-                                IsEnabled="{Binding CustIsReadOnly.Value}"
                                 Margin="10 0 0 0"
                                 Content="검색"
                                 CommandParameter="{Binding Text, ElementName=Search}"
@@ -88,8 +98,8 @@
                                 HorizontalAlignment="Right" Cursor="Hand"/>
                         </StackPanel>
 
+                            
                         <TextBox 
-                            IsReadOnly="{Binding CustIsReadOnly.Value}"
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
                             Text="{Binding Contract.Value.Contractor.Value.Phone.Value}"
@@ -106,7 +116,6 @@
                                 Foreground="{StaticResource MainColor}"  
                                 md:HintAssist.IsFloating="True"/>
                             <Button
-                                IsEnabled="{Binding CustIsReadOnly.Value, Converter={StaticResource ReverseBool}}"
                                  Margin="10 0 0 0"
                                  Content="검색"
                                  CommandParameter="{Binding Text, ElementName=ContractorName}"
@@ -115,7 +124,6 @@
                                  HorizontalAlignment="Right" Cursor="Hand"/>
                         </StackPanel>
                         <TextBox 
-                            IsReadOnly="{Binding CustIsReadOnly.Value}"
                             md:HintAssist.Hint="상세주소입력"
                             FontSize="14"  
                             Text="{Binding Contract.Value.Contractor.Value.Address1.Value, Mode=TwoWay}"
@@ -149,10 +157,13 @@
                             RowHeight="40"
                             Margin="5"
                             ItemsSource="{Binding Contract.Value.Product}"
-                            SelectedItem="{Binding SelectedProduct.Value}"
+                            SelectedItem="{Binding SelectedItem.Value}"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
                             >
+                            <DataGrid.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+                            </DataGrid.InputBindings>
                             <DataGrid.Columns>
                                 <DataGridTextColumn 
                                     Header="제품명" Width="*" 
@@ -254,8 +265,8 @@
                             Width="200" HorizontalAlignment="Left" 
                             md:HintAssist.Hint="배송희망일" FontSize="14" 
                             md:HintAssist.IsFloating="True"  
-                            Foreground="{StaticResource MainColor}" 
-                            BorderBrush="{StaticResource MainColor}" >
+                            Foreground="{StaticResource textColor2}" 
+                            BorderBrush="{StaticResource textColor2}" >
                                 <DatePicker.SelectedDate>
                                     <Binding Path="Contract.Value.Delivery.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
@@ -268,8 +279,8 @@
                            md:HintAssist.Hint="희망시간"
                            FontSize="14" Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
                            md:HintAssist.IsFloating="True"  
-                           Foreground="{StaticResource MainColor}" 
-                           BorderBrush="{StaticResource MainColor}" >
+                           Foreground="{StaticResource textColor2}" 
+                           BorderBrush="{StaticResource textColor2}" >
                                 <md:TimePicker.Text>
                                     <Binding 
                                     Path="Contract.Value.Delivery.Value"

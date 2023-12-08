@@ -22,8 +22,8 @@
                 IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
                 md:HintAssist.Hint="날짜" FontSize="14" 
                 md:HintAssist.IsFloating="True"  
-                Foreground="{StaticResource MainColor}" 
-                BorderBrush="{StaticResource MainColor}" >
+                Foreground="{StaticResource textColor2}" 
+                BorderBrush="{StaticResource textColor2}" >
                 <DatePicker.SelectedDate>
                     <Binding Path="ReceiptModel.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -38,8 +38,8 @@
                            md:HintAssist.Hint="시간"
                            FontSize="14" 
                            md:HintAssist.IsFloating="True"  
-                           Foreground="{StaticResource MainColor}" 
-                           BorderBrush="{StaticResource MainColor}" >
+                           Foreground="{StaticResource textColor2}" 
+                           BorderBrush="{StaticResource textColor2}" >
                 <md:TimePicker.Text>
                     <Binding Path="ReceiptModel.Value.Month.Value"
                              NotifyOnValidationError="True" 
@@ -57,18 +57,19 @@
                 IsReadOnly="True" 
                 FontSize="14" 
                 Text="{Binding ReceiptModel.Value.ReceiptNo.Value}"  
-                Foreground="{StaticResource MainColor}" 
+                Foreground="{StaticResource textColor2}" 
                 md:TextFieldAssist.HasClearButton="False" 
                 md:HintAssist.IsFloating="True" 
                 IsEnabled="False" 
                 Cursor="IBeam"/>
             <ComboBox 
+                Style="{StaticResource MaterialDesignComboBox}"
                 md:HintAssist.Hint="대분류" 
                 FontSize="14" 
                 ItemsSource="{Binding SearchIncomeCostTypeValues}"
                 SelectedItem="{Binding ReceiptModel.Value.IncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Margin="0 0 0 12" 
-                Foreground="{StaticResource MainColor}"  
+                Foreground="{StaticResource textColor2}"  
                 md:HintAssist.IsFloating="True"/>
             <ComboBox 
                 md:HintAssist.Hint="중분류"
@@ -77,7 +78,7 @@
                 SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="14" 
                 Margin="0 0 0 12" 
-                Foreground="{StaticResource MainColor}"  
+                Foreground="{StaticResource textColor2}"  
                 md:HintAssist.IsFloating="True"/>
             <ComboBox 
                 SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -85,7 +86,7 @@
                 ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
                 FontSize="14"
                 Margin="0 0 0 12" 
-                Foreground="{StaticResource MainColor}"  
+                Foreground="{StaticResource textColor2}"  
                 md:HintAssist.IsFloating="True" />
             <TextBox 
                 md:HintAssist.Hint="금액"
