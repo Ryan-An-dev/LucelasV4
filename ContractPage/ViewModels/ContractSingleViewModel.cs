@@ -80,6 +80,7 @@ namespace ContractPage.ViewModels
                 if (x == Visibility.Collapsed) //신규 계약
                 {
                     IsNewContractReverse.Value = Visibility.Visible;
+                    CustIsReadOnly.Value = false; //편집모드 진입
                 }
                 else { //기존계약
                     IsNewContractReverse.Value = Visibility.Collapsed;
