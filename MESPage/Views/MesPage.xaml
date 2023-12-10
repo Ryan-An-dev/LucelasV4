@@ -5,6 +5,7 @@
              xmlns:mah ="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local ="clr-namespace:MESPage.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,227 +15,210 @@
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
     </UserControl.Resources>
-    <md:DrawerHost BorderThickness="2" BorderBrush="Transparent">
-        <!-- Drawer -->
-        <md:DrawerHost.RightDrawerContent>
-            <ContentControl x:Name="Cc" prism:RegionManager.RegionName="BankListSingleRegion"/>
-        </md:DrawerHost.RightDrawerContent>
+    <Grid>
+            <!--Visibility="{Binding SearchVisibility.Value, UpdateSourceTrigger=PropertyChanged}"-->
+        <!--<Grid 
+            Visibility="Collapsed"
+            Panel.ZIndex="1"
+            Opacity="0.5" 
+            Background="#151f2d">
+            <fa:ImageAwesome Icon="Refresh" Spin="True" Height="48" Width="48" Foreground="White"/>
+        </Grid>-->
+        <md:DrawerHost BorderThickness="2" BorderBrush="Transparent">
+            <!-- Drawer -->
+            <md:DrawerHost.RightDrawerContent>
+                <ContentControl x:Name="Cc" prism:RegionManager.RegionName="MesSingleRegion"/>
+            </md:DrawerHost.RightDrawerContent>
 
-        <!-- Main -->
-        <DockPanel Margin="20 8 20 20" LastChildFill="True" x:Name="Doc">
-            <!-- Search Condition -->
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="재고 관리" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
-                <ComboBox
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
-                        ItemsSource="{Binding CountList}"
-                        SelectedValue="{Binding ListCount.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignComboBox}" 
-                        md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="리스트설정"
-                        Foreground="{StaticResource MainColor}"
-                        Margin=" 0 4 0 0" Cursor="">
-                </ComboBox>
-            </Grid>
+            <!-- Main -->
+            <DockPanel Margin="20 8 20 20" LastChildFill="True" x:Name="Doc">
 
-            <DockPanel Dock="Top">
-                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
+                <!-- Search Condition -->
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="재고 관리" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
                     <ComboBox
-                        ItemsSource="{Binding SearchIncomeCostTypeValues}"
-                        SelectedItem="{Binding SearchIncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        Style="{StaticResource MaterialDesignComboBox}" 
-                        md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="용도"
-                        Foreground="{StaticResource MainColor}"
-                        Margin=" 0 4 20 0">
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    ItemsSource="{Binding CountList}"
+                    SelectedValue="{Binding ListCount.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource MaterialDesignComboBox}" 
+                    md:HintAssist.IsFloating="True" 
+                    md:HintAssist.Hint="리스트설정"
+                    Foreground="{StaticResource MainColor}"
+                    Margin=" 0 4 0 0" Cursor="">
                     </ComboBox>
-                    <ComboBox
-                        ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchFullyCompleted.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignComboBox}" 
+                </Grid>
+
+                <DockPanel Dock="Top">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
+                        <ComboBox
+                    ItemsSource="{Binding SearchIncomeCostTypeValues}"
+                    SelectedItem="{Binding SearchIncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    Style="{StaticResource MaterialDesignComboBox}" 
+                    md:HintAssist.IsFloating="True" 
+                    md:HintAssist.Hint="용도"
+                    Foreground="{StaticResource textColor2}"
+                    Margin=" 0 4 20 0">
+                        </ComboBox>
+                        <ComboBox
+                    ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
+                    SelectedItem="{Binding SearchFullyCompleted.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource MaterialDesignComboBox}" 
+                    md:HintAssist.IsFloating="True" 
+                    md:HintAssist.Hint="구입처"
+                    Foreground="{StaticResource textColor2}"
+                    Margin=" 0 4 20 0"
+                    />
+                        <StackPanel Orientation="Horizontal">
+                            <DatePicker 
+                        BorderBrush="{StaticResource textColor2}"
+                        md:HintAssist.Hint="시작일" FontSize="14" 
+                        Margin="0 0 8 0" 
                         md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="구입처"
-                        Foreground="{StaticResource MainColor}"
-                        Margin=" 0 4 20 0"
-                        />
-                    <StackPanel Orientation="Horizontal">
-                        <DatePicker 
-                            BorderBrush="{StaticResource MainColor}"
-                            md:HintAssist.Hint="시작일" FontSize="14" 
-                            Margin="0 0 8 0" 
-                            md:HintAssist.IsFloating="True" 
-                            SelectedDate="{Binding StartDate.Value, TargetNullValue=''}" 
-                            Foreground="{StaticResource MainColor}"/>
-                        <TextBlock Text="～"  
-                                   Foreground="{StaticResource MainColor}" 
-                                   VerticalAlignment="Center" 
-                                   FontSize="14" Margin="0 0 8 0"
-                                   Padding="0 14 0 0"/>
-                        <DatePicker 
-                            BorderBrush="{StaticResource MainColor}" 
-                            md:HintAssist.Hint="종료일" 
-                            FontSize="14" Margin="0 0 12 0" 
-                            md:HintAssist.IsFloating="True" 
-                            
-                            SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
-                            Foreground="{StaticResource MainColor}"/>
+                        SelectedDate="{Binding StartDate.Value, TargetNullValue=''}" 
+                        Foreground="{StaticResource textColor2}"/>
+                            <TextBlock Text="～"  
+                               Foreground="{StaticResource textColor2}" 
+                               VerticalAlignment="Center" 
+                               FontSize="14" Margin="0 0 8 0"
+                               Padding="0 14 0 0"/>
+                            <DatePicker 
+                        BorderBrush="{StaticResource textColor2}" 
+                        md:HintAssist.Hint="종료일" 
+                        FontSize="14" Margin="0 0 12 0" 
+                        md:HintAssist.IsFloating="True" 
+                        
+                        SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
+                        Foreground="{StaticResource textColor2}"/>
+                        </StackPanel>
+
+                        <Button 
+                    Content="{md:PackIcon Size=25, Kind=Search}" 
+                    Padding="0" Height="40"
+                    Width="40" VerticalAlignment="Bottom" 
+                    Cursor="Hand" Command="{Binding SearchButton}" 
+                    Margin="30 0 8 0"/>
+
                     </StackPanel>
 
+                    <Button DockPanel.Dock="Right" 
+                    HorizontalAlignment="Right" 
+                    Command="{Binding NewButton}"
+                    Height="35" Width="140" 
+                    VerticalAlignment="Bottom"
+			        Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    Content="신규 재고 추가"
+                    FontWeight="Bold"
+                    Cursor="Hand" Margin="0 0 0 10"/>
+                </DockPanel>
+
+                <StackPanel Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     <Button 
-                        Content="{md:PackIcon Size=25, Kind=Search}" 
-                        Padding="0" Height="40"
-                        Width="40" VerticalAlignment="Bottom" 
-                        Cursor="Hand" Command="{Binding SearchButton}" 
-                        Margin="30 0 8 0"/>
-                  
+                        Width="30" 
+                        Height="30" 
+                        Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
+                        Margin="5 5 5 5" 
+                        Foreground="{StaticResource MainColor}" 
+                        Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Prev}"
+            />
+                    <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} / {1}({2})">
+                                <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                                <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                                <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Button 
+            Width="30" 
+            Height="30" 
+            Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
+            Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
+            Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Next}"/>
+
                 </StackPanel>
 
-                <Button DockPanel.Dock="Right" 
-                        HorizontalAlignment="Right" 
-                        Command="{Binding NewButton}"
-                        Height="35" Width="140" 
-                        VerticalAlignment="Bottom"
-				        Style="{StaticResource MaterialDesignFlatMidBgButton}" 
-                        Content="신규 재고 추가"
-                        FontWeight="Bold"
-                        Cursor="Hand" Margin="0 0 0 10"/>
+                <!-- List -->
+                <!--Background="{StaticResource MaterialDesignDarkBackground}"-->
+                <DataGrid 
+            x:Name="DataGrid"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            AutoGenerateColumns="False" 
+            CanUserAddRows="False"
+            DockPanel.Dock="Top" 
+            ItemsSource="{Binding ReceiptItems, UpdateSourceTrigger=PropertyChanged}" 
+            SelectedItem="{Binding SelectedItem.Value , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            Style="{StaticResource MaterialDesignDataGrid}"
+            IsReadOnly="True" 
+            Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                    <DataGrid.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                    MinWidth="50" Width="0.13*" 
+                    MaxWidth="65"  Binding="{Binding ListNo.Value}" 
+                    Header="No"/>
+                        <DataGridTextColumn
+                    MinWidth="50" Width="0.12*" 
+                    Binding="{Binding BankInfo.Value.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
+                    Header="용도"/>
+
+                        <DataGridTextColumn
+                    MinWidth="50" Width="0.12*" 
+                    Binding="{Binding BankInfo.Value.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
+                    Header="구입처"/>
+
+                        <DataGridTextColumn 
+                    MinWidth="120" Width="0.15*" 
+                    HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
+                    Binding="{Binding Month.Value, StringFormat=yyyy-MM-dd HH:mm:ss}" 
+                    Header="입고일"/>
+
+                        <DataGridTextColumn 
+                    MinWidth="100" Width="0.08*" 
+                    Binding="{Binding ReceiptType.Value}" 
+                    Header="제품종류" />
+
+                        <DataGridTextColumn 
+                    MinWidth="80" Width="0.1*"
+                    Header="금액">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding Money.Value,StringFormat=+\{0:N0\}}"/>
+                                    <Setter Property="Foreground" Value="Blue"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IncomeCostType.Value}" Value="2">
+                                            <Setter Property="Text" Value="{Binding Money.Value,StringFormat=-\{0:N0\}}"/>
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+
+                        <DataGridTextColumn 
+                    MinWidth="80" Width="0.18*" 
+                    Binding="{Binding Memo.Value}" 
+                    Header="메모"/>
+                        <DataGridTextColumn 
+                    MinWidth="100" Width="0.13*" 
+                    Binding="{Binding Tip.Value}" 
+                    Header="상태"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
-           
-            <StackPanel Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                <Button 
-                Width="30" 
-                Height="30" 
-                Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
-                Margin="5 5 5 5" 
-                Foreground="{StaticResource MainColor}" 
-                Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Prev}"
-                />
-                <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0} / {1}({2})">
-                            <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                            <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                            <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <Button 
-                Width="30" 
-                Height="30" 
-                Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
-                Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
-                Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Next}"/>
-
-            </StackPanel>
-            <Border 
-                DockPanel.Dock="Bottom" 
-                BorderThickness="3" Padding="5" CornerRadius="5"
-                HorizontalAlignment="Right" BorderBrush="{StaticResource MainColor}"
-                Background="White" Opacity="0.5">
-                <StackPanel 
-                Orientation="Horizontal">
-                    <TextBlock 
-                        Padding="5"
-                        VerticalAlignment="Center"
-                        Text="기간내 총 입금액 : " 
-                        Foreground="Black"/>
-                    <TextBlock Padding="5"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="{Binding TotalIncome.Value, UpdateSourceTrigger=PropertyChanged,StringFormat=+\{0:N0\}, FallbackValue=0}"  
-                        Foreground="Blue" />
-
-                    <TextBlock Padding="5" Text="  ||  " Foreground="White" />
-
-                    <TextBlock VerticalAlignment="Center" Padding="5"
-                        Text="총 출금액 : " 
-                        Foreground="Black"/>
-                    <TextBlock VerticalAlignment="Center" Padding="5"
-                        FontSize="14"
-                        Text="{Binding TotalCost.Value, UpdateSourceTrigger=PropertyChanged,StringFormat=-\{0:N0\}, FallbackValue=0}"  
-                        Foreground="Red" />
-                </StackPanel>
-
-            </Border>
-            <!-- List -->
-            <!--Background="{StaticResource MaterialDesignDarkBackground}"-->
-            <DataGrid 
-                x:Name="DataGrid"
-                VirtualizingStackPanel.IsVirtualizing="True"
-                VirtualizingStackPanel.VirtualizationMode="Recycling"
-                AutoGenerateColumns="False" 
-                CanUserAddRows="False"
-                DockPanel.Dock="Top" 
-                ItemsSource="{Binding ReceiptItems, UpdateSourceTrigger=PropertyChanged}" 
-                SelectedItem="{Binding SelectedItem.Value , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                Style="{StaticResource MaterialDesignDataGrid}"
-                IsReadOnly="True" 
-                Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-                <DataGrid.InputBindings>
-                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
-                </DataGrid.InputBindings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        MinWidth="50" Width="0.13*" 
-                        MaxWidth="65"  Binding="{Binding ListNo.Value}" 
-                        Header="No"/>
-                    <DataGridTextColumn
-                        MinWidth="50" Width="0.12*" 
-                        Binding="{Binding BankInfo.Value.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
-                        Header="용도"/>
-
-                    <DataGridTextColumn
-                        MinWidth="50" Width="0.12*" 
-                        Binding="{Binding BankInfo.Value.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
-                        Header="구입처"/>
-                    
-                    <DataGridTextColumn 
-                        MinWidth="120" Width="0.15*" 
-                        HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
-                        Binding="{Binding Month.Value, StringFormat=yyyy-MM-dd HH:mm:ss}" 
-                        Header="입고일"/>
-                    
-                    <DataGridTextColumn 
-                        MinWidth="100" Width="0.08*" 
-                        Binding="{Binding ReceiptType.Value}" 
-                        Header="제품종류" />
-                    
-                    <DataGridTextColumn 
-                        MinWidth="80" Width="0.1*"
-                        Header="금액">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{Binding Money.Value,StringFormat=+\{0:N0\}}"/>
-                                <Setter Property="Foreground" Value="Blue"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IncomeCostType.Value}" Value="2">
-                                        <Setter Property="Text" Value="{Binding Money.Value,StringFormat=-\{0:N0\}}"/>
-                                        <Setter Property="Foreground" Value="Red"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    
-                    <DataGridTextColumn 
-                        MinWidth="80" Width="0.18*" 
-                        Binding="{Binding Memo.Value}" 
-                        Header="메모"/>
-                    <DataGridTextColumn 
-                        MinWidth="100" Width="0.13*" 
-                        Binding="{Binding Tip.Value}" 
-                        Header="상태"/>
-                  
-                </DataGrid.Columns>
-            </DataGrid>
-
-        </DockPanel>
-    </md:DrawerHost>
+        </md:DrawerHost>
+    </Grid>
+    
 </UserControl>

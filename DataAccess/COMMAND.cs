@@ -86,5 +86,12 @@ namespace DataAccess
         #region 통계데이터
         GetDailyList = 60,
         #endregion
+
+        #region 재고관리
+        GET_INVENTORY_LIST = 80,
+        UPDATE_INVENTORY_LIST,
+        CREATE_INVENTORY_LIST,
+        DELETE_INVENTORY_LIST,
+        #endregion
     }
 }

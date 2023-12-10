@@ -86,6 +86,7 @@ namespace LucelasV4
             regMan.RegisterForNavigation<DepositWithdrawal.Views.FindItemPage>();
             regMan.RegisterForNavigation<StatisticsPage.Views.StatisticsPage>();
             regMan.RegisterForNavigation<MESPage.Views.MesPage>();
+            regMan.RegisterForNavigation<MESPage.Views.MesSingle>();
             regMan.RegisterForNavigation<DeliveryPage.Views.DeliveryPage>();
         }
 
@@ -101,12 +102,15 @@ namespace LucelasV4
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();
             containerRegistry.Register<ICustomerRepository, CustomerRepository>();
+            containerRegistry.Register<IInventoryRepository, InventoryRepository>();
             containerRegistry.Register<IProductRepository, ProductRepository>();
             containerRegistry.Register<ICompanyRepository, CompanyRepository>();
             containerRegistry.Register<IEmployeeRepository, EmployeeRepository>();
             containerRegistry.Register<IProductCategoryRepository, ProductCategoryRepository>();
             containerRegistry.Register<IAccountRepository, AccountRepository>();
             containerRegistry.Register<IApiRepository, APIRepository>();
+
+
             containerRegistry.RegisterDialogWindow<CommonDialogWindow>("CommonDialogWindow");
             containerRegistry.RegisterDialogWindow<AlertWindow1>("AlertWindow");
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");

@@ -16,5 +16,6 @@
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
     <ProjectReference Include="..\CommonModule\CommonModule.csproj" />
     <ProjectReference Include="..\DataAgent\DataAgent.csproj" />
+    <ProjectReference Include="..\SettingPage\SettingPage.csproj" />
   </ItemGroup>
 </Project>

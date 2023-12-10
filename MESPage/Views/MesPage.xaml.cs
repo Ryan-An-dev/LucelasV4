@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using Prism.Regions;
+using System.Windows.Controls;
 
 namespace MESPage.Views
 {
@@ -7,9 +8,11 @@ namespace MESPage.Views
     /// </summary>
     public partial class MesPage : UserControl
     {
-        public MesPage()
+        public MesPage(IRegionManager regionManager)
         {
             InitializeComponent();
+            if (regionManager.Regions.ContainsRegionWithName("MesSingleRegion")) return;
+            CommonModule.Logic.Utility.SetRegionManager(regionManager, Cc, "MesSingleRegion");
         }
     }
 }
