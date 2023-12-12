@@ -71,7 +71,7 @@ namespace MESPage.ViewModels
         public MesPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
             
-            this.SearchPurpose = new ReactiveProperty<Purpose>(Purpose.All).AddTo(this.disposable);
+            this.SearchPurpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);

@@ -173,7 +173,7 @@
                     Margin="0 20 0 0"
                     Header="재고정보">
                     <StackPanel Margin="10 0">
-                        <Grid DataContext="{Binding SelectedItem.Value}">
+                        <Grid DataContext="{Binding SelectedItem.Value}" IsEnabled="False">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -197,7 +197,7 @@
                                  md:HintAssist.IsFloating="True">
                             </TextBox>
                         </Grid>
-                        <Grid DataContext="{Binding SelectedItem.Value}">
+                        <Grid DataContext="{Binding SelectedItem.Value}" IsEnabled="False">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -234,14 +234,16 @@
                                   Foreground="{StaticResource MainColor}"
                                   md:HintAssist.IsFloating="True">
                             </TextBox>
-                            <TextBox 
+                            <ComboBox 
                                  Grid.Column="1"
                                   Margin="0 0 10 12"
                                   md:HintAssist.Hint="상태"
+                                  ItemsSource="{Binding PurposeTypeSelectValues}"
+                                  SelectedItem="{Binding PurposeTypeSelect.Value}"
                                   FontSize="14"
-                                  Foreground="{StaticResource MainColor}"
+                                  Foreground="{StaticResource textColor2}"
                                   md:HintAssist.IsFloating="True">
-                            </TextBox>
+                            </ComboBox>
                         </Grid>
                         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="160">
                             <TextBox

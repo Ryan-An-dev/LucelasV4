@@ -31,11 +31,15 @@ namespace MESPage.ViewModels
 
     public class MesSingleViewModel : PrsimListViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
-
         public ReactiveProperty<CompanyProductSelect> CompanyProductTypeSelect { get; set; } //검색옵션
         public IEnumerable<CompanyProductSelect> CompanyProductTypeSelectValues //검색옵션
         {
             get { return Enum.GetValues(typeof(CompanyProductSelect)).Cast<CompanyProductSelect>(); }
+        }
+        public ReactiveProperty<Purpose> PurposeTypeSelect { get; set; } //검색옵션
+        public IEnumerable<Purpose> PurposeTypeSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(Purpose)).Cast<Purpose>().Skip(1);  }
         }
         public ReactiveCommand List_MouseDoubleClick { get; set; }
 
@@ -72,7 +76,7 @@ namespace MESPage.ViewModels
 
         public DelegateCommand SaveButton { get; }
         public ReactiveProperty<string> Title { get; } = new();
-        public ReactiveProperty<ContractedProduct> Inventory { get; set; }
+        public ReactiveProperty<FurnitureInventory> Inventory { get; set; }
         public DelegateCommand DeleteButton { get; }
         public DelegateCommand SearchAddress { get; }
         public DelegateCommand<string> SearchName { get; }
@@ -88,6 +92,7 @@ namespace MESPage.ViewModels
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
 
+            PurposeTypeSelect= new ReactiveProperty<Purpose>().AddTo(disposable);
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
             IsNewContractReverse = new ReactiveProperty<Visibility>().AddTo(disposable);
             ContainerProvider = containerprovider;
@@ -95,7 +100,7 @@ namespace MESPage.ViewModels
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
-            Inventory = new ReactiveProperty<ContractedProduct>().AddTo(disposable);
+            Inventory = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             Title.Value = "신규등록";
         }
 
@@ -151,10 +156,6 @@ namespace MESPage.ViewModels
             }
         }     
        
-        public void Dispose()
-        {
-            _disposable.Dispose();
-        }
         public bool IsNavigationTarget(NavigationContext navigationContext) => false;
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
@@ -164,12 +165,12 @@ namespace MESPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            ContractedProduct Inventory = navigationContext.Parameters["object"] as ContractedProduct;
+            FurnitureInventory Inventory = navigationContext.Parameters["object"] as FurnitureInventory;
 
             if (Inventory == null)
             {
                 Title.Value = "신규 재고 추가";
-                this.Inventory.Value = new ContractedProduct();
+                this.Inventory.Value = new FurnitureInventory();
             }
             else
             {
