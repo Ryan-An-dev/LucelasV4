@@ -86,26 +86,18 @@ namespace DepositWithdrawal.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
             ReceiptModel item = null;
-            parameters.TryGetValue("AccountName", out item);
+            parameters.TryGetValue("object", out item);
             this.args.Value = item;
 
-            //요청보내고 (카드 or 현금에 대한 것)
-            using (var network = this.ContainerProvider.Resolve<DataAgent.BankListDataAgent>()) {
+            //계약 찾기
+            using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();
-                if (this.args.Value.ReceiptType.Value == ReceiptType.Cash)
-                {
-                    jobj["shi_key"] = "Cash";
-                }
-                else
-                {
-                    jobj["shi_key"] = this.args.Value.BankInfo.Value.AccountNum.Value;
-                }
-                jobj["shi_time"] = this.args.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                jobj["shi_id"] = this.args.Value.ReceiptNo.Value;
-                jobj["shi_remain_price"] = this.args.Value.RemainPrice.Value;
-                jobj["shi_use_content"] = this.args.Value.Contents.Value;
+                jobj["payment_method"] = (int)item.ReceiptType.Value;
+                jobj["shi_time"] = item.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                //시간쪽 수정해야됨 starttime이랑 endtime 어떻게 정하기로 했는지 까먹음
+                jobj["complete"] = 2;
                 network.SetReceiver(this);
-                network.GetConnectedContract(jobj);
+                network.GetContractList(jobj);
             }
         }
 
