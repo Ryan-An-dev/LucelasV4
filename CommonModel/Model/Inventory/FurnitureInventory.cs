@@ -12,24 +12,28 @@ using System.Threading.Tasks;
 namespace CommonModel
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum Purpose {
+    public enum Purpose
+    {
+        [Description("모두")]
+        All = 0,
         [Description("입고예정")]
         PreStored = 1,
         [Description("배달예정")]
-        BookingDelivery= 2,
+        BookingDelivery = 2,
         [Description("배달완료")]
-        Completed=3,
+        Completed = 3,
         [Description("창고재고")]
         Stored = 4,
         [Description("DP용")]
         DP = 5
     }
     //재고
-
     public class FurnitureInventory: PrismCommonModelBase
     {
+
         public ReactiveProperty<int> No { get; set; } // 순서
-        public ReactiveProperty<Product> Product {get;set; }
+
+        public ReactiveProperty<Product> Product {get;set;}
         public ReactiveProperty<int> Id { get; set; } // 아이디
 
         public ReactiveProperty<Purpose> Purpose; //재고 목적
@@ -37,6 +41,10 @@ namespace CommonModel
         public ReactiveProperty<DateTime> StoreReachDate;//입고일
 
         public ReactiveProperty<int> Count;//수량
+        public ReactiveProperty<string> Memo { get; set; } //메모
+        
+        //연결된 계약을 추가할까? 추가로 받자
+        public ReactiveProperty<Contract> ContractedContract { get; set; }
 
         public FurnitureInventory() : base()
         {

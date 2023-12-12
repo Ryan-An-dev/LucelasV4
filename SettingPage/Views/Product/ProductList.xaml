@@ -83,8 +83,8 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}" />
-                <DataGridTextColumn Width="0.2*" Header="회사명" Binding="{Binding Company.Value.CompanyName.Value}" />
-                <DataGridTextColumn Width="0.2*" Header="카테고리" Binding="{Binding ProductType.Value.Name.Value}"/>
+                <DataGridTextColumn Width="0.25*" Header="회사명" Binding="{Binding Company.Value.CompanyName.Value}" />
+                <DataGridTextColumn Width="0.1*" Header="종류" Binding="{Binding ProductType.Value.Name.Value}"/>
                 <DataGridTextColumn Width="0.3*" Header="물품명" Binding="{Binding Name.Value}"/>
                 <DataGridTextColumn Width="0.2*" Header="가격" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}" />
             </DataGrid.Columns>

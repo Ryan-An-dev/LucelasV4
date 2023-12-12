@@ -262,11 +262,12 @@
                                 <ColumnDefinition Width="0.5*"/>
                             </Grid.ColumnDefinitions>
                             <DatePicker 
-                            Width="200" HorizontalAlignment="Left" 
-                            md:HintAssist.Hint="배송희망일" FontSize="14" 
-                            md:HintAssist.IsFloating="True"  
-                            Foreground="{StaticResource textColor2}" 
-                            BorderBrush="{StaticResource textColor2}" >
+                                Margin="8 0"
+                                Width="200" HorizontalAlignment="Left" 
+                                md:HintAssist.Hint="배송희망일" FontSize="14" 
+                                md:HintAssist.IsFloating="True"  
+                                Foreground="{StaticResource textColor2}" 
+                                BorderBrush="{StaticResource textColor2}" >
                                 <DatePicker.SelectedDate>
                                     <Binding Path="Contract.Value.Delivery.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
@@ -311,7 +312,7 @@
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="판매자"
-                        Foreground="{StaticResource MainColor}"
+                        Foreground="{StaticResource textColor2}"
                         ItemsSource="{Binding EmployeeInfos}"
                         SelectedItem="{Binding Contract.Value.Seller.Value}"
                         DisplayMemberPath="Name.Value"

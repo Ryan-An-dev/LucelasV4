@@ -62,7 +62,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No" Binding="{Binding No.Value}" Width="0.3*" IsReadOnly="True"/>
-                <DataGridTextColumn Header="카테고리" Binding="{Binding Name.Value}" Width="0.7*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="종류" Binding="{Binding Name.Value}" Width="0.7*" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
 

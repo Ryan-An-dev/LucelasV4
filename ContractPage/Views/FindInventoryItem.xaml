@@ -228,8 +228,8 @@
                                 Height="100"
                             />
                         
-                    </StackPanel>
-                </Grid>
+                        </StackPanel>
+                    </Grid>
                 </GroupBox>
             </Grid>
             

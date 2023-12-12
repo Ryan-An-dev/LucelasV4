@@ -28,6 +28,9 @@ namespace MESPage.ViewModels
     public class MesPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
+
+        public ReactiveProperty<Purpose> SearchPurpose { get; set; }
+        public ReactiveProperty<FurnitureType>SelectedType { get; set; }
         public ReactiveProperty<string> SearchPhone { get; set; }
         public ReactiveProperty<string> SearchName { get; set; }
         public ReactiveProperty<DateTime> StartDate { get; set; }
@@ -37,8 +40,12 @@ namespace MESPage.ViewModels
         {
             get { return Enum.GetValues(typeof(FullyCompleted)).Cast<FullyCompleted>(); }
         }
-
+        public IEnumerable<Purpose> SearchPurposeValues
+        {
+            get { return Enum.GetValues(typeof(Purpose)).Cast<Purpose>(); }
+        }
         #endregion
+
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         public DelegateCommand SearchButton { get; }
 
@@ -53,8 +60,8 @@ namespace MESPage.ViewModels
 
         public DelegateCommand NewButton { get; }
         public DelegateCommand RowDoubleClick { get; }
-        public ReactiveCollection<ContractedProduct> InventoryItems { get; }
-        public ReactiveProperty<ContractedProduct> SelectedItem { get; set; }
+        public ReactiveCollection<FurnitureInventory> InventoryItems { get; }
+        public ReactiveProperty<FurnitureInventory> SelectedItem { get; set; }
         private IContainerProvider ContainerProvider { get; }
         public ReactiveCollection<FurnitureType> furnitureInfos { get; }
 
@@ -63,6 +70,8 @@ namespace MESPage.ViewModels
 
         public MesPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            
+            this.SearchPurpose = new ReactiveProperty<Purpose>(Purpose.All).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);
@@ -79,15 +88,21 @@ namespace MESPage.ViewModels
             NewButton = new DelegateCommand(NewButtonExecute);
             RowDoubleClick = new DelegateCommand(RowDoubleClickExecute);
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
-            InventoryItems = new ReactiveCollection<ContractedProduct>().AddTo(this.disposable);
+            InventoryItems = new ReactiveCollection<FurnitureInventory>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
-            SelectedItem = new ReactiveProperty<ContractedProduct>().AddTo(disposable);
+            SelectedItem = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
 
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;
             }
+            FurnitureType all = new FurnitureType();
+            all.Id.Value = 0;
+            all.Name.Value = "모두";
+            this.furnitureInfos.Insert(0, all);
+            this.SelectedType = new ReactiveProperty<FurnitureType>(furnitureInfos[0]).AddTo(this.disposable);
+
             this.CountList.Add(30);
             this.CountList.Add(50);
             this.CountList.Add(70);
@@ -136,16 +151,14 @@ namespace MESPage.ViewModels
             using (var network = this.ContainerProvider.Resolve<DataAgent.InventoryDataAgent>())
             {
                 network.SetReceiver(this);
-                //accountList, CategoryList, ProductList 기본으로 요청하기
                 JObject jobj = new JObject();
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
-                search["cui_name"] = this.SearchName.Value;
+                search["receiving_type"] = (int)this.SearchPurpose.Value;
+                search["product_type"] = (int)this.SelectedType.Value.Id.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["complete"] = (int)this.SearchFullyCompleted.Value;
-                search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
                 network.Get(jobj);
                 IsLoading.Value = true;
@@ -160,11 +173,10 @@ namespace MESPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
-                search["cui_name"] = this.SearchName.Value;
+                search["receiving_type"] = (int)this.SearchPurpose.Value;
+                search["product_type"] = (int)this.SelectedType.Value.Id.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["complete"] = (int)this.SearchFullyCompleted.Value;
-                search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
                 network.Get(jobj);
                 IsLoading.Value = true;
@@ -228,10 +240,60 @@ namespace MESPage.ViewModels
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GET_INVENTORY_LIST: //데이터 조회
+                    if (jobj["inventory_history"] != null)
+                    {
+                        this.InventoryItems.Clear();
+                        JArray jarr = JArray.Parse(jobj["inventory_history"].ToString());
+                        int i = 0;
+                        foreach (var item in jarr)
+                        {
+                            FurnitureInventory temp = new FurnitureInventory();
+                            temp.No.Value = i++;
+                            if (item["inventory_id"]!=null)
+                                temp.Id.Value = item["inventory_id"].Value<int>();
+                            if (item["count"] != null)
+                                temp.Count.Value = item["count"].Value<int>();
+                            if (item["memo"] != null)
+                                temp.Memo.Value = item["memo"].Value<string>();
+                            if (item["receiving_date"] != null)
+                                temp.StoreReachDate.Value = item["receiving_date"].Value<DateTime>();
+                            if (item["receiving_type"] != null)
+                                temp.Purpose.Value = item["receiving_type"].Value<Purpose>();
+                            if (item["connected_contract"] != null)
+                            {
+                                temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
+                            }
+
+                            this.InventoryItems.Add(temp);
+                        }
+                        this.TotalItemCount.Value = jobj["history_count"].Value<int>();
+                        this.TotalPage.Value = (this.TotalItemCount.Value / this.ListCount.Value) + 1;
+                        this.FirstItem.Value = (this.CurrentPage.Value - 1) * this.ListCount.Value;
+                    }
+                    else
+                    {
+                        
+                    }
                     IsLoading.Value = false;
                     break;
 
             }
+        }
+
+        private Contract SetContract(JObject jobj)
+        {
+            Contract temp = new Contract();
+            if (jobj["con_id"] != null)
+                temp.Id.Value = jobj["con_id"].Value<int>();
+            if (jobj["cui_name"] !=null)
+                temp.Contractor.Value.Name.Value = jobj["cui_name"].Value<string>();
+            if (jobj["cui_address"] !=null)
+                temp.Contractor.Value.Address.Value = jobj["cui_address"].Value<string>();
+            if (jobj["cui_address_detail"]!=null)
+                temp.Contractor.Value.Address1.Value = jobj["cui_address_detail"].Value<string>();
+            if (jobj["delivery_date"]!=null)
+                temp.Delivery.Value = jobj["delivery_date"].Value<DateTime>();
+            return temp;
         }
 
         public void OnSent()

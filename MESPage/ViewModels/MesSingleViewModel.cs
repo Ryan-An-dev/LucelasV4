@@ -19,6 +19,7 @@ using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
@@ -28,8 +29,27 @@ using System.Windows.Controls;
 namespace MESPage.ViewModels
 {
 
-    public class MesSingleViewModel : PrismCommonViewModelBase, INavigationAware, IDisposable, INetReceiver
+    public class MesSingleViewModel : PrsimListViewModelBase, INavigationAware, IDisposable, INetReceiver
     {
+
+        public ReactiveProperty<CompanyProductSelect> CompanyProductTypeSelect { get; set; } //검색옵션
+        public IEnumerable<CompanyProductSelect> CompanyProductTypeSelectValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(CompanyProductSelect)).Cast<CompanyProductSelect>(); }
+        }
+        public ReactiveCommand List_MouseDoubleClick { get; set; }
+
+        [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+        public enum CompanyProductSelect
+        {
+            [Description("제품명")]
+            ProductName = 0,
+            [Description("회사명")]
+            CompanyName = 1,
+        }
+        public ReactiveCollection<FurnitureType> FurnitureInfos { get; set; }
+
+
         /// <summary>
         /// 새로운 계약 : Collapse  // 기존계약 : Visible
         /// </summary>
@@ -52,9 +72,6 @@ namespace MESPage.ViewModels
 
         public DelegateCommand SaveButton { get; }
         public ReactiveProperty<string> Title { get; } = new();
-
-        private readonly CompositeDisposable _disposable = new();
-
         public ReactiveProperty<ContractedProduct> Inventory { get; set; }
         public DelegateCommand DeleteButton { get; }
         public DelegateCommand SearchAddress { get; }
@@ -62,46 +79,42 @@ namespace MESPage.ViewModels
         public DelegateCommand<string> AddContractItemButton { get; }
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
-        public ReactiveProperty<Payment> SelectedPayment { get; set; }
-        public ReactiveProperty<ContractedProduct> SelectedProduct { get; set; }
-        public ReactiveCollection<Employee> EmployeeInfos { get; set; }
-        public ReactiveProperty<Employee> SelectedEmployee { get; set; }
-        public IDialogService dialogService { get; }
-        public ReactiveProperty<PrismCommonModelBase> SelectedItem { get; set; }
-        public DelegateCommand RowDoubleClick { get; }
-        public MesSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
+
+        public MesSingleViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
-            this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
+
+            //listItem
+            List_MouseDoubleClick = new ReactiveCommand().WithSubscribe(() => RowDoubleClickEvent()).AddTo(disposable);
+            FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
+            CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
+
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
             IsNewContractReverse = new ReactiveProperty<Visibility>().AddTo(disposable);
-            ContainerProvider = containerProvider;
-            this.dialogService = dialogService;
-            SelectedProduct = new ReactiveProperty<ContractedProduct>().AddTo(disposable);
+            ContainerProvider = containerprovider;
             AddContractItemButton = new DelegateCommand<string>(ExecAddContractItemButton);
             RegionManager = regionManager;
             SaveButton = new DelegateCommand(SaveButtonExecute);
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
             Inventory = new ReactiveProperty<ContractedProduct>().AddTo(disposable);
             Title.Value = "신규등록";
-            EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
-            SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
-            this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
         }
-        public void RowDoubleClickEvent()
+
+
+        public override void RowDoubleClickEvent()
         {
             if (SelectedItem.Value == null)
                 return;
             DialogParameters dialogParameters = new DialogParameters();
             SelectedItem.Value.ClearJson();
-            dialogParameters.Add("object", SelectedItem.Value as ContractedProduct);
+            dialogParameters.Add("object", SelectedItem.Value as Product);
 
-            dialogService.ShowDialog("FindInventoryItem", dialogParameters, r =>
+            dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
             {
                 try
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        ContractedProduct item = r.Parameters.GetValue<ContractedProduct>("object");
+                        Product item = r.Parameters.GetValue<Product>("object");
                         if (item != null)
                         {
                             using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
@@ -232,7 +245,69 @@ namespace MESPage.ViewModels
                         regionManager.RequestNavigate("ContentRegion", nameof(MESPage));
                     });
                     break;
+                case COMMAND.UPDATEPRODUCTINFO:
+                    SearchTitle(this.Keyword.Value);
+                    break;
+                case COMMAND.GETPRODUCTINFO:
+                    JObject jobject = null;
+                    try { jobject = new JObject(JObject.Parse(msg)); }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                    ErpLogWriter.LogWriter.Trace(jobject.ToString());
+                    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                    FurnitureInfos = temp.FurnitureInfos;
+                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    if (jobject.ToString().Trim() != string.Empty)
+                    {
+                        try
+                        {
+                            if (jobject["product_list"] == null)
+                                return;
+                            JArray jarr = new JArray();
+                            jarr = jobject["product_list"] as JArray;
+                            if (jobject["history_count"] != null)
+                                TotalItemCount.Value = jobject["history_count"].ToObject<int>();
+
+                            int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
+
+                            foreach (JObject jobj in jarr)
+                            {
+                                Product inventory = new Product();
+                                inventory.No.Value = i++;
+                                if (jobj["company"] != null)
+                                    inventory.Company.Value = SetCompanyInfo(jobj["company"] as JObject);
+                                if (jobj["product_type"] != null)
+                                    inventory.ProductType.Value = FurnitureInfos.FirstOrDefault(x => x.Id.Value == jobj["product_type"].ToObject<int>());
+                                if (jobj["product_name"] != null)
+                                    inventory.Name.Value = jobj["product_name"].ToString();
+                                if (jobj["product_price"] != null)
+                                    inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    this.List.Add(inventory);
+                                });
+                            }
+                        }
+                        catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
+                    }
+                    break;
             }
+        }
+        private Company SetCompanyInfo(JObject jobj)
+        {
+            Company temp = new Company();
+            if (jobj["company_name"] != null)
+                temp.CompanyName.Value = jobj["company_name"].ToString();
+            if (jobj["company_phone"] != null)
+                temp.CompanyPhone.Value = jobj["company_phone"].ToString();
+            if (jobj["company_id"] != null)
+                temp.Id.Value = jobj["company_id"].ToObject<int>();
+            if (jobj["company_address"] != null)
+                temp.CompanyAddress.Value = jobj["company_address"].ToString();
+            return temp;
+
         }
 
         public void OnConnected()
@@ -242,6 +317,86 @@ namespace MESPage.ViewModels
         public void OnSent()
         {
         }
+        public override void AddButtonClick()
+        {
+            DialogParameters dialogParameters = new DialogParameters();
+            dialogParameters.Add("object", new Product());
 
+            dialogService.ShowDialog("ProductAddPage", dialogParameters, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        Product item = r.Parameters.GetValue<Product>("object");
+                        if (item != null)
+                        {
+                            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["product_id"] = (int)0;
+                                jobj["product_type"] = (int)item.ProductType.Value.Id.Value;
+                                jobj["product_name"] = item.Name.Value;
+                                jobj["product_price"] = item.Price.Value;
+                                jobj["company_id"] = item.Company.Value.Id.Value;
+                                network.Create(jobj);
+                                IsLoading.Value = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
+        }
+
+        public override void DeleteButtonClick(PrismCommonModelBase selecteditem)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["aci_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
+                jobj["acpi_id"] = (int)(selecteditem as Product).Id.Value;
+                network.Delete(jobj);
+                IsLoading.Value = true;
+            }
+        }
+
+        public override void SearchTitle(string Keyword)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                JObject search = new JObject();
+                if (this.CompanyProductTypeSelect.Value == CompanyProductSelect.ProductName)
+                {
+                    search["product_name"] = Keyword;
+                }
+                else
+                {
+                    search["company_name"] = Keyword;
+                }
+                jobj["page_unit"] = (ListCount.Value);
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                jobj["search_option"] = search;
+                network.Get(jobj);
+            }
+        }
+
+        public override void UpdatePageItem(CommonModel.MovePageType param, int count)
+        {
+            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["next_preview"] = (int)param;
+                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                network.repo.Read(jobj);
+            }
+        }
     }
 }

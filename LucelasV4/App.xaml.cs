@@ -116,6 +116,7 @@ namespace LucelasV4
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
             containerRegistry.RegisterDialog<SearchNamePage>("SearchNamePage");
             containerRegistry.RegisterDialog<AddPaymentPage>("AddPaymentPage");
+            containerRegistry.RegisterDialog<PaymentCardAddPage>("PaymentCardAddPage");
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
