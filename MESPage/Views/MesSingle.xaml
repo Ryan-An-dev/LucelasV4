@@ -232,6 +232,7 @@
                                   md:HintAssist.Hint="수량"
                                   FontSize="14"
                                   Foreground="{StaticResource MainColor}"
+                                 Text="{Binding Inventory.Value.Count.Value}"
                                   md:HintAssist.IsFloating="True">
                             </TextBox>
                             <ComboBox 
@@ -239,21 +240,21 @@
                                   Margin="0 0 10 12"
                                   md:HintAssist.Hint="상태"
                                   ItemsSource="{Binding PurposeTypeSelectValues}"
-                                  SelectedItem="{Binding PurposeTypeSelect.Value}"
+                                  SelectedItem="{Binding Inventory.Value.Purpose.Value}"
                                   FontSize="14"
                                   Foreground="{StaticResource textColor2}"
                                   md:HintAssist.IsFloating="True">
                             </ComboBox>
                         </Grid>
-                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="160">
+                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="130">
                             <TextBox
                               AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                               md:HintAssist.Hint="제품 특이사항 입력"
                               FontSize="14"  
-                              Text="{Binding SelectedFurniture.Value.Memo.Value}"
+                              Text="{Binding Inventory.Value.Memo.Value}"
                               Foreground="{StaticResource MainColor}"  
                               md:HintAssist.IsFloating="True"
-                              Height="160"/>
+                              Height="130"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

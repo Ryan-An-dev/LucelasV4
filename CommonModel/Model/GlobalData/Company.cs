@@ -34,7 +34,16 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>(categoryId).AddTo(disposable);
             this.CompanyName = new ReactiveProperty<string>(CompanyName).AddTo(disposable);
         }
-        
+        public JObject MakeJson()
+        {
+            JObject jobj = new JObject();
+            jobj["company_id"] = this.Id.Value;
+            jobj["company_name"] = this.CompanyName.Value;
+            jobj["company_phone"] = this.CompanyPhone.Value;
+            jobj["company_address"] = this.CompanyAddress.Value;
+            jobj["company_address_detail"] = this.CompanyAddressDetail.Value;
+            return jobj;
+        }
         public override void SetObserver()
         {
             this.CompanyName.Subscribe(x => ChangedJson("company_name", x));

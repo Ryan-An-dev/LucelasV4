@@ -198,11 +198,12 @@ namespace MESPage.ViewModels
                 network.SetReceiver(this);
                 if (param == 0)
                 { // Update
-                    if (this.Title.Value == "신규계약 추가") //신규등록일경우
+                    if (this.Title.Value == "신규 재고 추가") //신규등록일경우
                     {
 
                         if (this.Inventory.Value.isChanged)
                         {
+                            this.Inventory.Value.Product.Value = this.SelectedItem.Value as Product;
                             network.Create(this.Inventory.Value.MakeJson());
                         }
                     }
