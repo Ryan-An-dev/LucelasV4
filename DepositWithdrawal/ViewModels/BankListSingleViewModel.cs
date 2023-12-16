@@ -81,7 +81,7 @@ namespace DepositWithdrawal.ViewModels
                     //return;
                 }
                 DialogParameters p = new DialogParameters();
-                p.Add("AccountName",this.ReceiptModel.Value);
+                p.Add("object",this.ReceiptModel.Value);
                 this.dialogService.ShowDialog("FindItemPage", p, r => FindContractItem(r), "CommonDialogWindow");
             }
             else {  //Delete

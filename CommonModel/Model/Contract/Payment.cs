@@ -31,6 +31,7 @@ namespace CommonModel.Model
 
     public class Payment : PrismCommonModelBase
     {
+        public ReactiveProperty<bool> IsChecked { get; set; }
         public ReactiveProperty<AddDelete> Action { get; set; }
         public IEnumerable<PaymentType> PaymentTypeSelectValues //검색옵션
         {
@@ -61,6 +62,7 @@ namespace CommonModel.Model
 
         public Payment() : base()
         {
+            this.IsChecked = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.Action = new ReactiveProperty<AddDelete>(AddDelete.Add).AddTo(disposable);
             this.PaymentId = new ReactiveProperty<int>().AddTo(disposable);
             this.PaymentType = new ReactiveProperty<PaymentType>().AddTo(disposable);

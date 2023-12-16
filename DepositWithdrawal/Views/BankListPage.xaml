@@ -295,6 +295,16 @@
                 <DataGrid.InputBindings>
                     <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
                 </DataGrid.InputBindings>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <TextBlock Text="test"></TextBlock>
+                            <DataGrid>
+                                
+                            </DataGrid>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         MinWidth="50" Width="0.13*" 

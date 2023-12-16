@@ -87,7 +87,6 @@ namespace DepositWithdrawal.ViewModels
         {
             ReceiptModel item = null;
             parameters.TryGetValue("object", out item);
-            this.args.Value = item;
 
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
