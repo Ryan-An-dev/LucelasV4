@@ -92,7 +92,8 @@ namespace MESPage.ViewModels
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
 
-            PurposeTypeSelect= new ReactiveProperty<Purpose>().AddTo(disposable);
+            IsNewInventory = new ReactiveProperty<Visibility>().AddTo(disposable);
+            PurposeTypeSelect = new ReactiveProperty<Purpose>().AddTo(disposable);
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
             IsNewContractReverse = new ReactiveProperty<Visibility>().AddTo(disposable);
             ContainerProvider = containerprovider;

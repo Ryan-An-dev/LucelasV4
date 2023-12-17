@@ -169,7 +169,7 @@
                             Header="No"/>
                         <DataGridTextColumn
                             MinWidth="50" Width="0.12*" 
-                            Binding="{Binding Product.Value.Company.Value.CompanyName.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
+                            Binding="{Binding Product.Value.Company.Value.CompanyName.Value, UpdateSourceTrigger=PropertyChanged}" 
                             Header="구입처"/>
                         <DataGridTextColumn 
                             MinWidth="120" Width="0.15*" 
@@ -198,8 +198,8 @@
                         
                         <DataGridTextColumn 
                             MinWidth="100" Width="0.13*" 
-                            Binding="{Binding Contract.Value.Contractor.Value.Name.Value}" 
-                            Header="연결된 계약정보"/>
+                            Binding="{Binding ContractedContract.Value.Contractor.Value.Name.Value}" 
+                            Header="고객명"/>
                         <DataGridTextColumn 
                             MinWidth="80" Width="0.18*" 
                             Binding="{Binding Memo.Value}" 

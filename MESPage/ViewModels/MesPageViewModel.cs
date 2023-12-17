@@ -242,29 +242,50 @@ namespace MESPage.ViewModels
                 case COMMAND.GET_INVENTORY_LIST: //데이터 조회
                     if (jobj["inventory_history"] != null)
                     {
-                        this.InventoryItems.Clear();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.InventoryItems.Clear();
+                        });
+                        
                         JArray jarr = JArray.Parse(jobj["inventory_history"].ToString());
                         int i = 0;
                         foreach (var item in jarr)
                         {
                             FurnitureInventory temp = new FurnitureInventory();
-                            temp.No.Value = i++;
+                            temp.No.Value = ++i;
                             if (item["inventory_id"]!=null)
                                 temp.Id.Value = item["inventory_id"].Value<int>();
                             if (item["count"] != null)
                                 temp.Count.Value = item["count"].Value<int>();
                             if (item["memo"] != null)
                                 temp.Memo.Value = item["memo"].Value<string>();
-                            if (item["receiving_date"] != null)
-                                temp.StoreReachDate.Value = item["receiving_date"].Value<DateTime>();
+                            if (item["receiving_date"] != null) {
+                                try {
+                                    temp.StoreReachDate.Value = item["receiving_date"].Value<DateTime>();
+                                } catch (Exception) {
+                                    temp.StoreReachDate.Value = null;
+                                }
+                            }
+                            if (item["product_info"] != null) { 
+                                temp.Product.Value = SetProductInfo(item["product_info"] as JObject);
+                            }
                             if (item["receiving_type"] != null)
-                                temp.Purpose.Value = item["receiving_type"].Value<Purpose>();
+                            {
+                                try {
+                                    temp.Purpose.Value = item["receiving_type"].Value<Purpose>();
+                                } catch (Exception) { 
+                                
+                                }
+                            }
                             if (item["connected_contract"] != null)
                             {
                                 temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
                             }
 
-                            this.InventoryItems.Add(temp);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                this.InventoryItems.Add(temp);
+                            });
                         }
                         this.TotalItemCount.Value = jobj["history_count"].Value<int>();
                         this.TotalPage.Value = (this.TotalItemCount.Value / this.ListCount.Value) + 1;
@@ -279,7 +300,43 @@ namespace MESPage.ViewModels
 
             }
         }
+       
+        private Product SetProductInfo(JObject jobj)
+        {
+            Product product = new Product();
+            if (jobj["acpi_id"] != null)
+                product.Id.Value = jobj["acpi_id"].ToObject<int>();
+            if (jobj["product_type"] != null)
+                product.ProductType.Value = GetProductType(jobj["product_type"].ToObject<int>());
+            if (jobj["product_name"] != null)
+                product.Name.Value = jobj["product_name"].ToObject<string>();
+            if (jobj["product_price"] != null)
+                product.Price.Value = jobj["product_price"].ToObject<int>();
+            if (jobj["company"] != null)
+                product.Company.Value = SetCompany(jobj["company"] as JObject);
+            return product;
+        }
+        private Company SetCompany(JObject jobj)
+        {
 
+            Company temp = new Company();
+            if (jobj["company_name"] != null)
+                temp.CompanyName.Value = jobj["company_name"].ToString();
+            if (jobj["company_phone"] != null)
+                temp.CompanyPhone.Value = jobj["company_phone"].ToString();
+            if (jobj["company_id"] != null)
+                temp.Id.Value = jobj["company_id"].ToObject<int>();
+            if (jobj["company_address"] != null)
+                temp.CompanyAddress.Value = jobj["company_address"].ToString();
+            if (jobj["company_address_detail"] != null)
+                temp.CompanyAddressDetail.Value = jobj["company_address_detail"].ToString();
+            return temp;
+
+        }
+        private FurnitureType GetProductType(int id)
+        {
+            return this.furnitureInfos.FirstOrDefault(x => x.Id.Value == id);
+        }
         private Contract SetContract(JObject jobj)
         {
             Contract temp = new Contract();

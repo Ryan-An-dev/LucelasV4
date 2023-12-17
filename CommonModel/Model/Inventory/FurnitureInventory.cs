@@ -38,7 +38,7 @@ namespace CommonModel
 
         public ReactiveProperty<Purpose> Purpose; //재고 목적
 
-        public ReactiveProperty<DateTime> StoreReachDate;//입고일
+        public ReactiveProperty<DateTime?> StoreReachDate;//입고일
 
         public ReactiveProperty<int> Count;//수량
         public ReactiveProperty<string> Memo { get; set; } //메모
@@ -52,7 +52,8 @@ namespace CommonModel
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Product = new ReactiveProperty<Product>().AddTo(disposable);
             this.Purpose = new ReactiveProperty<Purpose>().AddTo(disposable);
-            this.StoreReachDate = CreateDateTimeProperty("입고일");
+            this.StoreReachDate = new ReactiveProperty<DateTime?>().AddTo(disposable);
+            this.ContractedContract = new ReactiveProperty<Contract>().AddTo(disposable);   
             this.Memo = CreateProperty<string>("메모");
             this.Count = CreateProperty<int>("재고수량");
             SetObserver();
@@ -63,7 +64,7 @@ namespace CommonModel
             jobj["product_info"] = this.Product.Value.MakeJson();
             jobj["inventory_id"] = this.Id.Value;
             jobj["receiving_type"] = (int)this.Purpose.Value;
-            jobj["receiving_date"] = this.StoreReachDate.Value.ToString("yyyy-MM-dd");
+            jobj["receiving_date"] = StoreReachDate.Value.ToString();
             jobj["count"] = this.Count.Value;
             jobj["memo"] = this.Memo.Value;
             return jobj;
