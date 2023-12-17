@@ -246,7 +246,7 @@
                                   md:HintAssist.IsFloating="True">
                             </ComboBox>
                         </Grid>
-                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="130">
+                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="120">
                             <TextBox
                               AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                               md:HintAssist.Hint="제품 특이사항 입력"
@@ -254,7 +254,7 @@
                               Text="{Binding Inventory.Value.Memo.Value}"
                               Foreground="{StaticResource MainColor}"  
                               md:HintAssist.IsFloating="True"
-                              Height="130"/>
+                              Height="120"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

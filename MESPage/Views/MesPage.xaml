@@ -164,18 +164,17 @@
                     </DataGrid.InputBindings>
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            MinWidth="50" Width="0.13*" 
+                            MinWidth="50" Width="0.1*" 
                             MaxWidth="65"  Binding="{Binding No.Value}" 
                             Header="No"/>
-                        <DataGridTextColumn
-                            MinWidth="50" Width="0.12*" 
-                            Binding="{Binding Product.Value.Company.Value.CompanyName.Value, UpdateSourceTrigger=PropertyChanged}" 
-                            Header="구입처"/>
                         <DataGridTextColumn 
-                            MinWidth="120" Width="0.15*" 
-                            HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
+                            Width="0.1*" 
                             Binding="{Binding StoreReachDate.Value, StringFormat=yyyy-MM-dd HH:mm:ss}" 
                             Header="입고일"/>
+                        <DataGridTextColumn
+                            MinWidth="50" Width="0.1*" 
+                            Binding="{Binding Product.Value.Company.Value.CompanyName.Value}" 
+                            Header="구입처"/>
                         <DataGridTextColumn 
                             MinWidth="100" Width="0.1*" 
                             Binding="{Binding Product.Value.ProductType.Value.Name.Value}" 
@@ -186,22 +185,21 @@
                             Header="제품명" />
                         
                         <DataGridTextColumn
-                            MinWidth="50" Width="0.12*" 
+                            MinWidth="50" Width="0.1*" 
                             Binding="{Binding Purpose.Value, UpdateSourceTrigger=PropertyChanged}" 
-                            Header="상태"/>       
-                        
+                            Header="상태"/>
+
                         <DataGridTextColumn 
                             MinWidth="80" Width="0.1*"
                             Header="입고금액"
                             Binding="{Binding Product.Value.Price.Value,StringFormat=\{0:N0\}}" 
                             />
-                        
                         <DataGridTextColumn 
-                            MinWidth="100" Width="0.13*" 
+                            MinWidth="100" Width="0.1*" 
                             Binding="{Binding ContractedContract.Value.Contractor.Value.Name.Value}" 
                             Header="고객명"/>
                         <DataGridTextColumn 
-                            MinWidth="80" Width="0.18*" 
+                            MinWidth="80" Width="0.3*" 
                             Binding="{Binding Memo.Value}" 
                             Header="메모"/>   
                     </DataGrid.Columns>

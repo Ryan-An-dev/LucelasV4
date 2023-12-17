@@ -178,6 +178,7 @@ namespace MESPage.ViewModels
                 Title.Value = "재고 내역 수정";
                 IsNewInventory.Value = Visibility.Visible;
                 this.Inventory.Value = Inventory;
+                SelectedItem.Value = Inventory.Product.Value;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
         }
