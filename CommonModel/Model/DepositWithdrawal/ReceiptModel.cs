@@ -52,7 +52,6 @@ namespace CommonModel.Model
         All = 0,
     }
 
-
     //index
     //날짜
     //구분 income withdrawal
