@@ -252,11 +252,13 @@ namespace MESPage.ViewModels
                         foreach (var item in jarr)
                         {
                             FurnitureInventory temp = new FurnitureInventory();
-                            temp.No.Value = ++i;
-                            if (item["inventory_id"]!=null)
-                                temp.Id.Value = item["inventory_id"].Value<int>();
                             if (item["count"] != null)
                                 temp.Count.Value = item["count"].Value<int>();
+                            if (temp.Count.Value == 0) { 
+                                continue;
+                            }
+                            if (item["inventory_id"]!=null)
+                                temp.Id.Value = item["inventory_id"].Value<int>();
                             if (item["memo"] != null)
                                 temp.Memo.Value = item["memo"].Value<string>();
                             if (item["receiving_date"] != null) {
@@ -283,10 +285,11 @@ namespace MESPage.ViewModels
                                     temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
                                 }
                             }
-
+                            temp.No.Value = ++i;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                this.InventoryItems.Add(temp);
+                                
+                                    this.InventoryItems.Add(temp);
                             });
                         }
                         this.TotalItemCount.Value = jobj["history_count"].Value<int>();
