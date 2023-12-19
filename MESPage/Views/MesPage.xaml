@@ -169,7 +169,7 @@
                             Header="No"/>
                         <DataGridTextColumn 
                             Width="0.1*" 
-                            Binding="{Binding StoreReachDate.Value, StringFormat=yyyy-MM-dd HH:mm:ss}" 
+                            Binding="{Binding StoreReachDate.Value, StringFormat=yyyy-MM-dd}" 
                             Header="입고일"/>
                         <DataGridTextColumn
                             MinWidth="50" Width="0.1*" 
@@ -183,12 +183,10 @@
                             MinWidth="100" Width="0.1*" 
                             Binding="{Binding Product.Value.Name.Value}" 
                             Header="제품명" />
-                        
                         <DataGridTextColumn
-                            MinWidth="50" Width="0.1*" 
-                            Binding="{Binding Purpose.Value, UpdateSourceTrigger=PropertyChanged}" 
+                            MinWidth="100" Width="0.1*" 
+                            Binding="{Binding ReceivingType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             Header="상태"/>
-
                         <DataGridTextColumn 
                             MinWidth="80" Width="0.1*"
                             Header="입고금액"

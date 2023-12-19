@@ -240,7 +240,7 @@
                                   Margin="0 0 10 12"
                                   md:HintAssist.Hint="상태"
                                   ItemsSource="{Binding PurposeTypeSelectValues}"
-                                  SelectedItem="{Binding Inventory.Value.Purpose.Value}"
+                                  SelectedItem="{Binding Inventory.Value.ReceivingType.Value}"
                                   FontSize="14"
                                   Foreground="{StaticResource textColor2}"
                                   md:HintAssist.IsFloating="True">

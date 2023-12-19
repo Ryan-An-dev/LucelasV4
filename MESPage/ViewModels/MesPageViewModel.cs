@@ -261,7 +261,7 @@ namespace MESPage.ViewModels
                                 temp.Memo.Value = item["memo"].Value<string>();
                             if (item["receiving_date"] != null) {
                                 try {
-                                    temp.StoreReachDate.Value = item["receiving_date"].Value<DateTime>();
+                                    temp.StoreReachDate.Value = item["receiving_date"].ToObject<DateTime>();
                                 } catch (Exception) {
                                     temp.StoreReachDate.Value = null;
                                 }
@@ -272,14 +272,16 @@ namespace MESPage.ViewModels
                             if (item["receiving_type"] != null)
                             {
                                 try {
-                                    temp.Purpose.Value = item["receiving_type"].Value<Purpose>();
+                                    temp.ReceivingType.Value = (Purpose)item["receiving_type"].ToObject<int>();
                                 } catch (Exception) { 
                                 
                                 }
                             }
                             if (item["connected_contract"] != null)
                             {
-                                temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
+                                if (!(item["connected_contract"].ToString().Equals(""))) {
+                                    temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
+                                }
                             }
 
                             Application.Current.Dispatcher.Invoke(() =>
