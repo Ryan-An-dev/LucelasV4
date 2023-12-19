@@ -193,6 +193,11 @@
                             Binding="{Binding Product.Value.Price.Value,StringFormat=\{0:N0\}}" 
                             />
                         <DataGridTextColumn 
+                            MinWidth="80" Width="0.1*"
+                            Header="수량"
+                            Binding="{Binding Count.Value}" 
+                            />  
+                        <DataGridTextColumn 
                             MinWidth="100" Width="0.1*" 
                             Binding="{Binding ContractedContract.Value.Contractor.Value.Name.Value}" 
                             Header="고객명"/>

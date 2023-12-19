@@ -179,6 +179,7 @@ namespace MESPage.ViewModels
                 IsNewInventory.Value = Visibility.Visible;
                 this.Inventory.Value = Inventory;
                 SelectedItem.Value = Inventory.Product.Value;
+                this.Inventory.Value.ClearJson();
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
         }
