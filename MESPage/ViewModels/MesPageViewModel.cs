@@ -5,6 +5,7 @@ using DataAccess.NetWork;
 using LogWriter;
 using MaterialDesignThemes.Wpf;
 using MESPage.Views;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace MESPage.ViewModels
 {
@@ -155,7 +157,9 @@ namespace MESPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
-                search["receiving_type"] = (int)this.SearchPurpose.Value;
+                int[] temp = new int[1];
+                temp[0] = (int)this.SearchPurpose.Value;
+                search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -173,7 +177,9 @@ namespace MESPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
-                search["receiving_type"] = (int)this.SearchPurpose.Value;
+                int[] temp = new int[1];
+                temp[0] = (int)this.SearchPurpose.Value;
+                search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
