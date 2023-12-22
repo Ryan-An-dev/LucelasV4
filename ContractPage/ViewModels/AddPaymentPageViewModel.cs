@@ -43,8 +43,8 @@ namespace ContractPage.ViewModels
         public AddPaymentPageViewModel(IContainerProvider ContainerProvider) :base()
         {
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);
-            PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
             SelectedItem = new ReactiveProperty<Payment>().AddTo(disposable);
+            PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
             SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             this.PaymentCardList = temp.PayCardTypeInfos;
         }

@@ -6,10 +6,12 @@ using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;
+using SettingPage.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +19,9 @@ using System.Text;
 
 namespace DepositWithdrawal.ViewModels
 {
-    public class FindItemPageViewModel : PrismCommonViewModelBase, INetReceiver,IDialogAware
+    public class FindItemPageViewModel : PrsimListViewModelBase, INetReceiver,IDialogAware
     {
+        public ReactiveCollection<PayCardType> PaymentCardList { get; set; }
         public ReactiveCollection<Contract> ContractItems { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
         public BankModel SelectedBank { get; set; }
@@ -29,12 +32,15 @@ namespace DepositWithdrawal.ViewModels
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
 
-        public FindItemPageViewModel(IContainerProvider con):base()
+        public FindItemPageViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
             this.ContainerProvider= con;
             this.args= new ReactiveProperty<ReceiptModel>().AddTo(disposable);
             this.ContractItems= new ReactiveCollection<Contract>().AddTo(disposable);
             this.SelectedBank = new BankModel();
+            PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
+            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            this.PaymentCardList = temp.PayCardTypeInfos;
         }
 
         protected virtual void CloseDialog(string parameter)
@@ -91,10 +97,32 @@ namespace DepositWithdrawal.ViewModels
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();
-                jobj["payment_method"] = (int)item.ReceiptType.Value;
-                jobj["shi_time"] = item.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                jobj["page_unit"] = 30;
+                jobj["page_start_pos"] = 0;
+                JObject jobj2 = new JObject();
+                jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                jobj2["start_time"] = item.Month.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
+                jobj2["end_time"] = item.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 //시간쪽 수정해야됨 starttime이랑 endtime 어떻게 정하기로 했는지 까먹음
-                jobj["complete"] = 2;
+                jobj2["complete"] = 2;
+
+                if (item.ReceiptType.Value == ReceiptType.Cash) // 현금
+                {
+                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                    jobj2["cui_name"] = item.Contents.Value;
+                }
+                else if (item.ReceiptType.Value == ReceiptType.Cash) { //카드
+                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                }
+                else {  //계좌이체
+                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                    jobj2["cui_name"] = item.Contents.Value;
+                }
+
+
+                jobj["search_option"] = jobj2;
+
+
                 network.SetReceiver(this);
                 network.GetContractList(jobj);
             }
@@ -170,16 +198,6 @@ namespace DepositWithdrawal.ViewModels
         }
 
 
-        //private Company MakeProductClass(int companyId, int productId)
-        //{
-        //    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-        //    //CompanyList item = temp.CompanyInfos.First(c => c.Id.Value == companyId);
-        //    //Product product = item.ProductList.First(c => c.ProductId.Value == productId);
-        //    //Company company = new Company(item.Id.Value,item.CompanyName.Value);
-        //    //company.Product.Value = product.Clone();
-        //    return company;
-        //}
-
         public Customer FindCustomer(int id)
         {
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
@@ -188,8 +206,32 @@ namespace DepositWithdrawal.ViewModels
         }
         public void OnSent()
         {
-            throw new NotImplementedException();
+            
         }
 
+        public override void UpdatePageItem(CommonModel.MovePageType param, int count)
+        {
+            
+        }
+
+        public override void AddButtonClick()
+        {
+            
+        }
+
+        public override void DeleteButtonClick(PrismCommonModelBase selecteditem)
+        {
+            
+        }
+
+        public override void RowDoubleClickEvent()
+        {
+            
+        }
+
+        public override void SearchTitle(string value)
+        {
+            
+        }
     }
 }
