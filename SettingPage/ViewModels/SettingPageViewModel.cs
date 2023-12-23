@@ -269,6 +269,8 @@ namespace SettingPage.ViewModels
                             inventory.Name.Value = jobj["product_name"].ToString();
                         if (jobj["product_price"] != null)
                             inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                        if (jobj["product_id"] != null)
+                            inventory.Id.Value = jobj["product_id"].ToObject<int>();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             this.ProductListViewModel.List.Add(inventory);

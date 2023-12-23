@@ -34,7 +34,7 @@ namespace DepositWithdrawal.ViewModels
 
         public FindItemPageViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
-            this.ContainerProvider= con;
+            this.ContainerProvider= containerprovider;
             this.args= new ReactiveProperty<ReceiptModel>().AddTo(disposable);
             this.ContractItems= new ReactiveCollection<Contract>().AddTo(disposable);
             this.SelectedBank = new BankModel();

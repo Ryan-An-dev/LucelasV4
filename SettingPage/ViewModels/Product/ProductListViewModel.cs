@@ -142,6 +142,8 @@ namespace SettingPage.ViewModels
                                     inventory.Name.Value = jobj["product_name"].ToString();
                                 if (jobj["product_price"] != null)
                                     inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                                if (jobj["product_id"]!=null)
+                                    inventory.Id.Value = jobj["product_id"].ToObject<int>();
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     this.List.Add(inventory);
@@ -228,7 +230,8 @@ namespace SettingPage.ViewModels
                                 network.SetReceiver(this);
                                 JObject jobj = new JObject();
                                 jobj["changed_item"] = item.ChangedItem;
-                                jobj["product_id"] = item.Id.Value;
+                                jobj["acpi_id"] = item.Id.Value;
+                                jobj["aci_id"] = item.Company.Value.Id.Value;
                                 network.Update(jobj);
                             }
                         }

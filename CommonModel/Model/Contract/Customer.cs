@@ -51,6 +51,7 @@ namespace CommonModel.Model
             this.Name.Subscribe(x => ChangedJson("cui_name", x));
             this.Phone.Subscribe(x => ChangedJson("cui_phone", x));
             this.Address.Subscribe(x => ChangedJson("cui_address", x));
+            this.Memo.Subscribe(x => ChangedJson("cui_memo", x));
             this.Address1.Subscribe(x => ChangedJson("cui_address_detail", x));
             this.Id.Subscribe(x => ChangedJson("cui_id", x));
         }
