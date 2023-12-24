@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:base="clr-namespace:CommonModel;assembly=CommonModel"
-             Width="1000" Height="600" 
+             xmlns:Selector ="clr-namespace:CommonModel;assembly=CommonModel"
+             Width="1200" Height="800" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" 
              prism:ViewModelLocator.AutoWireViewModel="True"  Background="Transparent"
              >
@@ -13,8 +14,8 @@
                 <RowDefinition Height="0.1*"/>
                 <RowDefinition Height="0.1"/>
                 <RowDefinition Height="0.55*"/>
-                <RowDefinition Height="0.15*"/>
-                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="0.06*"/>
             </Grid.RowDefinitions>
             <StackPanel Margin="10 10" VerticalAlignment="Center">
                 <TextBlock Text="대기중인 계약목록" FontSize="16" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center"/>
@@ -30,59 +31,72 @@
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.15*"/>
-                        <ColumnDefinition Width="0.15*"/>
-                        <ColumnDefinition Width="0.15*"/>
-                        <ColumnDefinition Width="0.25*"/>
-                    </Grid.ColumnDefinitions>
-                    <ComboBox
-                        Style="{StaticResource MaterialDesignComboBox}" 
-                        ItemsSource="{Binding CompanyProductTypeSelectValues}"
-                        SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        md:HintAssist.Hint="계좌/현금/카드"
-                        Foreground="{StaticResource MainColor}"  
-                        md:HintAssist.IsFloating="True" 
-                        FontSize="14" 
-                        Margin="10 0 0 0">
-                    </ComboBox>
-                    <ComboBox
-                        Grid.Column="1"
-                        Style="{StaticResource MaterialDesignComboBox}" 
-                        ItemsSource="{Binding CompanyProductTypeSelectValues}"
-                        SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        md:HintAssist.Hint="검색타입"
-                        Foreground="{StaticResource MainColor}"  
-                        md:HintAssist.IsFloating="True" 
-                        FontSize="14" 
-                        Margin="10 0 0 0">
-                    </ComboBox>
-                    <ComboBox
-                        Grid.Column="2"
-                        Style="{StaticResource MaterialDesignComboBox}" 
-                        ItemsSource="{Binding CompanyProductTypeSelectValues}"
-                        SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        md:HintAssist.Hint="검색타입"
-                        Foreground="{StaticResource MainColor}"  
-                        md:HintAssist.IsFloating="True" 
-                        FontSize="14" 
-                        Margin="10 0 10 0">
-                    </ComboBox>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                             HorizontalAlignment="Left"
+                             Width="180"
+                             Style="{StaticResource MaterialDesignComboBox}" 
+                             ItemsSource="{Binding CompanyProductTypeSelectValues}"
+                             SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             md:HintAssist.Hint="계좌/현금/카드"
+                             Foreground="{StaticResource MainColor}"  
+                             md:HintAssist.IsFloating="True" 
+                             FontSize="14" 
+                             Margin="10 0 0 0">
+                        </ComboBox>
+                        <ComboBox
+                             HorizontalAlignment="Left"
+                             Width="100"
+                             Grid.Column="1"
+                             Style="{StaticResource MaterialDesignComboBox}" 
+                             ItemsSource="{Binding CompanyProductTypeSelectValues}"
+                             SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             md:HintAssist.Hint="검색타입"
+                             Foreground="{StaticResource MainColor}"  
+                             md:HintAssist.IsFloating="True" 
+                             FontSize="14" 
+                             Margin="10 0 0 0">
+                        </ComboBox>
+                        <ComboBox
+                             HorizontalAlignment="Left"
+                             Width="100"
+                             Grid.Column="2"
+                             Style="{StaticResource MaterialDesignComboBox}" 
+                             ItemsSource="{Binding CompanyProductTypeSelectValues}"
+                             SelectedItem="{Binding CompanyProductTypeSelect.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             md:HintAssist.Hint="검색타입"
+                             Foreground="{StaticResource MainColor}"  
+                             md:HintAssist.IsFloating="True" 
+                             FontSize="14" 
+                             Margin="10 0 10 0">
+                        </ComboBox>
+                        <TextBox     
+                            Grid.Column="1"
+                            x:Name="Search"
+                            md:HintAssist.Hint="고객명" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            FontSize="14"  
+                            Width="100"
+                            Text="{Binding Keyword.Value}"
+                            Margin="10,0,10,0"
+                            Foreground="{StaticResource MainColor}"
+                            md:HintAssist.IsFloating="True">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchExecute}" Key="Enter" CommandParameter="{Binding ElementName=Search, Path=Text}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button 
+                            Content="{md:PackIcon Size=22, Kind=Search}" 
+                            Padding="0" Height="30"
+                            Width="30" VerticalAlignment="Center"
+                            Margin="0 15 0 0"
+                            Cursor="Hand" Command="{Binding SearchButton}" 
+                            />  
+                    </StackPanel>
                 </Grid>
-                <TextBox     
-                    Grid.Column="1"
-                    x:Name="Search"
-                    md:HintAssist.Hint="고객명" 
-                    VerticalAlignment="Center"
-                    FontSize="14"  
-                    Text="{Binding Keyword.Value}"
-                    Margin="10,0,10,0"
-                    Foreground="{StaticResource MainColor}"
-                    md:HintAssist.IsFloating="True">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding SearchExecute}" Key="Enter" CommandParameter="{Binding ElementName=Search, Path=Text}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
+                
                 <DataGrid
                         Grid.ColumnSpan="2"
                         x:Name="List"
@@ -93,16 +107,69 @@
                         CanUserAddRows="False"
                         IsReadOnly="True"
                         Margin="10" Grid.Row="1"
-                        ItemsSource="{Binding List}">   
-                    <DataGrid.InputBindings>
-                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
-                    </DataGrid.InputBindings>
+                        ItemsSource="{Binding ContractItems}">   
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <md:PackIcon 
+                                    Width="30"
+                                    Height="30"
+                                    Margin="0 0 50 0"
+                                    Kind="ChevronDoubleRight"
+                                    Padding="0" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource textColor2}"/>
+                                <DataGrid 
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Width="600"
+                                    MaxHeight="150"
+                                    HorizontalScrollBarVisibility="Auto"
+                                    MinHeight="150" 
+                                    Margin="5" 
+                                    IsReadOnly="True"
+                                    ItemsSource="{Binding Payment}"
+                                    CanUserAddRows="False" RowHeight="32"
+                                    AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsCheckedAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
+                                    <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
+                                    <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
+                                    <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
+                                    <DataGridTextColumn 
+                                        MaxWidth="120" Binding="{Binding PaymentCompleted.Value}" 
+                                        Header="완료유무" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            </Grid>    
+                            
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="0.1*" Header="No" Binding="{Binding No.Value}" />
-                        <DataGridTextColumn Width="0.1*" Header="날짜" Binding="{Binding Company.Value.CompanyName.Value}" />
-                        <DataGridTextColumn Width="0.15*" Header="계약자명" Binding="{Binding ProductType.Value.Name.Value}"/>
-                        <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Name.Value}"/>
-                        <DataGridTextColumn Width="0.2*" Header="비고" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}" />
+                        <DataGridTextColumn Width="0.05*" Header="No" Binding="{Binding ListNo.Value}" />
+                        <DataGridTextColumn Width="0.1*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
+                        <DataGridTextColumn Width="0.08*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
+                        <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
+                        <DataGridTextColumn Width="0.2*" Header="주소" Binding="{Binding Contractor.Value.Address.Value}"/>
+                        <DataGridTextColumn Width="0.2*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -133,7 +200,7 @@
                         Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Grid Grid.Row="3" Margin="0 -80 10 0" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="0.6*"/>

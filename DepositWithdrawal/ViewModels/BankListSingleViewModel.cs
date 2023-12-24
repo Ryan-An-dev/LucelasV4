@@ -81,7 +81,7 @@ namespace DepositWithdrawal.ViewModels
                     //return;
                 }
                 DialogParameters p = new DialogParameters();
-                p.Add("object",this.ReceiptModel.Value);
+                p.Add("object", this.ReceiptModel.Value);
                 this.dialogService.ShowDialog("FindItemPage", p, r => FindContractItem(r), "CommonDialogWindow");
             }
             else {  //Delete
@@ -93,10 +93,10 @@ namespace DepositWithdrawal.ViewModels
             if(r == null) return;
             if (r.Result == ButtonResult.OK)
             {
-                if (!r.Parameters.ContainsKey("SelectedPaymentItem")) return;
+                if (!r.Parameters.ContainsKey("object")) return;
                 else {
                     Payment temp = null;
-                    r.Parameters.TryGetValue("SelectedPaymentItem", out temp);
+                    r.Parameters.TryGetValue("object", out temp);
                 }
             }
             else 
