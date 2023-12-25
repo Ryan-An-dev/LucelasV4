@@ -100,6 +100,7 @@ namespace DepositWithdrawal.ViewModels
                 {
                     if (pay.IsSelected.Value)
                     {
+                        this.ReceiptModel.Value.ConnectedContract.Add(temp);
                         JObject inner = new JObject();
                         inner["con_id"] = temp.Id.Value;
                         inner["payment_id"] = pay.PaymentId.Value;
@@ -116,6 +117,7 @@ namespace DepositWithdrawal.ViewModels
                     network.SetReceiver(this);
                     network.SetConnectedContract(jobj);
                 }
+                
             }
         }
 

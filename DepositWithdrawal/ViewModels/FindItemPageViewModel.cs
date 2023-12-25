@@ -1,5 +1,6 @@
 ﻿using CommonModel;
 using CommonModel.Model;
+using CommonModule.Views;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;
@@ -95,19 +96,15 @@ namespace DepositWithdrawal.ViewModels
         {
             DialogResult temp = null;
             ButtonResult result = ButtonResult.None;
-            
             if (parameter?.ToLower() == "true")
             {
-                if (this.SelectedPayment == null)
-                    return;
                 result = ButtonResult.OK;
-                temp = new DialogResult(result);
                 DialogParameters p = new DialogParameters();
                 p.Add("object", this.ContractItems);
-                temp.Parameters.Add("object", p);
+                temp = new DialogResult(result, p);
             }
-            else if (parameter?.ToLower() == "false") 
-            { 
+            else if (parameter?.ToLower() == "false")
+            {
                 result = ButtonResult.Cancel;
                 temp = new DialogResult(result);
             }
