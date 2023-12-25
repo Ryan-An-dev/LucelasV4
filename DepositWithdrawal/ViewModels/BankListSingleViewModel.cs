@@ -88,6 +88,37 @@ namespace DepositWithdrawal.ViewModels
                 
             }
         }
+
+        private void SetPayment(ReactiveCollection<Contract>args)
+        {
+            JObject jobj = new JObject();
+            jobj["shi_id"] = this.ReceiptModel.Value.ReceiptNo.Value;
+            JArray jarr = new JArray();
+            foreach (Contract temp in args)
+            {
+                foreach (Payment pay in temp.Payment)
+                {
+                    if (pay.IsSelected.Value)
+                    {
+                        JObject inner = new JObject();
+                        inner["con_id"] = temp.Id.Value;
+                        inner["payment_id"] = pay.PaymentId.Value;
+                        jarr.Add(inner);
+
+                    }
+                }
+            }
+            if (jarr.Count > 0)
+            {
+                jobj["connected_contract"] = jarr;
+                using (var network = this.ContainerProvider.Resolve<DataAgent.BankListDataAgent>())
+                {
+                    network.SetReceiver(this);
+                    network.SetConnectedContract(jobj);
+                }
+            }
+        }
+
         private void FindContractItem(IDialogResult r) {
             //Contract ID 받아야되는데 
             if(r == null) return;
@@ -95,8 +126,10 @@ namespace DepositWithdrawal.ViewModels
             {
                 if (!r.Parameters.ContainsKey("object")) return;
                 else {
-                    Payment temp = null;
+                    ReactiveCollection<Contract> temp = null;
                     r.Parameters.TryGetValue("object", out temp);
+                    if (temp == null) return;
+                    SetPayment(temp);
                 }
             }
             else 

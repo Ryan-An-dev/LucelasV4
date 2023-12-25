@@ -26,7 +26,7 @@ namespace DataAccess
         CreateBankHistory=21,
         UpdateBankHistory=22,
         DeleteBankHistory=23,
-        GetConnectedContract = 24,
+        CONNECTED_CONTRACT = 24,
         #endregion
 
         #region 계약리스트

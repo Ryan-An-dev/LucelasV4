@@ -105,10 +105,10 @@ namespace DataAccess.Repository
                 NetManager.Send(msg, COMMAND.DeleteBankHistory);
             }
         }
-        public void GetConnectedContract(JObject msg) {
+        public void SetConnectedContract(JObject msg) {
             if (NetManager.session_id != 0)
             {
-                NetManager.Send(msg, COMMAND.GetConnectedContract);
+                NetManager.Send(msg, COMMAND.CONNECTED_CONTRACT);
             }
         }
 

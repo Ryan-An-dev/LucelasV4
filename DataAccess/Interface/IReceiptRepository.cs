@@ -25,7 +25,7 @@ namespace DataAccess.Interface
         public void UpdateBankHistory(JObject msg);
         public void DeleteBankHistory(JObject msg);
 
-        public void GetConnectedContract(JObject msg);
+        public void SetConnectedContract(JObject msg);
         #endregion
 
 

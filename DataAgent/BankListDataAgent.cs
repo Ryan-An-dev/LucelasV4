@@ -20,16 +20,6 @@ namespace DataAgent
         {
             this.repo = repo;
         }
-
-        public void GetAccountList() {
-            repo.GetBankCardList();
-        }
-        public void GetProductCategory() {
-            repo.GetProductCategoryList();
-        }
-        public void GetCategory() {
-            this.repo.GetReceiptCategoryList();
-        }
         public void GetBankHistory(JObject msg) {
             this.repo.GetBankHistoryList(msg);
         }
@@ -42,8 +32,8 @@ namespace DataAgent
         public void DeleteBankHistory(JObject msg) {
             this.repo.DeleteBankHistory(msg);
         }
-        public void GetConnectedContract(JObject msg) {
-            this.repo.GetConnectedContract(msg);
+        public void SetConnectedContract(JObject msg) {
+            this.repo.SetConnectedContract(msg);
         }
     }
 }

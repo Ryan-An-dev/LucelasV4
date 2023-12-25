@@ -90,7 +90,7 @@ namespace DepositWithdrawal.ViewModels
                 network.GetContractList(jobj);
             }
         }
-
+        
         protected virtual void CloseDialog(string parameter)
         {
             DialogResult temp = null;
@@ -103,7 +103,7 @@ namespace DepositWithdrawal.ViewModels
                 result = ButtonResult.OK;
                 temp = new DialogResult(result);
                 DialogParameters p = new DialogParameters();
-                p.Add("object", this.SelectedPayment.Value);
+                p.Add("object", this.ContractItems);
                 temp.Parameters.Add("object", p);
             }
             else if (parameter?.ToLower() == "false") 
@@ -190,7 +190,7 @@ namespace DepositWithdrawal.ViewModels
                     });
                     SetContractList(jobj);
                     break;
-                case COMMAND.DeleteBankHistory: //데이터 삭제완료
+                case COMMAND.CONNECTED_CONTRACT: //전송 완료
                     
                     break;
             }
