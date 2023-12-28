@@ -15,217 +15,226 @@
     <b:Interaction.Behaviors>
         <behavior:ValidationErrorBehavior x:Name="Behavior"/>
     </b:Interaction.Behaviors>
-    <DockPanel Background="#19191A">
-        <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" DockPanel.Dock="Top" Margin="20 8 20 0"/>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="20 0 20 0" >
-            <DatePicker 
-                IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
-                md:HintAssist.Hint="날짜" FontSize="14" 
-                md:HintAssist.IsFloating="True"  
-                Foreground="{StaticResource textColor2}" 
-                BorderBrush="{StaticResource textColor2}" >
-                <DatePicker.SelectedDate>
-                    <Binding Path="ReceiptModel.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <val:NotEmptyValidation/>
-                            <val:FutureDateValidation/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </DatePicker.SelectedDate>
-            </DatePicker>
-            <md:TimePicker Is24Hours="False"
-                           IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
-                           md:HintAssist.Hint="시간"
-                           FontSize="14" 
-                           md:HintAssist.IsFloating="True"  
-                           Foreground="{StaticResource textColor2}" 
-                           BorderBrush="{StaticResource textColor2}" >
-                <md:TimePicker.Text>
-                    <Binding Path="ReceiptModel.Value.Month.Value"
-                             NotifyOnValidationError="True" 
-                             Mode="TwoWay" 
-                             UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <val:NotEmptyValidation/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </md:TimePicker.Text>
-            </md:TimePicker>
-            <TextBox 
-                md:HintAssist.Hint="승인번호" 
-                Visibility="{Binding VisibilityAddButton.Value, UpdateSourceTrigger=PropertyChanged}" 
-                IsReadOnly="True" 
-                FontSize="14" 
-                Text="{Binding ReceiptModel.Value.ReceiptNo.Value}"  
-                Foreground="{StaticResource textColor2}" 
-                md:TextFieldAssist.HasClearButton="False" 
-                md:HintAssist.IsFloating="True" 
-                IsEnabled="False" 
-                Cursor="IBeam"/>
-            <ComboBox 
-                Style="{StaticResource MaterialDesignComboBox}"
-                md:HintAssist.Hint="대분류" 
-                FontSize="14" 
-                ItemsSource="{Binding SearchIncomeCostTypeValues}"
-                SelectedItem="{Binding ReceiptModel.Value.IncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Margin="0 0 0 12" 
-                Foreground="{StaticResource textColor2}"  
-                md:HintAssist.IsFloating="True"/>
-            <ComboBox 
-                md:HintAssist.Hint="중분류"
-                IsEnabled="False"
-                ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
-                SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="14" 
-                Margin="0 0 0 12" 
-                Foreground="{StaticResource textColor2}"  
-                md:HintAssist.IsFloating="True"/>
-            <ComboBox 
-                SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                md:HintAssist.Hint="소분류" 
-                ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
-                FontSize="14"
-                Margin="0 0 0 12" 
-                Foreground="{StaticResource textColor2}"  
-                md:HintAssist.IsFloating="True" />
-            <TextBox 
-                md:HintAssist.Hint="금액"
-                FontSize="14"  
-                IsEnabled="{Binding IsCashOnly.Value, UpdateSourceTrigger=PropertyChanged}"
-                Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
-                Margin="0 0 0 12"
-                Foreground="{StaticResource MainColor}"  
-                md:HintAssist.IsFloating="True"/>
-            <TextBox 
-                md:HintAssist.Hint="적요"
-                FontSize="14"
-                Text="{Binding ReceiptModel.Value.Tip.Value}"
-                Margin="0 0 0 12"
-                Foreground="{StaticResource MainColor}"  
-                md:HintAssist.IsFloating="True" IsEnabled="False"/>
-            <TextBox 
-                md:HintAssist.Hint="내용"
-                FontSize="14"  
-                Text="{Binding ReceiptModel.Value.Contents.Value }"
-                Margin="0 0 0 12"
-                Foreground="{StaticResource MainColor}"  
-                md:HintAssist.IsFloating="True"/>
-            <TextBox 
-                md:HintAssist.Hint="메모"
-                FontSize="14"  
-                Text="{Binding ReceiptModel.Value.Memo.Value}"
-                Margin="0 0 0 12"
-                Foreground="{StaticResource MainColor}"  
-                md:HintAssist.IsFloating="True"/>
-            <GroupBox 
-                Header="계약관리"  
-                Margin="0 20 0 0" 
-                Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
-                <StackPanel Cursor="">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button 
-                            md:HintAssist.Hint="추가"
-                            Content="{md:PackIcon Kind=Plus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Add"
-                            Margin="5" Cursor="Hand"/>
-                        <Button 
-                            md:HintAssist.Hint="삭제"
-                            Content="{md:PackIcon Kind=Minus, Size=14}"
-                            Command="{Binding AddContractItemButton}"
-                            CommandParameter="Delete"
-                            Margin="5"/>
-                    </StackPanel>
-                    <DataGrid
-                        VirtualizingStackPanel.IsVirtualizing="True"
-                        VirtualizingStackPanel.VirtualizationMode="Recycling"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        IsReadOnly="True"
-                        
-                        Margin="10"
-                        HorizontalScrollBarVisibility="Disabled"
-                        VerticalScrollBarVisibility="Visible"
-                        Height="250"
-                        ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.1*"/>
-                                        <ColumnDefinition Width="0.9*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <md:PackIcon 
-                                        Width="30"
-                                        Height="30"
-                                        Margin="0 0 0 0"
-                                        Kind="ChevronDoubleRight"
-                                        Padding="0" 
-                                        HorizontalAlignment="Right" 
-                                        VerticalAlignment="Center"
-                                        Foreground="{StaticResource textColor2}"/>
-                                    <DataGrid 
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Right"
-                                        Width="450"
-                                        MaxHeight="100"
-                                        MinHeight="100" 
-                                        Margin="5"
-                                        ItemsSource="{Binding Payment}"
-                                        CanUserAddRows="False" RowHeight="32"
-                                        AutoGenerateColumns="False">
-                                        <DataGrid.Columns>
-                                            <DataGridTemplateColumn>
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox IsEnabled="False" IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
-                                            <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
-                                            <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
-                                            <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
-                                            <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
-                                            
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </Grid>
+    <Grid Background="#19191A">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.105*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
+            <DockPanel Background="#19191A">
+                <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="20 0 20 0" >
+                    <DatePicker 
+              IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
+              md:HintAssist.Hint="날짜" FontSize="14" 
+              md:HintAssist.IsFloating="True"  
+              Foreground="{StaticResource textColor2}" 
+              BorderBrush="{StaticResource textColor2}" >
+                        <DatePicker.SelectedDate>
+                            <Binding Path="ReceiptModel.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:NotEmptyValidation/>
+                                    <val:FutureDateValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </DatePicker.SelectedDate>
+                    </DatePicker>
+                    <md:TimePicker Is24Hours="False"
+                         IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
+                         md:HintAssist.Hint="시간"
+                         FontSize="14" 
+                         md:HintAssist.IsFloating="True"  
+                         Foreground="{StaticResource textColor2}" 
+                         BorderBrush="{StaticResource textColor2}" >
+                        <md:TimePicker.Text>
+                            <Binding Path="ReceiptModel.Value.Month.Value"
+                           NotifyOnValidationError="True" 
+                           Mode="TwoWay" 
+                           UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:NotEmptyValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </md:TimePicker.Text>
+                    </md:TimePicker>
+                    <TextBox 
+              md:HintAssist.Hint="승인번호" 
+              Visibility="{Binding VisibilityAddButton.Value, UpdateSourceTrigger=PropertyChanged}" 
+              IsReadOnly="True" 
+              FontSize="14" 
+              Text="{Binding ReceiptModel.Value.ReceiptNo.Value}"  
+              Foreground="{StaticResource textColor2}" 
+              md:TextFieldAssist.HasClearButton="False" 
+              md:HintAssist.IsFloating="True" 
+              IsEnabled="False" 
+              Cursor="IBeam"/>
+                    <ComboBox 
+              Style="{StaticResource MaterialDesignComboBox}"
+              md:HintAssist.Hint="대분류" 
+              FontSize="14" 
+              ItemsSource="{Binding SearchIncomeCostTypeValues}"
+              SelectedItem="{Binding ReceiptModel.Value.IncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+              Margin="0 0 0 12" 
+              Foreground="{StaticResource textColor2}"  
+              md:HintAssist.IsFloating="True"/>
+                    <ComboBox 
+              md:HintAssist.Hint="중분류"
+              IsEnabled="False"
+              ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
+              SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+              FontSize="14" 
+              Margin="0 0 0 12" 
+              Foreground="{StaticResource textColor2}"  
+              md:HintAssist.IsFloating="True"/>
+                    <ComboBox 
+              SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+              md:HintAssist.Hint="소분류" 
+              ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
+              FontSize="14"
+              Margin="0 0 0 12" 
+              Foreground="{StaticResource textColor2}"  
+              md:HintAssist.IsFloating="True" />
+                    <TextBox 
+              md:HintAssist.Hint="금액"
+              FontSize="14"  
+              IsEnabled="{Binding IsCashOnly.Value, UpdateSourceTrigger=PropertyChanged}"
+              Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
+              Margin="0 0 0 12"
+              Foreground="{StaticResource MainColor}"  
+              md:HintAssist.IsFloating="True"/>
+                    <TextBox 
+              md:HintAssist.Hint="적요"
+              FontSize="14"
+              Text="{Binding ReceiptModel.Value.Tip.Value}"
+              Margin="0 0 0 12"
+              Foreground="{StaticResource MainColor}"  
+              md:HintAssist.IsFloating="True" IsEnabled="False"/>
+                    <TextBox 
+              md:HintAssist.Hint="내용"
+              FontSize="14"  
+              Text="{Binding ReceiptModel.Value.Contents.Value }"
+              Margin="0 0 0 12"
+              Foreground="{StaticResource MainColor}"  
+              md:HintAssist.IsFloating="True"/>
+                    <TextBox 
+              md:HintAssist.Hint="메모"
+              FontSize="14"  
+              Text="{Binding ReceiptModel.Value.Memo.Value}"
+              Margin="0 0 0 12"
+              Foreground="{StaticResource MainColor}"  
+              md:HintAssist.IsFloating="True"/>
+                    <GroupBox 
+              Header="계약관리"  
+              Margin="0 20 0 0" 
+              Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
+                        <StackPanel Cursor="">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button 
+                          md:HintAssist.Hint="추가"
+                          Content="{md:PackIcon Kind=Plus, Size=14}"
+                          Command="{Binding AddContractItemButton}"
+                          CommandParameter="Add"
+                          Margin="5" Cursor="Hand"/>
+                                <Button 
+                          md:HintAssist.Hint="삭제"
+                          Content="{md:PackIcon Kind=Minus, Size=14}"
+                          Command="{Binding AddContractItemButton}"
+                          CommandParameter="Delete"
+                          Margin="5"/>
+                            </StackPanel>
+                            <DataGrid
+                      VirtualizingStackPanel.IsVirtualizing="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      
+                      Margin="10"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Visible"
+                      Height="250"
+                      ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGrid.RowDetailsTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.1*"/>
+                                                <ColumnDefinition Width="0.9*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <md:PackIcon 
+                                      Width="30"
+                                      Height="30"
+                                      Margin="0 0 0 0"
+                                      Kind="ChevronDoubleRight"
+                                      Padding="0" 
+                                      HorizontalAlignment="Right" 
+                                      VerticalAlignment="Center"
+                                      Foreground="{StaticResource textColor2}"/>
+                                            <DataGrid 
+                                      Grid.Column="1"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Right"
+                                      Width="450"
+                                      MaxHeight="100"
+                                      MinHeight="100" 
+                                      Margin="5"
+                                      ItemsSource="{Binding Payment}"
+                                      CanUserAddRows="False" RowHeight="32"
+                                      AutoGenerateColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsEnabled="False" IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
+                                                    <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
+                                                    <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
+                                                    <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
 
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Header="No" Binding="{Binding ListNo.Value}" />
-                            <DataGridTextColumn Width="*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
-                            <DataGridTextColumn Width="*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
-                            <DataGridTextColumn Width="*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
-                            <DataGridTextColumn Width="*" Header="주소" Binding="{Binding Contractor.Value.Address.Value}"/>
-                            <DataGridTextColumn Width="*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
-                        <TextBlock 
-                        Text="남은 금액 : " 
-                        Foreground="White" 
-                        FontSize="13" 
-                        FontWeight="Bold"/>
-                        <TextBlock 
-                        Text="150,000 원"
-                        Foreground="White" 
-                        FontSize="13" 
-                        FontWeight="Bold"/>
-                    </StackPanel>
-                    
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Grid>
+
+                                    </DataTemplate>
+                                </DataGrid.RowDetailsTemplate>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="*" Header="No" Binding="{Binding ListNo.Value}" />
+                                    <DataGridTextColumn Width="*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
+                                    <DataGridTextColumn Width="*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
+                                    <DataGridTextColumn Width="*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
+                                    <DataGridTextColumn Width="*" Header="주소" Binding="{Binding Contractor.Value.Address.Value}"/>
+                                    <DataGridTextColumn Width="*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+                                <TextBlock 
+                      Text="남은 금액 : " 
+                      Foreground="White" 
+                      FontSize="13" 
+                      FontWeight="Bold"/>
+                                <TextBlock 
+                      Text="150,000 원"
+                      Foreground="White" 
+                      FontSize="13" 
+                      FontWeight="Bold"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </GroupBox>
                 </StackPanel>
-               
-            </GroupBox>
-        </StackPanel>
-        <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom">
-            <Grid Width="Auto">
-                <views:DeleteButton Command="{Binding DeleteButton}"
-                                    Visibility="{Binding VisibilityAddButton.Value}"/>
-                <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
-            </Grid>
-        </md:ColorZone>
-    </DockPanel>
+                <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom">
+                    <Grid Width="Auto">
+                        <views:DeleteButton Command="{Binding DeleteButton}"
+                                  Visibility="{Binding VisibilityAddButton.Value}"/>
+                        <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
+                    </Grid>
+                </md:ColorZone>
+            </DockPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
