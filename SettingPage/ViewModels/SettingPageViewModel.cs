@@ -440,6 +440,8 @@ namespace SettingPage.ViewModels
                             temp.Address.Value = jobj["employee_address"].ToString();
                         if (jobj["employee_address_detail"] != null)
                             temp.AddressDetail.Value = jobj["employee_address_detail"].ToString();
+                        if (jobj["employee_memo"] != null)
+                            temp.Memo.Value = jobj["employee_memo"].ToString();
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             if(EmployeeListViewModel != null)
