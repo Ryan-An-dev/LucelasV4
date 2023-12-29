@@ -344,26 +344,32 @@ namespace ContractPage.ViewModels
                          
 
                             //제품 
-                            if (inner["product_list"] != null)
+                            if (inner["product_list"] != null && !inner["product_list"].ToString().Equals(""))
                             {
-                                foreach (JObject con in inner["product_list"] as JArray) {
-                                    ContractedProduct contractproduct = SetProduct(con);    
+                                
+                                foreach (JObject con in inner["product_list"] as JArray)
+                                {
+                                    ContractedProduct contractproduct = SetProduct(con);
                                     temp.Product.Add(contractproduct);
                                 }
                                 temp.TotalPrice();
                                 string combine = "";
-                                foreach (ContractedProduct item in temp.Product) {
-                                    if (combine != string.Empty) {
+                                foreach (ContractedProduct item in temp.Product)
+                                {
+                                    if (combine != string.Empty)
+                                    {
                                         combine += ", ";
                                     }
-                                    combine += 
+                                    combine +=
                                         item.FurnitureInventory.Value.ProductType.Value.Name.Value + " : "
-                                        + item.FurnitureInventory.Value.Name.Value 
-                                        + "(" +item.SellCount.Value + "개)"
+                                        + item.FurnitureInventory.Value.Name.Value
+                                        + "(" + item.SellCount.Value + "개)"
                                         ;
                                 }
                                 temp.ProductNameCombine.Value = combine;
                                 ProductMemoCombine(temp);
+                            
+                               
                             }
                             if (inner["total"] != null)
                                 temp.Price.Value = inner["total"].ToObject<int>();
@@ -372,7 +378,7 @@ namespace ContractPage.ViewModels
 
 
                             //계약금,잔금 부분
-                            if (inner["payment"] != null)
+                            if (inner["payment"] != null && !inner["payment"].ToString().Equals(""))
                             {
 
                                 foreach (JObject jobj in inner["payment"] as JArray)
