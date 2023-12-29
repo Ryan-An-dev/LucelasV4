@@ -227,14 +227,17 @@
 
                     </GroupBox>
                 </StackPanel>
-                <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom">
-                    <Grid Width="Auto">
-                        <views:DeleteButton Command="{Binding DeleteButton}"
-                                  Visibility="{Binding VisibilityAddButton.Value}"/>
-                        <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
-                    </Grid>
-                </md:ColorZone>
+              
             </DockPanel>
         </ScrollViewer>
+        <md:ColorZone
+            Grid.Row="2"
+            Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom">
+            <Grid Width="Auto">
+                <views:DeleteButton Command="{Binding DeleteButton}"
+                    Visibility="{Binding VisibilityAddButton.Value}"/>
+                <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
+            </Grid>
+        </md:ColorZone>
     </Grid>
 </UserControl>

@@ -35,7 +35,14 @@ namespace CommonModel
                 return null;
             });
 
-            this.ProductType = CreateProperty<FurnitureType>("제품타입");
+            this.ProductType = new ReactiveProperty<FurnitureType>(mode: ReactivePropertyMode.IgnoreInitialValidationError).SetValidateNotifyError(x =>
+            {
+                if (x == null || x.Id.Value == 0)
+                {
+                    return $"제품분류을(를) 입력하세요.";
+                }
+                return null;
+            });
             SetObserver();
         }
         public JObject MakeJson()

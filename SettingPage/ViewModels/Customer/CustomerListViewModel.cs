@@ -186,13 +186,13 @@ namespace SettingPage.ViewModels
                         Customer item = r.Parameters.GetValue<Customer>("object");
                         if (item != null)
                         {
-                            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                            using (var network = ContainerProvider.Resolve<DataAgent.CustomerDataAgent>())
                             {
                                 network.SetReceiver(this);
                                 JObject jobj = new JObject();
                                 jobj["changed_item"] = item.ChangedItem;
                                 jobj["cui_id"] = item.Id.Value;
-                                network.Update(jobj);
+                                network.UpdateCustomerList(jobj);
                             }
                         }
                     }

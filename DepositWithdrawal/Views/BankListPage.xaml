@@ -298,11 +298,11 @@
                 <DataGrid.InputBindings>
                     <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
                 </DataGrid.InputBindings>
-                <DataGrid.RowDetailsTemplateSelector>
+                <!--<DataGrid.RowDetailsTemplateSelector>
                     <Selector:DepositDataTemplateSelector 
                         InComeTemplate ="{StaticResource InComeTemplate}" 
                         CostTemplate="{StaticResource CostTemplate}"/>
-                </DataGrid.RowDetailsTemplateSelector>
+                </DataGrid.RowDetailsTemplateSelector>-->
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         MinWidth="50" Width="0.13*" 

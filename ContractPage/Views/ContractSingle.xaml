@@ -98,7 +98,6 @@
                                 HorizontalAlignment="Right" Cursor="Hand"/>
                         </StackPanel>
 
-                            
                         <TextBox 
                             md:HintAssist.Hint="번호"
                             FontSize="14"  
