@@ -237,7 +237,7 @@ namespace ContractPage.ViewModels
                                     customer.Address1.Value = inner["cui_address_detail"].ToObject<string>();
                                 if (inner["cui_memo"] != null)
                                     customer.Memo.Value = inner["cui_memo"].ToObject<string>();
-                                Application.Current.Dispatcher.BeginInvoke(() =>
+                                Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     this.CustomerList.Add(customer);
                                 });

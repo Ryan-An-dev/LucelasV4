@@ -22,6 +22,7 @@ using System.Windows.Input;
 
 namespace ContractPage.ViewModels
 {
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum SearchType
     {
         [Description("재고")]
@@ -58,6 +59,7 @@ namespace ContractPage.ViewModels
 
         public FindInventoryItemViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
+            SearchTypeSelect= new ReactiveProperty<SearchType>(SearchType.Product).AddTo(disposable);
             List_MouseDoubleClick = new ReactiveCommand().WithSubscribe(() => RowDoubleClickEvent()).AddTo(disposable);
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
@@ -139,7 +141,6 @@ namespace ContractPage.ViewModels
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
-            ErpLogWriter.LogWriter.Debug(msg);
             if (packet.Header.CMD < (ushort)COMMAND.CREATEPRODUCTINFO
                 || packet.Header.CMD > (ushort)COMMAND.DELETEPRODUCTINFO)
             {
@@ -159,18 +160,22 @@ namespace ContractPage.ViewModels
                     {
                         return;
                     }
+
                     ErpLogWriter.LogWriter.Trace(jobject.ToString());
                     SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
                     FurnitureInfos = temp.FurnitureInfos;
-                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    Application.Current.Dispatcher.Invoke(() => { List.Clear(); });
+                    
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try
                         {
                             if (jobject["product_list"] == null)
                                 return;
+
                             JArray jarr = new JArray();
                             jarr = jobject["product_list"] as JArray;
+                            
                             if (jobject["history_count"] != null)
                                 TotalItemCount.Value = jobject["history_count"].ToObject<int>();
 

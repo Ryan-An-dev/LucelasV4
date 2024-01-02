@@ -110,7 +110,7 @@
                           CanUserAddRows="False"
                           IsReadOnly="True"
                           Margin="10" Grid.Row="1"
-                          ItemsSource="{Binding List}">
+                          ItemsSource="{Binding List, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
                         </DataGrid.InputBindings>

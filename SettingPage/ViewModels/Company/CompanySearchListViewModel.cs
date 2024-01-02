@@ -69,7 +69,7 @@ namespace SettingPage.ViewModels
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GETCOMPANYINFO: //데이터 조회
-                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    Application.Current.Dispatcher.Invoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try

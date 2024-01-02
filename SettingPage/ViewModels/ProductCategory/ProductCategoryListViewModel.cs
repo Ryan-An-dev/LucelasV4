@@ -90,7 +90,7 @@ namespace SettingPage.ViewModels
                     {
                         return;
                     }
-                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    Application.Current.Dispatcher.Invoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try

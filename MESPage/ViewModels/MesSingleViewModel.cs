@@ -263,7 +263,7 @@ namespace MESPage.ViewModels
                     ErpLogWriter.LogWriter.Trace(jobject.ToString());
                     SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
                     FurnitureInfos = temp.FurnitureInfos;
-                    Application.Current.Dispatcher.BeginInvoke(() => { List.Clear(); });
+                    Application.Current.Dispatcher.Invoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)
                     {
                         try
