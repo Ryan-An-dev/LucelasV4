@@ -191,6 +191,10 @@ namespace CommonModel
                     DateTime time = (DateTime)value;
                     ChangedItem[name] = time.ToString("yyyy-MM-dd");
                 }
+                else if(value is bool)
+                {
+                    ChangedItem[name] = (bool)value;
+                }
 
                 isChanged = true;
             }

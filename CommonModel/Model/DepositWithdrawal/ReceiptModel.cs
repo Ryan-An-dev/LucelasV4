@@ -65,6 +65,7 @@ namespace CommonModel.Model
 
     public class ReceiptModel : PrismCommonModelBase
     {
+        public ReactiveProperty<bool> IsAutoCategory { get; set; }
         public ReactiveProperty<int> ListNo { get; set; }
         public ReactiveProperty<int> ReceiptNo { get; set; }
         public ReactiveProperty<BankModel> BankInfo { get; set; }
@@ -84,6 +85,7 @@ namespace CommonModel.Model
         public ReactiveProperty<string> indexKey { get; set; }
         public ReceiptModel() : base()
         {
+            this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>("", mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);
@@ -107,6 +109,7 @@ namespace CommonModel.Model
 
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
+            this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
             CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>(Tip, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //적요
@@ -157,6 +160,7 @@ namespace CommonModel.Model
             this.Money.Subscribe(x => ChangedJson("shi_cost", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
+            this.IsAutoCategory.Subscribe(x => ChangedJson("shi_auto_category", x));
         }
         private void ChargeCalc(int allocatePrice)
         {

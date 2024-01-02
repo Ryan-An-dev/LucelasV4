@@ -84,7 +84,7 @@ namespace DataAccess
         #endregion
 
         #region 통계데이터
-        GetDailyList = 60,
+        GetDailyList = 42,
         #endregion
 
         #region 재고관리

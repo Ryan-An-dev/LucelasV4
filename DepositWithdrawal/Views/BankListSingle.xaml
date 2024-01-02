@@ -111,12 +111,13 @@
               Foreground="{StaticResource MainColor}"  
               md:HintAssist.IsFloating="True" IsEnabled="False"/>
                     <TextBox 
-              md:HintAssist.Hint="내용"
-              FontSize="14"  
-              Text="{Binding ReceiptModel.Value.Contents.Value }"
-              Margin="0 0 0 12"
-              Foreground="{StaticResource MainColor}"  
-              md:HintAssist.IsFloating="True"/>
+                        IsReadOnly="True"
+                        md:HintAssist.Hint="내용"
+                        FontSize="14"  
+                        Text="{Binding ReceiptModel.Value.Contents.Value }"
+                        Margin="0 0 0 12"
+                        Foreground="{StaticResource MainColor}"  
+                        md:HintAssist.IsFloating="True"/>
                     <TextBox 
               md:HintAssist.Hint="메모"
               FontSize="14"  
@@ -124,10 +125,53 @@
               Margin="0 0 0 12"
               Foreground="{StaticResource MainColor}"  
               md:HintAssist.IsFloating="True"/>
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition  Binding="{Binding ReceiptModel.Value.FullyCompleted.Value}" Value="NotYet"/>
+                                            <Condition  Binding="{Binding ReceiptModel.Value.IncomeCostType.Value}" Value="Cost"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <CheckBox 
+                            BorderBrush="White"
+                            Foreground="{StaticResource MainColor}"
+                            IsChecked="{Binding IsAutoCategory.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            >
+                            <ContentControl>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>위 내용 [ </TextBlock>
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="ExtraBold"
+                                        Foreground="{StaticResource textColor2}"
+                                        Margin="5 0 5 0"
+                                        Text="{Binding ReceiptModel.Value.Contents.Value}"/>
+                                    <TextBlock> ]</TextBlock>
+                                    <TextBlock Margin="5 0 0 0"> 을/를 </TextBlock>
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="ExtraBold"
+                                        Foreground="{StaticResource textColor2}"
+                                        Margin="5 0 5 0"
+                                        Text="{Binding ReceiptModel.Value.CategoryInfo.Value.Name.Value}"/>
+                                    <TextBlock> 으로 자동 분류합니다.</TextBlock>
+                                </StackPanel>
+                            </ContentControl>
+                        </CheckBox>
+                        
+                    </StackPanel>
                     <GroupBox 
-              Header="계약관리"  
-              Margin="0 20 0 0" 
-              Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
+                          Header="계약관리"  
+                          Margin="0 20 0 0" 
+                          Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
                         <StackPanel Cursor="">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button 
