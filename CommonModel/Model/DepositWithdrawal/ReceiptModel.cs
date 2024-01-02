@@ -105,8 +105,6 @@ namespace CommonModel.Model
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
             SetObserver();
-
-
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
             this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
@@ -129,29 +127,10 @@ namespace CommonModel.Model
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
             SetObserver();
-
-        }
-        public ReceiptModel Copy() {
-            ReceiptModel tmp = new ReceiptModel(this.Tip.Value, this.CategoryInfo.Value, this.Memo.Value,this.Money.Value,this.Contents.Value,(int)this.IncomeCostType.Value);
-            
-            tmp.ChangedItem= this.ChangedItem;
-            tmp.BankInfo.Value = this.BankInfo.Value;
-            tmp.ListNo.Value = this.ListNo.Value;
-            tmp.ReceiptNo.Value = this.ReceiptNo.Value;
-            tmp.Month.Value = this.Month.Value;
-            tmp.ReceiptType.Value = this.ReceiptType.Value;
-            tmp.FullyCompleted.Value = this.FullyCompleted.Value;
-            tmp.RemainPrice.Value = this.RemainPrice.Value;
-            tmp.indexKey.Value = this.indexKey.Value;
-            if (this.ConnectedContract.Count > 0) { 
-                foreach (Contract item in this.ConnectedContract) {
-                    tmp.ConnectedContract.Add(item);
-                }
-            }
-            return tmp;
         }
         public override void SetObserver()
         {
+            this.IsAutoCategory.Subscribe(x => ChangedJson("shi_auto_category", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
             this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
@@ -160,7 +139,6 @@ namespace CommonModel.Model
             this.Money.Subscribe(x => ChangedJson("shi_cost", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
-            this.IsAutoCategory.Subscribe(x => ChangedJson("shi_auto_category", x));
         }
         private void ChargeCalc(int allocatePrice)
         {

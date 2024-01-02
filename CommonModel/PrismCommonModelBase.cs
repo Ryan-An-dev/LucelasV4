@@ -195,7 +195,6 @@ namespace CommonModel
                 {
                     ChangedItem[name] = (bool)value;
                 }
-
                 isChanged = true;
             }
         }

@@ -179,10 +179,12 @@ namespace DepositWithdrawal.ViewModels
             {
                 Title.Value = "내역 수정";
                 IsEnableTab.Value = true; // 현금내역 아닐때
-                this.ReceiptModel.Value = Receipt.Value.Copy();
+                this.ReceiptModel.Value = Receipt.Value;
                 if (Receipt.Value.IncomeCostType.Value == IncomeCostType.Cost) {
                     this.VisibilityContract.Value = Visibility.Collapsed;
                 }
+                this.ReceiptModel.Value.isChanged = false;
+                this.ReceiptModel.Value.ChangedItem.RemoveAll();
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
             if (this.ReceiptModel.Value.ReceiptType.Value == ReceiptType.Cash) {
@@ -213,7 +215,7 @@ namespace DepositWithdrawal.ViewModels
                         if (this.ReceiptModel.Value.isChanged) {
                             JObject inner = new JObject();
                             inner["shi_id"] = this.ReceiptModel.Value.ReceiptNo.Value;
-                            inner["changed_property"] = this.ReceiptModel.Value.ChangedItem;
+                            inner["changed_item"] = this.ReceiptModel.Value.ChangedItem;
                             jobj["update_history"] = inner;
                             network.UpdateBankHistory(jobj);
                         }

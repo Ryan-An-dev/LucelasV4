@@ -132,7 +132,6 @@
                                 <Style.Triggers>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition  Binding="{Binding ReceiptModel.Value.FullyCompleted.Value}" Value="NotYet"/>
                                             <Condition  Binding="{Binding ReceiptModel.Value.IncomeCostType.Value}" Value="Cost"/>
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="Visibility" Value="Visible"/>
@@ -143,7 +142,7 @@
                         <CheckBox 
                             BorderBrush="White"
                             Foreground="{StaticResource MainColor}"
-                            IsChecked="{Binding IsAutoCategory.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsChecked="{Binding ReceiptModel.Value.IsAutoCategory.Value}"
                             >
                             <ContentControl>
                                 <StackPanel Orientation="Horizontal">
