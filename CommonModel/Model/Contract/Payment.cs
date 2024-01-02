@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CommonModel.Model
 {
@@ -134,6 +135,13 @@ namespace CommonModel.Model
             this.Price.Subscribe(x => ChangedJsonADD("price", x));
             this.Action.Subscribe(x => ChangedJson("action", x));
             this.SelectedPayCard.Subscribe(x => ChangedJsonADD("payment_card", x.Id.Value));
+            this.IsSelected.Subscribe(x=>OnMyEvent(x,this.Price.Value));
+        }
+
+        public delegate void PayCheckEvent(bool isChecked,int price);
+        public event PayCheckEvent MyPayCheckEvent;
+        public virtual void OnMyEvent(bool message,int price) { 
+            MyPayCheckEvent?.Invoke(message,price);
         }
     }
 }

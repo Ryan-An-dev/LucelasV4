@@ -22,12 +22,25 @@ using System.Windows.Input;
 
 namespace ContractPage.ViewModels
 {
+    public enum SearchType
+    {
+        [Description("재고")]
+        Inventory = 0,
+        [Description("제품")]
+        Product = 1,
+    }
+   
     public class FindInventoryItemViewModel : PrsimListViewModelBase, IDisposable, INetReceiver, IDialogAware
     {
         public ReactiveProperty<CompanyProductSelect> CompanyProductTypeSelect { get; set; } //검색옵션
         public IEnumerable<CompanyProductSelect> CompanyProductTypeSelectValues //검색옵션
         {
             get { return Enum.GetValues(typeof(CompanyProductSelect)).Cast<CompanyProductSelect>(); }
+        }
+        public ReactiveProperty<SearchType> SearchTypeSelect { get; set; } //검색옵션
+        public IEnumerable<SearchType> SearchTypeValues //검색옵션
+        {
+            get { return Enum.GetValues(typeof(SearchType)).Cast<SearchType>(); }
         }
         public ReactiveCommand List_MouseDoubleClick { get; set; }
 
@@ -175,6 +188,8 @@ namespace ContractPage.ViewModels
                                     inventory.Name.Value = jobj["product_name"].ToString();
                                 if (jobj["product_price"] != null)
                                     inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                                if (jobj["product_id"]!=null)
+                                    inventory.Id.Value = jobj["product_id"].ToObject<int>();
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     this.List.Add(inventory);
@@ -232,8 +247,8 @@ namespace ContractPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["aci_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
-                jobj["acpi_id"] = (int)(selecteditem as Product).Id.Value;
+                jobj["company_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
+                jobj["product_id"] = (int)(selecteditem as Product).Id.Value;
                 network.Delete(jobj);
                 IsLoading.Value = true;
             }
@@ -274,24 +289,48 @@ namespace ContractPage.ViewModels
 
         public override void SearchTitle(string Keyword)
         {
-            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+            if (SearchTypeSelect.Value == SearchType.Inventory)
             {
-                network.SetReceiver(this);
-                JObject jobj = new JObject();
-                JObject search = new JObject();
-                if (this.CompanyProductTypeSelect.Value == CompanyProductSelect.ProductName)
+                using (var network = ContainerProvider.Resolve<DataAgent.InventoryDataAgent>())
                 {
-                    search["product_name"] = Keyword;
+                    network.SetReceiver(this);
+                    JObject jobj = new JObject();
+                    JObject search = new JObject();
+                    if (this.CompanyProductTypeSelect.Value == CompanyProductSelect.ProductName)
+                    {
+                        search["product_name"] = Keyword;
+                    }
+                    else
+                    {
+                        search["company_name"] = Keyword;
+                    }
+                    jobj["page_unit"] = (ListCount.Value);
+                    jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                    jobj["search_option"] = search;
+                    network.Get(jobj);
                 }
-                else
-                {
-                    search["company_name"] = Keyword;
-                }
-                jobj["page_unit"] = (ListCount.Value);
-                jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
-                jobj["search_option"] = search;
-                network.Get(jobj);
             }
+            else {
+                using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                {
+                    network.SetReceiver(this);
+                    JObject jobj = new JObject();
+                    JObject search = new JObject();
+                    if (this.CompanyProductTypeSelect.Value == CompanyProductSelect.ProductName)
+                    {
+                        search["product_name"] = Keyword;
+                    }
+                    else
+                    {
+                        search["company_name"] = Keyword;
+                    }
+                    jobj["page_unit"] = (ListCount.Value);
+                    jobj["page_start_pos"] = (CurrentPage.Value - 1) * ListCount.Value;
+                    jobj["search_option"] = search;
+                    network.Get(jobj);
+                }
+            }
+            
         }
 
         public override void UpdatePageItem(CommonModel.MovePageType param, int count)

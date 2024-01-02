@@ -201,8 +201,8 @@ namespace SettingPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["aci_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
-                jobj["acpi_id"] = (int)(selecteditem as Product).Id.Value;
+                jobj["company_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
+                jobj["product_id"] = (int)(selecteditem as Product).Id.Value;
                 network.Delete(jobj);
                 IsLoading.Value = true;
             }
@@ -230,8 +230,8 @@ namespace SettingPage.ViewModels
                                 network.SetReceiver(this);
                                 JObject jobj = new JObject();
                                 jobj["changed_item"] = item.ChangedItem;
-                                jobj["acpi_id"] = item.Id.Value;
-                                jobj["aci_id"] = item.Company.Value.Id.Value;
+                                jobj["product_id"] = item.Id.Value;
+                                jobj["company_id"] = item.Company.Value.Id.Value;
                                 network.Update(jobj);
                             }
                         }

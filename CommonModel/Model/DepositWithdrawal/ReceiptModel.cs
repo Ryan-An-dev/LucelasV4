@@ -79,9 +79,13 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Tip { get; set; }
         public ReactiveProperty<string> Memo { get; set; }
         public ReactiveProperty<int> RemainPrice { get; set; }
+        public ReactiveProperty<int> AllocatedPrice { get; set; }
+        public ReactiveProperty<float> CardCharge { get; set; }
         public ReactiveProperty<string> indexKey { get; set; }
         public ReceiptModel() : base()
         {
+            this.CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
+            this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>("", mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);//ListNo
@@ -98,10 +102,13 @@ namespace CommonModel.Model
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
-           
+            SetObserver();
+
+
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
-            
+            CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
+            this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>(Tip, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //적요
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);//ListNo
@@ -118,7 +125,8 @@ namespace CommonModel.Model
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
             this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
             this.ChangedItem = new JObject();
-            
+            SetObserver();
+
         }
         public ReceiptModel Copy() {
             ReceiptModel tmp = new ReceiptModel(this.Tip.Value, this.CategoryInfo.Value, this.Memo.Value,this.Money.Value,this.Contents.Value,(int)this.IncomeCostType.Value);
@@ -148,6 +156,18 @@ namespace CommonModel.Model
             this.Tip.Subscribe(x => ChangedJson("shi_use_name", x)).AddTo(disposable);
             this.Money.Subscribe(x => ChangedJson("shi_cost", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
+            this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
+        }
+        private void ChargeCalc(int allocatePrice)
+        {
+            if(this.ReceiptType.Value == Model.ReceiptType.Card)
+            {
+                this.CardCharge.Value = (float)( this.AllocatedPrice.Value / this.Money.Value)* 100;
+            }
+            else
+            {
+                this.CardCharge.Value = 0;
+            }
         }
     }
 }

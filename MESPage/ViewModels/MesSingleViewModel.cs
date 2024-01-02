@@ -362,8 +362,8 @@ namespace MESPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["aci_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
-                jobj["acpi_id"] = (int)(selecteditem as Product).Id.Value;
+                jobj["company_id"] = (int)(selecteditem as Product).Company.Value.Id.Value;
+                jobj["product_id"] = (int)(selecteditem as Product).Id.Value;
                 network.Delete(jobj);
                 IsLoading.Value = true;
             }

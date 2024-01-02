@@ -382,6 +382,8 @@ namespace ContractPage.ViewModels
                 Title.Value = "계약 내역 수정";
                 IsNewContract.Value = Visibility.Visible;
                 this.Contract.Value = contract;
+                this.Contract.Value.ClearJson();
+                this.Contract.Value.isChanged = false;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
         }

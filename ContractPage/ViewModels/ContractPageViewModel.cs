@@ -305,7 +305,7 @@ namespace ContractPage.ViewModels
                         {
                             Contract temp = new Contract();
                             int id = 0;
-                            temp.ListNo.Value = i;
+                            temp.ListNo.Value = i++;
                             Customer Contractor = null;
 
                             if (inner["con_id"] != null)

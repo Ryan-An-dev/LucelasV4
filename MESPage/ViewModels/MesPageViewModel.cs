@@ -315,8 +315,8 @@ namespace MESPage.ViewModels
         private Product SetProductInfo(JObject jobj)
         {
             Product product = new Product();
-            if (jobj["acpi_id"] != null)
-                product.Id.Value = jobj["acpi_id"].ToObject<int>();
+            if (jobj["product_id"] != null)
+                product.Id.Value = jobj["product_id"].ToObject<int>();
             if (jobj["product_type"] != null)
                 product.ProductType.Value = GetProductType(jobj["product_type"].ToObject<int>());
             if (jobj["product_name"] != null)

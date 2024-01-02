@@ -94,6 +94,18 @@ namespace CommonModel.Model
             }
             this.Price.Value = temper;
         }
+
+        public void ClearJson() { 
+            this.ChangedItem.RemoveAll();
+            foreach (Payment item in Payment) { 
+                item.ClearJson();
+                item.isChanged = false;
+            }
+            foreach (ContractedProduct item in Product) {
+                item.ClearJson();
+                item.isChanged = false;
+            }
+        }
         /// <summary>
         /// 현재 정보 모두 파싱해서 내리는 곳
         /// 

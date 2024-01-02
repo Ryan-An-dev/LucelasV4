@@ -48,7 +48,7 @@ namespace CommonModel
         public JObject MakeJson()
         {
             JObject jobj = new JObject();
-            jobj["acpi_id"] = this.Id.Value;
+            jobj["product_id"] = this.Id.Value;
             jobj["company_id"] = this.Company.Value.MakeJson();
             jobj["product_name"] = this.Name.Value;
             jobj["product_price"] = (int)Price.Value;

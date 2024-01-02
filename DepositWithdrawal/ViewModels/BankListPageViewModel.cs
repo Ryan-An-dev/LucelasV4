@@ -356,9 +356,16 @@ namespace DepositWithdrawal.ViewModels
                         {
                             foreach (JObject jobj in inner["connected_contract"] as JArray)
                             {
-                                //Contract 클래스 같이쓰면 안될거같네 하나 더 만들기
-                                //Contract innerItem = FindContractItem(jobj["cti_id"].ToObject<int>());
-                                //temp.ConnectedContract.Add(Contract);
+                                Contract contract = new Contract();
+                                if (jobj["con_id"] != null) { 
+                                    contract.Id.Value = jobj["con_id"].ToObject<int>();
+                                }
+                                if (jobj["pay_id"] != null) { 
+                                    Payment payment = new Payment();
+                                    payment.PaymentId.Value = jobj["pay_id"].ToObject<int>();
+                                    contract.Payment.Add(payment);
+                                }
+                                temp.ConnectedContract.Add(contract);
                             }
                         }
                         if (inner["remain_price"] != null)
@@ -402,7 +409,7 @@ namespace DepositWithdrawal.ViewModels
                 //foreach (JObject inner in msg["company_product"] as JArray)
                 //{
                 //    ReactiveProperty<string> CompanyName = new ReactiveProperty<string>(inner["company_name"].ToString());
-                //    ReactiveProperty<int> CompanyID = new ReactiveProperty<int>(inner["aci_id"].ToObject<int>());
+                //    ReactiveProperty<int> CompanyID = new ReactiveProperty<int>(inner["company_id"].ToObject<int>());
                 //    ReactiveCollection<Product> ProductList = new ReactiveCollection<Product>();
                 //    foreach(JObject dept in inner["product"] as JArray) 
                 //    {

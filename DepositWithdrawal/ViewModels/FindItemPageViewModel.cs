@@ -24,6 +24,17 @@ namespace DepositWithdrawal.ViewModels
 {
     public class FindItemPageViewModel : PrsimListViewModelBase, INetReceiver,IDialogAware
     {
+        public ReactiveProperty<ReceiptType> SearchReceiptType { get; set; }
+        public IEnumerable<ReceiptType> SearchReceiptTypeValues
+        {
+            get { return Enum.GetValues(typeof(ReceiptType)).Cast<ReceiptType>(); }
+        }
+
+        public ReactiveProperty<DateTime> StartDate { get; set; }
+        public ReactiveProperty<DateTime> EndDate { get; set; }
+
+        
+
         public ReactiveCollection<FurnitureType> furnitureInfos { get; }
         public ReactiveCollection<PayCardType> PaymentCardList { get; set; }
         public ReactiveCollection<Contract> ContractItems { get; }
@@ -41,6 +52,9 @@ namespace DepositWithdrawal.ViewModels
 
         public FindItemPageViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
+            this.EndDate = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
+            this.StartDate = new ReactiveProperty<DateTime>(DateTime.Today.AddMonths(-1)).AddTo(this.disposable);
+            SearchReceiptType = new ReactiveProperty<ReceiptType>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             this.ContainerProvider= containerprovider;
             this.args= new ReactiveProperty<ReceiptModel>().AddTo(disposable);
@@ -56,35 +70,19 @@ namespace DepositWithdrawal.ViewModels
         }
         private void SearchExecuteCommand(string obj)
         {
-            if (this.args.Value == null)
-                return;
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>())
             {
                 JObject jobj = new JObject();
                 jobj["page_unit"] = 30;
                 jobj["page_start_pos"] = 0;
                 JObject jobj2 = new JObject();
-                jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
-                jobj2["start_time"] = args.Value.Month.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
-                jobj2["end_time"] = args.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                //시간쪽 수정해야됨 starttime이랑 endtime 어떻게 정하기로 했는지 까먹음
+                jobj2["payment_method"] = (int)this.SearchReceiptType.Value;
+                jobj2["start_time"] =  this.StartDate.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
+                jobj2["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+
                 jobj2["complete"] = 2;
                 if (obj != string.Empty) {
-                    jobj2["cui_name"] = args.Value.Contents.Value;
-                }
-                if (args.Value.ReceiptType.Value == ReceiptType.Cash) // 현금
-                {
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
-                    
-                }
-                else if (args.Value.ReceiptType.Value == ReceiptType.Cash)
-                { //카드
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
-                }
-                else
-                {  //계좌이체
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
-                    jobj2["cui_name"] = args.Value.Contents.Value;
+                    jobj2["cui_name"] = Keyword.Value;
                 }
                 jobj["search_option"] = jobj2;
                 network.SetReceiver(this);
@@ -126,7 +124,7 @@ namespace DepositWithdrawal.ViewModels
 
         public void OnConnected()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnDialogClosed()
@@ -139,6 +137,13 @@ namespace DepositWithdrawal.ViewModels
             ReceiptModel item = null;
             parameters.TryGetValue("object", out item);
             args.Value = item;
+            SearchReceiptType.Value = item.ReceiptType.Value;
+            if (item.ReceiptType.Value != ReceiptType.Card)
+            {
+                Keyword.Value = item.Contents.Value;
+            }
+            this.StartDate.Value = item.Month.Value.AddDays(-7);
+            this.EndDate.Value = item.Month.Value;
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();
@@ -163,8 +168,6 @@ namespace DepositWithdrawal.ViewModels
                     jobj2["payment_method"] = (int)item.ReceiptType.Value;
                     jobj2["cui_name"] = item.Contents.Value;
                 }
-
-
                 jobj["search_option"] = jobj2;
 
 
@@ -249,7 +252,7 @@ namespace DepositWithdrawal.ViewModels
 
 
                             //제품 
-                            if (inner["product_list"] != null)
+                            if (inner["product_list"] != null && !inner["product_list"].ToString().Equals(""))
                             {
                                 foreach (JObject con in inner["product_list"] as JArray)
                                 {
@@ -280,7 +283,7 @@ namespace DepositWithdrawal.ViewModels
 
 
                             //계약금,잔금 부분
-                            if (inner["payment"] != null)
+                            if (inner["payment"] != null && !inner["payment"].ToString().Equals(""))
                             {
 
                                 foreach (JObject jobj in inner["payment"] as JArray)
@@ -308,6 +311,7 @@ namespace DepositWithdrawal.ViewModels
                                                 pay.SelectedPayCard.Value = item;
                                         }
                                     }
+                                    pay.MyPayCheckEvent += PaymentEvent;
                                     temp.Payment.Add(pay);
                                 }
 
@@ -323,6 +327,15 @@ namespace DepositWithdrawal.ViewModels
                 {
                     ErpLogWriter.LogWriter.Trace(ex.ToString());
                 }
+            }
+        }
+        private void PaymentEvent(bool temp,int price) {
+            if (temp)
+            {
+                args.Value.RemainPrice.Value += price;
+            }
+            else {
+                args.Value.RemainPrice.Value -= price;
             }
         }
         private Employee FindEmployee(int id)
