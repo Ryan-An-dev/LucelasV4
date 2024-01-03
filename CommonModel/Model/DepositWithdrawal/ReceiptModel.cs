@@ -133,7 +133,7 @@ namespace CommonModel.Model
             this.IsAutoCategory.Subscribe(x => ChangedCategory("shi_auto_category", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
-            this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
+            this.CategoryInfo.Subscribe(x => ChangedCategoryInfo("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
             this.Memo.Subscribe(x => ChangedJson("shi_memo", x)).AddTo(disposable);
             this.Tip.Subscribe(x => ChangedJson("shi_use_name", x)).AddTo(disposable);
             this.Money.Subscribe(x => ChangedJson("shi_cost", x));
@@ -152,9 +152,25 @@ namespace CommonModel.Model
                 this.CardCharge.Value = 0;
             }
         }
+
         private void ChangedCategory(string name, bool args) {
             ChangedItem["shi_use_content"] = this.Contents.Value;
             ChangedJson(name, args);
+        }
+
+        private void ChangedCategoryInfo(string name, int categoryId) {
+            ChangedJson("shi_biz_type", categoryId);
+            if (this.IncomeCostType.Value == Model.IncomeCostType.Cost)
+            {
+                if (this.CategoryInfo.Value.Name.Value == "기타")
+                {
+                    this.FullyCompleted.Value = AllocateType.NotYet;
+                }
+                else
+                {
+                    this.FullyCompleted.Value = AllocateType.FullyCompleted;
+                }
+            }
         }
     }
 }
