@@ -130,7 +130,7 @@ namespace CommonModel.Model
         }
         public override void SetObserver()
         {
-            this.IsAutoCategory.Subscribe(x => ChangedJson("shi_auto_category", x));
+            this.IsAutoCategory.Subscribe(x => ChangedCategory("shi_auto_category", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
             this.CategoryInfo.Subscribe(x => ChangedJson("shi_biz_type", x.CategoryId.Value)).AddTo(disposable);
@@ -139,6 +139,7 @@ namespace CommonModel.Model
             this.Money.Subscribe(x => ChangedJson("shi_cost", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
+            this.FullyCompleted.Subscribe(x => ChangedJson("shi_complete", (int)x));
         }
         private void ChargeCalc(int allocatePrice)
         {
@@ -150,6 +151,10 @@ namespace CommonModel.Model
             {
                 this.CardCharge.Value = 0;
             }
+        }
+        private void ChangedCategory(string name, bool args) {
+            ChangedItem["shi_use_content"] = this.Contents.Value;
+            ChangedJson(name, args);
         }
     }
 }
