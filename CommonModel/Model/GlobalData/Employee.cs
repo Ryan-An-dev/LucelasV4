@@ -11,6 +11,8 @@ namespace CommonModel.Model
 {
     public class Employee : PrismCommonModelBase
     {
+        public ReactiveProperty<AddDelete> Action { get; set; }
+        public ReactiveProperty<bool> IsChecked { get; set; }
         public ReactiveProperty<int> No { get; set; }
         public ReactiveProperty<int> Id { get; set; }
         public ReactiveProperty<string> Name { get; set; }
@@ -22,6 +24,8 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Memo { get; set; }
         public Employee()
         {
+            Action = new ReactiveProperty<AddDelete>(0).AddTo(disposable);
+            IsChecked = new ReactiveProperty<bool>().AddTo(disposable);
             No = new ReactiveProperty<int>().AddTo(disposable);
             Id = new ReactiveProperty<int>().AddTo(disposable);
             Name = CreateProperty<string>("이름");
@@ -35,6 +39,7 @@ namespace CommonModel.Model
         }
         public override void SetObserver()
         {
+            IsChecked.Subscribe(x => ActionChecked(x));
             Name.Subscribe(x => ChangedJson("employee_name", x));
             Phone.Subscribe(x => ChangedJson("employee_phone", x));
             StartWorkTime.Subscribe(x => ChangedJson("employee_start", x));
@@ -43,5 +48,18 @@ namespace CommonModel.Model
             Memo.Subscribe(x => ChangedJson("employee_memo", x));
             BirthDay.Subscribe(x => ChangedJson("employee_birthday", x));
         }
+
+        public void ActionChecked(bool check)
+        {
+            isChanged = true;
+            if (check)
+            {
+                this.Action.Value = AddDelete.Add;
+            }
+            else { 
+                this.Action.Value = AddDelete.Delete;
+            }
+        }
+        
     }
 }

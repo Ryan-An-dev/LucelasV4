@@ -130,7 +130,7 @@
 
             <!-- List -->
             <DataGrid 
-                 VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                 AutoGenerateColumns="False" 
                 CanUserAddRows="False"

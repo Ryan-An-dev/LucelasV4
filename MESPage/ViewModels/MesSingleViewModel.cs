@@ -241,7 +241,8 @@ namespace MESPage.ViewModels
             catch (Exception e) { }
             switch ((COMMAND)packet.Header.CMD)
             {
-                case COMMAND.UpdateBankHistory: //데이터 업데이트 완료
+                case COMMAND.CREATE_INVENTORY_LIST:
+                case COMMAND.UPDATE_INVENTORY_LIST: //데이터 업데이트 완료
                 case COMMAND.DeleteBankHistory: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);

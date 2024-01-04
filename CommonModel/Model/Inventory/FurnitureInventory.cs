@@ -64,7 +64,7 @@ namespace CommonModel
             jobj["product_info"] = this.Product.Value.MakeJson();
             jobj["inventory_id"] = this.Id.Value;
             jobj["receiving_type"] = (int)this.ReceivingType.Value;
-            jobj["receiving_date"] = StoreReachDate.Value.ToString();
+            jobj["receiving_date"] = StoreReachDate.Value?.ToString("yyyy-MM-dd");
             jobj["count"] = this.Count.Value;
             jobj["memo"] = this.Memo.Value;
             return jobj;
@@ -75,6 +75,7 @@ namespace CommonModel
             this.ReceivingType.Subscribe(x => ChangedJson("receiving_type", x));
             this.StoreReachDate.Subscribe(x => ChangedJson("insert_date", x));
             this.Count.Subscribe(x => ChangedJson("count", x));
+            this.Memo.Subscribe(x => ChangedJson("memo", x));
         }
     }
 }

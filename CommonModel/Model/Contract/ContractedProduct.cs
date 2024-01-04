@@ -13,9 +13,11 @@ namespace CommonModel.Model
 {
     public enum AddDelete
     {
+        Default = 0,
         Add = 1,
         Remove = 2,
-        Update = 3
+        Update = 3,
+        Delete = 4,
     }
     public class ContractedProduct : PrismCommonModelBase
     {

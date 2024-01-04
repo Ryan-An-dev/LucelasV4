@@ -7,7 +7,7 @@
              xmlns:views="clr-namespace:CommonModule.UserControls.Views;assembly=CommonModule"
 			 xmlns:val="clr-namespace:CommonModule.Validations;assembly=CommonModule"
 			 xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"     
-             Width="600" 
+             Width="800" 
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
@@ -187,17 +187,16 @@
                           Margin="5"/>
                             </StackPanel>
                             <DataGrid
-                      VirtualizingStackPanel.IsVirtualizing="True"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      IsReadOnly="True"
-                      
-                      Margin="10"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Visible"
-                      Height="250"
-                      ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  Margin="10"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Visible"
+                                  Height="250"
+                                  ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGrid.RowDetailsTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -245,12 +244,10 @@
                                     </DataTemplate>
                                 </DataGrid.RowDetailsTemplate>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Width="*" Header="No" Binding="{Binding ListNo.Value}" />
-                                    <DataGridTextColumn Width="*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
-                                    <DataGridTextColumn Width="*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
-                                    <DataGridTextColumn Width="*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
-                                    <DataGridTextColumn Width="*" Header="주소" Binding="{Binding Contractor.Value.Address.Value}"/>
-                                    <DataGridTextColumn Width="*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
+                                    <DataGridTextColumn Width="0.1*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
+                                    <DataGridTextColumn Width="0.1*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
+                                    <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
+                                    <DataGridTextColumn Width="0.1*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">

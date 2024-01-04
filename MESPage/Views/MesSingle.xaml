@@ -38,16 +38,13 @@
                     <DatePicker  
                         Margin="0 10 0 0"
                         HorizontalAlignment="Left" 
-                        md:HintAssist.Hint="작성날짜" FontSize="16" Width="150"
+                        md:HintAssist.Hint="입고날짜" FontSize="16" Width="150"
                         md:HintAssist.IsFloating="True"  
                         Foreground="{StaticResource textColor2}" 
                         BorderBrush="{StaticResource textColor2}" >
                         <DatePicker.SelectedDate>
-                            <Binding Path="Contract.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:NotEmptyValidation/>
-                                    <val:FutureDateValidation/>
-                                </Binding.ValidationRules>
+                            <Binding Path="Inventory.Value.StoreReachDate.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                
                             </Binding>
                         </DatePicker.SelectedDate>
                     </DatePicker>

@@ -67,8 +67,12 @@ namespace ContractPage.ViewModels
         public IDialogService dialogService { get; }
         public ReactiveProperty<PrismCommonModelBase> SelectedItem { get; set; }
         public DelegateCommand RowDoubleClick { get; }
+
+        public DelegateCommand<object> CheckBoxAccountCommand { get; set; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
+
+            CheckBoxAccountCommand = new DelegateCommand<object>(execCheckBoxAccountCommand);
             this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);
             SetEditMode = new DelegateCommand<string>(ExecSetEditMode);
@@ -103,6 +107,26 @@ namespace ContractPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
         }
+
+        private void execCheckBoxAccountCommand(object args)
+        {
+            if(args is Employee)
+            {
+                Employee emp = args as Employee;
+                if (emp.IsChecked.Value)
+                {
+                    if(!this.Contract.Value.DeliveryMan.Contains(emp))
+                        this.Contract.Value.DeliveryMan.Add(emp);
+                }
+                else
+                {
+                    if (this.Contract.Value.DeliveryMan.Contains(emp))
+                        this.Contract.Value.DeliveryMan.Remove(emp);
+                }
+                this.Contract.Value.isChanged = true;
+            }
+        }
+
         public void RowDoubleClickEvent()
         {
             if (SelectedItem.Value == null)

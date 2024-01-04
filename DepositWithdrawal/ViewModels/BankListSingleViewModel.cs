@@ -104,13 +104,14 @@ namespace DepositWithdrawal.ViewModels
                         JObject inner = new JObject();
                         inner["con_id"] = temp.Id.Value;
                         inner["payment_id"] = pay.PaymentId.Value;
+                        inner["mode"] = 1;
                         jarr.Add(inner);
-
                     }
                 }
             }
             if (jarr.Count > 0)
             {
+                jobj["complete"] = (int)this.ReceiptModel.Value.FullyCompleted.Value; //완료여부
                 jobj["connected_contract"] = jarr;
                 using (var network = this.ContainerProvider.Resolve<DataAgent.BankListDataAgent>())
                 {
@@ -238,6 +239,7 @@ namespace DepositWithdrawal.ViewModels
             } catch (Exception e) { }
             switch ((COMMAND)packet.Header.CMD)
             {
+                case COMMAND.CreateBankHistory: //데이터 생성 완료
                 case COMMAND.UpdateBankHistory: //데이터 업데이트 완료
                 case COMMAND.DeleteBankHistory: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {

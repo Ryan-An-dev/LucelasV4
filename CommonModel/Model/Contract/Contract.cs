@@ -41,9 +41,10 @@ namespace CommonModel.Model
         public ReactiveProperty<string> ProductNameCombine { get; set; }
 
         public ReactiveProperty<string> ProductMemoCombine { get; set; }
-
+        public ReactiveCollection<Employee> DeliveryMan { get; set; }
         public Contract()
         {
+            DeliveryMan = new ReactiveCollection<Employee>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);
@@ -59,6 +60,8 @@ namespace CommonModel.Model
             ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
             ProductMemoCombine = new ReactiveProperty<string>().AddTo(disposable);
             this.Contractor.Value = new Customer();
+
+
             SetObserver();
         }
         public void CompleteChangedData()
@@ -67,6 +70,7 @@ namespace CommonModel.Model
             isChanged = false;
         }
         public override void SetObserver() {
+            this.DeliveryMan.ToObservable().Subscribe(updatedItems => { isChanged = true; });
             this.Month.Subscribe(x => ChangedJson("create_time", x));
             this.Price.Subscribe(x => ChangedJson("total", x));
             this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id.Value));
@@ -136,7 +140,9 @@ namespace CommonModel.Model
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment)
             {
-                jarrPayment.Add(item.MakeJson());
+                if (item.Action.Value != AddDelete.Default) {
+                    jarrPayment.Add(item.MakeJson());
+                }
             }
             if (jarrPayment.Count > 0)
                 NewObject["payment"] = jarrPayment;
@@ -151,6 +157,18 @@ namespace CommonModel.Model
             if (jarrProduct != null)
                 NewObject["product"] = jarrProduct;
 
+            JArray jarrDelivery = new JArray();
+            foreach (Employee item in DeliveryMan)
+            {
+                JObject jobj = new JObject();
+                jobj["employee_id"] = item.Id.Value;
+                jobj["action"] = (int)item.Action.Value;
+                jarrDelivery.Add(jobj);
+            }
+            if (jarrDelivery.Count > 0) {
+                NewObject["delivery_group"] = jarrDelivery;
+            }
+
             return NewObject;
         }
         /// <summary>
@@ -160,12 +178,6 @@ namespace CommonModel.Model
         /// <returns>고객,회사,제품 제외한 변경된 Json Return</returns>
         public JObject GetChangedItem()
         {
-            //계약자 자체가 바뀐경우 
-            //이때는 바뀐 id 를 줘야한다.
-
-            //기존계약자의 내용만 수정한경우 
-            //--이거는 따로 처리되어서 상관없다.
-
             JArray jarrPayment = new JArray();
             foreach (Payment item in Payment) {
                 JObject jobj = new JObject();
@@ -173,20 +185,45 @@ namespace CommonModel.Model
                 {
                     jobj["payment_id"] = item.PaymentId.Value;
                     jobj["changed_item"] = item.MakeJson();
+                    if (ChangedItem["payment"] == null)
+                    {
+                        jarrPayment.Add(jobj);
+                        if (!item.ChangedItem.ToString().Equals(""))
+                        {
+                            ChangedItem["payment"] = jarrPayment;
+                        }
+                    }
+                    else
+                    {
+                        if (!item.ChangedItem.ToString().Equals(""))
+                        {
+                            (ChangedItem["payment"] as JArray).Add(jobj);
+                        }
+                    }
                 }
                 if (item.isChanged && item.PaymentId.Value != 0) //기존 수정
                 {
                     jobj["payment_id"] = item.PaymentId.Value;
                     jobj["changed_item"] = item.ChangedItem;
-                }
-                if (ChangedItem["payment"] == null) {
-                    jarrPayment.Add(jobj);
-                    ChangedItem["payment"] = jarrPayment;
-                }
-                else{
-                    (ChangedItem["payment"] as JArray).Add(jobj);
+                    if (ChangedItem["payment"] == null)
+                    {
+                        jarrPayment.Add(jobj);
+                        if (!item.ChangedItem.ToString().Equals(""))
+                        {
+                            ChangedItem["payment"] = jarrPayment;
+                        }
+                    }
+                    else
+                    {
+                        if (!item.ChangedItem.ToString().Equals(""))
+                        {
+                            (ChangedItem["payment"] as JArray).Add(jobj);
+                        }
+                    }
                 }
                 
+                item.isChanged = false;
+                item.ChangedItem.RemoveAll();
             }
 
             if (jarrPayment.Count > 0) {
@@ -198,7 +235,7 @@ namespace CommonModel.Model
                     
                 }
             }
-                
+               
 
             JArray jarrProduct = new JArray();
             foreach (ContractedProduct item in Product)
@@ -208,10 +245,23 @@ namespace CommonModel.Model
                     jarrProduct.Add(item.MakeJson());
                 }
             }
-            if (jarrProduct != null)
+            if (jarrProduct != null && jarrProduct.Count>0)
                 ChangedItem["product"] = jarrProduct;
             
 
+            JArray deliveryMan = new JArray();
+            foreach (Employee item in DeliveryMan)
+            {
+                if (item.isChanged) {
+                    JObject jobj = new JObject();
+                    jobj["employee_id"] = item.Id.Value;
+                    jobj["action"] = (int)item.Action.Value;
+                    deliveryMan.Add(jobj);
+                }
+            }
+            if (deliveryMan.Count > 0) {
+                ChangedItem["delivery_group"] = deliveryMan;
+            }
             return ChangedItem;
         }
     }

@@ -79,7 +79,6 @@ namespace DepositWithdrawal.ViewModels
                 jobj2["payment_method"] = (int)this.SearchReceiptType.Value;
                 jobj2["start_time"] =  this.StartDate.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
                 jobj2["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-
                 jobj2["complete"] = 2;
                 if (obj != string.Empty) {
                     jobj2["cui_name"] = Keyword.Value;
