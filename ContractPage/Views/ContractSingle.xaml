@@ -237,6 +237,9 @@
                             SelectedItem="{Binding SelectedPayment.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             CanUserAddRows="False" RowHeight="40" IsReadOnly="True"
                             AutoGenerateColumns="False">
+                            <DataGrid.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowPayDoubleClick}"/>
+                            </DataGrid.InputBindings>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
                                 <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>

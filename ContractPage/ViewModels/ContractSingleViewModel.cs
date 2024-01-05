@@ -67,7 +67,7 @@ namespace ContractPage.ViewModels
         public IDialogService dialogService { get; }
         public ReactiveProperty<PrismCommonModelBase> SelectedItem { get; set; }
         public DelegateCommand RowDoubleClick { get; }
-
+        public DelegateCommand RowPayDoubleClick { get; }
         public DelegateCommand<object> CheckBoxAccountCommand { get; set; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
@@ -106,6 +106,7 @@ namespace ContractPage.ViewModels
             EmployeeInfos = new ReactiveCollection<Employee>().AddTo(disposable);
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
+            RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
         }
 
         private void execCheckBoxAccountCommand(object args)
@@ -125,6 +126,19 @@ namespace ContractPage.ViewModels
                 //}
                 this.Contract.Value.isChanged = true;
             }
+        }
+        public void RowPayDoubleClickExec() {
+            if (SelectedPayment.Value == null)
+                return;
+            int total = this.Contract.Value.Price.Value;
+            foreach (Payment inner in this.Contract.Value.Payment)
+            {
+                total -= inner.Price.Value;
+            }
+            DialogParameters p = new DialogParameters();
+            p.Add("object", SelectedPayment.Value);
+            p.Add("total", total);
+            this.dialogService.ShowDialog("AddPaymentPage", p, r => SetPayment(r), "CommonDialogWindow");
         }
 
         public void RowDoubleClickEvent()
@@ -273,11 +287,23 @@ namespace ContractPage.ViewModels
                 {
                     Payment temp = null;
                     r.Parameters.TryGetValue("object", out temp);
-                    if (this.Contract.Value != null)
+                    if (temp != null && temp.PaymentId.Value != 0)//수정
                     {
-                        this.Contract.Value.isChanged = true;
-                        this.Contract.Value.Payment.Add(temp);
+                        if (this.Contract.Value != null)
+                        {
+                            this.Contract.Value.isChanged = true;
+                            this.Contract.Value.Payment.Remove(this.Contract.Value.Payment.FirstOrDefault(x=>x.PaymentId.Value == temp.PaymentId.Value));
+                            this.Contract.Value.Payment.Add(temp);
+                        }
                     }
+                    else { //추가
+                        if (this.Contract.Value != null)
+                        {
+                            this.Contract.Value.isChanged = true;
+                            this.Contract.Value.Payment.Add(temp);
+                        }
+                    }
+                    
                 }
             }
             else
@@ -391,8 +417,9 @@ namespace ContractPage.ViewModels
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             foreach (Employee emp in temp.EmployeeInfos)
             {
+                emp.Action.Value = AddDelete.Default;
+                emp.isChanged = false;
                 this.EmployeeInfos.Add(emp);
-
             }
             
             Contract contract = navigationContext.Parameters["Contract"] as Contract;
@@ -447,9 +474,9 @@ namespace ContractPage.ViewModels
                             inner["con_id"] = this.Contract.Value.Id.Value;
                             inner["changed_item"] = this.Contract.Value.GetChangedItem();
                             this.Contract.Value.isChanged = false;
-                            this.Contract.Value.ClearJson();
-                            ErpLogWriter.LogWriter.Debug(inner);
                             network.UpdateContract(inner);
+                            ErpLogWriter.LogWriter.Debug(inner);
+                            this.Contract.Value.ClearJson();
                         }
                     }
                 }

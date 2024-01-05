@@ -25,7 +25,7 @@ namespace CommonModel.Model
         public Employee()
         {
             Action = new ReactiveProperty<AddDelete>(0).AddTo(disposable);
-            IsChecked = new ReactiveProperty<bool>().AddTo(disposable);
+            IsChecked = new ReactiveProperty<bool>(false).AddTo(disposable);
             No = new ReactiveProperty<int>().AddTo(disposable);
             Id = new ReactiveProperty<int>().AddTo(disposable);
             Name = CreateProperty<string>("이름");

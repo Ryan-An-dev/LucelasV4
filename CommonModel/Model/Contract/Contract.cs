@@ -224,19 +224,11 @@ namespace CommonModel.Model
                         }
                     }
                 }
-                
                 item.isChanged = false;
-                item.ChangedItem.RemoveAll();
             }
 
             if (jarrPayment.Count > 0) {
-                if (ChangedItem["payment"] == null)
-                {
-                    ChangedItem["payment"] = jarrPayment;
-                }
-                else{
-                    
-                }
+                ChangedItem["payment"] = jarrPayment;
             }
                
 
