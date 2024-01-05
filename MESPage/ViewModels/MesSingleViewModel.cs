@@ -243,7 +243,7 @@ namespace MESPage.ViewModels
             {
                 case COMMAND.CREATE_INVENTORY_LIST:
                 case COMMAND.UPDATE_INVENTORY_LIST: //데이터 업데이트 완료
-                case COMMAND.DeleteBankHistory: //데이터 삭제완료
+                case COMMAND.DELETE_INVENTORY_LIST: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                         //this.Inventory.Value.CompleteChangedData(); //변경완료 후 변수 초기화
@@ -290,6 +290,8 @@ namespace MESPage.ViewModels
                                     inventory.Name.Value = jobj["product_name"].ToString();
                                 if (jobj["product_price"] != null)
                                     inventory.Price.Value = jobj["product_price"].ToObject<int>();
+                                if (jobj["product_id"] != null)
+                                    inventory.Id.Value = jobj["product_id"].ToObject<int>();
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     this.List.Add(inventory);
