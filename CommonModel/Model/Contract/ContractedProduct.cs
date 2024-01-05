@@ -16,8 +16,7 @@ namespace CommonModel.Model
         Default = 0,
         Add = 1,
         Remove = 2,
-        Update = 3,
-        Delete = 4,
+        Update = 3
     }
     public class ContractedProduct : PrismCommonModelBase
     {

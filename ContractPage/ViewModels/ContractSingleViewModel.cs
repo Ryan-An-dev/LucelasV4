@@ -113,16 +113,16 @@ namespace ContractPage.ViewModels
             if(args is Employee)
             {
                 Employee emp = args as Employee;
-                if (emp.IsChecked.Value)
-                {
-                    if(!this.Contract.Value.DeliveryMan.Contains(emp))
-                        this.Contract.Value.DeliveryMan.Add(emp);
-                }
-                else
-                {
-                    if (this.Contract.Value.DeliveryMan.Contains(emp))
-                        this.Contract.Value.DeliveryMan.Remove(emp);
-                }
+                //if (emp.IsChecked.Value)
+                //{
+                //    if(!this.Contract.Value.DeliveryMan.Contains(emp))
+                //        this.Contract.Value.DeliveryMan.Add(emp);
+                //}
+                //else
+                //{
+                //    if (this.Contract.Value.DeliveryMan.Contains(emp))
+                //        this.Contract.Value.DeliveryMan.Remove(emp);
+                //}
                 this.Contract.Value.isChanged = true;
             }
         }
@@ -392,7 +392,9 @@ namespace ContractPage.ViewModels
             foreach (Employee emp in temp.EmployeeInfos)
             {
                 this.EmployeeInfos.Add(emp);
+
             }
+            
             Contract contract = navigationContext.Parameters["Contract"] as Contract;
             
             if (contract == null)
@@ -410,6 +412,7 @@ namespace ContractPage.ViewModels
                 this.Contract.Value.isChanged = false;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
+            this.Contract.Value.DeliveryMan = this.EmployeeInfos;
         }
         private void SaveButtonExecute()
         {
@@ -443,6 +446,8 @@ namespace ContractPage.ViewModels
                             JObject inner = new JObject();
                             inner["con_id"] = this.Contract.Value.Id.Value;
                             inner["changed_item"] = this.Contract.Value.GetChangedItem();
+                            this.Contract.Value.isChanged = false;
+                            this.Contract.Value.ClearJson();
                             ErpLogWriter.LogWriter.Debug(inner);
                             network.UpdateContract(inner);
                         }
@@ -467,8 +472,9 @@ namespace ContractPage.ViewModels
             catch (Exception e) { }
             switch ((COMMAND)packet.Header.CMD)
             {
-                case COMMAND.UpdateBankHistory: //데이터 업데이트 완료
-                case COMMAND.DeleteBankHistory: //데이터 삭제완료
+                case COMMAND.CREATECONTRACT: //데이터 생성 완료
+                case COMMAND.UPDATECONTRACT: //데이터 업데이트 완료
+                case COMMAND.DELETECONTRACT: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                         this.Contract.Value.CompleteChangedData(); //변경완료 후 변수 초기화

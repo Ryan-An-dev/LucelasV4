@@ -109,6 +109,9 @@ namespace CommonModel.Model
                 item.ClearJson();
                 item.isChanged = false;
             }
+            foreach (Employee item in DeliveryMan) { 
+                item.isChanged = false;
+            }
         }
         /// <summary>
         /// 현재 정보 모두 파싱해서 내리는 곳
@@ -162,7 +165,7 @@ namespace CommonModel.Model
             {
                 JObject jobj = new JObject();
                 jobj["employee_id"] = item.Id.Value;
-                jobj["action"] = (int)item.Action.Value;
+                jobj["action"] = 1;
                 jarrDelivery.Add(jobj);
             }
             if (jarrDelivery.Count > 0) {
@@ -262,6 +265,7 @@ namespace CommonModel.Model
             if (deliveryMan.Count > 0) {
                 ChangedItem["delivery_group"] = deliveryMan;
             }
+
             return ChangedItem;
         }
     }

@@ -57,7 +57,7 @@ namespace CommonModel.Model
                 this.Action.Value = AddDelete.Add;
             }
             else { 
-                this.Action.Value = AddDelete.Delete;
+                this.Action.Value = AddDelete.Remove;
             }
         }
         
