@@ -77,7 +77,10 @@ namespace DataAccess.Repository
 
         public void UpdateContract(JObject msg)
         {
-           
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.UPDATECONTRACT);
+            }
         }
 
         public void Dispose()
