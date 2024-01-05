@@ -40,7 +40,7 @@ namespace CommonModel.Model
         }
         public IEnumerable<ReceiptType> PaymentMethodSelectValues //검색옵션
         {
-            get { return Enum.GetValues(typeof(ReceiptType)).Cast<ReceiptType>(); }
+            get { return Enum.GetValues(typeof(ReceiptType)).Cast<ReceiptType>().Skip(1); }
         }
         public IEnumerable<Complete> CompleteSelectValues //검색옵션
         {
