@@ -414,13 +414,7 @@ namespace ContractPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            foreach (Employee emp in temp.EmployeeInfos)
-            {
-                emp.Action.Value = AddDelete.Default;
-                emp.isChanged = false;
-                this.EmployeeInfos.Add(emp);
-            }
+            
             
             Contract contract = navigationContext.Parameters["Contract"] as Contract;
             
@@ -439,7 +433,7 @@ namespace ContractPage.ViewModels
                 this.Contract.Value.isChanged = false;
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
-            this.Contract.Value.DeliveryMan = this.EmployeeInfos;
+            
         }
         private void SaveButtonExecute()
         {

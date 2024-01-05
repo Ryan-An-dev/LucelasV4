@@ -303,7 +303,7 @@
                                 <ItemsControl
                                     VerticalAlignment="Stretch"
                                     HorizontalAlignment="Stretch"
-                                    ItemsSource="{Binding EmployeeInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    ItemsSource="{Binding  Contract.Value.DeliveryMan}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <UniformGrid  Columns="4"></UniformGrid>

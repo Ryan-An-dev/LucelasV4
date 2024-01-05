@@ -60,7 +60,7 @@ namespace CommonModel.Model
             ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
             ProductMemoCombine = new ReactiveProperty<string>().AddTo(disposable);
             this.Contractor.Value = new Customer();
-
+            
 
             SetObserver();
         }

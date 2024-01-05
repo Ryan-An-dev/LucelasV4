@@ -340,8 +340,21 @@ namespace ContractPage.ViewModels
                             if (inner["delivery_date"] != null)
                                 temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
 
-                            //최종금액
-                         
+                            //
+                            SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                            foreach (Employee emp in employee.EmployeeInfos)
+                            {
+                                emp.Action.Value = AddDelete.Default;
+                                emp.isChanged = false;
+                                temp.DeliveryMan.Add(emp);
+                            }
+                            if (inner["delivery_group"] != null && !inner["delivery_group"].ToString().Equals("")) {
+                                foreach (JObject jobj in inner["delivery_group"] as JArray)
+                                {
+                                    int emp_id =jobj["employee_id"].ToObject<int>();
+                                    temp.DeliveryMan.FirstOrDefault(x => x.Id.Value == emp_id).IsChecked.Value = true;
+                                }
+                            }
 
                             //제품 
                             if (inner["product_list"] != null && !inner["product_list"].ToString().Equals(""))
