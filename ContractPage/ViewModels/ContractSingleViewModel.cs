@@ -213,7 +213,7 @@ namespace ContractPage.ViewModels
                     break;
                 case "DeleteProduct":
                     JObject jobj = new JObject();
-                    int id = this.SelectedProduct.Value.Id.Value;
+                    int id = this.SelectedProduct.Value.FurnitureInventory.Value.Id.Value;
                     if (id == 0)
                     {
                         this.Contract.Value.Product.Remove(this.SelectedProduct.Value);

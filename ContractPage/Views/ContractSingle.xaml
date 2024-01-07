@@ -156,7 +156,7 @@
                             RowHeight="40"
                             Margin="5"
                             ItemsSource="{Binding Contract.Value.Product}"
-                            SelectedItem="{Binding SelectedItem.Value}"
+                            SelectedItem="{Binding SelectedProduct.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
                             >
