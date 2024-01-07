@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4E66F2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddressSearchManager", "AddressSearchManager\AddressSearchManager.csproj", "{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{64C9EF63-76E0-4517-BA78-BF7C90474701}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,8 @@ Global
 		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8428F50C-357C-4E5D-B9F6-E0D39850BCE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C9EF63-76E0-4517-BA78-BF7C90474701}.Debug|Any CPU.ActiveCfg = Debug
+		{64C9EF63-76E0-4517-BA78-BF7C90474701}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
