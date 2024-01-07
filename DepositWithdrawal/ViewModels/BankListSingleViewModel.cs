@@ -373,7 +373,7 @@ namespace DepositWithdrawal.ViewModels
                                         ;
                                 }
                                 temp.ProductNameCombine.Value = combine;
-
+                                ProductMemoCombine(temp);
                             }
                             if (inner["total"] != null)
                                 temp.Price.Value = inner["total"].ToObject<int>();
@@ -423,7 +423,14 @@ namespace DepositWithdrawal.ViewModels
                 }
             }
         }
-
+        private void ProductMemoCombine(Contract temper)
+        {
+            temper.ProductMemoCombine.Value = "";
+            foreach (ContractedProduct temp in temper.Product)
+            {
+                temper.ProductMemoCombine.Value += "[" + temp.FurnitureInventory.Value.Name.Value + "]" + "\r\n" + temp.Memo.Value + "\r\n";
+            }
+        }
         private Employee FindEmployee(int id)
         {
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");

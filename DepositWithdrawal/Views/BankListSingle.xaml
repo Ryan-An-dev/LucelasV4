@@ -198,58 +198,13 @@
                                   Height="250"
                                   SelectedItem="{Binding SelectedContract.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGrid.RowDetailsTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="0.1*"/>
-                                                <ColumnDefinition Width="0.9*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <md:PackIcon 
-                                      Width="30"
-                                      Height="30"
-                                      Margin="0 0 0 0"
-                                      Kind="ChevronDoubleRight"
-                                      Padding="0" 
-                                      HorizontalAlignment="Right" 
-                                      VerticalAlignment="Center"
-                                      Foreground="{StaticResource textColor2}"/>
-                                            <DataGrid 
-                                      Grid.Column="1"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Right"
-                                      Width="450"
-                                      MaxHeight="100"
-                                      MinHeight="100" 
-                                      Margin="5"
-                                      ItemsSource="{Binding Payment}"
-                                      CanUserAddRows="False" RowHeight="32"
-                                      AutoGenerateColumns="False">
-                                                <DataGrid.Columns>
-                                                    <DataGridTemplateColumn>
-                                                        <DataGridTemplateColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <CheckBox IsEnabled="False" IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                            </DataTemplate>
-                                                        </DataGridTemplateColumn.CellTemplate>
-                                                    </DataGridTemplateColumn>
-                                                    <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
-                                                    <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
-                                                    <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
-                                                    <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
-
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                        </Grid>
-
-                                    </DataTemplate>
-                                </DataGrid.RowDetailsTemplate>
+                                
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="0.1*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
                                     <DataGridTextColumn Width="0.1*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
-                                    <DataGridTextColumn Width="0.1*" Header="구분" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
-                                    <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
-                                    <DataGridTextColumn Width="0.1*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
+                                    <DataGridTextColumn Width="0.1*" Header="구분" Binding="{Binding Payment[0].PaymentType.Value}"/>
+                                    <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Payment[0].Price.Value, StringFormat=\{0:N0\}}"/>
+                                    <DataGridTextColumn Width="0.34*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
