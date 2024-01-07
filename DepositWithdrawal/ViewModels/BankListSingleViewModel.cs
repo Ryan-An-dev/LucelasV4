@@ -291,7 +291,7 @@ namespace DepositWithdrawal.ViewModels
             {
                 try
                 {
-                    if (msg["contract_history"] != null)
+                    if (msg["contract_history"] != null && !msg["contract_history"].ToString().Equals(""))
                     {
                         foreach (JObject inner in msg["contract_history"] as JArray)
                         {
