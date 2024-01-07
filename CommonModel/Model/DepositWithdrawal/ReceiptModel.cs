@@ -16,10 +16,11 @@ namespace CommonModel.Model
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum AllocateType
     {
-        [Description("완료")]
-        FullyCompleted = 1,
         [Description("미완료")]
         NotYet = 0,
+        [Description("완료")]
+        FullyCompleted = 1
+        
     }
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum ReceiptType
@@ -205,7 +206,7 @@ namespace CommonModel.Model
             {
                 foreach (Payment pay in contract.Payment)
                 {
-                    if (!(pay.Action.Value == AddDelete.Default))
+                    if (!(pay.Action.Value == AddDelete.Default) && !(pay.Action.Value == AddDelete.Update))
                     {
                         JObject inner = new JObject();
                         inner["con_id"] = contract.Id.Value;

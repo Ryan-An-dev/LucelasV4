@@ -158,7 +158,7 @@ namespace CommonModel.Model
                 jarrProduct.Add(item.MakeJson());
             }
             if (jarrProduct != null)
-                NewObject["product"] = jarrProduct;
+                NewObject["product_list"] = jarrProduct;
 
             JArray jarrDelivery = new JArray();
             foreach (Employee item in DeliveryMan)

@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows;
 using LiveCharts;
+using CommonModel.Model;
 
 namespace CommonModel.Converter
 {
@@ -46,6 +47,7 @@ namespace CommonModel.Converter
             }
         }
     }
+
     
 
 

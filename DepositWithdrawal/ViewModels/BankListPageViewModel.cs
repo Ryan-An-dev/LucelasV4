@@ -352,24 +352,7 @@ namespace DepositWithdrawal.ViewModels
                             temp.FullyCompleted.Value = (AllocateType)inner["shi_complete"].ToObject<int>();
                         if (inner["shi_key"] != null)
                             temp.indexKey.Value = inner["shi_key"].ToString();
-                        if (inner["connected_contract"] != null)
-                        {
-                            foreach (JObject jobj in inner["connected_contract"] as JArray)
-                            {
-                                Contract contract = new Contract();
-                                if (jobj["con_id"] != null) { 
-                                    contract.Id.Value = jobj["con_id"].ToObject<int>();
-                                }
-                                if (jobj["pay_id"] != null) { 
-                                    Payment payment = new Payment();
-                                    payment.PaymentId.Value = jobj["pay_id"].ToObject<int>();
-                                    contract.Payment.Add(payment);
-                                }
-                                temp.ConnectedContract.Add(contract);
-                            }
-                        }
-                        if (inner["remain_price"] != null)
-                            temp.RemainPrice.Value = inner["remain_price"].ToObject<int>();
+                        
                         temp.ListNo.Value = i;
                         Application.Current.Dispatcher.Invoke(() =>
                         {

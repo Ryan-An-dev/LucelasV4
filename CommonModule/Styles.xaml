@@ -148,7 +148,8 @@
     </Style>
 
     <local:ReverseBoolConverter x:Key="ReverseBool"/>
-    
+    <local:BooleanToEnumConverter x:Key="BooleanToEnumConverter"/>
+
     <Selector:DepositStyleSelector x:Key="DepositCellStyleSelector">
         <Selector:DepositStyleSelector.IncomeDataStyle>
             <Style TargetType="DataGridRow">

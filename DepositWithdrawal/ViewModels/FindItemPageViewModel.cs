@@ -298,7 +298,6 @@ namespace DepositWithdrawal.ViewModels
                                         pay.PaymentMethod.Value = (ReceiptType)jobj["payment_method"].ToObject<int>();
                                     if (jobj["price"] != null)
                                         pay.Price.Value = jobj["price"].ToObject<int>();
-
                                     if (jobj["payment_card"] != null)
                                     {
                                         int paycard_id = jobj["payment_card"].ToObject<int>();
