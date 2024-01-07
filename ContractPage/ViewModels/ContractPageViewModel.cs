@@ -242,6 +242,8 @@ namespace ContractPage.ViewModels
             if (jobj["product_info"] != null) {
                 contractedProduct.FurnitureInventory.Value = SetProductInfo(jobj["product_info"] as JObject);
             }
+            if (jobj["product_order_id"]!=null)
+                contractedProduct.Id.Value = jobj["product_order_id"].ToObject<int>();
             
             return contractedProduct;
         }

@@ -220,6 +220,7 @@ namespace ContractPage.ViewModels
                         return;
                     }
                     jobj["product_id"] = id;
+                    jobj["product_order_id"] = this.SelectedProduct.Value.Id.Value;
                     JObject inner = new JObject();
                     inner["action"] = 2;
                     jobj["changed_item"] = inner;
