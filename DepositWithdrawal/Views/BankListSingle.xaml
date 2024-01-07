@@ -60,57 +60,58 @@
                         </md:TimePicker.Text>
                     </md:TimePicker>
                     <TextBox 
-              md:HintAssist.Hint="승인번호" 
-              Visibility="{Binding VisibilityAddButton.Value, UpdateSourceTrigger=PropertyChanged}" 
-              IsReadOnly="True" 
-              FontSize="14" 
-              Text="{Binding ReceiptModel.Value.ReceiptNo.Value}"  
-              Foreground="{StaticResource textColor2}" 
-              md:TextFieldAssist.HasClearButton="False" 
-              md:HintAssist.IsFloating="True" 
-              IsEnabled="False" 
-              Cursor="IBeam"/>
+                      md:HintAssist.Hint="승인번호" 
+                      Visibility="{Binding VisibilityAddButton.Value, UpdateSourceTrigger=PropertyChanged}" 
+                      IsReadOnly="True" 
+                      FontSize="14" 
+                      Text="{Binding ReceiptModel.Value.ReceiptNo.Value}"  
+                      Foreground="{StaticResource textColor2}" 
+                      md:TextFieldAssist.HasClearButton="False" 
+                      md:HintAssist.IsFloating="True" 
+                      IsEnabled="False" 
+                      Cursor="IBeam"/>  
                     <ComboBox 
-              Style="{StaticResource MaterialDesignComboBox}"
-              md:HintAssist.Hint="대분류" 
-              FontSize="14" 
-              ItemsSource="{Binding SearchIncomeCostTypeValues}"
-              SelectedItem="{Binding ReceiptModel.Value.IncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              Margin="0 0 0 12" 
-              Foreground="{StaticResource textColor2}"  
-              md:HintAssist.IsFloating="True"/>
+                        IsEnabled="{Binding IsCashOnly.Value, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignComboBox}"
+                        md:HintAssist.Hint="대분류" 
+                        FontSize="14" 
+                        ItemsSource="{Binding SearchIncomeCostTypeValues}"
+                        SelectedItem="{Binding ReceiptModel.Value.IncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0 0 0 12" 
+                        Foreground="{StaticResource textColor2}"  
+                        md:HintAssist.IsFloating="True"/>
                     <ComboBox 
-              md:HintAssist.Hint="중분류"
-              IsEnabled="False"
-              ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
-              SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              FontSize="14" 
-              Margin="0 0 0 12" 
-              Foreground="{StaticResource textColor2}"  
-              md:HintAssist.IsFloating="True"/>
+                          md:HintAssist.Hint="중분류"
+                          IsEnabled="False"
+                          ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
+                          SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="14" 
+                          Margin="0 0 0 12" 
+                          Foreground="{StaticResource textColor2}"  
+                          md:HintAssist.IsFloating="True"/>
                     <ComboBox 
-              SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              md:HintAssist.Hint="소분류" 
-              ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
-              FontSize="14"
-              Margin="0 0 0 12" 
-              Foreground="{StaticResource textColor2}"  
-              md:HintAssist.IsFloating="True" />
+                          SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          md:HintAssist.Hint="소분류" 
+                          ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
+                          FontSize="14"
+                          Margin="0 0 0 12" 
+                          Foreground="{StaticResource textColor2}"  
+                          md:HintAssist.IsFloating="True" />
                     <TextBox 
-              md:HintAssist.Hint="금액"
-              FontSize="14"  
-              IsEnabled="{Binding IsCashOnly.Value, UpdateSourceTrigger=PropertyChanged}"
-              Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
-              Margin="0 0 0 12"
-              Foreground="{StaticResource MainColor}"  
-              md:HintAssist.IsFloating="True"/>
+                      md:HintAssist.Hint="금액"
+                      FontSize="14"  
+                      IsEnabled="{Binding IsCashOnly.Value, UpdateSourceTrigger=PropertyChanged}"
+                      Text="{Binding ReceiptModel.Value.Money.Value, StringFormat=\{0:N0\}}"
+                      Margin="0 0 0 12"
+                      Foreground="{StaticResource MainColor}"  
+                      md:HintAssist.IsFloating="True"/>
                     <TextBox 
-              md:HintAssist.Hint="적요"
-              FontSize="14"
-              Text="{Binding ReceiptModel.Value.Tip.Value}"
-              Margin="0 0 0 12"
-              Foreground="{StaticResource MainColor}"  
-              md:HintAssist.IsFloating="True" IsEnabled="False"/>
+                        md:HintAssist.Hint="적요"
+                        FontSize="14"
+                        Text="{Binding ReceiptModel.Value.Tip.Value}"
+                        Margin="0 0 0 12"
+                        Foreground="{StaticResource MainColor}"  
+                        md:HintAssist.IsFloating="True" IsEnabled="False"/>
                     <TextBox 
                         IsReadOnly="True"
                         md:HintAssist.Hint="내용"
@@ -120,12 +121,12 @@
                         Foreground="{StaticResource MainColor}"  
                         md:HintAssist.IsFloating="True"/>
                     <TextBox 
-              md:HintAssist.Hint="메모"
-              FontSize="14"  
-              Text="{Binding ReceiptModel.Value.Memo.Value}"
-              Margin="0 0 0 12"
-              Foreground="{StaticResource MainColor}"  
-              md:HintAssist.IsFloating="True"/>
+                          md:HintAssist.Hint="메모"
+                          FontSize="14"  
+                          Text="{Binding ReceiptModel.Value.Memo.Value}"
+                          Margin="0 0 0 12"
+                          Foreground="{StaticResource MainColor}"  
+                          md:HintAssist.IsFloating="True"/>
                     <StackPanel>
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">

@@ -118,7 +118,6 @@ namespace CommonModel.Model
 
         public JObject MakeJson() {
             JObject jobj = new JObject();
-            jobj["action"] = (int)this.Action.Value;
             jobj["payment_type"] = (int)this.PaymentType.Value;
             jobj["payment_completed"] = (int)this.PaymentCompleted.Value;
             jobj["payment_method"] = (int)this.PaymentMethod.Value;
@@ -137,6 +136,8 @@ namespace CommonModel.Model
             this.SelectedPayCard.Subscribe(x => ChangedJsonADD("payment_card", x.Id.Value));
             this.IsSelected.Subscribe(x=>OnMyEvent(x,this.Price.Value));
         }
+
+
 
         public delegate void PayCheckEvent(bool isChecked,int price);
         public event PayCheckEvent MyPayCheckEvent;

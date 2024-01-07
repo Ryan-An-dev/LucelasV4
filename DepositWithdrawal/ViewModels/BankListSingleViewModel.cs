@@ -125,16 +125,21 @@ namespace DepositWithdrawal.ViewModels
             JArray jarr = new JArray();
             foreach (Contract temp in args)
             {
-                foreach (Payment pay in temp.Payment)
-                {
-                    if (pay.IsSelected.Value)
-                    {
-                        pay.Action.Value = AddDelete.Add;
+
+                if (temp.Payment.Count == 0) {
+                    continue;
+                }
+
+                foreach (Payment inner in temp.Payment) {
+                    if (inner.IsSelected.Value) {
+                        Contract temper = temp.DeepCopy();
+                        temper.Payment.Clear();
+                        inner.Action.Value = AddDelete.Add;
+                        temper.Payment.Add(inner);
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             ReceiptModel.Value.isChanged = true;
-                            this.ReceiptModel.Value.ConnectedContract.Add(temp);
-                            this.ReceiptModel.Value.AllocatedPrice.Value += pay.Price.Value;
+                            this.ReceiptModel.Value.ConnectedContract.Add(temper);
                         });
                     }
                 }
@@ -265,6 +270,7 @@ namespace DepositWithdrawal.ViewModels
             string msg = Encoding.UTF8.GetString(packet.Body);
             try {
                 JObject jobj = new JObject(JObject.Parse(msg));
+                
                 switch ((COMMAND)packet.Header.CMD)
                 {
                     case COMMAND.CreateBankHistory: //데이터 생성 완료
@@ -277,6 +283,7 @@ namespace DepositWithdrawal.ViewModels
                         });
                         break;
                     case COMMAND.GET_CONNECTED_CONTRACT:
+                        ErpLogWriter.LogWriter.Trace(jobj);
                         SetContractHistory(jobj);
                         break;
                 }

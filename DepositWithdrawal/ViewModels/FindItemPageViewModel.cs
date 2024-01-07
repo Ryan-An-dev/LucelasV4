@@ -137,7 +137,7 @@ namespace DepositWithdrawal.ViewModels
             parameters.TryGetValue("object", out item);
             args.Value = item;
             SearchReceiptType.Value = item.ReceiptType.Value;
-            if (item.ReceiptType.Value != ReceiptType.Card)
+            if (item.CategoryInfo.Value.Name.Value == "기타")
             {
                 Keyword.Value = item.Contents.Value;
             }
@@ -164,8 +164,14 @@ namespace DepositWithdrawal.ViewModels
                     jobj2["payment_method"] = (int)item.ReceiptType.Value;
                 }
                 else {  //계좌이체
+                    if (item.CategoryInfo.Value.Name.Value.Contains("대금"))
+                    {
+                        jobj2["shi_biz_type"] = (int)item.CategoryInfo.Value.CategoryId.Value;
+                    }
+                    else {
+                        jobj2["cui_name"] = item.Contents.Value;
+                    }
                     jobj2["payment_method"] = (int)item.ReceiptType.Value;
-                    jobj2["cui_name"] = item.Contents.Value;
                 }
                 jobj["search_option"] = jobj2;
 
@@ -188,9 +194,6 @@ namespace DepositWithdrawal.ViewModels
                         this.ContractItems.Clear();
                     });
                     SetContractList(jobj);
-                    break;
-                case COMMAND.CONNECTED_CONTRACT: //전송 완료
-                    
                     break;
             }
             

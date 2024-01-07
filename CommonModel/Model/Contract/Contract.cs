@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CommonModel.Model
 {
@@ -261,6 +263,32 @@ namespace CommonModel.Model
             }
 
             return ChangedItem;
+        }
+        public Contract DeepCopy()
+        {
+            Contract temp = new Contract();
+            temp.Id.Value = this.Id.Value;
+            foreach (Payment pay in this.Payment) { 
+                Payment tempPay = new Payment();
+                tempPay.PaymentId.Value = pay.PaymentId.Value;
+                tempPay.PaymentType.Value = pay.PaymentType.Value;
+                tempPay.PaymentMethod.Value = pay.PaymentMethod.Value;
+                tempPay.PaymentCompleted.Value = pay.PaymentCompleted.Value;
+                tempPay.SelectedPayCard.Value = pay.SelectedPayCard.Value;
+                tempPay.Price.Value = pay.Price.Value;
+                tempPay.Action.Value = pay.Action.Value;
+                temp.Payment.Add(tempPay);
+            }
+            temp.ProductNameCombine.Value = this.ProductNameCombine.Value;
+            temp.ProductMemoCombine.Value = this.ProductMemoCombine.Value;
+            temp.Price.Value = this.Price.Value;
+            temp.DepositComplete.Value = this.DepositComplete.Value;
+            temp.PaymentComplete.Value = this.PaymentComplete.Value;
+            temp.Memo.Value = this.Memo.Value;
+            temp.Seller.Value = this.Seller.Value;
+            temp.Contractor.Value = this.Contractor.Value;
+            temp.Delivery.Value = this.Delivery.Value;
+            return temp;
         }
     }
 }
