@@ -296,6 +296,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
+            ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
@@ -346,10 +347,12 @@ namespace ContractPage.ViewModels
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
                             foreach (Employee emp in employee.EmployeeInfos)
                             {
-                                emp.Action.Value = AddDelete.Default;
-                                emp.isChanged = false;
-                                temp.DeliveryMan.Add(emp);
+                                Employee newEmp = emp.Copy();
+                                newEmp.Action.Value = AddDelete.Default;
+                                newEmp.IsChecked.Value = false;
+                                temp.DeliveryMan.Add(newEmp);
                             }
+
                             if (inner["delivery_group"] != null && !inner["delivery_group"].ToString().Equals("")) {
                                 foreach (JObject jobj in inner["delivery_group"] as JArray)
                                 {

@@ -116,16 +116,6 @@ namespace ContractPage.ViewModels
             if(args is Employee)
             {
                 Employee emp = args as Employee;
-                //if (emp.IsChecked.Value)
-                //{
-                //    if(!this.Contract.Value.DeliveryMan.Contains(emp))
-                //        this.Contract.Value.DeliveryMan.Add(emp);
-                //}
-                //else
-                //{
-                //    if (this.Contract.Value.DeliveryMan.Contains(emp))
-                //        this.Contract.Value.DeliveryMan.Remove(emp);
-                //}
                 this.Contract.Value.isChanged = true;
             }
         }

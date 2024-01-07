@@ -314,7 +314,7 @@
                                             <CheckBox 
                                                 Name="innerCheck" 
                                                 Margin="5 5" Foreground="{StaticResource textColor2}" Content="{Binding Name.Value}"
-                                                IsChecked="{Binding IsChecked.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                IsChecked="{Binding IsChecked.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="Unchecked">
                                                         <b:InvokeCommandAction 

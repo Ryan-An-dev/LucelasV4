@@ -60,6 +60,20 @@ namespace CommonModel.Model
                 this.Action.Value = AddDelete.Remove;
             }
         }
+        public Employee Copy() { 
+            Employee employee = new Employee();
+            employee.Action.Value = this.Action.Value;
+            employee.IsChecked.Value = this.IsChecked.Value;
+            employee.Id.Value = this.Id.Value;
+            employee.Name.Value = this.Name.Value;
+            employee.Phone.Value = this.Phone.Value;
+            employee.Address.Value = this.Address.Value;
+            employee.AddressDetail.Value = this.AddressDetail.Value;
+            employee.StartWorkTime.Value = this.StartWorkTime.Value;
+            employee.BirthDay.Value = this.BirthDay.Value;
+            employee.Memo.Value = this.Memo.Value;
+            return employee;
+        }
         
     }
 }
