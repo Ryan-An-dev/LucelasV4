@@ -107,6 +107,8 @@ namespace ContractPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
             RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
+            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            EmployeeInfos = temp.EmployeeInfos;
         }
 
         private void execCheckBoxAccountCommand(object args)
