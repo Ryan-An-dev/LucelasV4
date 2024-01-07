@@ -398,36 +398,6 @@ namespace DepositWithdrawal.ViewModels
             return item;
         }
 
-        private void SetProductCategoryList(JObject msg)
-        {
-            if (msg.ToString().Equals(""))
-            {
-                return;
-            }
-            try
-            {
-                //foreach (JObject inner in msg["company_product"] as JArray)
-                //{
-                //    ReactiveProperty<string> CompanyName = new ReactiveProperty<string>(inner["company_name"].ToString());
-                //    ReactiveProperty<int> CompanyID = new ReactiveProperty<int>(inner["company_id"].ToObject<int>());
-                //    ReactiveCollection<Product> ProductList = new ReactiveCollection<Product>();
-                //    foreach(JObject dept in inner["product"] as JArray) 
-                //    {
-                //        ReactiveProperty<string> ProductName = new ReactiveProperty<string>(dept["acpi_product_name"].ToString());
-                //        ReactiveProperty<int> ProductPrice = new ReactiveProperty<int>(inner["acpi_product_price"].ToObject<int>());
-                //        Product product = new Product(ProductPrice, ProductName);
-                //        ProductList.Add(product);
-                //    }
-                //    Company company = new Company(CompanyID, CompanyName, ProductList);
-                //    this.CompanyList.Add(company);
-                //}
-            }
-            catch (Exception e) { }
-        }
-
-  
-       
-
         public void OnConnected()
         {
             

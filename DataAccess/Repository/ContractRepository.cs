@@ -87,5 +87,13 @@ namespace DataAccess.Repository
         {
             this.NetManager.Close();
         }
+
+        public void GetConnectedContract(JObject msg)
+        {
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.GET_CONNECTED_CONTRACT);
+            }
+        }
     }
 }

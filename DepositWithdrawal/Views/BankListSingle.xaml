@@ -196,6 +196,7 @@
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Visible"
                                   Height="250"
+                                  SelectedItem="{Binding SelectedContract.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   ItemsSource="{Binding ReceiptModel.Value.ConnectedContract,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGrid.RowDetailsTemplate>
                                     <DataTemplate>

@@ -205,7 +205,6 @@ namespace ContractPage.ViewModels
             catch (Exception) {
                 return;
             }
-
            // ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {

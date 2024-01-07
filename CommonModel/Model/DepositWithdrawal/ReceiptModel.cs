@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace CommonModel.Model
 {
@@ -130,6 +131,22 @@ namespace CommonModel.Model
         }
         public override void SetObserver()
         {
+            this.ConnectedContract.ToObservable().Subscribe(x => ChangedConnectedContract(x));
+            BindingOperations.EnableCollectionSynchronization(this.ConnectedContract, new object());
+            ICollectionView view = CollectionViewSource.GetDefaultView(this.ConnectedContract);
+            view.Filter = (x) =>
+            {
+                Contract contract = x as Contract;
+                if (contract == null)
+                    return false;
+                foreach (Payment pay in contract.Payment) {
+                    if (pay.Action.Value == AddDelete.Remove) {
+                        return false;
+                    }
+                }    
+                return true;
+            };
+
             this.IsAutoCategory.Subscribe(x => ChangedCategory("shi_auto_category", x));
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.IncomeCostType.Subscribe(x => ChangedJson("shi_type", (int)x));
@@ -141,6 +158,12 @@ namespace CommonModel.Model
             this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
             this.FullyCompleted.Subscribe(x => ChangedJson("shi_complete", (int)x));
         }
+
+        private void ChangedConnectedContract(Contract x)
+        {
+            this.isChanged = true;
+        }
+
         private void ChargeCalc(int allocatePrice)
         {
             if(this.ReceiptType.Value == Model.ReceiptType.Card)
@@ -171,6 +194,30 @@ namespace CommonModel.Model
                     this.FullyCompleted.Value = AllocateType.FullyCompleted;
                 }
             }
+        }
+        public JObject GetChangedItem()
+        {
+            JArray jarr = new JArray();
+            if (ChangedItem["connected_contract"] != null)
+                jarr = ChangedItem["connected_contract"] as JArray;
+
+            foreach (Contract contract in ConnectedContract)
+            {
+                foreach (Payment pay in contract.Payment)
+                {
+                    if (!(pay.Action.Value == AddDelete.Default))
+                    {
+                        JObject inner = new JObject();
+                        inner["con_id"] = contract.Id.Value;
+                        inner["payment_id"] = pay.PaymentId.Value;
+                        inner["mode"] = (int)pay.Action.Value;
+                        jarr.Add(inner);
+                    }
+                }
+            }
+            if(jarr.Count>0)
+                ChangedItem["connected_contract"] = jarr;
+            return ChangedItem;
         }
     }
 }
