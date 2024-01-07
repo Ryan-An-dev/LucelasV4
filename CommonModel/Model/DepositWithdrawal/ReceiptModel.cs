@@ -78,12 +78,12 @@ namespace CommonModel.Model
         public ReactiveProperty<CategoryInfo> CategoryInfo { get; set; }
         public ReactiveCollection<Contract> ConnectedContract { get; set; }
         public ReactiveProperty<string> Contents { get; set; }
-        public ReactiveProperty<int> Money { get; set; }
         public ReactiveProperty<string> Tip { get; set; }
         public ReactiveProperty<string> Memo { get; set; }
-        public ReactiveProperty<int> RemainPrice { get; set; }
-        public ReactiveProperty<int> AllocatedPrice { get; set; }
-        public ReactiveProperty<float> CardCharge { get; set; }
+        public ReactiveProperty<int> Money { get; set; } //금액
+        public ReactiveProperty<int> RemainPrice { get; set; } //남은금액
+        public ReactiveProperty<int> AllocatedPrice { get; set; } //할당금액
+        public ReactiveProperty<float> CardCharge { get; set; } //카드수수료
         public ReactiveProperty<string> indexKey { get; set; }
         public ReceiptModel() : base()
         {
@@ -167,9 +167,11 @@ namespace CommonModel.Model
 
         private void ChargeCalc(int allocatePrice)
         {
-            if(this.ReceiptType.Value == Model.ReceiptType.Card)
+            this.AllocatedPrice.Value = allocatePrice;
+            this.RemainPrice.Value = this.Money.Value - this.AllocatedPrice.Value;
+            if (this.ReceiptType.Value == Model.ReceiptType.Card)
             {
-                this.CardCharge.Value = (float)( this.AllocatedPrice.Value / this.Money.Value)* 100;
+                this.CardCharge.Value = (float)( this.AllocatedPrice.Value / this.Money.Value) * 100;
             }
             else
             {

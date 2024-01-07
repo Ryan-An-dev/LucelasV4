@@ -330,10 +330,10 @@ namespace DepositWithdrawal.ViewModels
         private void PaymentEvent(bool temp,int price) {
             if (temp)
             {
-                args.Value.RemainPrice.Value += price;
+                args.Value.AllocatedPrice.Value += price;
             }
             else {
-                args.Value.RemainPrice.Value -= price;
+                args.Value.AllocatedPrice.Value -= price;
             }
         }
         private Employee FindEmployee(int id)

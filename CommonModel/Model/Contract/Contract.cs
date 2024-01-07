@@ -241,7 +241,7 @@ namespace CommonModel.Model
                 }
             }
             if (jarrProduct != null && jarrProduct.Count>0)
-                ChangedItem["product"] = jarrProduct;
+                ChangedItem["product_list"] = jarrProduct;
             
 
             JArray deliveryMan = new JArray();

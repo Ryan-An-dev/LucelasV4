@@ -242,8 +242,8 @@
                     Foreground="White" />
                 <TextBlock 
                     HorizontalAlignment="Right"
-                    Grid.Column="1" Grid.Row="1"
-                    Text="{Binding args.Value.AllocatedPrice.Value,StringFormat=\{0:N0\} 원}" 
+                    Grid.Column="1" Grid.Row="2"
+                    Text="{Binding args.Value.RemainPrice.Value,StringFormat=\{0:N0\} 원}" 
                     Foreground="White" />
                 <TextBlock 
                     HorizontalAlignment="Right"

@@ -109,12 +109,14 @@ namespace DepositWithdrawal.ViewModels
                         inner["payment_id"] = pay.PaymentId.Value;
                         inner["mode"] = (int)2;
                         jarr.Add(inner);
+                        this.ReceiptModel.Value.AllocatedPrice.Value -= pay.Price.Value;
                     }
                 }
                 if (jarr.Count > 0)
                     this.ReceiptModel.Value.ChangedItem["connected_contract"] = jarr;
-
+                
                 this.ReceiptModel.Value.ConnectedContract.Remove(this.SelectedContract.Value);
+
             }
         }
 
@@ -132,6 +134,7 @@ namespace DepositWithdrawal.ViewModels
                         {
                             ReceiptModel.Value.isChanged = true;
                             this.ReceiptModel.Value.ConnectedContract.Add(temp);
+                            this.ReceiptModel.Value.AllocatedPrice.Value += pay.Price.Value;
                         });
                     }
                 }
@@ -374,6 +377,7 @@ namespace DepositWithdrawal.ViewModels
                                 }
                                 temp.ProductNameCombine.Value = combine;
                                 ProductMemoCombine(temp);
+                                
                             }
                             if (inner["total"] != null)
                                 temp.Price.Value = inner["total"].ToObject<int>();
@@ -413,6 +417,7 @@ namespace DepositWithdrawal.ViewModels
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 this.ReceiptModel.Value.ConnectedContract.Add(temp);
+                                this.ReceiptModel.Value.AllocatedPrice.Value += temp.Price.Value;
                             });
                         }
                     }
