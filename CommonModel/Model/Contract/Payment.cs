@@ -24,10 +24,11 @@ namespace CommonModel.Model
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum Complete
     {
+        [Description("미완료")]
+        InComplete = 0,
         [Description("완료")]
         Complete = 1,
-        [Description("미완료")]
-        InComplete= 0,
+        
     }
 
     public class Payment : PrismCommonModelBase
@@ -47,16 +48,15 @@ namespace CommonModel.Model
             get { return Enum.GetValues(typeof(Complete)).Cast<Complete>(); }
         }
         public ReactiveProperty<int> PaymentId { get; set; }
-        [JsonPropertyName("payment_method")]
+        
         public ReactiveProperty<ReceiptType> PaymentMethod { get; set; } //계좌, 카드 , 계좌이체 , 현금
-        [JsonPropertyName("payment_type")]
+        
         public ReactiveProperty<PaymentType> PaymentType  { get; set; } // 계약금, 잔금
 
-        [JsonPropertyName("payment_completed")]
         public ReactiveProperty<Complete> PaymentCompleted { get; set; }
 
         public ReactiveProperty<PayCardType>SelectedPayCard { get; set; }
-        [JsonPropertyName("price")]
+        
         public ReactiveProperty<int> Price { get; set; }
 
         public ReactiveProperty<Visibility> cardVisibility { get; set; }

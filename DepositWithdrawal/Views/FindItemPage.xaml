@@ -126,29 +126,36 @@
                                     MinHeight="150" 
                                     Margin="5" 
                                     IsReadOnly="True"
+                                    RowHeight="35"
                                     ItemsSource="{Binding Payment}"
-                                    CanUserAddRows="False" RowHeight="32"
+                                    CanUserAddRows="False"
                                     AutoGenerateColumns="False">
                                     <DataGrid.Columns>
-                                    <DataGridTemplateColumn>
-                                        <DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsCheckedAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.HeaderTemplate>
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
-                                    <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
-                                    <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
-                                    <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
-                                    <DataGridTextColumn 
-                                        MaxWidth="120" Binding="{Binding PaymentCompleted.Value}" 
-                                        Header="완료유무" IsReadOnly="True"/>
+                                        <DataGridTemplateColumn Width="50">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <CheckBox.Style>
+                                                            <Style TargetType="CheckBox" BasedOn="{StaticResource MahApps.Styles.CheckBox}">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding PaymentCompleted.Value, UpdateSourceTrigger=PropertyChanged}" Value="InComplete">
+                                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </CheckBox.Style>
+                                                    </CheckBox>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
+                                        <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
+                                        <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
+                                        <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
+                                        <DataGridTextColumn 
+                                            MaxWidth="120" Binding="{Binding PaymentCompleted.Value}" 
+                                            Header="완료유무" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             </Grid>    

@@ -172,6 +172,27 @@
                           Margin="0 20 0 0" 
                           Visibility="{Binding VisibilityContract.Value, UpdateSourceTrigger=PropertyChanged}">
                         <StackPanel Cursor="">
+                            <CheckBox 
+                                 Margin="10 0 0 0"
+                                 BorderBrush="White"
+                                 Foreground="{StaticResource MainColor}"
+                                 IsChecked="{Binding ReceiptModel.Value.FullyCompleted.Value}"
+                                 >
+                                <ContentControl>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock>아래 내용으로 [</TextBlock>
+                                        <TextBlock
+                                             FontSize="14"
+                                             FontWeight="ExtraBold"
+                                             Foreground="{StaticResource textColor2}"
+                                             Margin="5 0 5 0"
+                                             Text="{Binding ReceiptModel.Value.Contents.Value}"/>
+                                        <TextBlock> ]</TextBlock>
+                                        <TextBlock Margin="5 0 0 0"> 에 대한 입금내역</TextBlock>
+                                        <TextBlock>분류를 완료합니다. </TextBlock>
+                                    </StackPanel>
+                                </ContentControl>
+                            </CheckBox>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button 
                           md:HintAssist.Hint="추가"
