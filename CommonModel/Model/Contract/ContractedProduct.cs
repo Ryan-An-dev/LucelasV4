@@ -54,7 +54,7 @@ namespace CommonModel.Model
             jobj["sell_price"] = this.SellPrice.Value;
             jobj["order_count"] = this.SellCount.Value;
             jobj["memo"] = this.Memo.Value;
-            jobj["product_action"] = (int)this.Action.Value;
+            jobj["action"] = (int)this.Action.Value;
             return jobj;
         }
         public void GetTotal(string name,int x) {

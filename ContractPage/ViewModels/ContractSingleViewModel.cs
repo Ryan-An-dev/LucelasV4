@@ -211,9 +211,7 @@ namespace ContractPage.ViewModels
                     }
                     jobj["product_id"] = id;
                     jobj["product_order_id"] = this.SelectedProduct.Value.Id.Value;
-                    JObject inner = new JObject();
-                    inner["action"] = 2;
-                    jobj["changed_item"] = inner;
+                    jobj["action"] = 2;
                     if (this.Contract.Value.ChangedItem["product_list"] == null)
                     {
                         JArray jarr = new JArray();
