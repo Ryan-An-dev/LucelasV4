@@ -135,11 +135,11 @@ namespace ContractPage.ViewModels
 
         public void RowDoubleClickEvent()
         {
-            if (SelectedItem.Value == null)
+            if (SelectedProduct.Value == null)
                 return;
             DialogParameters dialogParameters = new DialogParameters();
-            SelectedItem.Value.ClearJson();
-            dialogParameters.Add("object", SelectedItem.Value as ContractedProduct);
+            SelectedProduct.Value.ClearJson();
+            dialogParameters.Add("object", SelectedProduct.Value as ContractedProduct);
 
             dialogService.ShowDialog("FindInventoryItem", dialogParameters, r =>
             {
@@ -148,17 +148,35 @@ namespace ContractPage.ViewModels
                     if (r.Result == ButtonResult.OK)
                     {
                         ContractedProduct item = r.Parameters.GetValue<ContractedProduct>("object");
-                        if (item != null)
-                        {
-                            using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
-                            {
-                                network.SetReceiver(this);
-                                JObject jobj = new JObject();
-                                jobj["changed_item"] = item.ChangedItem;
-                                jobj["product_id"] = item.Id.Value;
-                                network.Update(jobj);
-                            }
-                        }
+                        this.Contract.Value.isChanged = true;
+                        //JObject jobj = new JObject();
+                        //jobj["changed_item"] = item.ChangedItem;
+                        //jobj["product_id"] = item.FurnitureInventory.Value.Id.Value;
+                        //jobj["product_order_id"] = item.Id.Value;
+                        //jobj["action"] = 3;
+                        //if (this.Contract.Value.ChangedItem["product_list"] == null)
+                        //{
+                        //    JArray jarr = new JArray();
+                        //    jarr.Add(jobj);
+                        //    this.Contract.Value.ChangedItem["product_list"] = jarr;
+                        //}
+                        //else
+                        //{
+                        //    (this.Contract.Value.ChangedItem["product_list"] as JArray).Add(jobj);
+                        //}
+                        //if (item != null)
+                        //{
+                        //    using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
+                        //    {
+                        //        network.SetReceiver(this);
+                        //        JObject jobj = new JObject();
+                        //        jobj["changed_item"] = item.ChangedItem;
+                        //        jobj["product_id"] = item.FurnitureInventory.Value.Id.Value;
+                        //        jobj["product_order_id"] = item.Id.Value;
+                        //        jobj["action"] = 3;
+                        //        network.Update(jobj);
+                        //    }
+                        //}
                     }
                 }
                 catch (Exception) { }

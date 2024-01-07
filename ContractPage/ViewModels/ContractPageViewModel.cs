@@ -296,7 +296,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
-            ErpLogWriter.LogWriter.Trace(msg.ToString());
+            //ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
