@@ -417,7 +417,7 @@ namespace DepositWithdrawal.ViewModels
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 this.ReceiptModel.Value.ConnectedContract.Add(temp);
-                                this.ReceiptModel.Value.AllocatedPrice.Value += temp.Price.Value;
+                                this.ReceiptModel.Value.AllocatedPrice.Value = temp.Price.Value;
                             });
                         }
                     }

@@ -31,7 +31,6 @@
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}">
-
                     <StackPanel Orientation="Horizontal">
                         <ComboBox
                             ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
@@ -88,7 +87,59 @@
                             />  
                     </StackPanel>
                 </Grid>
-                
+                <Grid Grid.Column="1" Width="160" HorizontalAlignment="Right" Margin="0 0 15 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock 
+                        HorizontalAlignment="Right"
+                        Text="대분류 : "
+                        Foreground="White"
+                        FontSize="13"
+                        FontWeight="ExtraBold"/>
+                    <TextBlock 
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="{Binding args.Value.IncomeCostType.Value}"
+                        Foreground="White"
+                        FontSize="13"
+                        FontWeight="ExtraBold"
+                        />
+                    <TextBlock 
+                         FontSize="13"
+                        FontWeight="ExtraBold" 
+                        Grid.Row="1" Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Text="중분류 : "
+                        Foreground="White"/>
+                    <TextBlock 
+                         FontSize="13"
+                        FontWeight="ExtraBold"
+                        Grid.Row="1" Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="{Binding args.Value.ReceiptType.Value}"
+                        Foreground="White"/>
+                    <TextBlock 
+                        FontSize="13"
+                        FontWeight="ExtraBold"
+                        Grid.Row="2" Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Text="소분류 : "
+                        Foreground="White"/>
+                    <TextBlock 
+                        FontSize="13"
+                        FontWeight="ExtraBold"
+                        Grid.Row="2" Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="{Binding args.Value.CategoryInfo.Value.Name.Value}"
+                        Foreground="White"/>
+                </Grid>
                 <DataGrid
                         Grid.ColumnSpan="2"
                         x:Name="List"

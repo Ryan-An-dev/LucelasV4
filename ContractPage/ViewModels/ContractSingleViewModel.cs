@@ -149,34 +149,6 @@ namespace ContractPage.ViewModels
                     {
                         ContractedProduct item = r.Parameters.GetValue<ContractedProduct>("object");
                         this.Contract.Value.isChanged = true;
-                        //JObject jobj = new JObject();
-                        //jobj["changed_item"] = item.ChangedItem;
-                        //jobj["product_id"] = item.FurnitureInventory.Value.Id.Value;
-                        //jobj["product_order_id"] = item.Id.Value;
-                        //jobj["action"] = 3;
-                        //if (this.Contract.Value.ChangedItem["product_list"] == null)
-                        //{
-                        //    JArray jarr = new JArray();
-                        //    jarr.Add(jobj);
-                        //    this.Contract.Value.ChangedItem["product_list"] = jarr;
-                        //}
-                        //else
-                        //{
-                        //    (this.Contract.Value.ChangedItem["product_list"] as JArray).Add(jobj);
-                        //}
-                        //if (item != null)
-                        //{
-                        //    using (var network = ContainerProvider.Resolve<DataAgent.ProductDataAgent>())
-                        //    {
-                        //        network.SetReceiver(this);
-                        //        JObject jobj = new JObject();
-                        //        jobj["changed_item"] = item.ChangedItem;
-                        //        jobj["product_id"] = item.FurnitureInventory.Value.Id.Value;
-                        //        jobj["product_order_id"] = item.Id.Value;
-                        //        jobj["action"] = 3;
-                        //        network.Update(jobj);
-                        //    }
-                        //}
                     }
                 }
                 catch (Exception) { }

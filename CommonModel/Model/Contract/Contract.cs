@@ -188,6 +188,7 @@ namespace CommonModel.Model
                 {
                     jobj["payment_id"] = item.PaymentId.Value;
                     jobj["changed_item"] = item.MakeJson();
+                    jobj["action"]= (int)item.Action.Value;
                     if (ChangedItem["payment"] == null)
                     {
                         jarrPayment.Add(jobj);
@@ -208,6 +209,7 @@ namespace CommonModel.Model
                 {
                     jobj["payment_id"] = item.PaymentId.Value;
                     jobj["changed_item"] = item.ChangedItem;
+                    jobj["action"] = (int)item.Action.Value;
                     if (ChangedItem["payment"] == null)
                     {
                         jarrPayment.Add(jobj);

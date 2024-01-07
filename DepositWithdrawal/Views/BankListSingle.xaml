@@ -236,7 +236,7 @@
                                   FontSize="13" 
                                   FontWeight="Bold"/>
                                 <TextBlock 
-                                  Text="{Binding ReceiptModel.Value.RemainPrice.Value,StringFormat={}{0}원,UpdateSourceTrigger=PropertyChanged}"
+                                  Text="{Binding ReceiptModel.Value.RemainPrice.Value,StringFormat=\{0:N0\}원,UpdateSourceTrigger=PropertyChanged}"
                                   Foreground="White" 
                                   FontSize="13" 
                                   FontWeight="Bold"/>
