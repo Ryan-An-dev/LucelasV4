@@ -37,6 +37,7 @@ namespace DepositWithdrawal.ViewModels
 
         public ReactiveCollection<FurnitureType> furnitureInfos { get; }
         public ReactiveCollection<PayCardType> PaymentCardList { get; set; }
+        public ReactiveProperty<PayCardType>SelectedPaymentCard { get; set; }
         public ReactiveCollection<Contract> ContractItems { get; }
         public ReactiveProperty<Payment> SelectedPayment { get; set; }
         public BankModel SelectedBank { get; set; }
@@ -45,13 +46,15 @@ namespace DepositWithdrawal.ViewModels
         private DelegateCommand<string> _SearchExecute;
         public DelegateCommand<string> SearchExecute =>
             _SearchExecute ?? (_SearchExecute = new DelegateCommand<string>(SearchExecuteCommand));
-
+        public ReactiveProperty<Visibility> isCard { get; set; }
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
 
         public FindItemPageViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider, dialogService)
         {
+            this.isCard = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(this.disposable);
+            this.SelectedPaymentCard = new ReactiveProperty<PayCardType>().AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
             this.StartDate = new ReactiveProperty<DateTime>(DateTime.Today.AddMonths(-1)).AddTo(this.disposable);
             SearchReceiptType = new ReactiveProperty<ReceiptType>().AddTo(this.disposable);
@@ -63,6 +66,10 @@ namespace DepositWithdrawal.ViewModels
             PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
             SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             this.PaymentCardList = temp.PayCardTypeInfos;
+            PayCardType temper = new PayCardType();
+            temper.Id.Value = 0;
+            temper.Name.Value = "전체";
+            this.PaymentCardList.Insert(0, temper);
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;
@@ -76,20 +83,19 @@ namespace DepositWithdrawal.ViewModels
                 jobj["page_unit"] = 30;
                 jobj["page_start_pos"] = 0;
                 JObject jobj2 = new JObject();
-                jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
-                jobj2["start_time"] = args.Value.Month.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
-                jobj2["end_time"] = args.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                
+                jobj2["payment_method"] = (int)SearchReceiptType.Value;
+                jobj2["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                jobj2["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj2["complete"] = 2;
 
                 if (args.Value.ReceiptType.Value == ReceiptType.Cash) // 현금
                 {
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
+                    jobj2["payment_method"] = (int)SearchReceiptType.Value;
                     jobj2["cui_name"] = args.Value.Contents.Value;
                 }
                 else if (args.Value.ReceiptType.Value == ReceiptType.Cash)
                 { //카드
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
+                    jobj2["payment_method"] = (int)SearchReceiptType.Value;
                 }
                 else
                 {  //계좌이체
@@ -100,7 +106,7 @@ namespace DepositWithdrawal.ViewModels
                     }
                     else
                     {
-                        jobj2["cui_name"] = args.Value.Contents.Value;
+                        jobj2["cui_name"] = Keyword.Value;
                     }
                     jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
                 }
@@ -168,6 +174,12 @@ namespace DepositWithdrawal.ViewModels
             }
             this.StartDate.Value = item.Month.Value.AddDays(-7);
             this.EndDate.Value = item.Month.Value;
+            if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
+            {
+                isCard.Value = Visibility.Visible;
+                string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
+                this.SelectedPaymentCard.Value = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank);
+            }
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();

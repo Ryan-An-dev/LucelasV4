@@ -41,6 +41,17 @@
                             md:HintAssist.Hint="계좌/카드/현금"
                             Margin=" 10 4 20 0"
                             />
+                        <ComboBox
+                            Visibility="{Binding isCard.Value}"
+                            ItemsSource="{Binding PaymentCardList}" 
+                            DisplayMemberPath="Name.Value"
+                            SelectedItem="{Binding SelectedPaymentCard.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignComboBox}" 
+                            Foreground="{StaticResource textColor2}"  
+                            md:HintAssist.IsFloating="True" 
+                            md:HintAssist.Hint="카드선택"
+                            Margin=" 10 4 20 0"
+                            />
                         <StackPanel Orientation="Horizontal">
                             <DatePicker 
                            BorderBrush="{StaticResource textColor2}"
