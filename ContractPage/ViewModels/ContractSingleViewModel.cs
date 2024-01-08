@@ -230,8 +230,7 @@ namespace ContractPage.ViewModels
                     }
                     jobject["payment_id"] = pay_id;
                     JObject inner_pay = new JObject();
-                    inner_pay["action"] = 2;
-                    jobject["changed_item"] = inner_pay;
+                    jobject["action"] = 2;
 
                     if (this.Contract.Value.ChangedItem["payment"] == null)
                     {
