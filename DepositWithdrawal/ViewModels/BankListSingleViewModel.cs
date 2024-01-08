@@ -114,7 +114,7 @@ namespace DepositWithdrawal.ViewModels
                 }
                 if (jarr.Count > 0)
                     this.ReceiptModel.Value.ChangedItem["connected_contract"] = jarr;
-                
+                this.ReceiptModel.Value.isChanged = true;
                 this.ReceiptModel.Value.ConnectedContract.Remove(this.SelectedContract.Value);
 
             }
