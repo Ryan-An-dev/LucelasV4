@@ -130,19 +130,15 @@ namespace DepositWithdrawal.ViewModels
                     continue;
                 }
 
-                foreach (Payment inner in temp.Payment) {
-                    if (inner.IsSelected.Value) {
-                        Contract temper = temp.DeepCopy();
-                        temper.Payment.Clear();
-                        inner.Action.Value = AddDelete.Add;
-                        temper.Payment.Add(inner);
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            ReceiptModel.Value.isChanged = true;
-                            this.ReceiptModel.Value.ConnectedContract.Add(temper);
-                        });
-                    }
+                if (temp.Payment[0].IsSelected.Value) {
+                    temp.Payment[0].Action.Value = AddDelete.Add;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ReceiptModel.Value.isChanged = true;
+                        this.ReceiptModel.Value.ConnectedContract.Add(temp);
+                    });
                 }
+                
             }
         }
 

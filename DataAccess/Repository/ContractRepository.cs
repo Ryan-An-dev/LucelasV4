@@ -43,7 +43,10 @@ namespace DataAccess.Repository
 
         public void DeleteContract(JObject msg)
         {
-            
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.DELETECONTRACT);
+            }
         }
 
         public void GetContractList(JObject msg)
