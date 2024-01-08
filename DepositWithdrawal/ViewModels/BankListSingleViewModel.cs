@@ -420,11 +420,12 @@ namespace DepositWithdrawal.ViewModels
                                     }
                                 }
                                 temp.Payment.Add(pay);
+                                this.ReceiptModel.Value.AllocatedPrice.Value += pay.Price.Value;
                             }
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 this.ReceiptModel.Value.ConnectedContract.Add(temp);
-                                this.ReceiptModel.Value.AllocatedPrice.Value = temp.Price.Value;
+                                
                             });
                         }
                     }

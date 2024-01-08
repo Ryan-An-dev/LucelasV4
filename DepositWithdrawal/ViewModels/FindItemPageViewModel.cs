@@ -33,7 +33,7 @@ namespace DepositWithdrawal.ViewModels
         public ReactiveProperty<DateTime> StartDate { get; set; }
         public ReactiveProperty<DateTime> EndDate { get; set; }
 
-        
+        public int OriginAllocatedPrice { get; set; }
 
         public ReactiveCollection<FurnitureType> furnitureInfos { get; }
         public ReactiveCollection<PayCardType> PaymentCardList { get; set; }
@@ -101,7 +101,8 @@ namespace DepositWithdrawal.ViewModels
                 temp = new DialogResult(result, p);
             }
             else if (parameter?.ToLower() == "false")
-            {
+            {   
+                this.args.Value.AllocatedPrice.Value = OriginAllocatedPrice;
                 result = ButtonResult.Cancel;
                 temp = new DialogResult(result);
             }
@@ -136,6 +137,7 @@ namespace DepositWithdrawal.ViewModels
             ReceiptModel item = null;
             parameters.TryGetValue("object", out item);
             args.Value = item;
+            OriginAllocatedPrice = item.AllocatedPrice.Value;
             SearchReceiptType.Value = item.ReceiptType.Value;
             if (item.CategoryInfo.Value.Name.Value == "기타")
             {

@@ -168,7 +168,7 @@ namespace CommonModel.Model
         private void ChargeCalc(int allocatePrice)
         {
             this.RemainPrice.Value = this.Money.Value - this.AllocatedPrice.Value;
-            if (this.ReceiptType.Value == Model.ReceiptType.Card)
+            if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
             {
                 this.CardCharge.Value = (float)( this.AllocatedPrice.Value / this.Money.Value) * 100;
             }
