@@ -19,6 +19,10 @@ namespace DataAgent
         {
             this.repo = repo;
         }
+        public void GetContractForReceipt(JObject msg)
+        {
+            this.repo.GetContractForReceipt(msg);
+        }
         public void GetConnectedContract(JObject msg)
         {
             this.repo.GetConnectedContract(msg);

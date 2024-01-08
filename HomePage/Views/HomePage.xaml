@@ -198,21 +198,62 @@
             <Border Style="{StaticResource mainBorder}" Margin="0 0 0 30" Grid.Column="1">
                 <Grid>
                     <!--Title-->
-                    <TextBlock Text="최고의 사원" Style="{StaticResource titleText}"/>
+                    <TextBlock Text="전달비교" Style="{StaticResource titleText}"/>
 
                     <!--Filter Button-->
                     <Button Style="{StaticResource titleButton}">
                         <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
                     </Button>
+                    <lvc:CartesianChart LegendLocation="None" Margin="0 50 0 0">
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip Background="#101a28" Foreground="#d5e2ff"/>
+                        </lvc:CartesianChart.DataTooltip>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis 
+                                Foreground="#bcc0c6" 
+                                ShowLabels="True" 
+                                Labels="1일,2일,3일,4일,5일,6일,7일,8일,9일,10일,11일,12일">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" Step="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis 
+                                Foreground="#bcc0c6" 
+                                ShowLabels="True" 
+                                MinValue="0" MaxValue="1000">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
 
-                    <ListView Margin="0 50 0 0" 
-                                  Background="Transparent" 
-                                  BorderThickness="0"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
-                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                  Style="{StaticResource MaterialDesignListView}">
+                        <lvc:CartesianChart.Series>
+                            <lvc:LineSeries StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
+                            Values="10,80,128,231,255,308,359,368,468,572,578,788">
+                                <lvc:LineSeries.Fill>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="#2e3966" Offset="0.4"/>
+                                        <GradientStop Color="#21304a" Offset="1.2"/>
+                                    </LinearGradientBrush>
+                                </lvc:LineSeries.Fill>
+                            </lvc:LineSeries>
+                            <lvc:LineSeries 
+                                DataLabels="False"
+                                StrokeThickness="2" Stroke="#ffaf01" PointGeometrySize="0"
+                                Values="5,8,8,9,18,30">
+                                <lvc:LineSeries.Fill>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="#2e3966" Offset="0.4"/>
+                                        <GradientStop Color="#21304a" Offset="1.2"/>
+                                    </LinearGradientBrush>
+                                </lvc:LineSeries.Fill>
+                            </lvc:LineSeries>
+                        </lvc:CartesianChart.Series>
+                        
+                    </lvc:CartesianChart>
 
-                    </ListView>
 
                 </Grid>
             </Border>

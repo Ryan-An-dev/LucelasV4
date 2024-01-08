@@ -17,6 +17,8 @@ namespace DataAccess.Interface
         public void UpdateContract(JObject msg);
         public void DeleteContract(JObject msg);
         public void GetConnectedContract(JObject msg);
+
+        public void GetContractForReceipt(JObject msg);
         #endregion
 
     }

@@ -76,16 +76,39 @@ namespace DepositWithdrawal.ViewModels
                 jobj["page_unit"] = 30;
                 jobj["page_start_pos"] = 0;
                 JObject jobj2 = new JObject();
-                jobj2["payment_method"] = (int)this.SearchReceiptType.Value;
-                jobj2["start_time"] =  this.StartDate.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
-                jobj2["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
+                jobj2["start_time"] = args.Value.Month.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
+                jobj2["end_time"] = args.Value.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                
                 jobj2["complete"] = 2;
-                if (obj != string.Empty) {
-                    jobj2["cui_name"] = Keyword.Value;
+
+                if (args.Value.ReceiptType.Value == ReceiptType.Cash) // 현금
+                {
+                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
+                    jobj2["cui_name"] = args.Value.Contents.Value;
+                }
+                else if (args.Value.ReceiptType.Value == ReceiptType.Cash)
+                { //카드
+                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
+                }
+                else
+                {  //계좌이체
+                    if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
+                    {
+                        string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
+                        jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank).Id.Value;
+                    }
+                    else
+                    {
+                        jobj2["cui_name"] = args.Value.Contents.Value;
+                    }
+                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
                 }
                 jobj["search_option"] = jobj2;
+
+
                 network.SetReceiver(this);
-                network.GetContractList(jobj);
+                network.GetContractForReceipt(jobj);
             }
         }
         
@@ -166,9 +189,10 @@ namespace DepositWithdrawal.ViewModels
                     jobj2["payment_method"] = (int)item.ReceiptType.Value;
                 }
                 else {  //계좌이체
-                    if (item.CategoryInfo.Value.Name.Value.Contains("대금"))
+                    if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
                     {
-                        jobj2["shi_biz_type"] = (int)item.CategoryInfo.Value.CategoryId.Value;
+                        string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
+                        jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank).Id.Value;
                     }
                     else {
                         jobj2["cui_name"] = item.Contents.Value;
@@ -179,7 +203,7 @@ namespace DepositWithdrawal.ViewModels
 
 
                 network.SetReceiver(this);
-                network.GetContractList(jobj);
+                network.GetContractForReceipt(jobj);
             }
         }
 
@@ -190,7 +214,7 @@ namespace DepositWithdrawal.ViewModels
             ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
-                case COMMAND.GetContractList: //검색결과 받는곳 
+                case COMMAND.GET_CONTRACT_FOR_RECEIPT: //검색결과 받는곳 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         this.ContractItems.Clear();
@@ -289,35 +313,30 @@ namespace DepositWithdrawal.ViewModels
                             //계약금,잔금 부분
                             if (inner["payment"] != null && !inner["payment"].ToString().Equals(""))
                             {
-
-                                foreach (JObject jobj in inner["payment"] as JArray)
+                                Payment pay = new Payment();
+                                if (inner["payment"]["payment_id"] != null)
+                                    pay.PaymentId.Value = inner["payment"]["payment_id"].ToObject<int>();
+                                if (inner["payment"]["payment_type"] != null)
+                                    pay.PaymentType.Value = (PaymentType)inner["payment"]["payment_type"].ToObject<int>();
+                                if (inner["payment"]["payment_completed"] != null)
+                                    pay.PaymentCompleted.Value = (Complete)inner["payment"]["payment_completed"].ToObject<int>();
+                                if (inner["payment"]["payment_method"] != null)
+                                    pay.PaymentMethod.Value = (ReceiptType)inner["payment"]["payment_method"].ToObject<int>();
+                                if (inner["payment"]["price"] != null)
+                                    pay.Price.Value = inner["payment"]["price"].ToObject<int>();
+                                if (inner["payment"]["payment_card"] != null)
                                 {
-                                    Payment pay = new Payment();
-                                    if (jobj["payment_id"] != null)
-                                        pay.PaymentId.Value = jobj["payment_id"].ToObject<int>();
-                                    if (jobj["payment_type"] != null)
-                                        pay.PaymentType.Value = (PaymentType)jobj["payment_type"].ToObject<int>();
-                                    if (jobj["payment_completed"] != null)
-                                        pay.PaymentCompleted.Value = (Complete)jobj["payment_completed"].ToObject<int>();
-                                    if (jobj["payment_method"] != null)
-                                        pay.PaymentMethod.Value = (ReceiptType)jobj["payment_method"].ToObject<int>();
-                                    if (jobj["price"] != null)
-                                        pay.Price.Value = jobj["price"].ToObject<int>();
-                                    if (jobj["payment_card"] != null)
+                                    int paycard_id = inner["payment"]["payment_card"].ToObject<int>();
+                                    if (paycard_id != 0)
                                     {
-                                        int paycard_id = jobj["payment_card"].ToObject<int>();
-                                        if (paycard_id != 0)
-                                        {
-                                            SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-                                            PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
-                                            if (item != null)
-                                                pay.SelectedPayCard.Value = item;
-                                        }
+                                        SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                                        PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
+                                        if (item != null)
+                                            pay.SelectedPayCard.Value = item;
                                     }
-                                    pay.MyPayCheckEvent += PaymentEvent;
-                                    temp.Payment.Add(pay);
                                 }
-
+                                pay.MyPayCheckEvent += PaymentEvent;
+                                temp.Payment.Add(pay);
                             }
                             Application.Current.Dispatcher.Invoke(() =>
                             {

@@ -35,6 +35,7 @@ namespace DataAccess
         UPDATECONTRACT = 32,
         DELETECONTRACT = 33,
         GET_CONNECTED_CONTRACT = 34,
+        GET_CONTRACT_FOR_RECEIPT = 35,
         #endregion
 
         #region 직원리스트

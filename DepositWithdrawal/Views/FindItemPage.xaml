@@ -377,12 +377,21 @@
                         </DataTemplate>
                     </DataGrid.RowDetailsTemplate>
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Width="0.05*" Header="No" Binding="{Binding ListNo.Value}" />
                         <DataGridTextColumn Width="0.1*" Header="날짜" Binding="{Binding Month.Value, StringFormat=yy-MM-dd}" />
                         <DataGridTextColumn Width="0.08*" Header="계약자명" Binding="{Binding Contractor.Value.Name.Value}"/>
-                        <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}"/>
-                        <DataGridTextColumn Width="0.2*" Header="주소" Binding="{Binding Contractor.Value.Address.Value}"/>
-                        <DataGridTextColumn Width="0.2*" Header="비고" Binding="{Binding ProductNameCombine.Value}"/>
+                        <DataGridTextColumn Width="0.1*" Header="구분" Binding="{Binding Payment[0].PaymentType.Value}"/>
+                        <DataGridTextColumn Width="0.1*" Header="지불방식" Binding="{Binding Payment[0].PaymentMethod.Value}"/>
+                        <DataGridTextColumn Width="0.1*" Header="지불방법" Binding="{Binding Payment[0].SelectedPayCard.Value.Name.Value}"/>
+                        <DataGridTextColumn Width="0.1*" Header="금액" Binding="{Binding Payment[0].Price.Value, StringFormat=\{0:N0\}}"/>
+                        <DataGridTextColumn Width="0.1*" Header="완료유무" Binding="{Binding  Payment[0].PaymentCompleted.Value}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
