@@ -83,12 +83,12 @@ namespace CommonModel.Model
         public ReactiveProperty<int> Money { get; set; } //금액
         public ReactiveProperty<int> RemainPrice { get; set; } //남은금액
         public ReactiveProperty<int> AllocatedPrice { get; set; } //할당금액
-        public ReactiveProperty<float> CardCharge { get; set; } //카드수수료
+        public ReactiveProperty<double> CardCharge { get; set; } //카드수수료
         public ReactiveProperty<string> indexKey { get; set; }
         public ReceiptModel() : base()
         {
             this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
-            this.CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
+            this.CardCharge = new ReactiveProperty<double>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>("", mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
@@ -110,7 +110,7 @@ namespace CommonModel.Model
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
             this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
-            CardCharge = new ReactiveProperty<float>(0).AddTo(disposable);
+            CardCharge = new ReactiveProperty<double>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             this.Tip = new ReactiveProperty<string>(Tip, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //적요
             this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
@@ -170,7 +170,7 @@ namespace CommonModel.Model
             this.RemainPrice.Value = this.Money.Value - this.AllocatedPrice.Value;
             if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
             {
-                this.CardCharge.Value = (float)( this.AllocatedPrice.Value / this.Money.Value) * 100;
+                this.CardCharge.Value = Math.Round(((float)this.RemainPrice.Value / this.Money.Value)*100,2);
             }
             else
             {
