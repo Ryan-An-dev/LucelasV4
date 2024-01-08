@@ -96,8 +96,7 @@ namespace DepositWithdrawal.ViewModels
                 {  //계좌이체
                     if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
                     {
-                        string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
-                        jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank).Id.Value;
+                        jobj2["payment_card_type"] = this.SelectedPaymentCard.Value.Id.Value;
                     }
                     else
                     {
@@ -173,6 +172,7 @@ namespace DepositWithdrawal.ViewModels
                 isCard.Value = Visibility.Visible;
                 string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
                 this.SelectedPaymentCard.Value = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank);
+                SearchReceiptType.Value = ReceiptType.Card;
             }
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
@@ -199,6 +199,7 @@ namespace DepositWithdrawal.ViewModels
                     {
                         string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
                         jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank).Id.Value;
+                        jobj2["payment_method"] = (int)ReceiptType.Card;
                     }
                     else {
                         jobj2["cui_name"] = item.Contents.Value;
