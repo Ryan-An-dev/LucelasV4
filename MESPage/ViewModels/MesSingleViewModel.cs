@@ -92,7 +92,7 @@ namespace MESPage.ViewModels
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
 
-            IsNewInventory = new ReactiveProperty<Visibility>().AddTo(disposable);
+            IsNewInventory = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
             PurposeTypeSelect = new ReactiveProperty<Purpose>().AddTo(disposable);
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
             IsNewContractReverse = new ReactiveProperty<Visibility>().AddTo(disposable);
@@ -172,11 +172,11 @@ namespace MESPage.ViewModels
             {
                 Title.Value = "신규 재고 추가";
                 this.Inventory.Value = new FurnitureInventory();
+                IsNewInventory.Value = Visibility.Visible;
             }
             else
             {
                 Title.Value = "재고 내역 수정";
-                IsNewInventory.Value = Visibility.Visible;
                 this.Inventory.Value = Inventory;
                 SelectedItem.Value = Inventory.Product.Value;
                 this.Inventory.Value.ClearJson();

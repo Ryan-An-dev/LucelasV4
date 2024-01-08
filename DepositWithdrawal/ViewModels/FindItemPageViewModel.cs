@@ -90,12 +90,7 @@ namespace DepositWithdrawal.ViewModels
 
                 if (args.Value.ReceiptType.Value == ReceiptType.Cash) // 현금
                 {
-                    jobj2["payment_method"] = (int)SearchReceiptType.Value;
                     jobj2["cui_name"] = args.Value.Contents.Value;
-                }
-                else if (args.Value.ReceiptType.Value == ReceiptType.Cash)
-                { //카드
-                    jobj2["payment_method"] = (int)SearchReceiptType.Value;
                 }
                 else
                 {  //계좌이체
@@ -108,7 +103,6 @@ namespace DepositWithdrawal.ViewModels
                     {
                         jobj2["cui_name"] = Keyword.Value;
                     }
-                    jobj2["payment_method"] = (int)args.Value.ReceiptType.Value;
                 }
                 jobj["search_option"] = jobj2;
 
