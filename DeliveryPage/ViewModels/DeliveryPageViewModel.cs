@@ -59,7 +59,8 @@ namespace DeliveryPage.ViewModels
         public ReactiveProperty<Contract> SelectedItem { get; set; }
         private IContainerProvider ContainerProvider { get; }
         public ReactiveCollection<FurnitureType> furnitureInfos { get; }
-
+        public ReactiveCollection<Employee> Employees { get; }
+        public ReactiveProperty<Employee> SearchEmployee { get; set; }
         public DeliveryPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
             this.ContainerProvider = containerProvider;
@@ -75,17 +76,25 @@ namespace DeliveryPage.ViewModels
             this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);
             this.SearchButton = new DelegateCommand(SearchContractExecute);
             this.SearchPhone = new ReactiveProperty<string>().AddTo(this.disposable);
+            this.SearchEmployee = new ReactiveProperty<Employee>().AddTo(this.disposable);
             NewButton = new DelegateCommand(NewButtonExecute);
             RowDoubleClick = new DelegateCommand(RowDoubleClickExecute);
             CmdGoPage = new DelegateCommand<object>(ExecCmdGoPage);
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             SelectedItem = new ReactiveProperty<Contract>().AddTo(disposable);
-
+            this.Employees = new ReactiveCollection<Employee>().AddTo(this.disposable);
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;
+            }
+            if (temp.EmployeeInfos.Count > 0) { 
+                this.Employees = temp.EmployeeInfos;
+                Employee tempEmp = new Employee();
+                tempEmp.Id.Value = 0;
+                tempEmp.Name.Value = "전체";
+                this.Employees.Insert(0, tempEmp);
             }
             this.CountList.Add(30);
             this.CountList.Add(50);
@@ -132,6 +141,7 @@ namespace DeliveryPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
+                search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -150,6 +160,7 @@ namespace DeliveryPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
+                search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -161,7 +172,7 @@ namespace DeliveryPage.ViewModels
         }
         private void NewButtonExecute()
         {
-            regionManager.RequestNavigate("DeliverySingleRegion", nameof(DeliverySinglePage));
+            regionManager.RequestNavigate("DeliverySinglePageRegion", nameof(DeliverySinglePage));
             DrawerHost.OpenDrawerCommand.Execute(Dock.Right, null);
         }
         private void RowDoubleClickExecute()
@@ -175,7 +186,7 @@ namespace DeliveryPage.ViewModels
                 p.Add(nameof(Contract), SelectedItem.Value);
             }
 
-            regionManager.RequestNavigate("DeliverySingleRegion", nameof(DeliverySinglePage), p);
+            regionManager.RequestNavigate("DeliverySinglePageRegion", nameof(DeliverySinglePage), p);
             DrawerHost.OpenDrawerCommand.Execute(Dock.Right, null);
         }
 
@@ -365,11 +376,17 @@ namespace DeliveryPage.ViewModels
 
                             if (inner["delivery_group"] != null && !inner["delivery_group"].ToString().Equals(""))
                             {
+                                string combine = "";
                                 foreach (JObject jobj in inner["delivery_group"] as JArray)
                                 {
                                     int emp_id = jobj["employee_id"].ToObject<int>();
                                     temp.DeliveryMan.FirstOrDefault(x => x.Id.Value == emp_id).IsChecked.Value = true;
+                                    if (combine != string.Empty) {
+                                        combine += ", ";
+                                    }
+                                    combine += temp.DeliveryMan.FirstOrDefault(x => x.Id.Value == emp_id).Name.Value;
                                 }
+                                temp.DeliveryManCombine.Value = combine;
                             }
 
                             //제품 

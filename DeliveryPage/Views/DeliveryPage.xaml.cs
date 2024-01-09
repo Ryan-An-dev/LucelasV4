@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using Prism.Regions;
+using System.Windows.Controls;
 
 namespace DeliveryPage.Views
 {
@@ -7,9 +8,11 @@ namespace DeliveryPage.Views
     /// </summary>
     public partial class DeliveryPage : UserControl
     {
-        public DeliveryPage()
+        public DeliveryPage(IRegionManager regionManager)
         {
             InitializeComponent();
+            if (regionManager.Regions.ContainsRegionWithName("DeliverySinglePageRegion")) return;
+            CommonModule.Logic.Utility.SetRegionManager(regionManager, Cc, "DeliverySinglePageRegion");
         }
     }
 }

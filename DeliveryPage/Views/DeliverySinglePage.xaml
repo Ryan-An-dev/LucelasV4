@@ -1,16 +1,19 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/" xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:behavior="clr-namespace:CommonModule.Behavior;assembly=CommonModule"
-             xmlns:views="clr-namespace:CommonModule.UserControls.Views;assembly=CommonModule"
-			 xmlns:val="clr-namespace:CommonModule.Validations;assembly=CommonModule"
-			 xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"     
-             xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" 
-             x:Class="DeliveryPage.Views.DeliverySinglePage"     
-             Width="600"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/" 
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behavior="clr-namespace:CommonModule.Behavior;assembly=CommonModule"
+    xmlns:views="clr-namespace:CommonModule.UserControls.Views;assembly=CommonModule"
+	xmlns:val="clr-namespace:CommonModule.Validations;assembly=CommonModule"
+	xmlns:md="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"     
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="av" 
+    x:Class="DeliveryPage.Views.DeliverySinglePage"     
+    Width="600"
+    prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
     </UserControl.Resources>
@@ -26,7 +29,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
-            <StackPanel Orientation="Vertical" Margin="20 0 20 0">
+            <StackPanel Orientation="Vertical" Margin="20 0 20 0"  IsEnabled="False">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

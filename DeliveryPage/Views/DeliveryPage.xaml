@@ -11,7 +11,9 @@
     <md:DrawerHost BorderThickness="2" BorderBrush="Transparent">
         <!-- Drawer -->
         <md:DrawerHost.RightDrawerContent>
-            <ContentControl x:Name="Cc" prism:RegionManager.RegionName="DeliverySinglePageRegion"/>
+            <ContentControl 
+                x:Name="Cc" 
+                prism:RegionManager.RegionName="DeliverySinglePageRegion"/>
         </md:DrawerHost.RightDrawerContent>
 
         <!-- Main -->
@@ -56,11 +58,13 @@
                         Foreground="{StaticResource textColor2}"/>
 
                     <ComboBox
-                        ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchFullyCompleted.Value}"
+                        ItemsSource="{Binding Employees}" 
+                        SelectedItem="{Binding SearchEmployee.Value}"
+                        DisplayMemberPath="Name.Value"
+                        SelectedIndex="0"
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="완료유/무"
+                        md:HintAssist.Hint="배송직원 선택"
                         Foreground="{StaticResource textColor2}"
                         Margin=" 0 5 15 0"
                         />
@@ -152,18 +156,29 @@
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
-                        Binding="{Binding Contractor.Value.Name.Value}"
-                        Header="고객이름" 
+                        Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
+                        Header="배송요청시간" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        Width="0.15*"
-                        Binding="{Binding Contractor.Value.Phone.Value}"
-                        Header="고객번호" 
+                        Width="0.1*"
+                        Binding="{Binding DeliveryManCombine.Value}" 
+                        Header="배송직원" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.2*"
                         Binding="{Binding ProductNameCombine.Value}" 
                         Header="물품"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    
+                    <DataGridTextColumn 
+                        Width="0.1*"
+                        Binding="{Binding Contractor.Value.Name.Value}"
+                        Header="고객 이름" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                    <DataGridTextColumn 
+                        Width="0.15*"
+                        Binding="{Binding Contractor.Value.Phone.Value}"
+                        Header="고객 번호" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
@@ -179,11 +194,6 @@
                         Width="0.1*"
                         Binding="{Binding Month.Value, StringFormat=yy-MM-dd}"
                         Header="계약일" 
-                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
-                    <DataGridTextColumn 
-                        Width="0.1*"
-                        Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
-                        Header="배송요청시간" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"

@@ -198,6 +198,7 @@ namespace MESPage.ViewModels
             if (SelectedItem.Value == null)
                 return;
             SelectedItem.Value.ClearJson();
+            SelectedItem.Value.isChanged = false;
             var p = new NavigationParameters();
             if (SelectedItem != null)
             {
@@ -276,6 +277,8 @@ namespace MESPage.ViewModels
                             }
                             if (item["product_info"] != null) { 
                                 temp.Product.Value = SetProductInfo(item["product_info"] as JObject);
+                                if (temp.Product.Value.Price.Value != 0)
+                                    temp.RealPrice.Value = temp.Product.Value.Price.Value;
                             }
                             if (item["receiving_type"] != null)
                             {
@@ -287,9 +290,15 @@ namespace MESPage.ViewModels
                             }
                             if (item["connected_contract"] != null)
                             {
-                                if (!(item["connected_contract"].ToString().Equals(""))) {
+                                if (!(item["connected_contract"].ToString().Equals("")))
+                                {
                                     temp.ContractedContract.Value = SetContract(item["connected_contract"] as JObject);
+                                    temp.CountEnable.Value = false;
                                 }
+                                else {
+                                    temp.CountEnable.Value = true;
+                                }
+                                
                             }
                             temp.No.Value = ++i;
                             Application.Current.Dispatcher.Invoke(() =>

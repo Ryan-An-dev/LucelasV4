@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CommonModel
 {
@@ -38,7 +39,11 @@ namespace CommonModel
 
         public ReactiveProperty<Purpose> ReceivingType { get; set; } //재고 목적
 
+        public ReactiveProperty<bool> CountEnable { get; set; } //수량 제한여부
+
         public ReactiveProperty<DateTime?> StoreReachDate { get; set; }//입고일
+        public ReactiveProperty<Visibility> RealPriceVis { get; set; } //실제 재고
+        public ReactiveProperty<int> RealPrice { get; set; } //실제 재고가격
 
         public ReactiveProperty<int> Count { get; set; }//수량
         public ReactiveProperty<string> Memo { get; set; } //메모
@@ -48,6 +53,9 @@ namespace CommonModel
 
         public FurnitureInventory() : base()
         {
+            RealPrice = new ReactiveProperty<int>(0).AddTo(disposable);
+            CountEnable = new ReactiveProperty<bool>().AddTo(disposable); 
+            RealPriceVis = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.Product = new ReactiveProperty<Product>().AddTo(disposable);
@@ -56,6 +64,7 @@ namespace CommonModel
             this.ContractedContract = new ReactiveProperty<Contract>().AddTo(disposable);   
             this.Memo = CreateProperty<string>("메모");
             this.Count = CreateProperty<int>("재고수량");
+            RealPrice = new ReactiveProperty<int>().AddTo(disposable);
             SetObserver();
         }
         public JObject MakeJson()
@@ -72,10 +81,21 @@ namespace CommonModel
 
         public override void SetObserver()
         {
-            this.ReceivingType.Subscribe(x => ChangedJson("receiving_type", x));
+            this.ReceivingType.Subscribe(x => ChangedRecivingType("receiving_type", x));
             this.StoreReachDate.Subscribe(x => ChangedJson("insert_date", x));
             this.Count.Subscribe(x => ChangedJson("count", x));
+            this.RealPrice.Subscribe(x => ChangedJson("real_price", x));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
+        }
+        private void ChangedRecivingType(string name , Purpose purpose)
+        {
+            if ((int)purpose >= 2) {
+                RealPriceVis.Value = Visibility.Visible;
+            }
+            else{
+                RealPriceVis.Value = Visibility.Collapsed;
+            }
+            ChangedJson("receiving_type", purpose);
         }
     }
 }

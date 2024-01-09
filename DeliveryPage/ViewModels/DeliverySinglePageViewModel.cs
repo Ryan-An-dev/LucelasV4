@@ -72,7 +72,6 @@ namespace DeliveryPage.ViewModels
         public DelegateCommand<object> CheckBoxAccountCommand { get; set; }
         public DeliverySinglePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
-
             CheckBoxAccountCommand = new DelegateCommand<object>(execCheckBoxAccountCommand);
             this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);

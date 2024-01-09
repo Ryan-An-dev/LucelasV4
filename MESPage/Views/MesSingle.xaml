@@ -212,7 +212,7 @@
                             <TextBox 
                                 Grid.Column="1"
                                  Margin="0 0 10 12"
-                                 md:HintAssist.Hint="매입단가"
+                                 md:HintAssist.Hint="최근매입단가"
                                  FontSize="14"
                                  Text="{Binding Price.Value , StringFormat=\{0:N0\}}"
                                  Foreground="{StaticResource MainColor}"
@@ -225,7 +225,8 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBox
-                                 Grid.Column="0"
+                                 IsEnabled="{Binding Inventory.Value.CountEnable.Value}"
+                                  Grid.Column="0"
                                   Margin="0 0 10 12"
                                   md:HintAssist.Hint="수량"
                                   FontSize="14"
@@ -243,6 +244,21 @@
                                   Foreground="{StaticResource textColor2}"
                                   md:HintAssist.IsFloating="True">
                             </ComboBox>
+                        </Grid>
+                        <Grid Visibility="{Binding Inventory.Value.RealPriceVis.Value}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox 
+                                 Grid.Column="1"
+                                 Margin="0 0 10 12"
+                                 md:HintAssist.Hint="실제매입단가"
+                                 FontSize="14"
+                                 Text="{Binding Inventory.Value.RealPrice.Value , StringFormat=\{0:N0\}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Foreground="{StaticResource MainColor}"
+                                 md:HintAssist.IsFloating="True">
+                            </TextBox>
                         </Grid>
                         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="120">
                             <TextBox

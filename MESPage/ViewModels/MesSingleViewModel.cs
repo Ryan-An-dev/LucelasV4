@@ -77,6 +77,10 @@ namespace MESPage.ViewModels
         public DelegateCommand SaveButton { get; }
         public ReactiveProperty<string> Title { get; } = new();
         public ReactiveProperty<FurnitureInventory> Inventory { get; set; }
+
+        public ReactiveProperty<Visibility> RealPriceVis { get; set; }
+        public ReactiveProperty<int> RealyPrice { get; set; }
+
         public DelegateCommand DeleteButton { get; }
         public DelegateCommand SearchAddress { get; }
         public DelegateCommand<string> SearchName { get; }
@@ -103,6 +107,8 @@ namespace MESPage.ViewModels
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
             Inventory = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             Title.Value = "신규등록";
+            
+            
         }
 
 
