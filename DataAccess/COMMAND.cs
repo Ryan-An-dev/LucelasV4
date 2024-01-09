@@ -95,5 +95,12 @@ namespace DataAccess
         CREATE_INVENTORY_LIST,
         DELETE_INVENTORY_LIST,
         #endregion
+
+        #region 재고관리
+        GET_DELIVERYLIST = 100,
+        UPDATE_DELIVERYLIST,
+        CREATE_DELIVERYLIST,
+        DELETE_DELIVERYLIST,
+        #endregion
     }
 }

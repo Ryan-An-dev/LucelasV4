@@ -329,6 +329,8 @@ namespace DepositWithdrawal.ViewModels
                         this.TotalCost.Value = msg["total_cost"].ToObject<int>();
                     else
                         this.TotalCost.Value = 0;
+                    
+
                     foreach (JObject inner in msg["state_history"] as JArray)
                     {
                         ReceiptModel temp = new ReceiptModel(
@@ -352,7 +354,19 @@ namespace DepositWithdrawal.ViewModels
                             temp.FullyCompleted.Value = (AllocateType)inner["shi_complete"].ToObject<int>();
                         if (inner["shi_key"] != null)
                             temp.indexKey.Value = inner["shi_key"].ToString();
-                        
+                        if (inner["shi_card_id"] != null)
+                        {
+                            if (inner["shi_card_id"].ToObject<int>() != 0)
+                            {
+                                temp.PayCardType.Value = FindCardType(inner["shi_card_id"].ToObject<int>());
+                            }
+                            else { 
+                                PayCardType payCardType = new PayCardType();
+                                payCardType.Id.Value = 0;
+                                payCardType.Name.Value = "";
+                                temp.PayCardType.Value = payCardType;
+                            }
+                        }
                         temp.ListNo.Value = i;
                         Application.Current.Dispatcher.Invoke(() =>
                         {
@@ -380,7 +394,12 @@ namespace DepositWithdrawal.ViewModels
             CategoryInfo item = temp.CategoryInfos.First(c => c.CategoryId.Value == id);
             return item;
         }
-
+        public PayCardType FindCardType(int id)
+        {
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            PayCardType item = temp.PayCardTypeInfos.First(c => c.Id.Value == id);
+            return item;
+        }
         public void OnConnected()
         {
             

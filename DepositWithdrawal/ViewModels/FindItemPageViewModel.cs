@@ -87,25 +87,13 @@ namespace DepositWithdrawal.ViewModels
                 jobj2["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj2["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj2["complete"] = 2;
-
-                if (args.Value.ReceiptType.Value == ReceiptType.Cash) // 현금
+                jobj2["cui_name"] = Keyword.Value;
+                if (args.Value.PayCardType.Value.Id.Value != 0)
                 {
-                    jobj2["cui_name"] = args.Value.Contents.Value;
-                }
-                else
-                {  //계좌이체
-                    if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
-                    {
-                        jobj2["payment_card_type"] = this.SelectedPaymentCard.Value.Id.Value;
-                    }
-                    else
-                    {
-                        jobj2["cui_name"] = Keyword.Value;
-                    }
+                    jobj2["payment_card_type"] = this.SelectedPaymentCard.Value.Id.Value;
+
                 }
                 jobj["search_option"] = jobj2;
-
-
                 network.SetReceiver(this);
                 network.GetContractForReceipt(jobj);
             }
@@ -160,52 +148,33 @@ namespace DepositWithdrawal.ViewModels
             parameters.TryGetValue("object", out item);
             args.Value = item;
             OriginAllocatedPrice = item.AllocatedPrice.Value;
-            SearchReceiptType.Value = item.ReceiptType.Value;
+            SearchReceiptType.Value = item.PayCardType.Value.Id.Value != 0 ? ReceiptType.Card : item.ReceiptType.Value == ReceiptType.Account ? ReceiptType.Account : ReceiptType.Cash;
             if (item.CategoryInfo.Value.Name.Value == "기타")
             {
                 Keyword.Value = item.Contents.Value;
             }
             this.StartDate.Value = item.Month.Value.AddDays(-7);
             this.EndDate.Value = item.Month.Value;
-            if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
-            {
-                isCard.Value = Visibility.Visible;
-                string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
-                this.SelectedPaymentCard.Value = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank);
-                SearchReceiptType.Value = ReceiptType.Card;
-            }
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();
                 jobj["page_unit"] = 30;
                 jobj["page_start_pos"] = 0;
                 JObject jobj2 = new JObject();
-                jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                jobj2["payment_method"] = (int)SearchReceiptType.Value;
                 jobj2["start_time"] = item.Month.Value.AddDays(-7).ToString("yyyy-MM-dd HH:mm:ss");
                 jobj2["end_time"] = item.Month.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 //시간쪽 수정해야됨 starttime이랑 endtime 어떻게 정하기로 했는지 까먹음
                 jobj2["complete"] = 2;
-
-                if (item.ReceiptType.Value == ReceiptType.Cash) // 현금
+                if (args.Value.PayCardType.Value.Id.Value != 0)
                 {
-                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
+                    jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Id.Value == args.Value.PayCardType.Value.Id.Value).Id.Value;
+                    jobj2["payment_method"] = (int)ReceiptType.Card;
+                }
+                else {
                     jobj2["cui_name"] = item.Contents.Value;
                 }
-                else if (item.ReceiptType.Value == ReceiptType.Cash) { //카드
-                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
-                }
-                else {  //계좌이체
-                    if (args.Value.CategoryInfo.Value.Name.Value.Contains("대금"))
-                    {
-                        string bank = args.Value.CategoryInfo.Value.Name.Value.Split(" ")[0].Trim();
-                        jobj2["payment_card_type"] = PaymentCardList.FirstOrDefault(x => x.Name.Value == bank).Id.Value;
-                        jobj2["payment_method"] = (int)ReceiptType.Card;
-                    }
-                    else {
-                        jobj2["cui_name"] = item.Contents.Value;
-                    }
-                    jobj2["payment_method"] = (int)item.ReceiptType.Value;
-                }
+               
                 jobj["search_option"] = jobj2;
 
 

@@ -80,6 +80,9 @@ namespace CommonModel.Model
         public ReactiveProperty<string> Contents { get; set; }
         public ReactiveProperty<string> Tip { get; set; }
         public ReactiveProperty<string> Memo { get; set; }
+        
+        public ReactiveProperty<PayCardType> PayCardType { get; set; }
+
         public ReactiveProperty<int> Money { get; set; } //금액
         public ReactiveProperty<int> RemainPrice { get; set; } //남은금액
         public ReactiveProperty<int> AllocatedPrice { get; set; } //할당금액
@@ -87,6 +90,7 @@ namespace CommonModel.Model
         public ReactiveProperty<string> indexKey { get; set; }
         public ReceiptModel() : base()
         {
+            this.PayCardType = new ReactiveProperty<PayCardType>().AddTo(disposable);
             this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.CardCharge = new ReactiveProperty<double>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
@@ -109,6 +113,7 @@ namespace CommonModel.Model
             SetObserver();
         }
         public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
+            this.PayCardType = new ReactiveProperty<PayCardType>().AddTo(disposable);
             this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
             CardCharge = new ReactiveProperty<double>(0).AddTo(disposable);
             this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);

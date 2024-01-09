@@ -1,15 +1,9 @@
 ﻿<UserControl x:Class="DeliveryPage.Views.DeliveryPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:mah ="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:prism="http://prismlibrary.com/"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+			 xmlns:prism="http://prismlibrary.com/"
              xmlns:local ="clr-namespace:DeliveryPage.ViewModels"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             d:DesignWidth="1200" d:DesignHeight="380" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
@@ -17,19 +11,20 @@
     <md:DrawerHost BorderThickness="2" BorderBrush="Transparent">
         <!-- Drawer -->
         <md:DrawerHost.RightDrawerContent>
-            <ContentControl x:Name="Cc" prism:RegionManager.RegionName="BankListSingleRegion"/>
+            <ContentControl x:Name="Cc" prism:RegionManager.RegionName="DeliverySinglePageRegion"/>
         </md:DrawerHost.RightDrawerContent>
 
         <!-- Main -->
-        <DockPanel Margin="20 8 20 20" LastChildFill="True" x:Name="Doc">
+        <DockPanel Margin="20 8 20 20">
             <!-- Search Condition -->
+
             <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="배송 관리" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
+                <TextBlock Grid.Column="0" Text="배송 조회" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
                 <ComboBox
                         Grid.Column="2"
                         HorizontalAlignment="Right"
@@ -38,39 +33,36 @@
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="리스트설정"
-                        Foreground="{StaticResource MainColor}"
+                        Foreground="{StaticResource textColor2}"
                         Margin=" 0 4 0 0" Cursor="">
                 </ComboBox>
             </Grid>
-
             <DockPanel Dock="Top">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
-                    <ComboBox
-                        ItemsSource="{Binding SearchIncomeCostTypeValues}"
-                        SelectedItem="{Binding SearchIncomeCostType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        Style="{StaticResource MaterialDesignComboBox}" 
+                    <TextBox 
+                        md:HintAssist.Hint="고객 이름"  MinWidth="100"
+                        Text="{Binding SearchName.Value}" 
+                        Margin="0 0 8 0" 
                         md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="직원선택"
-                        Foreground="{StaticResource textColor2}"
-                        Margin=" 0 4 20 0">
-                    </ComboBox>
-                    <ComboBox
-                        ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignComboBox}" 
+                        Cursor="IBeam" 
+                        Foreground="{StaticResource textColor2}"/>
+
+                    <TextBox 
+                        md:HintAssist.Hint="고객번호 4자리"  MinWidth="100"
+                        Text="{Binding SearchPhone.Value}" 
+                        Margin="0 0 8 0" 
                         md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="계좌/카드/현금"
-                        Foreground="{StaticResource textColor2}"
-                        Margin=" 0 4 20 0"
-                        />
+                        Cursor="IBeam" 
+                        Foreground="{StaticResource textColor2}"/>
+
                     <ComboBox
                         ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchFullyCompleted.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SearchFullyCompleted.Value}"
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="완료유/무"
                         Foreground="{StaticResource textColor2}"
-                        Margin=" 0 4 20 0"
+                        Margin=" 0 5 15 0"
                         />
                     <StackPanel Orientation="Horizontal">
                         <DatePicker 
@@ -89,31 +81,27 @@
                             BorderBrush="{StaticResource textColor2}" 
                             md:HintAssist.Hint="마지막일" 
                             FontSize="14" Margin="0 0 12 0" 
-                            md:HintAssist.IsFloating="True" 
+                            md:HintAssist.IsFloating="True"
                             SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
                             Foreground="{StaticResource textColor2}"/>
                     </StackPanel>
 
                     <Button 
-                        Content="{md:PackIcon Size=25, Kind=Search}" 
-                        Padding="0" Height="40"
-                        Width="40" VerticalAlignment="Bottom" 
-                        Cursor="Hand" Command="{Binding SearchButton}" 
-                        Margin="30 0 8 0"/>
-              
+                        Content="{md:PackIcon Kind=Search}" 
+                        Padding="0" 
+                        Height="40"  Margin="30 0 8 0"
+                        Width="40"
+                        VerticalAlignment="Bottom" 
+                        Cursor="Hand" 
+                        Command="{Binding SearchButton}" />
                 </StackPanel>
-
                 <Button DockPanel.Dock="Right" 
-                        HorizontalAlignment="Right" 
+                        HorizontalAlignment="Right"
                         Command="{Binding NewButton}"
-                        Height="35" Width="140" 
                         VerticalAlignment="Bottom"
-				        Style="{StaticResource MaterialDesignFlatMidBgButton}" 
-                        Content="현금내역 추가" 
-                        FontWeight="Bold"
-                        Cursor="Hand" Margin="0 0 0 10"/>
+				        Content="신규계약추가" Cursor="Hand" Margin="0 0 0 10"/>
             </DockPanel>
-            
+
             <StackPanel Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                 <Button 
                 Width="30" 
@@ -138,127 +126,72 @@
                 Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
                 Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
                 Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Next}"/>
-
             </StackPanel>
-            <Border 
-                DockPanel.Dock="Bottom" 
-                BorderThickness="3" Padding="5" CornerRadius="5"
-                HorizontalAlignment="Right" BorderBrush="{StaticResource MainColor}"
-                Background="White" Opacity="0.5">
-                <StackPanel 
-                Orientation="Horizontal">
-                    <TextBlock 
-                        Padding="5"
-                        VerticalAlignment="Center"
-                        Text="기간내 총 입금액 : " 
-                        Foreground="Black"/>
-                    <TextBlock Padding="5"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Text="{Binding TotalIncome.Value, UpdateSourceTrigger=PropertyChanged,StringFormat=+\{0:N0\}, FallbackValue=0}"  
-                        Foreground="Blue" />
 
-                    <TextBlock Padding="5" Text="  ||  " Foreground="White" />
-
-                    <TextBlock VerticalAlignment="Center" Padding="5"
-                        Text="총 출금액 : " 
-                        Foreground="Black"/>
-                    <TextBlock VerticalAlignment="Center" Padding="5"
-                        FontSize="14"
-                        Text="{Binding TotalCost.Value, UpdateSourceTrigger=PropertyChanged,StringFormat=-\{0:N0\}, FallbackValue=0}"  
-                        Foreground="Red" />
-                </StackPanel>
-
-            </Border>
             <!-- List -->
-            <!--Background="{StaticResource MaterialDesignDarkBackground}"-->
             <DataGrid 
-                x:Name="DataGrid"
                 VirtualizingStackPanel.IsVirtualizing="True"
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                 AutoGenerateColumns="False" 
                 CanUserAddRows="False"
                 DockPanel.Dock="Top" 
-                ItemsSource="{Binding ReceiptItems, UpdateSourceTrigger=PropertyChanged}" 
-                SelectedItem="{Binding SelectedItem.Value , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                ItemsSource="{Binding ContractItems}" 
+                SelectedItem="{Binding SelectedItem.Value}" 
                 Style="{StaticResource MaterialDesignDataGrid}"
-                IsReadOnly="True" 
+                IsReadOnly="True"
                 Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                 <DataGrid.InputBindings>
                     <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RowDoubleClick}"/>
                 </DataGrid.InputBindings>
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        MinWidth="50" Width="0.13*" 
-                        MaxWidth="65"  Binding="{Binding ListNo.Value}" 
-                        Header="No"/>
-                    <DataGridTextColumn
-                        MinWidth="50" Width="0.12*" 
-                        Binding="{Binding BankInfo.Value.Name.Value, UpdateSourceTrigger=PropertyChanged, FallbackValue=현금}" 
-                        Header="구분"/>
                     <DataGridTextColumn 
-                        MinWidth="120" Width="0.15*" 
-                        Binding="{Binding Month.Value, StringFormat=yyyy-MM-dd HH:mm:ss}" 
-                        Header="날짜"/>
+                        MinWidth="50"   
+                        MaxWidth="50"  
+                        Binding="{Binding ListNo.Value}" 
+                        Header="No" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="100" Width="0.08*" 
-                        Binding="{Binding IncomeCostType.Value}" 
-                        Header="대분류" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Blue"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IncomeCostType.Value}" Value="2">
-                                        <Setter Property="Foreground" Value="Red"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        Width="0.1*"
+                        Binding="{Binding Contractor.Value.Name.Value}"
+                        Header="고객이름" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="100" Width="0.08*" 
-                        Binding="{Binding ReceiptType.Value}" 
-                        Header="중분류" />
+                        Width="0.15*"
+                        Binding="{Binding Contractor.Value.Phone.Value}"
+                        Header="고객번호" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="100" Width="0.13*" 
-                        Binding="{Binding CategoryInfo.Value.Name.Value}" 
-                        Header="소분류" />
+                        Width="0.2*"
+                        Binding="{Binding ProductNameCombine.Value}" 
+                        Header="물품"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="80" Width="0.1*"
-                        Header="금액">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{Binding Money.Value,StringFormat=+\{0:N0\}}"/>
-                                <Setter Property="Foreground" Value="Blue"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IncomeCostType.Value}" Value="2">
-                                        <Setter Property="Text" Value="{Binding Money.Value,StringFormat=-\{0:N0\}}"/>
-                                        <Setter Property="Foreground" Value="Red"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
+                        Width="0.1*"
+                        Binding="{Binding Price.Value ,StringFormat=\{0:N0\}}" 
+                        Header="금액" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="100" Width="0.13*" 
-                        Binding="{Binding Tip.Value}" 
-                        Header="적요"/>
+                         Width="0.1*"
+                         Binding="{Binding Seller.Value.Name.Value}" 
+                         Header="판매직원"
+                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="100" Width="0.28*" 
-                        Binding="{Binding Contents.Value}" 
-                        Header="내용"/>
+                        Width="0.1*"
+                        Binding="{Binding Month.Value, StringFormat=yy-MM-dd}"
+                        Header="계약일" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="80" Width="0.18*" 
-                        Binding="{Binding Memo.Value}" 
-                        Header="메모"/>
+                        Width="0.1*"
+                        Binding="{Binding Delivery.Value, StringFormat=yy-MM-dd HH:mm}" 
+                        Header="배송요청시간" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
-                        MinWidth="50" Width="0.15*" 
-                        MaxWidth="120" Binding="{Binding FullyCompleted.Value}" 
-                        Header="완료유무"/>
+                        Width="0.1*"
+                        Binding="{Binding FullyCompleted.Value}"
+                        Header="완료여부" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
-
         </DockPanel>
     </md:DrawerHost>
 </UserControl>

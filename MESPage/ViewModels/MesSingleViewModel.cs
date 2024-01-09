@@ -248,7 +248,7 @@ namespace MESPage.ViewModels
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                         //this.Inventory.Value.CompleteChangedData(); //변경완료 후 변수 초기화
                         Dispose();
-                        regionManager.RequestNavigate("ContentRegion", nameof(MESPage));
+                        regionManager.RequestNavigate("ContentRegion", nameof(MesPage));
                     });
                     break;
                 case COMMAND.UPDATEPRODUCTINFO:

@@ -88,6 +88,7 @@ namespace LucelasV4
             regMan.RegisterForNavigation<MESPage.Views.MesPage>();
             regMan.RegisterForNavigation<MESPage.Views.MesSingle>();
             regMan.RegisterForNavigation<DeliveryPage.Views.DeliveryPage>();
+            regMan.RegisterForNavigation<DeliveryPage.Views.DeliverySinglePage>();
         }
 
 
@@ -103,6 +104,7 @@ namespace LucelasV4
             containerRegistry.Register<ISettingRepository, SettingRepository>();
             containerRegistry.Register<ICustomerRepository, CustomerRepository>();
             containerRegistry.Register<IInventoryRepository, InventoryRepository>();
+            containerRegistry.Register<IDeliveryRepository, DeliveryRepository>();
             containerRegistry.Register<IProductRepository, ProductRepository>();
             containerRegistry.Register<ICompanyRepository, CompanyRepository>();
             containerRegistry.Register<IEmployeeRepository, EmployeeRepository>();
