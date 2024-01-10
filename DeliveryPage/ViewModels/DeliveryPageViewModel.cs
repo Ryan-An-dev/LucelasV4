@@ -162,7 +162,7 @@ namespace DeliveryPage.ViewModels
                 search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["cui_phone"] = this.SearchPhone.Value;
                 search["receiving_type"] = (int)this.SelectedPurpose.Value;
                 jobj["search_option"] = search;
@@ -181,7 +181,7 @@ namespace DeliveryPage.ViewModels
                 search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["cui_phone"] = this.SearchPhone.Value;
                 search["receiving_type"] = (int)this.SelectedPurpose.Value;
                 jobj["search_option"] = search;
@@ -384,7 +384,7 @@ namespace DeliveryPage.ViewModels
 
                             //배송 완료 
                             if (inner["delivery_complete"]!=null)
-                                temp.DeliveryComplete.Value = (FullyCompleted)inner["delivery_complete"].ToObject<int>();
+                                temp.DeliveryComplete.Value = (AllocateType)inner["delivery_complete"].ToObject<int>();
 
 
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");

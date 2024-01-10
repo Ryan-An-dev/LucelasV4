@@ -46,10 +46,10 @@ namespace CommonModel.Model
 
         public ReactiveProperty<string> DeliveryManCombine { get; set; }
         public ReactiveCollection<Employee> DeliveryMan { get; set; }
-        public ReactiveProperty<FullyCompleted> DeliveryComplete { get; set; }
+        public ReactiveProperty<AllocateType> DeliveryComplete { get; set; }
         public Contract()
         {
-            DeliveryComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
+            DeliveryComplete = new ReactiveProperty<AllocateType>(AllocateType.NotYet).AddTo(disposable);
             DeliveryManCombine = new ReactiveProperty<string>().AddTo(disposable);
             DeliveryMan = new ReactiveCollection<Employee>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
