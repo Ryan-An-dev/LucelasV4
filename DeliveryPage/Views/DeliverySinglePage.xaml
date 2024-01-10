@@ -376,6 +376,7 @@
                     Margin="10 40 0 0"
                     Content="상기 계약내용에 맞게 배송완료 되었습니다."
                     Foreground="{StaticResource textColor}" 
+                    IsChecked="{Binding Contract.Value.DeliveryComplete.Value}"
                     />
                 <views:DeleteButton Command="{Binding DeleteButton}" Grid.Row="1" Margin="4 0 0 0"
                                     Visibility="{Binding VisibilityAddButton.Value}"/>

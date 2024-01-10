@@ -382,7 +382,11 @@ namespace DeliveryPage.ViewModels
                             if (inner["delivery_date"] != null)
                                 temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
 
-                            //
+                            //배송 완료 
+                            if (inner["delivery_complete"]!=null)
+                                temp.DeliveryComplete.Value = (FullyCompleted)inner["delivery_complete"].ToObject<int>();
+
+
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
                             foreach (Employee emp in employee.EmployeeInfos)
                             {

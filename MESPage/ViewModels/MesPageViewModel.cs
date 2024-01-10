@@ -159,7 +159,7 @@ namespace MESPage.ViewModels
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 jobj["search_option"] = search;
                 network.Get(jobj);
                 IsLoading.Value = true;
@@ -178,7 +178,7 @@ namespace MESPage.ViewModels
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 jobj["search_option"] = search;
                 network.Get(jobj);
                 IsLoading.Value = true;
