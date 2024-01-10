@@ -75,7 +75,7 @@ namespace DeliveryPage.ViewModels
             this.TotalItemCount = new ReactiveProperty<int>(0).AddTo(this.disposable);
             this.TotalItemCount.Subscribe(c => this.TotalPage.Value = (c / this.ListCount.Value) + 1);
             this.SearchButton = new DelegateCommand(SearchContractExecute);
-            this.SearchPhone = new ReactiveProperty<string>().AddTo(this.disposable);
+            this.SearchPhone = new ReactiveProperty<string>("").AddTo(this.disposable);
             this.SearchEmployee = new ReactiveProperty<Employee>().AddTo(this.disposable);
             NewButton = new DelegateCommand(NewButtonExecute);
             RowDoubleClick = new DelegateCommand(RowDoubleClickExecute);
@@ -145,7 +145,6 @@ namespace DeliveryPage.ViewModels
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["complete"] = (int)this.SearchFullyCompleted.Value;
                 search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
                 network.GetDeliveryList(jobj);
@@ -164,7 +163,6 @@ namespace DeliveryPage.ViewModels
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["complete"] = (int)this.SearchFullyCompleted.Value;
                 search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
                 network.GetDeliveryList(jobj);

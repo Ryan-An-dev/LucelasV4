@@ -140,9 +140,6 @@ namespace DepositWithdrawal.ViewModels
                 }
                 
             }
-            if (this.ReceiptModel.Value.RemainPrice.Value <= 0) { 
-                this.ReceiptModel.Value.FullyCompleted.Value = AllocateType.FullyCompleted;
-            }
         }
 
         private void FindContractItem(IDialogResult r) {

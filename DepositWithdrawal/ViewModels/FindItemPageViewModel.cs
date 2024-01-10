@@ -155,6 +155,10 @@ namespace DepositWithdrawal.ViewModels
             }
             this.StartDate.Value = item.Month.Value.AddDays(-7);
             this.EndDate.Value = item.Month.Value;
+            if (args.Value.PayCardType.Value.Id.Value != 0) { 
+                isCard.Value = Visibility.Visible;
+                SelectedPaymentCard.Value = PaymentCardList.FirstOrDefault(x => x.Id.Value == args.Value.PayCardType.Value.Id.Value);
+            }
             //계약 찾기
             using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>()) {
                 JObject jobj = new JObject();

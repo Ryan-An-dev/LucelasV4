@@ -77,24 +77,11 @@
                             Margin=" 0 4 20 0">
                         </ComboBox>
                         <StackPanel Orientation="Horizontal">
-                            <DatePicker 
-                                BorderBrush="{StaticResource textColor2}"
-                                md:HintAssist.Hint="시작일" FontSize="14" 
-                                Margin="0 0 8 0" 
-                                md:HintAssist.IsFloating="True" 
-                                SelectedDate="{Binding StartDate.Value, TargetNullValue=''}" 
-                                Foreground="{StaticResource textColor2}"/>
-                                <TextBlock Text="～"  
-                                   Foreground="{StaticResource textColor2}" 
-                                   VerticalAlignment="Center" 
-                                   FontSize="14" Margin="0 0 8 0"
-                                   Padding="0 14 0 0"/>
                              <DatePicker 
                                 BorderBrush="{StaticResource textColor2}" 
-                                md:HintAssist.Hint="종료일" 
+                                md:HintAssist.Hint="선택일 이전 전체조회" 
                                 FontSize="14" Margin="0 0 12 0" 
-                                md:HintAssist.IsFloating="True" 
-                        
+                                md:HintAssist.IsFloating="True"
                                 SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
                                 Foreground="{StaticResource textColor2}"/>
                         </StackPanel>

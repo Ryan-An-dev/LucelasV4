@@ -163,6 +163,18 @@ namespace CommonModel.Model
             this.Contents.Subscribe(x => ChangedJson("shi_use_content", x));
             this.AllocatedPrice.Subscribe(x => ChargeCalc(x));
             this.FullyCompleted.Subscribe(x => ChangedJson("shi_complete", (int)x));
+            this.RemainPrice.Subscribe(x => RemainPriceCalc(x));
+        }
+
+        private void RemainPriceCalc(int remainPrice)
+        {
+            if (remainPrice <= 0)
+            {
+                this.FullyCompleted.Value = AllocateType.FullyCompleted;
+            }
+            else {
+                this.FullyCompleted.Value = AllocateType.NotYet;
+            }
         }
 
         private void ChangedConnectedContract(Contract x)

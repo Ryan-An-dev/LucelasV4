@@ -35,7 +35,6 @@ namespace MESPage.ViewModels
         public ReactiveProperty<FurnitureType>SelectedType { get; set; }
         public ReactiveProperty<string> SearchPhone { get; set; }
         public ReactiveProperty<string> SearchName { get; set; }
-        public ReactiveProperty<DateTime> StartDate { get; set; }
         public ReactiveProperty<DateTime> EndDate { get; set; }
         public ReactiveProperty<FullyCompleted> SearchFullyCompleted { get; set; }
         public IEnumerable<FullyCompleted> SearchFullyCompletedValues
@@ -76,8 +75,7 @@ namespace MESPage.ViewModels
             this.SearchPurpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
-            this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);
-            this.StartDate = new ReactiveProperty<DateTime>(DateTime.Today.AddMonths(-1)).AddTo(this.disposable);
+            this.EndDate = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
             this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
             this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable);
             this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);
@@ -161,7 +159,6 @@ namespace MESPage.ViewModels
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
-                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["search_option"] = search;
                 network.Get(jobj);
@@ -181,7 +178,6 @@ namespace MESPage.ViewModels
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
-                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 jobj["search_option"] = search;
                 network.Get(jobj);
