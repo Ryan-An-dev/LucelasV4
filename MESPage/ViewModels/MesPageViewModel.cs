@@ -366,6 +366,8 @@ namespace MESPage.ViewModels
                 temp.Contractor.Value.Address1.Value = jobj["cui_address_detail"].Value<string>();
             if (jobj["delivery_date"]!=null)
                 temp.Delivery.Value = jobj["delivery_date"].Value<DateTime>();
+            if (jobj["create_time"] != null)
+                temp.Month.Value = jobj["create_time"].Value<DateTime>();
             return temp;
         }
 

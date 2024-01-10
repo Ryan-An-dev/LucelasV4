@@ -189,6 +189,10 @@
                             Binding="{Binding ContractedContract.Value.Contractor.Value.Name.Value}" 
                             Header="고객명"/>
                         <DataGridTextColumn 
+                            Width="0.1*" 
+                            Binding="{Binding ContractedContract.Value.Month.Value, StringFormat=yyyy-MM-dd}" 
+                            Header="입고일"/>  
+                        <DataGridTextColumn 
                             MinWidth="80" Width="0.3*" 
                             Binding="{Binding Memo.Value}" 
                             Header="제품특이사항"/>   
