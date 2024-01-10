@@ -243,7 +243,7 @@ namespace MESPage.ViewModels
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GET_INVENTORY_LIST: //데이터 조회
-                    if (jobj["inventory_history"] != null)
+                    if (jobj["inventory_history"] != null && !jobj["inventory_history"].ToString().Equals(""))
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
