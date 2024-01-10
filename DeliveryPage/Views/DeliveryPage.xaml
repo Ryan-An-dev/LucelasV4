@@ -207,8 +207,8 @@
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
                         Width="0.1*"
-                        Binding="{Binding FullyCompleted.Value}"
-                        Header="완료여부" 
+                        Binding="{Binding DeliveryComplete.Value}"
+                        Header="배달완료여부" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>

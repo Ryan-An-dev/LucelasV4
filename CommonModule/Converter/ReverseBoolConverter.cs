@@ -54,4 +54,36 @@ namespace CommonModule
             return DependencyProperty.UnsetValue;
         }
     }
+
+    public class BooleanToDeliveryConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DeliveryComplete.Completed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool)
+            {
+                switch (value)
+                {
+                    case true:
+                        return DeliveryComplete.Completed;
+                    case false:
+                        return DeliveryComplete.NotYet;
+                    default:
+                        return DependencyProperty.UnsetValue;
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+    }
 }

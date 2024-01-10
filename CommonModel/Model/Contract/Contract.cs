@@ -11,9 +11,17 @@ using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ComponentModel;
 
 namespace CommonModel.Model
 {
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum DeliveryComplete {
+        [Description("배달예정")]
+        NotYet = 0,
+        [Description("배달완료")]
+        Completed = 1
+    }
     public class Contract : PrismCommonModelBase
     {
         [JsonPropertyName("con_id")]
@@ -46,10 +54,10 @@ namespace CommonModel.Model
 
         public ReactiveProperty<string> DeliveryManCombine { get; set; }
         public ReactiveCollection<Employee> DeliveryMan { get; set; }
-        public ReactiveProperty<AllocateType> DeliveryComplete { get; set; }
+        public ReactiveProperty<DeliveryComplete> DeliveryComplete { get; set; }
         public Contract()
         {
-            DeliveryComplete = new ReactiveProperty<AllocateType>(AllocateType.NotYet).AddTo(disposable);
+            DeliveryComplete = new ReactiveProperty<DeliveryComplete>(0).AddTo(disposable);
             DeliveryManCombine = new ReactiveProperty<string>().AddTo(disposable);
             DeliveryMan = new ReactiveCollection<Employee>().AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);

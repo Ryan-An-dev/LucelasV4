@@ -82,7 +82,7 @@ namespace DataAccess.Repository
         {
             if (NetManager.session_id != 0)
             {
-                NetManager.Send(msg, COMMAND.UPDATECONTRACT);
+                NetManager.Send(msg, COMMAND.UPDATE_DELIVERYLIST);
             }
         }
 

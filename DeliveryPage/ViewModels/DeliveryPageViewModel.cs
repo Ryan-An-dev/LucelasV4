@@ -384,7 +384,7 @@ namespace DeliveryPage.ViewModels
 
                             //배송 완료 
                             if (inner["delivery_complete"]!=null)
-                                temp.DeliveryComplete.Value = (AllocateType)inner["delivery_complete"].ToObject<int>();
+                                temp.DeliveryComplete.Value = (DeliveryComplete)inner["delivery_complete"].ToObject<int>();
 
 
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");

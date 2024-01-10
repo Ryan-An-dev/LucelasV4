@@ -441,7 +441,7 @@ namespace DeliveryPage.ViewModels
 
         private void Save(int param)
         {
-            using (var network = this.ContainerProvider.Resolve<DataAgent.ContractDataAgent>())
+            using (var network = this.ContainerProvider.Resolve<DataAgent.DeliveryDataAgent>())
             {
                 JObject jobj = new JObject();
                 network.SetReceiver(this);
@@ -452,7 +452,7 @@ namespace DeliveryPage.ViewModels
 
                         if (this.Contract.Value.isChanged)
                         {
-                            network.CreateContractHistory(this.Contract.Value.MakeJson());
+                            network.CreateDeliveryList(this.Contract.Value.MakeJson());
                         }
                     }
                     else
@@ -463,7 +463,7 @@ namespace DeliveryPage.ViewModels
                             inner["con_id"] = this.Contract.Value.Id.Value;
                             inner["changed_item"] = this.Contract.Value.GetChangedItem();
                             this.Contract.Value.isChanged = false;
-                            network.UpdateContract(inner);
+                            network.UpdateDeliveryList(inner);
                             ErpLogWriter.LogWriter.Debug(inner);
                             this.Contract.Value.ClearJson();
                         }
@@ -472,7 +472,7 @@ namespace DeliveryPage.ViewModels
                 else
                 {
                     jobj["con_id"] = this.Contract.Value.Id.Value;
-                    network.DeleteContract(jobj);
+                    network.DeleteDeliveryList(jobj);
                 }
             }
         }
