@@ -24,7 +24,7 @@
     <!--<Grid  Background="#19191A" >-->
     <Grid Background="#19191A">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="0.105*"/>
         </Grid.RowDefinitions>

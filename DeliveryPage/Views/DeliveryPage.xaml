@@ -41,22 +41,17 @@
             </Grid>
             <DockPanel Dock="Top">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
-                    <TextBox 
-                        md:HintAssist.Hint="고객 이름"  MinWidth="100"
-                        Text="{Binding SearchName.Value}" 
-                        Margin="0 0 8 0" 
-                        md:HintAssist.IsFloating="True" 
-                        Cursor="IBeam" 
-                        Foreground="{StaticResource textColor2}"/>
-
-                    <TextBox 
-                        md:HintAssist.Hint="고객번호 4자리"  MinWidth="100"
-                        Text="{Binding SearchPhone.Value}" 
-                        Margin="0 0 8 0" 
-                        md:HintAssist.IsFloating="True" 
-                        Cursor="IBeam" 
-                        Foreground="{StaticResource textColor2}"/>
-
+                   
+                    <ComboBox
+                         ItemsSource="{Binding SearchPurpose}" 
+                         SelectedItem="{Binding SelectedPurpose.Value}"
+                         SelectedIndex="0"
+                         Style="{StaticResource MaterialDesignComboBox}" 
+                         md:HintAssist.IsFloating="True" 
+                         md:HintAssist.Hint="제품상태"
+                         Foreground="{StaticResource textColor2}"
+                         Margin=" 0 5 15 0"
+                         /> 
                     <ComboBox
                         ItemsSource="{Binding Employees}" 
                         SelectedItem="{Binding SearchEmployee.Value}"
@@ -68,6 +63,21 @@
                         Foreground="{StaticResource textColor2}"
                         Margin=" 0 5 15 0"
                         />
+                    <TextBox 
+                         md:HintAssist.Hint="고객 이름"  MinWidth="100"
+                         Text="{Binding SearchName.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
+
+                    <TextBox 
+                         md:HintAssist.Hint="고객번호 4자리"  MinWidth="100"
+                         Text="{Binding SearchPhone.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
                     <StackPanel Orientation="Horizontal">
                         <DatePicker 
                             BorderBrush="{StaticResource textColor2}"

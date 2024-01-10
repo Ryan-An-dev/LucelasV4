@@ -55,17 +55,17 @@
                     <RowDefinition Height="0.33*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
-                Number="68" Grid.Row="0"
-                Title="{Binding Month.Value, StringFormat={}{0:0월 미완료 계약건수} }" 
-                IsTechnical="False"/>
+                    Number="68" Grid.Row="0"
+                    Title="{Binding Month.Value, StringFormat={}{0:0월 미완료 계약건수} }" 
+                    IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="1"
-                Number="16" 
-                Title="{Binding Month.Value, StringFormat={}{0:0월 미분류 입금 지출 건수}}"
-                IsTechnical="False"/>
+                    Number="16" 
+                    Title="{Binding Month.Value, StringFormat={}{0:0월 미분류 입금 지출 건수}}"
+                    IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="2"
-                Number="94" 
-                Title=" 금일 배송 건수" 
-                IsTechnical="False"/>
+                    Number="94" 
+                    Title=" 금일 배송 건수" 
+                    IsTechnical="False"/>
             </Grid>
             
         </StackPanel>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataAccess
@@ -137,10 +138,9 @@ namespace DataAccess
                 index += 2;
                 this.BodyLength = BitConverter.ToInt32(this._HeaderBuffer, index);
 
+                byte [] body = new byte[this.BodyLength];
 
-                //Thread.Sleep(5);
-
-                this._CurrentPacket.Body = new byte[this.BodyLength];
+                this._CurrentPacket.Body = body;
                 this._CurrentPacket.Header.Length = this.BodyLength;
                 this.PacketStep = PacketStepEnum.Body;
             }

@@ -17,12 +17,15 @@ namespace DataAccess
         CategoryList = 5,
         ProductCategoryList = 6,
         GetCardTypeList = 7,
-        
+
         #endregion
 
+        #region 홈화면
+        GETHOMESUMMARY = 10,
+        #endregion
 
         #region 입출금페이지
-        GetBankHistory =20,
+        GetBankHistory = 20,
         CreateBankHistory=21,
         UpdateBankHistory=22,
         DeleteBankHistory=23,
@@ -36,6 +39,16 @@ namespace DataAccess
         DELETECONTRACT = 33,
         GET_CONNECTED_CONTRACT = 34,
         GET_CONTRACT_FOR_RECEIPT = 35,
+        #endregion
+
+        #region 통계데이터
+        GetDailyList = 40,
+        #endregion
+
+        #region 계좌/카드
+        CREATE_ACCOUNT_INFO = 50,
+        UPDATE_ACCOUNT_INFO,
+        DELETE_ACCOUNT_INFO,
         #endregion
 
         #region 직원리스트
@@ -72,11 +85,6 @@ namespace DataAccess
         DELETE_PRODUCTCATEGORY_INFO,
         #endregion
 
-        #region 계좌/카드
-        CREATE_ACCOUNT_INFO = 50,
-        UPDATE_ACCOUNT_INFO,
-        DELETE_ACCOUNT_INFO,
-        #endregion
 
         #region API
         CREATE_API_INFO = 75,
@@ -85,9 +93,7 @@ namespace DataAccess
         DELETE_API_INFO,
         #endregion
 
-        #region 통계데이터
-        GetDailyList = 42,
-        #endregion
+
 
         #region 재고관리
         GET_INVENTORY_LIST = 80,

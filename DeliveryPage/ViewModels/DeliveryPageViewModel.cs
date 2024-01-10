@@ -16,8 +16,10 @@ using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reactive.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -26,10 +28,25 @@ using System.Windows.Documents;
 
 namespace DeliveryPage.ViewModels
 {
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum SearchPurpose
+    {
+        [Description("모두")]
+        All = 0,
+        [Description("배달예정")]
+        BookingDelivery = 2,
+        [Description("배달완료")]
+        Completed = 3,
+    }
     public enum MovePageType { Next = 1, Prev }
     public class DeliveryPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
+        public IEnumerable<SearchPurpose> SearchPurpose
+        {
+            get { return Enum.GetValues(typeof(SearchPurpose)).Cast<SearchPurpose>(); }
+        }
+        public ReactiveProperty<SearchPurpose> SelectedPurpose { get; set; }
         public ReactiveProperty<string> SearchPhone { get; set; }
         public ReactiveProperty<string> SearchName { get; set; }
         public ReactiveProperty<DateTime> StartDate { get; set; }
@@ -63,6 +80,7 @@ namespace DeliveryPage.ViewModels
         public ReactiveProperty<Employee> SearchEmployee { get; set; }
         public DeliveryPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            this.SelectedPurpose = new ReactiveProperty<SearchPurpose>(0).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);
@@ -146,6 +164,7 @@ namespace DeliveryPage.ViewModels
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["cui_phone"] = this.SearchPhone.Value;
+                search["receiving_type"] = (int)this.SelectedPurpose.Value;
                 jobj["search_option"] = search;
                 network.GetDeliveryList(jobj);
             }
@@ -164,6 +183,7 @@ namespace DeliveryPage.ViewModels
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["cui_phone"] = this.SearchPhone.Value;
+                search["receiving_type"] = (int)this.SelectedPurpose.Value;
                 jobj["search_option"] = search;
                 network.GetDeliveryList(jobj);
             }

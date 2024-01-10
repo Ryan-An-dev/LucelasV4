@@ -23,9 +23,9 @@
     <!--<Grid  Background="#19191A" >-->
     <Grid Background="#19191A">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
-            <RowDefinition Height="0.105*"/>
+            <RowDefinition Height="140"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
@@ -348,7 +348,7 @@
                 </GroupBox>
 
                 <GroupBox
-                    Margin="0 20 0 0"
+                    Margin="0 20 0 40"
                     Header="판매자">
                     <ComboBox  
                         Style="{StaticResource MaterialDesignComboBox}" 
@@ -363,11 +363,24 @@
             </StackPanel>
         </ScrollViewer>
 
-        <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom" Grid.Row="2">
+        <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="150" VerticalAlignment="Bottom" Grid.Row="2">
             <Grid Width="Auto">
-                <views:DeleteButton Command="{Binding DeleteButton}"
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <CheckBox 
+                    Visibility="{Binding IsNewContract.Value}"
+                    FontSize="14"
+                    FontWeight="ExtraBold"
+                    Margin="10 40 0 0"
+                    Content="상기 계약내용에 맞게 배송완료 되었습니다."
+                    Foreground="{StaticResource textColor}" 
+                    />
+                <views:DeleteButton Command="{Binding DeleteButton}" Grid.Row="1" Margin="4 0 0 0"
                                     Visibility="{Binding VisibilityAddButton.Value}"/>
                 <Button 
+                    Grid.Row="1"
                     x:Name="BtnSave" 
                     Content="저장"
                     FontSize="12"
@@ -375,7 +388,7 @@
                     Width="100" 
                     Padding="0" 
                     HorizontalAlignment="Right"
-                    Margin="8"
+                    Margin="16"
                     Command="{Binding SaveButton}" 
                     IsEnabled="{Binding HasViewError, Converter={StaticResource ReverseBool}, ElementName=Behavior}"/>
             </Grid>

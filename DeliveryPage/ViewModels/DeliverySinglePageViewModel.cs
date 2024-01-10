@@ -414,13 +414,13 @@ namespace DeliveryPage.ViewModels
 
             if (contract == null)
             {
-                Title.Value = "신규계약 추가";
+                Title.Value = "신규 배송 추가";
                 IsNewContract.Value = Visibility.Collapsed;
                 this.Contract.Value = new Contract();
             }
             else
             {
-                Title.Value = "계약 내역 수정";
+                Title.Value = "배송 내역 보기";
                 IsNewContract.Value = Visibility.Visible;
                 this.Contract.Value = contract;
                 this.Contract.Value.ClearJson();

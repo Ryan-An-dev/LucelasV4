@@ -1,5 +1,6 @@
 ﻿using CommonModel.Model;
 using DataAccess.Repository;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,6 @@ namespace DataAccess.Interface
 {
     public interface IHomePageRepository : IBaseRepository
     {
-
+        public void GetHomePage(JObject msg);
     }
 }

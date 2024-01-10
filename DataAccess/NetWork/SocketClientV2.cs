@@ -206,7 +206,6 @@ namespace DataAccess.NetWork
         public int ProcessPakcet(byte[] data, int startPos, int size)
         {
             int rslt = 0;
-            DateTime start = DateTime.Now;
             while (rslt < size)
             {
                 switch (this._packet.PacketStep)
@@ -239,7 +238,7 @@ namespace DataAccess.NetWork
                         break;
                 }
             }
-            Thread.Sleep(30);
+            Thread.Sleep(50);
             return 0;
 
         }

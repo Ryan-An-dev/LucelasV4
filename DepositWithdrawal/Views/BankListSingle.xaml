@@ -18,7 +18,7 @@
     </b:Interaction.Behaviors>
     <Grid Background="#19191A">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="0.105*"/>
         </Grid.RowDefinitions>
@@ -256,7 +256,10 @@
             <Grid Width="Auto">
                 <views:DeleteButton Command="{Binding DeleteButton}"
                     Visibility="{Binding VisibilityAddButton.Value}"/>
-                <Button x:Name="BtnSave" Content="Save" FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
+                <Button x:Name="BtnSave" 
+                        Content="Save" 
+                        FontSize="12" Height="30" Width="100" Padding="0" HorizontalAlignment="Right" Margin="8" Command="{Binding SaveButton}" 
+                        IsEnabled="{Binding HasViewError, ElementName=Behavior, Converter={StaticResource ReverseBool}}"/>
             </Grid>
         </md:ColorZone>
     </Grid>
