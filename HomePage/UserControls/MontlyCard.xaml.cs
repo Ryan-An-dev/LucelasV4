@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using CommonModel;
+using Prism.Events;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace HomePage.UserControls
@@ -8,9 +10,11 @@ namespace HomePage.UserControls
     /// </summary>
     public partial class MontlyCard : UserControl
     {
+        private readonly IEventAggregator _eventAggregator;
         public MontlyCard()
         {
             InitializeComponent();
+           
         }
         public string Title
         {
@@ -43,14 +47,10 @@ namespace HomePage.UserControls
         public static readonly DependencyProperty IsTechnicalProperty =
             DependencyProperty.Register("IsTechnical", typeof(bool), typeof(MontlyCard)); 
         
-        public event RoutedEventHandler CustomClick;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (CustomClick != null)
-            {
-                CustomClick(this, new RoutedEventArgs());
-            }
+            _eventAggregator.GetEvent<HomeClickEvent>().Publish(this.Title);
         }
     }
 }

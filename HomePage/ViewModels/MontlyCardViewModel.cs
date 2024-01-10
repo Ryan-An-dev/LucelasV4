@@ -10,7 +10,7 @@ namespace HomePage.ViewModels
     {
         public MontlyCardViewModel()
         {
-
+          
         }
     }
 }

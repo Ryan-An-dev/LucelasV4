@@ -15,5 +15,6 @@
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\DataAgent\DataAgent.csproj" />
     <ProjectReference Include="..\LogWriter\LogWriter.csproj" />
+    <ProjectReference Include="..\SettingPage\SettingPage.csproj" />
   </ItemGroup>
 </Project>

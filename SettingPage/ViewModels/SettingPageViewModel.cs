@@ -66,7 +66,7 @@ namespace SettingPage.ViewModels
             PaymentCardListViewModel = new PaymentCardListViewModel(ContainerProvider, regionManager, dialogService);
 
         }
-        public SettingPageViewModel(IContainerRegistry containerProvider)
+        public SettingPageViewModel()
         {
             this.CustomerInfos = new ReactiveCollection<Customer>().AddTo(disposable);
             this.FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);

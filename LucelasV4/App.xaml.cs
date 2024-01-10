@@ -57,19 +57,20 @@ namespace LucelasV4
             //Setting내역 내려받고
             ErpLogWriter.LogWriter.Debug("============= SettingPageModule initialize =============");
             moduleCatalog.AddModule<SettingPage.SettingPageModule>();
+            this.InitializeModules();
             ErpLogWriter.LogWriter.Debug("============= DepositWithdrawalModule initialize =============");
             moduleCatalog.AddModule<DepositWithdrawal.DepositWithdrawalModule>();
-            this.InitializeModules();
-            ErpLogWriter.LogWriter.Debug("============= ContractPageModule initialize =============");
-            moduleCatalog.AddModule<ContractPage.ContractPageModule>();
             ErpLogWriter.LogWriter.Debug("============= HomePageModule initialize =============");
             moduleCatalog.AddModule<HomePage.HomePageModule>();
+            ErpLogWriter.LogWriter.Debug("============= ContractPageModule initialize =============");
+            moduleCatalog.AddModule<ContractPage.ContractPageModule>();
             ErpLogWriter.LogWriter.Debug("============= Statictics initialize =============");
             moduleCatalog.AddModule<StatisticsPage.StatisticsPageModule>();
             ErpLogWriter.LogWriter.Debug("============= Mes initialize =============");
             moduleCatalog.AddModule<MESPage.MESPageModule>();
             ErpLogWriter.LogWriter.Debug("============= DeliveryPage initialize =============");
             moduleCatalog.AddModule<DeliveryPage.DeliveryPageModule>();
+
         }
 
         public void RegisterAllNavigation() {

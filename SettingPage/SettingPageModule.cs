@@ -4,6 +4,7 @@ using Prism.Modularity;
 using Prism.Regions;
 using SettingPage.ViewModels;
 using SettingPage.Views;
+using System.Threading;
 
 namespace SettingPage
 {
@@ -11,14 +12,12 @@ namespace SettingPage
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            SettingPageViewModel instance=containerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            instance.ContainerProvider = containerProvider;
-            instance.initData();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            SettingPageViewModel instance = new SettingPageViewModel(containerRegistry);
+            SettingPageViewModel instance = new SettingPageViewModel();
             containerRegistry.RegisterInstance<SettingPageViewModel>(instance,"GlobalData");
             containerRegistry.RegisterDialog<CompanyAddPage>("CompanyAddPage");
             containerRegistry.RegisterDialog<CustomerAddPage>("CustomerAddPage");

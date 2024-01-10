@@ -18,6 +18,7 @@ namespace CommonModel.Model
         public ReactiveProperty<int?> CompleteDelevery { get; set; }
         public ReactiveProperty<int?> NotCompleteContract { get; set; }
         public ReactiveProperty<int?> NotCompleteDistribute { get; set; }
+        public ReactiveProperty<int?> NotCompleteDelivery { get; set; }
         public ReactiveProperty<int?> TodayDelevery { get; set; }
 
         public HomeSummaryModel() : base()
@@ -29,6 +30,7 @@ namespace CommonModel.Model
             this.NotCompleteContract = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.NotCompleteDistribute = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.TodayDelevery = new ReactiveProperty<int?>(0).AddTo(this.disposable);
+            this.NotCompleteDelivery = new ReactiveProperty<int?>().AddTo(this.disposable);
         }
 
         public override void SetObserver()

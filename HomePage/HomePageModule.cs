@@ -3,6 +3,9 @@ using LogWriter;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using SettingPage.ViewModels;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace HomePage
 {
@@ -10,7 +13,6 @@ namespace HomePage
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            
             
         }
 

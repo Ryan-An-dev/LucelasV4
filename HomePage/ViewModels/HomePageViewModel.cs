@@ -11,10 +11,13 @@ using Prism.Mvvm;
 using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Windows;
 
 namespace HomePage.ViewModels
 {
@@ -64,6 +67,8 @@ namespace HomePage.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             SendData();
+            
+            
         }
 
         public void OnRceivedData(ErpPacket packet)
@@ -78,6 +83,10 @@ namespace HomePage.ViewModels
                     break;
 
             }
+            SettingPageViewModel instance = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            instance.ContainerProvider = this.ContainerProvider;
+            instance.IsLoading.Value = true;
+            instance.initData();
         }
 
         private void SetHomeSummary(JObject msg)
@@ -100,8 +109,10 @@ namespace HomePage.ViewModels
                     if (inner["incomplete"]["contract_count"] != null)
                         HomeSummary.Value.NotCompleteDistribute.Value = int.Parse(inner["incomplete"]["payment_count"].ToString());
                     if (inner["incomplete"]["contract_count"] != null)
-                        HomeSummary.Value.TodayDelevery.Value = int.Parse(inner["incomplete"]["delivery_count"].ToString());
+                        HomeSummary.Value.NotCompleteDelivery.Value = int.Parse(inner["incomplete"]["delivery_count"].ToString());
                 }
+                if (inner["today_delivery_count"]!=null)
+                    HomeSummary.Value.TodayDelevery.Value = int.Parse(inner["today_delivery_count"].ToString());
             }
         }
 

@@ -45,11 +45,11 @@
                     Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 입출금 분류 건수'} }"
                     IsTechnical="True"
                     IsActive="True"/>
-                <uc:MontlyCard Grid.Row="2"
+                <uc:MontlyCard 
+                    Grid.Row="2"
                     Number="{Binding CompleteDelevery.Value}" 
                     Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 배송 건수'} }"
-                    IsTechnical="True" 
-                    CustomClick="MontlyCard_CustomClick"
+                    IsTechnical="True"
                     IsActive="True"/>
             </Grid>
         </StackPanel>
