@@ -216,10 +216,10 @@ namespace DeliveryPage.ViewModels
             {
                 return;
             }
-            // ErpLogWriter.LogWriter.Trace(jobj.ToString());
+             ErpLogWriter.LogWriter.Trace(jobj.ToString());
             switch ((COMMAND)packet.Header.CMD)
             {
-                case COMMAND.GetContractList: //데이터 조회
+                case COMMAND.GET_DELIVERYLIST: //데이터 조회
                     SetContractHistory(jobj);
                     break;
 
