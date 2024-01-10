@@ -146,7 +146,7 @@ namespace ContractPage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobj = new JObject();
-                jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
+                jobj["page_unit"] = this.ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
                 search["cui_name"] = this.SearchName.Value;
@@ -296,7 +296,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
-            //ErpLogWriter.LogWriter.Trace(msg.ToString());
+            ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
@@ -442,9 +442,15 @@ namespace ContractPage.ViewModels
 
         private Employee FindEmployee(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
-            return item;
+            try
+            {
+                SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
+                return item;
+            } catch (Exception e) {
+                return null;
+            }
+           
         }
        
         public void OnConnected()

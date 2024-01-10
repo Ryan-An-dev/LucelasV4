@@ -109,6 +109,7 @@ namespace ContractPage.ViewModels
             RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
             SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
             EmployeeInfos = temp.EmployeeInfos;
+            
         }
 
         private void execCheckBoxAccountCommand(object args)
@@ -403,6 +404,14 @@ namespace ContractPage.ViewModels
                 Title.Value = "신규계약 추가";
                 IsNewContract.Value = Visibility.Collapsed;
                 this.Contract.Value = new Contract();
+                SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                foreach (Employee emp in employee.EmployeeInfos)
+                {
+                    Employee newEmp = emp.Copy();
+                    newEmp.Action.Value = AddDelete.Default;
+                    newEmp.IsChecked.Value = false;
+                    this.Contract.Value.DeliveryMan.Add(newEmp);
+                }
             }
             else
             {
