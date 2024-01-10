@@ -92,7 +92,7 @@ namespace MESPage.ViewModels
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             SelectedItem = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
 
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;

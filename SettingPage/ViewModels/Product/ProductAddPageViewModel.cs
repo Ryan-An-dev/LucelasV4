@@ -49,7 +49,7 @@ namespace SettingPage.ViewModels
         public ProductAddPageViewModel(IDialogService _DialogService, IContainerProvider con) : base(_DialogService, con)
         {
             Product = new ReactiveProperty<Product>().AddTo(disposable);
-            SettingPageViewModel temp = con.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = con.Resolve<SettingPageViewModel>();
             this.FurnitureType = temp.FurnitureInfos;
             
         }

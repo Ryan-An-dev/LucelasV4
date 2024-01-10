@@ -16,6 +16,7 @@ using MESPage;
 using DataAccess.NetWork;
 using LucelasV4.ViewModels;
 using CommonModule.Views;
+using HomePage.ViewModels;
 
 namespace LucelasV4
 {
@@ -39,14 +40,16 @@ namespace LucelasV4
             var result = login.ShowDialog();
             if (result.Value)
             {
-                base.OnInitialized();
                 LoadAllModule();
+                base.OnInitialized();
                 //여기서 모듈 로드 및 navigation 등록을 해야된다.
                 RegisterAllNavigation();
                 var regionManager = Container.Resolve<IRegionManager>();
                 regionManager.RequestNavigate("ContentRegion", "HomePage");
                 SocketClientV2 temp =Container.Resolve<SocketClientV2>();
                 temp.SetMainConnectCheck(Container.Resolve<MainWindowViewModel>());
+                Container.Resolve<MainWindowViewModel>().initLoadingTimer();
+
             }
             else {
                 MessageBox.Show("비밀번호가 틀립니다.");
@@ -55,13 +58,12 @@ namespace LucelasV4
 
         public void LoadAllModule() {
             //Setting내역 내려받고
-            ErpLogWriter.LogWriter.Debug("============= SettingPageModule initialize =============");
-            moduleCatalog.AddModule<SettingPage.SettingPageModule>();
-            this.InitializeModules();
-            ErpLogWriter.LogWriter.Debug("============= DepositWithdrawalModule initialize =============");
-            moduleCatalog.AddModule<DepositWithdrawal.DepositWithdrawalModule>();
             ErpLogWriter.LogWriter.Debug("============= HomePageModule initialize =============");
             moduleCatalog.AddModule<HomePage.HomePageModule>();
+            ErpLogWriter.LogWriter.Debug("============= SettingPageModule initialize =============");
+           
+            ErpLogWriter.LogWriter.Debug("============= DepositWithdrawalModule initialize =============");
+            moduleCatalog.AddModule<DepositWithdrawal.DepositWithdrawalModule>();
             ErpLogWriter.LogWriter.Debug("============= ContractPageModule initialize =============");
             moduleCatalog.AddModule<ContractPage.ContractPageModule>();
             ErpLogWriter.LogWriter.Debug("============= Statictics initialize =============");
@@ -70,6 +72,8 @@ namespace LucelasV4
             moduleCatalog.AddModule<MESPage.MESPageModule>();
             ErpLogWriter.LogWriter.Debug("============= DeliveryPage initialize =============");
             moduleCatalog.AddModule<DeliveryPage.DeliveryPageModule>();
+            moduleCatalog.AddModule<SettingPage.SettingPageModule>();
+            this.InitializeModules();
 
         }
 
@@ -97,8 +101,9 @@ namespace LucelasV4
         {
             this.regMan = containerRegistry;
             containerRegistry.Register<LoginViewModel>();
-            containerRegistry.RegisterSingleton<Login>(); 
-
+            containerRegistry.RegisterSingleton<Login>();
+            containerRegistry.RegisterSingleton<MainWindowViewModel>();
+            containerRegistry.RegisterSingleton<HomePageViewModel>();
             containerRegistry.Register<IReceiptRepository, ReceiptRepository>();
             containerRegistry.Register<IStatisticsRepository, StatisticsRepository>();
             containerRegistry.Register<IHomePageRepository, HomePageRepository>();

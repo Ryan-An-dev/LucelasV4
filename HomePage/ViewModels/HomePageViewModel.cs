@@ -2,6 +2,7 @@
 using CommonModel.Model;
 using DataAccess;
 using DataAccess.NetWork;
+using DataAccess.Repository;
 using DataAgent;
 using LogWriter;
 using Newtonsoft.Json.Linq;
@@ -29,15 +30,18 @@ namespace HomePage.ViewModels
 
         public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
 
-
+        public ReactiveProperty<bool> IsLoading { get; set; }
         private IContainerProvider ContainerProvider { get; }
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
-           
+            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
         }
+
+        
         private void SendData() {
+            this.IsLoading.Value = true;
             using (var network = this.ContainerProvider.Resolve<HomeDataAgent>())
             {
                 network.SetReceiver(this);
@@ -67,8 +71,6 @@ namespace HomePage.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             SendData();
-            
-            
         }
 
         public void OnRceivedData(ErpPacket packet)
@@ -81,12 +83,8 @@ namespace HomePage.ViewModels
                 case COMMAND.GETHOMESUMMARY: //데이터 조회
                     SetHomeSummary(jobj);
                     break;
-
             }
-            SettingPageViewModel instance = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
-            instance.ContainerProvider = this.ContainerProvider;
-            instance.IsLoading.Value = true;
-            instance.initData();
+            this.IsLoading.Value = false;
         }
 
         private void SetHomeSummary(JObject msg)

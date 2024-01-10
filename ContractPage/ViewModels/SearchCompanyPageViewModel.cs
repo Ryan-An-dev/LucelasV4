@@ -110,7 +110,7 @@ namespace ContractPage.ViewModels
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
             this.SelectedFurniture = new ReactiveProperty<Product>().AddTo(disposable);
             this.SelectedCompany = new ReactiveProperty<Company>().AddTo(disposable);
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             
             FurnitureInfos = temp.FurnitureInfos;
 

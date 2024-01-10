@@ -75,7 +75,7 @@ namespace SettingPage.ViewModels
             this.EmployeeInfos = new ReactiveCollection<Employee>().AddTo(this.disposable);
             this.PayCardTypeInfos = new ReactiveCollection<PayCardType>().AddTo(disposable);
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
-            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
+            this.IsLoading = new ReactiveProperty<bool>(true).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
             
 
@@ -92,7 +92,7 @@ namespace SettingPage.ViewModels
             this.CategoryInfos = new ReactiveCollection<CategoryInfo>().AddTo(this.disposable);
             this.AccountInfos = new ReactiveCollection<BankModel>().AddTo(this.disposable);
             this.AddCompanyCommand = new DelegateCommand(ExecAddCompanyCommand);
-            this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
+            this.IsLoading = new ReactiveProperty<bool>(true).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
             initViewModel();
             initData();
@@ -100,7 +100,6 @@ namespace SettingPage.ViewModels
         private void OnLoadingChanged(bool isLoading)
         {
             SearchVisibility.Value = isLoading ? Visibility.Visible : Visibility.Collapsed;
-
         }
         private void ExecAddCompanyCommand()
         {
@@ -119,6 +118,7 @@ namespace SettingPage.ViewModels
 
         public void initData()
         {
+            IsLoading.Value = true;
             try
             {
                 using (this.network = this.ContainerProvider.Resolve<DataAgent.SettingDataAgent>())
@@ -134,7 +134,7 @@ namespace SettingPage.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            return false;
+            return true;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
@@ -394,6 +394,7 @@ namespace SettingPage.ViewModels
                 catch (Exception e) { LogWriter.ErpLogWriter.LogWriter.Debug(e.ToString()); }
                 finally
                 {
+                   
                     if (this.CompanyListViewModel != null)
                     {
                         this.CompanyListViewModel.SendBasicData(this);
@@ -593,9 +594,7 @@ namespace SettingPage.ViewModels
                     }
                 }
                 catch (Exception ex) { }
-                finally {
-                    if (this.ProductCategoryListViewModel != null)
-                        IsLoading.Value = true;
+                finally {    
                     network.GetProductCategory();
                 }
             }

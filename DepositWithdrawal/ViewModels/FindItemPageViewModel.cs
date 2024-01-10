@@ -64,7 +64,7 @@ namespace DepositWithdrawal.ViewModels
             this.ContractItems= new ReactiveCollection<Contract>().AddTo(disposable);
             this.SelectedBank = new BankModel();
             PaymentCardList = new ReactiveCollection<PayCardType>().AddTo(disposable);
-            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>();
             this.PaymentCardList = temp.PayCardTypeInfos;
             PayCardType temper = new PayCardType();
             temper.Id.Value = 0;
@@ -309,7 +309,7 @@ namespace DepositWithdrawal.ViewModels
                                     int paycard_id = inner["payment"]["payment_card"].ToObject<int>();
                                     if (paycard_id != 0)
                                     {
-                                        SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                                        SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>();
                                         PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
                                         if (item != null)
                                             pay.SelectedPayCard.Value = item;
@@ -342,7 +342,7 @@ namespace DepositWithdrawal.ViewModels
         }
         private Employee FindEmployee(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
             return item;
         }
@@ -425,7 +425,7 @@ namespace DepositWithdrawal.ViewModels
         }
         public Customer FindCustomer(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             Customer item = temp.CustomerInfos.First(c => c.Id.Value == id);
             return item;
         }

@@ -113,7 +113,7 @@ namespace DepositWithdrawal.ViewModels
             CheckBoxAccountCommand = new DelegateCommand<object>(InnerCheckboxExecute);
             IsCategoryCheck = new DelegateCommand<object>(CheckBoxItemControlCategoryExecute);
             CheckBoxCategoryCommand = new DelegateCommand<object>(InnerCheckboxCategoryExecute);
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             this.BankList = temp.AccountInfos;
             this.CategoryList= temp.CategoryInfos;
         }
@@ -390,13 +390,13 @@ namespace DepositWithdrawal.ViewModels
         }
 
         public CategoryInfo FindCategory(int id) {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             CategoryInfo item = temp.CategoryInfos.First(c => c.CategoryId.Value == id);
             return item;
         }
         public PayCardType FindCardType(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             PayCardType item = temp.PayCardTypeInfos.First(c => c.Id.Value == id);
             return item;
         }

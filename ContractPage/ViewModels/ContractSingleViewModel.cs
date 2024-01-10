@@ -107,7 +107,7 @@ namespace ContractPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
             RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
-            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>();
             EmployeeInfos = temp.EmployeeInfos;
             
         }
@@ -404,7 +404,7 @@ namespace ContractPage.ViewModels
                 Title.Value = "신규계약 추가";
                 IsNewContract.Value = Visibility.Collapsed;
                 this.Contract.Value = new Contract();
-                SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
                 foreach (Employee emp in employee.EmployeeInfos)
                 {
                     Employee newEmp = emp.Copy();

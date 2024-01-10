@@ -114,7 +114,7 @@ namespace SettingPage.ViewModels
                         return;
                     }
                     ErpLogWriter.LogWriter.Trace(jobject.ToString());
-                    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                    SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
                     FurnitureInfos = temp.FurnitureInfos;
                     Application.Current.Dispatcher.Invoke(() => { List.Clear(); });
                     if (jobject.ToString().Trim() != string.Empty)

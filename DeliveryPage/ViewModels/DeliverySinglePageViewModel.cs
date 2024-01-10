@@ -108,7 +108,7 @@ namespace DeliveryPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
             RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
-            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>();
             EmployeeInfos = temp.EmployeeInfos;
         }
 

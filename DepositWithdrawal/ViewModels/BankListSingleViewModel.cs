@@ -74,7 +74,7 @@ namespace DepositWithdrawal.ViewModels
             IsReverseEnableTab = IsEnableTab.Select(x=>!x).ToReadOnlyReactiveProperty();
             IsCashOnly = new ReactiveProperty<bool>(false).AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(_disposable);
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;
@@ -182,7 +182,7 @@ namespace DepositWithdrawal.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             var Receipt = navigationContext.Parameters["ReceiptModel"] as ReactiveProperty<ReceiptModel>;
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             foreach (var item in temp.CategoryInfos) {
                 this.CategoryInfos.Add(item);
             }
@@ -339,7 +339,7 @@ namespace DepositWithdrawal.ViewModels
                                 temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
 
                             //
-                            SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                            SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
                             foreach (Employee emp in employee.EmployeeInfos)
                             {
                                 emp.Action.Value = AddDelete.Default;
@@ -409,7 +409,7 @@ namespace DepositWithdrawal.ViewModels
                                     int paycard_id = jobj["payment_card"].ToObject<int>();
                                     if (paycard_id != 0)
                                     {
-                                        SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                                        SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>();
                                         PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
                                         if (item != null)
                                             pay.SelectedPayCard.Value = item;
@@ -442,7 +442,7 @@ namespace DepositWithdrawal.ViewModels
         }
         private Employee FindEmployee(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
             return item;
         }

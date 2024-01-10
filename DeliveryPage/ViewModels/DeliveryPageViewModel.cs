@@ -102,7 +102,7 @@ namespace DeliveryPage.ViewModels
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             SelectedItem = new ReactiveProperty<Contract>().AddTo(disposable);
             this.Employees = new ReactiveCollection<Employee>().AddTo(this.disposable);
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             if (temp.FurnitureInfos.Count > 0)
             {
                 this.furnitureInfos = temp.FurnitureInfos;
@@ -387,7 +387,7 @@ namespace DeliveryPage.ViewModels
                                 temp.DeliveryComplete.Value = (DeliveryComplete)inner["delivery_complete"].ToObject<int>();
 
 
-                            SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                            SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
                             foreach (Employee emp in employee.EmployeeInfos)
                             {
                                 Employee newEmp = emp.Copy();
@@ -468,7 +468,7 @@ namespace DeliveryPage.ViewModels
                                         int paycard_id = jobj["payment_card"].ToObject<int>();
                                         if (paycard_id != 0)
                                         {
-                                            SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+                                            SettingPageViewModel set = this.ContainerProvider.Resolve<SettingPageViewModel>();
                                             PayCardType item = set.PayCardTypeInfos.First(c => c.Id.Value == paycard_id);
                                             if (item != null)
                                                 pay.SelectedPayCard.Value = item;
@@ -494,7 +494,7 @@ namespace DeliveryPage.ViewModels
 
         private Employee FindEmployee(int id)
         {
-            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>("GlobalData");
+            SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
             return item;
         }
