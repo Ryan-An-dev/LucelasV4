@@ -22,31 +22,26 @@ namespace HomePage.ViewModels
     {
         //뷰모델 부를 때마다 서버에 요청해서 데이터 가져오기 
         //뷰모델이 Dispose 될때 수정내역이 있다면 전달하자.
-        public ReactiveProperty<int> Month { get; set; }
-
         
+
+        public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
 
 
         private IContainerProvider ContainerProvider { get; }
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
-            this.Month = new ReactiveProperty<int>(1).AddTo(this.disposable);
-            init();
-        }
-        public void init()
-        {  //서버랑 통신하는 로직 넣기
-            this.Month.Value = DateTime.Now.Month;
-
+           
         }
         private void SendData() {
-            //using (var network = this.ContainerProvider.Resolve<HomeDataAgent>())
-            //{
-            //    network.SetReceiver(this);
-            //    JObject jobj = new JObject();
-            //    jobj["date_time"] = this.Month.Value.ToString("yyyy-MM-dd-HH-mm-ss");
-            //    network.GetHomeData(jobj);
-            //}
+            using (var network = this.ContainerProvider.Resolve<HomeDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobj = new JObject();
+                jobj["date_time"] = HomeSummary.Value.Month.Value.ToString("yyyy-MM-dd 23:59:59");
+                network.GetHomeData(jobj);
+            }
         }
 
         public void Exit() {
@@ -89,8 +84,23 @@ namespace HomePage.ViewModels
         {
             if (msg["summary"]!= null && !msg["summary"].ToString().Equals("")){
                 JObject inner = msg["summary"] as JObject;
+                
                 if (inner["complete"] != null && !inner["complete"].ToString().Equals("")) { 
-                    
+                    if (inner["complete"]["contract_count"]!=null)
+                        HomeSummary.Value.CompleteContract.Value = int.Parse(inner["complete"]["contract_count"].ToString());
+                    if (inner["complete"]["contract_count"] != null)
+                        HomeSummary.Value.CompleteDistribute.Value = int.Parse(inner["complete"]["payment_count"].ToString());
+                    if (inner["complete"]["contract_count"] != null)
+                        HomeSummary.Value.CompleteDelevery.Value = int.Parse(inner["complete"]["delivery_count"].ToString());
+                }
+                if (inner["incomplete"] != null && !inner["incomplete"].ToString().Equals(""))
+                {
+                    if (inner["incomplete"]["contract_count"] != null)
+                        HomeSummary.Value.NotCompleteContract.Value = int.Parse(inner["incomplete"]["contract_count"].ToString());
+                    if (inner["incomplete"]["contract_count"] != null)
+                        HomeSummary.Value.NotCompleteDistribute.Value = int.Parse(inner["incomplete"]["payment_count"].ToString());
+                    if (inner["incomplete"]["contract_count"] != null)
+                        HomeSummary.Value.TodayDelevery.Value = int.Parse(inner["incomplete"]["delivery_count"].ToString());
                 }
             }
         }

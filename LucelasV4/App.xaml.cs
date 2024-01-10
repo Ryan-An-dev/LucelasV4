@@ -97,8 +97,10 @@ namespace LucelasV4
             this.regMan = containerRegistry;
             containerRegistry.Register<LoginViewModel>();
             containerRegistry.RegisterSingleton<Login>(); 
+
             containerRegistry.Register<IReceiptRepository, ReceiptRepository>();
             containerRegistry.Register<IStatisticsRepository, StatisticsRepository>();
+            containerRegistry.Register<IHomePageRepository, HomePageRepository>();
             containerRegistry.Register<IContractRepository, ContractRepository>();
             containerRegistry.Register<ILoginRepository, LoginRepository>();
             containerRegistry.Register<ISettingRepository, SettingRepository>();

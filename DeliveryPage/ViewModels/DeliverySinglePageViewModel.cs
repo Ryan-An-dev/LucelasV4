@@ -488,7 +488,7 @@ namespace DeliveryPage.ViewModels
             catch (Exception e) { }
             switch ((COMMAND)packet.Header.CMD)
             {
-                case COMMAND.CREATECONTRACT: //데이터 생성 완료
+                case COMMAND.UPDATE_DELIVERYLIST: //데이터 생성 완료
                 case COMMAND.UPDATECONTRACT: //데이터 업데이트 완료
                 case COMMAND.DELETECONTRACT: //데이터 삭제완료
                     Application.Current.Dispatcher.Invoke(() => {

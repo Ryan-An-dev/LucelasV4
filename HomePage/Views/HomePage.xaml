@@ -23,7 +23,12 @@
         <StackPanel>
             
         </StackPanel>
-        <StackPanel x:Name="CompletedStack" Margin="10 10 10 10" VerticalAlignment="Stretch">
+        <StackPanel 
+            x:Name="CompletedStack" 
+            Margin="10 10 10 10" 
+            VerticalAlignment="Stretch"
+            DataContext="{Binding HomeSummary.Value}"
+            >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight,UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.33*"/>
@@ -31,23 +36,29 @@
                     <RowDefinition Height="0.33*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
-                Number="51" Grid.Row="0"
-                Title="{Binding Month.Value, StringFormat={}{0:0월 완료 계약건수} }"
-                IsTechnical="True" 
-                IsActive="True" />
+                    Number="{Binding CompleteContract.Value}" Grid.Row="0"
+                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 계약 건수'} }"
+                    IsTechnical="True" 
+                    IsActive="True" />
                 <uc:MontlyCard Grid.Row="1"
-                Number="76" 
-                Title="{Binding Month.Value, StringFormat={}{0:0월 분류 입금 지출 건수} }"
-                IsTechnical="True"
-                IsActive="True"/>
+                    Number="{Binding CompleteDistribute.Value}" 
+                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 입출금 분류 건수'} }"
+                    IsTechnical="True"
+                    IsActive="True"/>
                 <uc:MontlyCard Grid.Row="2"
-                Number="55" 
-                Title="{Binding Month.Value, StringFormat={}{0:0월 완료된 배송 건수} }"
-                IsTechnical="True" 
-                IsActive="True"/>
+                    Number="{Binding CompleteDelevery.Value}" 
+                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 배송 건수'} }"
+                    IsTechnical="True" 
+                    CustomClick="MontlyCard_CustomClick"
+                    IsActive="True"/>
             </Grid>
         </StackPanel>
-        <StackPanel Margin="10 10 10 10"  Grid.Column="1"  x:Name="UnCompletedStack">
+        <StackPanel 
+            Margin="10 10 10 10"  
+            Grid.Column="1"  
+            x:Name="UnCompletedStack"
+            DataContext="{Binding HomeSummary.Value}"
+            >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.33*"/>
@@ -55,15 +66,15 @@
                     <RowDefinition Height="0.33*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
-                    Number="68" Grid.Row="0"
-                    Title="{Binding Month.Value, StringFormat={}{0:0월 미완료 계약건수} }" 
+                    Number="{Binding NotCompleteContract.Value}" 
+                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 미완료 계약건수'} }" 
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="1"
-                    Number="16" 
-                    Title="{Binding Month.Value, StringFormat={}{0:0월 미분류 입금 지출 건수}}"
+                    Number="{Binding NotCompleteDistribute.Value}"
+                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 미분류 입금 지출 건수'}}"
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="2"
-                    Number="94" 
+                    Number="{Binding TodayDelevery.Value}" 
                     Title=" 금일 배송 건수" 
                     IsTechnical="False"/>
             </Grid>

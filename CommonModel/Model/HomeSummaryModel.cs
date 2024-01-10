@@ -12,17 +12,17 @@ namespace CommonModel.Model
     public class HomeSummaryModel : PrismCommonModelBase
     {
         
-        ReactiveProperty<int?> Month { get; set; }
-        ReactiveProperty<int?> CompleteContract { get; set; }
-        ReactiveProperty<int?> CompleteDistribute { get; set; }
-        ReactiveProperty<int?> CompleteDelevery { get; set; }
-        ReactiveProperty<int?> NotCompleteContract { get; set; }
-        ReactiveProperty<int?> NotCompleteDistribute { get; set; }
-        ReactiveProperty<int?> TodayDelevery { get; set; }
+        public ReactiveProperty<DateTime> Month { get; set; }
+        public ReactiveProperty<int?> CompleteContract { get; set; }
+        public ReactiveProperty<int?> CompleteDistribute { get; set; }
+        public ReactiveProperty<int?> CompleteDelevery { get; set; }
+        public ReactiveProperty<int?> NotCompleteContract { get; set; }
+        public ReactiveProperty<int?> NotCompleteDistribute { get; set; }
+        public ReactiveProperty<int?> TodayDelevery { get; set; }
 
         public HomeSummaryModel() : base()
         {
-            this.Month = new ReactiveProperty<int?>(0).AddTo(this.disposable);
+            this.Month = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
             this.CompleteContract = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.CompleteDistribute = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.CompleteDelevery = new ReactiveProperty<int?>(0).AddTo(this.disposable);
@@ -33,7 +33,7 @@ namespace CommonModel.Model
 
         public override void SetObserver()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
