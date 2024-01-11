@@ -6,7 +6,7 @@ namespace AddressSearchManager
 {
     public class AddressSearchManagerClass
     {
-        private const string API_KEY = "devU01TX0FVVEgyMDIzMTAwMzE2NDUyNjExNDEzOTI=";
+        private const string API_KEY = "U01TX0FVVEgyMDI0MDExMTEzMDgyODExNDQyMzE=";
         private const string API_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
 
         private string keyword = "";
