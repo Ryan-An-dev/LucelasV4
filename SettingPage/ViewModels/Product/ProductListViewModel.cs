@@ -93,7 +93,6 @@ namespace SettingPage.ViewModels
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
-            ErpLogWriter.LogWriter.Debug(msg);
             if (packet.Header.CMD < (ushort)COMMAND.CREATEPRODUCTINFO
                 || packet.Header.CMD > (ushort)COMMAND.DELETEPRODUCTINFO)
             {
