@@ -40,14 +40,14 @@
                     IsTechnical="True" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="ContractPage_Complete"
-                    IsActive="True" />
+                    IsActive="False" />
                 <uc:MontlyCard Grid.Row="1"
                     Number="{Binding HomeSummary.Value.CompleteDistribute.Value}" 
                     Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 완료 입출금 분류 건수'} }"
                     Command="{Binding MenuSelectCommand}"
                     Params ="BankListPage_Complete"
                     IsTechnical="True"
-                    IsActive="True"/>
+                    IsActive="False"/>
                 <uc:MontlyCard 
                     Grid.Row="2"
                     Number="{Binding HomeSummary.Value.CompleteDelevery.Value}" 
@@ -55,7 +55,7 @@
                     Command="{Binding MenuSelectCommand}"
                     Params ="DeliveryPage_Complete"
                     IsTechnical="True"
-                    IsActive="True"/>
+                    IsActive="False"/>
             </Grid>
         </StackPanel>
         <StackPanel 
