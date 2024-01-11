@@ -17,6 +17,8 @@ using DataAccess.NetWork;
 using LucelasV4.ViewModels;
 using CommonModule.Views;
 using HomePage.ViewModels;
+using Prism.Events;
+using CommonServiceLocator;
 
 namespace LucelasV4
 {
@@ -49,7 +51,6 @@ namespace LucelasV4
                 SocketClientV2 temp =Container.Resolve<SocketClientV2>();
                 temp.SetMainConnectCheck(Container.Resolve<MainWindowViewModel>());
                 Container.Resolve<MainWindowViewModel>().initLoadingTimer();
-
             }
             else {
                 MessageBox.Show("비밀번호가 틀립니다.");
@@ -61,7 +62,6 @@ namespace LucelasV4
             ErpLogWriter.LogWriter.Debug("============= HomePageModule initialize =============");
             moduleCatalog.AddModule<HomePage.HomePageModule>();
             ErpLogWriter.LogWriter.Debug("============= SettingPageModule initialize =============");
-           
             ErpLogWriter.LogWriter.Debug("============= DepositWithdrawalModule initialize =============");
             moduleCatalog.AddModule<DepositWithdrawal.DepositWithdrawalModule>();
             ErpLogWriter.LogWriter.Debug("============= ContractPageModule initialize =============");
@@ -100,6 +100,7 @@ namespace LucelasV4
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             this.regMan = containerRegistry;
+            containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
             containerRegistry.Register<LoginViewModel>();
             containerRegistry.RegisterSingleton<Login>();
             containerRegistry.RegisterSingleton<MainWindowViewModel>();

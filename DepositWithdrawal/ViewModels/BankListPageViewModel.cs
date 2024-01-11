@@ -279,7 +279,31 @@ namespace DepositWithdrawal.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            SendData();
+            string msg;
+            navigationContext.Parameters.TryGetValue("object", out msg);
+            if (msg == null)
+            {
+                SendData();
+            }
+            else
+            {
+                int Month = EndDate.Value.Month;
+                DateTime firstDayOfNextMonth = EndDate.Value.AddMonths(1);
+                // 다음 달의 첫 날에서 하루를 빼서 이번 달의 마지막 날을 구합니다.
+                DateTime lastDayOfMonth = firstDayOfNextMonth.AddDays(-1);
+                int day = lastDayOfMonth.Day;
+                this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
+                this.EndDate.Value = new DateTime(EndDate.Value.Year, Month, day);
+                if (msg.Equals("Complete"))
+                {
+                    this.SearchFullyCompleted.Value = FullyCompleted.FullyCompleted;
+                }
+                else
+                {
+                    this.SearchFullyCompleted.Value = FullyCompleted.NotYet;
+                }
+                SendData();
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

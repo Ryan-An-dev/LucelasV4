@@ -23,6 +23,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace ContractPage.ViewModels
 {
@@ -184,7 +185,30 @@ namespace ContractPage.ViewModels
             this.CurrentPage.Value = 1;
             this.TotalPage.Value = 0;
             this.TotalItemCount.Value = 0;
-            SendData();
+
+            string msg;
+            navigationContext.Parameters.TryGetValue("object", out msg);
+            if (msg==null)
+            {
+                SendData();
+            }
+            else{
+                int Month = EndDate.Value.Month;
+                DateTime firstDayOfNextMonth = EndDate.Value.AddMonths(1);
+                // 다음 달의 첫 날에서 하루를 빼서 이번 달의 마지막 날을 구합니다.
+                DateTime lastDayOfMonth = firstDayOfNextMonth.AddDays(-1);
+                int day = lastDayOfMonth.Day;
+                this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
+                this.EndDate.Value = new DateTime(EndDate.Value.Year, Month, day);
+                if (msg.Equals("Complete"))
+                {
+                    this.SearchFullyCompleted.Value = FullyCompleted.FullyCompleted;
+                }
+                else {
+                    this.SearchFullyCompleted.Value = FullyCompleted.NotYet;
+                }
+                SendData();
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

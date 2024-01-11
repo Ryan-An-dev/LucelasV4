@@ -54,7 +54,14 @@ namespace LucelasV4.ViewModels
             this.SearchVisibility = new ReactiveProperty<Visibility>().AddTo(this.disposables);
             this.ConnectionCheck = new ReactiveProperty<Visibility>(Visibility.Visible).AddTo(this.disposables);
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
+            init();
         }
+
+        private void init()
+        {
+            _Container.Resolve<HomePageViewModel>().MenuSelectCommand = this.MenuSelectCommand;
+        }
+
         public void initLoadingTimer()
         {
             this.Loading_timer = new DispatcherTimer();
@@ -103,12 +110,26 @@ namespace LucelasV4.ViewModels
             }
         }
 
-
         private void ExecuteMenuSelectCommand(string SelectedItem)
         {
-            if (SelectedItem != string.Empty) {
-                regionmanager.RequestNavigate("ContentRegion", SelectedItem);
+            if (SelectedItem.Contains("_"))
+            {
+                string item = SelectedItem.Split('_')[0];
+                string option = SelectedItem.Split('_')[1];
+                NavigationParameters temp = new NavigationParameters();
+                temp.Add("object", option);
+                if (SelectedItem != string.Empty)
+                {
+                    regionmanager.RequestNavigate("ContentRegion", item, temp);
+                }
             }
+            else {
+                if (SelectedItem != string.Empty)
+                {
+                    regionmanager.RequestNavigate("ContentRegion", SelectedItem);
+                }
+            }
+            
         }
 
         public void OnRceivedData(ErpPacket packet)

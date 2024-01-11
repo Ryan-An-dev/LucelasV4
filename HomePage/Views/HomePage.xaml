@@ -27,7 +27,6 @@
             x:Name="CompletedStack" 
             Margin="10 10 10 10" 
             VerticalAlignment="Stretch"
-            DataContext="{Binding HomeSummary.Value}"
             >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight,UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
@@ -36,19 +35,25 @@
                     <RowDefinition Height="0.33*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
-                    Number="{Binding CompleteContract.Value}" Grid.Row="0"
-                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 계약 건수'} }"
+                    Number="{Binding HomeSummary.Value.CompleteContract.Value}" Grid.Row="0"
+                    Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 완료 계약 건수'} }"
                     IsTechnical="True" 
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="ContractPage_Complete"
                     IsActive="True" />
                 <uc:MontlyCard Grid.Row="1"
-                    Number="{Binding CompleteDistribute.Value}" 
-                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 입출금 분류 건수'} }"
+                    Number="{Binding HomeSummary.Value.CompleteDistribute.Value}" 
+                    Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 완료 입출금 분류 건수'} }"
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="BankListPage_Complete"
                     IsTechnical="True"
                     IsActive="True"/>
                 <uc:MontlyCard 
                     Grid.Row="2"
-                    Number="{Binding CompleteDelevery.Value}" 
-                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 완료 배송 건수'} }"
+                    Number="{Binding HomeSummary.Value.CompleteDelevery.Value}" 
+                    Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 완료 배송 건수'} }"
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="DeliveryPage_Complete"
                     IsTechnical="True"
                     IsActive="True"/>
             </Grid>
@@ -57,7 +62,6 @@
             Margin="10 10 10 10"  
             Grid.Column="1"  
             x:Name="UnCompletedStack"
-            DataContext="{Binding HomeSummary.Value}"
             >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
@@ -66,15 +70,21 @@
                     <RowDefinition Height="0.33*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
-                    Number="{Binding NotCompleteContract.Value}" 
-                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 미완료 계약건수'} }" 
+                    Number="{Binding HomeSummary.Value.NotCompleteContract.Value}" 
+                    Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 미완료 계약건수'} }" 
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="ContractPage_InComplete"
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="1"
-                    Number="{Binding NotCompleteDistribute.Value}"
-                    Title="{Binding Month.Value, StringFormat={}{0:MM'월 미분류 입금 지출 건수'}}"
+                    Number="{Binding HomeSummary.Value.NotCompleteDistribute.Value}"
+                    Title="{Binding HomeSummary.Value.Month.Value, StringFormat={}{0:MM'월 미분류 입금 지출 건수'}}"
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="BankListPage_InComplete"
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="2"
-                    Number="{Binding TodayDelevery.Value}" 
+                    Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="DeliveryPage_InComplete"
                     Title=" 금일 배송 건수" 
                     IsTechnical="False"/>
             </Grid>

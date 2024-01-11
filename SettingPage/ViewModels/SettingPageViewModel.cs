@@ -134,7 +134,7 @@ namespace SettingPage.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            return true;
+            return false;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
@@ -144,7 +144,7 @@ namespace SettingPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            
+            initData();
         }
 
         public void OnRceivedData(ErpPacket packet)

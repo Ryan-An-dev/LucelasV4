@@ -15,6 +15,7 @@ using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,9 +28,8 @@ namespace HomePage.ViewModels
         //뷰모델 부를 때마다 서버에 요청해서 데이터 가져오기 
         //뷰모델이 Dispose 될때 수정내역이 있다면 전달하자.
         
-
+        public ReactiveCommand<string> MenuSelectCommand { get; set; }
         public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
-
         public ReactiveProperty<bool> IsLoading { get; set; }
         private IContainerProvider ContainerProvider { get; }
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
@@ -37,6 +37,7 @@ namespace HomePage.ViewModels
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
+            
         }
 
         

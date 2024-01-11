@@ -1,7 +1,9 @@
 ﻿using CommonModel;
+using CommonServiceLocator;
 using Prism.Events;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace HomePage.UserControls
 {
@@ -10,7 +12,6 @@ namespace HomePage.UserControls
     /// </summary>
     public partial class MontlyCard : UserControl
     {
-        private readonly IEventAggregator _eventAggregator;
         public MontlyCard()
         {
             InitializeComponent();
@@ -23,6 +24,14 @@ namespace HomePage.UserControls
         }
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(MontlyCard));
+
+        public string Params
+        {
+            get { return (string)GetValue(ParamsProperty); }
+            set { SetValue(ParamsProperty, value); }
+        }
+        public static readonly DependencyProperty ParamsProperty =
+            DependencyProperty.Register("Params", typeof(string), typeof(MontlyCard));
 
         public string Number
         {
@@ -45,12 +54,19 @@ namespace HomePage.UserControls
             set { SetValue(IsTechnicalProperty, value); }
         }
         public static readonly DependencyProperty IsTechnicalProperty =
-            DependencyProperty.Register("IsTechnical", typeof(bool), typeof(MontlyCard)); 
-        
+            DependencyProperty.Register("IsTechnical", typeof(bool), typeof(MontlyCard));
 
+
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
+        "Command", typeof(ICommand), typeof(MontlyCard), new PropertyMetadata(null));
         private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            _eventAggregator.GetEvent<HomeClickEvent>().Publish(this.Title);
+            Command?.Execute(Params);
         }
     }
 }

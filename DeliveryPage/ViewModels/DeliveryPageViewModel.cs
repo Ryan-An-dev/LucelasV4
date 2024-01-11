@@ -161,7 +161,7 @@ namespace DeliveryPage.ViewModels
                 JObject search = new JObject();
                 search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
-                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd 00:00:01");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["cui_phone"] = this.SearchPhone.Value;
                 search["receiving_type"] = (int)this.SelectedPurpose.Value;
@@ -180,7 +180,7 @@ namespace DeliveryPage.ViewModels
                 JObject search = new JObject();
                 search["employee_id"] = this.SearchEmployee.Value == null ? 0 : SearchEmployee.Value.Id.Value;
                 search["cui_name"] = this.SearchName.Value;
-                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd 00:00:01");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["cui_phone"] = this.SearchPhone.Value;
                 search["receiving_type"] = (int)this.SelectedPurpose.Value;
@@ -214,7 +214,33 @@ namespace DeliveryPage.ViewModels
             this.CurrentPage.Value = 1;
             this.TotalPage.Value = 0;
             this.TotalItemCount.Value = 0;
-            SendData();
+            string msg;
+            navigationContext.Parameters.TryGetValue("object", out msg);
+            if (msg == null)
+            {
+                SendData();
+            }
+            else
+            {
+                int Month = EndDate.Value.Month;
+                DateTime firstDayOfNextMonth = EndDate.Value.AddMonths(1);
+                // 다음 달의 첫 날에서 하루를 빼서 이번 달의 마지막 날을 구합니다.
+                DateTime lastDayOfMonth = firstDayOfNextMonth.AddDays(-1);
+                int day = lastDayOfMonth.Day;
+                this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
+                this.EndDate.Value = new DateTime(EndDate.Value.Year, Month, day);
+                if (msg.Equals("Complete"))
+                {
+                    this.SelectedPurpose.Value = ViewModels.SearchPurpose.Completed;
+                }
+                else
+                {
+                    this.SelectedPurpose.Value = ViewModels.SearchPurpose.BookingDelivery;
+                    this.StartDate.Value = DateTime.Today;
+                    this.EndDate.Value = DateTime.Today;
+                }
+                SendData();
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
