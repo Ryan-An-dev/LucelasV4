@@ -185,14 +185,17 @@ namespace CommonModel.Model
         private void ChargeCalc(int allocatePrice)
         {
             this.RemainPrice.Value = this.Money.Value - this.AllocatedPrice.Value;
-            if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
-            {
-                this.CardCharge.Value = Math.Round(((float)this.RemainPrice.Value / this.Money.Value)*100,2);
-            }
-            else
-            {
-                this.CardCharge.Value = 0;
-            }
+            try {
+                if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
+                {
+                    this.CardCharge.Value = Math.Round(((float)this.RemainPrice.Value / this.Money.Value) * 100, 2);
+                }
+                else
+                {
+                    this.CardCharge.Value = 0;
+                }
+            } catch (Exception) { }
+            
         }
 
         private void ChangedCategory(string name, bool args) {

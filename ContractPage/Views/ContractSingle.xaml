@@ -35,8 +35,8 @@
                         HorizontalAlignment="Left" 
                         md:HintAssist.Hint="판매날짜" FontSize="16" Width="150"
                         md:HintAssist.IsFloating="True"  
-                        Foreground="{StaticResource MainColor}" 
-                        BorderBrush="{StaticResource MainColor}" >
+                        Foreground="{StaticResource textColor2}" 
+                        BorderBrush="{StaticResource textColor2}" >
                         <DatePicker.SelectedDate>
                             <Binding Path="Contract.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
