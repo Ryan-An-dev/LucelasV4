@@ -85,7 +85,7 @@
                     Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="DeliveryPage_InComplete"
-                    Title=" 금일 배송 건수" 
+                    Title=" 금일 배송 예정 건수" 
                     IsTechnical="False"/>
             </Grid>
             
