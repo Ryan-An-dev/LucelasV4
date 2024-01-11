@@ -342,7 +342,8 @@ namespace ContractPage.ViewModels
                                 Contractor = SetCustomer(inner["contractor"] as JObject);
                                 Contractor.ClearJson();
                             }
-
+                            if (inner["complete"]!=null)
+                                temp.Complete.Value = (AllocateType)inner["complete"].ToObject<int>();
                             //계약일자
                             if (inner["create_time"] != null)
                                 temp.Month.Value = inner["create_time"].ToObject<DateTime>();

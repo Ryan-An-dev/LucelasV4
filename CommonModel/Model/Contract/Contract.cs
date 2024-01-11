@@ -37,7 +37,7 @@ namespace CommonModel.Model
         [JsonPropertyName("total")]
         public ReactiveProperty<int> Price { get; set; } //토탈 가격
 
-        public ReactiveProperty<bool> DepositComplete { get; set; } 
+        public ReactiveProperty<bool> DepositComplete { get; set; }
         public ReactiveProperty<FullyCompleted> PaymentComplete { get; set; }
         [JsonPropertyName("payment")]
         public ReactiveCollection<Payment> Payment { get; set; } //지불 클래스
@@ -55,8 +55,10 @@ namespace CommonModel.Model
         public ReactiveProperty<string> DeliveryManCombine { get; set; }
         public ReactiveCollection<Employee> DeliveryMan { get; set; }
         public ReactiveProperty<DeliveryComplete> DeliveryComplete { get; set; }
+        public ReactiveProperty<AllocateType> Complete { get; set; }
         public Contract()
         {
+            Complete = new ReactiveProperty<AllocateType>(AllocateType.NotYet).AddTo(disposable);
             DeliveryComplete = new ReactiveProperty<DeliveryComplete>(0).AddTo(disposable);
             DeliveryManCombine = new ReactiveProperty<string>().AddTo(disposable);
             DeliveryMan = new ReactiveCollection<Employee>().AddTo(disposable);
@@ -85,6 +87,7 @@ namespace CommonModel.Model
             isChanged = false;
         }
         public override void SetObserver() {
+            this.Complete.Subscribe(x => ChangedJson("complete", (int)x));
             this.DeliveryComplete.Subscribe(x => ChangedJson("delivery_complete", (int)x));
             this.DeliveryMan.ToObservable().Subscribe(updatedItems => { isChanged = true; });
             this.Month.Subscribe(x => ChangedJson("create_time", x));
@@ -248,7 +251,6 @@ namespace CommonModel.Model
             if (jarrPayment.Count > 0) {
                 ChangedItem["payment"] = jarrPayment;
             }
-               
 
             JArray jarrProduct = new JArray();
             foreach (ContractedProduct item in Product)
