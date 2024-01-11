@@ -84,7 +84,15 @@ namespace SettingPage.ViewModels
                 {
                     this.Company.Value = Company;
                 }
+                else
+                {
+                    this.Company.Value = new Company();
+                }
             }
+            else {
+                this.Company.Value = new Company();
+            }
+            
         }
         private void SearchAdressExcute()
         {
@@ -103,7 +111,7 @@ namespace SettingPage.ViewModels
                     r.Parameters.TryGetValue("object", out temp);
                     if (temp != null)
                     {
-                        Company.Value.CompanyAddress.Value = temp.도로명주소1;
+                        this.Company.Value.CompanyAddress.Value = temp.도로명주소1;
                     }
                 }
             }

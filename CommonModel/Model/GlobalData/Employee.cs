@@ -34,7 +34,7 @@ namespace CommonModel.Model
             AddressDetail = CreateProperty<string>("상세주소");
             StartWorkTime = CreateDateTimeProperty("시작일");
             BirthDay  = CreateDateTimeProperty("생일");
-            Memo = CreateProperty<string>("메모");
+            Memo = new ReactiveProperty<string>().AddTo(disposable);
             SetObserver();
         }
         public override void SetObserver()

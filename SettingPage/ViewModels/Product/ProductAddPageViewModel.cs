@@ -12,10 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using DataAccess.NetWork;
+using DataAccess;
 
 namespace SettingPage.ViewModels
 {
-    public class ProductAddPageViewModel : PrismCommonViewModelBase, IDialogAware
+    public class ProductAddPageViewModel : PrismCommonViewModelBase, IDialogAware, INetReceiver
     {
         private DelegateCommand<string> _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
@@ -26,6 +28,40 @@ namespace SettingPage.ViewModels
         private DelegateCommand<string> _SearchCompany;
         public DelegateCommand<string> SearchCompany =>
             _SearchCompany ?? (_SearchCompany = new DelegateCommand<string>(ExecSearchCompany));
+
+        private DelegateCommand _CreateCompanyDialogCommand;
+        public DelegateCommand CreateCompanyDialogCommand =>
+        _CreateCompanyDialogCommand ?? (_CreateCompanyDialogCommand = new DelegateCommand(ExecCreateCompany));
+
+        private void ExecCreateCompany()
+        {
+            DialogService.ShowDialog("CompanyAddPage", null, r =>
+            {
+                try
+                {
+                    if (r.Result == ButtonResult.OK)
+                    {
+                        Company item = r.Parameters.GetValue<Company>("object");
+                        if (item != null)
+                        {
+                            using (var network = con.Resolve<DataAgent.CompanyDataAgent>())
+                            {
+                                network.SetReceiver(this);
+                                JObject jobj = new JObject();
+                                jobj["company_id"] = (int)0;
+                                jobj["company_name"] = item.CompanyName.Value;
+                                jobj["company_address_detail"] = item.CompanyAddressDetail.Value;
+                                jobj["company_phone"] = item.CompanyPhone.Value;
+                                jobj["company_address"] = item.CompanyAddress.Value;
+                                network.Create(jobj);
+                            }
+                        }
+                    }
+                }
+                catch (Exception) { }
+
+            }, "CommonDialogWindow");
+        }
 
         private void ExecSearchCompany(string obj)
         {
@@ -117,6 +153,19 @@ namespace SettingPage.ViewModels
             }
         }
 
+        public void OnRceivedData(ErpPacket packet)
+        {
+         
+        }
 
+        public void OnConnected()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSent()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
