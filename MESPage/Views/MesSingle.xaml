@@ -225,13 +225,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBox
-                                 IsEnabled="{Binding Inventory.Value.CountEnable.Value}"
+                                  IsEnabled="{Binding Inventory.Value.CountEnable.Value}"
                                   Grid.Column="0"
                                   Margin="0 0 10 12"
                                   md:HintAssist.Hint="수량"
                                   FontSize="14"
                                   Foreground="{StaticResource MainColor}"
-                                 Text="{Binding Inventory.Value.Count.Value}"
+                                  Text="{Binding Inventory.Value.Count.Value}"
                                   md:HintAssist.IsFloating="True">
                             </TextBox>
                             <ComboBox 

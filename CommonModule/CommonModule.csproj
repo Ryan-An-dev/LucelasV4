@@ -4,6 +4,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Entity\**" />
+    <EmbeddedResource Remove="Entity\**" />
+    <None Remove="Entity\**" />
+    <Page Remove="Entity\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
@@ -13,9 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entity\Extended\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\CommonDialogWindow.xaml.cs">

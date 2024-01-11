@@ -1,6 +1,7 @@
 ﻿using AddressSearchManager.Models;
 using CommonModel;
 using CommonModel.Model;
+using CommonModule.Views;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;
@@ -179,6 +180,7 @@ namespace MESPage.ViewModels
                 Title.Value = "신규 재고 추가";
                 this.Inventory.Value = new FurnitureInventory();
                 IsNewInventory.Value = Visibility.Visible;
+                this.Inventory.Value.CountEnable.Value = true;
             }
             else
             {
@@ -191,6 +193,11 @@ namespace MESPage.ViewModels
         }
         private void SaveButtonExecute()
         {
+            if (this.Inventory.Value.ValidateAllProperties())
+            {
+                ContainerProvider.Resolve<AlertWindow1>().Show();
+                return;
+            }
             Save(0);
         }
 
