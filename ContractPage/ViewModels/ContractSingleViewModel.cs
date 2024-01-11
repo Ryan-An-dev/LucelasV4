@@ -33,6 +33,9 @@ namespace ContractPage.ViewModels
         /// 새로운 계약 : Collapse  // 기존계약 : Visible
         /// </summary>
         public ReactiveProperty<Visibility> IsNewContract { get; set; }
+
+
+
         /// <summary>
         /// 새로운 계약 : Visible  // 기존계약 : Collapse
         /// </summary>
@@ -71,7 +74,7 @@ namespace ContractPage.ViewModels
         public DelegateCommand<object> CheckBoxAccountCommand { get; set; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
-
+            
             CheckBoxAccountCommand = new DelegateCommand<object>(execCheckBoxAccountCommand);
             this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);

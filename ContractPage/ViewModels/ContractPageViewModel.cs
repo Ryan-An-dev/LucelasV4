@@ -44,7 +44,7 @@ namespace ContractPage.ViewModels
         #endregion
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         public DelegateCommand SearchButton { get; }
-
+        public ReactiveProperty<int> Total { get; set; }
         #region Paging
         public ReactiveProperty<int> CurrentPage { get; set; }
         public ReactiveProperty<int> TotalPage { get; set; }
@@ -63,6 +63,7 @@ namespace ContractPage.ViewModels
 
         public ContractPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            Total = new ReactiveProperty<int>().AddTo(disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
             this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);
@@ -327,6 +328,8 @@ namespace ContractPage.ViewModels
                     int i = 1 + ((CurrentPage.Value - 1) * ListCount.Value);
                     if (msg["history_count"] != null)
                         this.TotalItemCount.Value = msg["history_count"].ToObject<int>();
+                    if (msg["total_price"]!=null)
+                        this.Total.Value = msg["total_price"].ToObject<int>();
                     if (msg["contract_history"] != null) {
                         foreach (JObject inner in msg["contract_history"] as JArray)
                         {

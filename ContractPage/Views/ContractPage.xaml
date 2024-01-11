@@ -127,7 +127,24 @@
                 Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
                 Command="{Binding CmdGoPage}" CommandParameter="{x:Static local:MovePageType.Next}"/>
             </StackPanel>
-
+            <Border 
+                DockPanel.Dock="Bottom" 
+                BorderThickness="3" Padding="5" CornerRadius="5"
+                HorizontalAlignment="Right" BorderBrush="{StaticResource MainColor}"
+                Background="White" Opacity="0.5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        Padding="5"
+                        VerticalAlignment="Center"
+                        Text="기간내 총 판매금액 : " 
+                        Foreground="Black"/>
+                    <TextBlock Padding="5"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Text="{Binding Total.Value, UpdateSourceTrigger=PropertyChanged,StringFormat=+\{0:N0\}, FallbackValue=0}"  
+                        Foreground="Blue" />
+                </StackPanel>
+            </Border>
             <!-- List -->
             <DataGrid 
                 VirtualizingStackPanel.IsVirtualizing="True"

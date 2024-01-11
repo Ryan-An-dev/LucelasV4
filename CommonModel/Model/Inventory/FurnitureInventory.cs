@@ -21,12 +21,12 @@ namespace CommonModel
         PreStored = 1,
         [Description("배달예정")]
         BookingDelivery = 2,
-        [Description("배달완료")]
-        Completed = 3,
         [Description("창고재고")]
-        Stored = 4,
+        Stored = 3,
         [Description("DP용")]
-        DP = 5
+        DP = 4,
+        [Description("배달완료")]
+        Completed = 5,
     }
     //재고
     public class FurnitureInventory: PrismCommonModelBase

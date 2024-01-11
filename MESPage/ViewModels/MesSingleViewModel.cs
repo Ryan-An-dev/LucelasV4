@@ -40,7 +40,7 @@ namespace MESPage.ViewModels
         public ReactiveProperty<Purpose> PurposeTypeSelect { get; set; } //검색옵션
         public IEnumerable<Purpose> PurposeTypeSelectValues //검색옵션
         {
-            get { return Enum.GetValues(typeof(Purpose)).Cast<Purpose>().Skip(1);  }
+            get { return Enum.GetValues(typeof(Purpose)).Cast<Purpose>().Skip(1).SkipLast(1);  }
         }
         public ReactiveCommand List_MouseDoubleClick { get; set; }
 
@@ -96,7 +96,6 @@ namespace MESPage.ViewModels
             List_MouseDoubleClick = new ReactiveCommand().WithSubscribe(() => RowDoubleClickEvent()).AddTo(disposable);
             FurnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(disposable);
             CompanyProductTypeSelect = new ReactiveProperty<CompanyProductSelect>(CompanyProductSelect.ProductName).AddTo(disposable);
-
             IsNewInventory = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
             PurposeTypeSelect = new ReactiveProperty<Purpose>().AddTo(disposable);
             ButtonName = new ReactiveProperty<string>().AddTo(disposable);
