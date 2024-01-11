@@ -1,5 +1,6 @@
 ﻿using CommonModel;
 using CommonModel.Model;
+using CommonModule.Views;
 using ControlzEx.Standard;
 using DataAccess;
 using DataAccess.NetWork;
@@ -223,6 +224,17 @@ namespace DepositWithdrawal.ViewModels
           
         }
         private void Save(int param) {
+            bool Check = false;
+            this.ReceiptModel.Value.CategoryInfo.ForceValidate();
+            Check |= this.ReceiptModel.Value.CategoryInfo.HasErrors;
+            Check |= this.ReceiptModel.Value.ValidateAllProperties();
+            if (Check)
+            {
+
+                ContainerProvider.Resolve<AlertWindow1>().Show();
+                return;
+            }
+           
             using (var network = this.ContainerProvider.Resolve<DataAgent.BankListDataAgent>())
             {
                 JObject jobj = new JObject();

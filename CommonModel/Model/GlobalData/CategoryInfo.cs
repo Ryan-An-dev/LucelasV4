@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommonModel.Model
 {
-    public class CategoryInfo
+    public class CategoryInfo : PrismCommonModelBase
     {
         [Required(ErrorMessage = "필수")]
         public ReactiveProperty<int> CategoryId { get; set; } //DB Id
@@ -29,6 +29,10 @@ namespace CommonModel.Model
             this.OriginName.Value = OriginName;
             this.IsChecked.Value = true;
         }
-        
+
+        public override void SetObserver()
+        {
+            
+        }
     }
 }

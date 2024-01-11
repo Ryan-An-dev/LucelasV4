@@ -101,10 +101,16 @@ namespace CommonModel.Model
             this.Month = new ReactiveProperty<DateTime>().AddTo(disposable); //날짜
             this.ReceiptType = new ReactiveProperty<ReceiptType>().AddTo(disposable);//카드,계좌,현금 중분류
             this.IncomeCostType = new ReactiveProperty<IncomeCostType>((IncomeCostType)1, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //수익 지출 대분류
-            this.CategoryInfo = new ReactiveProperty<CategoryInfo>(mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); // 비용 Category 가 할당됨 , 안됨 소분류
+            this.CategoryInfo = new ReactiveProperty<CategoryInfo>(mode: ReactivePropertyMode.IgnoreInitialValidationError).AddTo(disposable).SetValidateNotifyError(x => {
+                if (x == null || x.CategoryId.Value == 0)
+                {
+                    return $"소분류 을(를) 선택하세요.";
+                }
+                return null;
+            });// 비용 Category 가 할당됨 , 안됨 소분류;
             this.FullyCompleted = new ReactiveProperty<AllocateType>().AddTo(disposable); //계약과의 할당 안됨, 부분완료 , 전체완료 -> 입금들 중 처리해야됨
             this.Contents = new ReactiveProperty<string>().AddTo(disposable); //계좌 혹은 카드에 찍힌 내용
-            this.Money = new ReactiveProperty<int>(0, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //금액
+            this.Money = CreateProperty<int>("금액"); //금액
             this.ConnectedContract = new ReactiveCollection<Contract>().AddTo(disposable); // Connected 계약 내용
             this.Memo = new ReactiveProperty<string>(mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);// 메모
             this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
@@ -112,29 +118,7 @@ namespace CommonModel.Model
             this.ChangedItem = new JObject();
             SetObserver();
         }
-        public ReceiptModel(string Tip, CategoryInfo categoryInfo,string memo,int money,string contents,int incomecost) : base() {
-            this.PayCardType = new ReactiveProperty<PayCardType>().AddTo(disposable);
-            this.IsAutoCategory = new ReactiveProperty<bool>(false).AddTo(disposable);
-            CardCharge = new ReactiveProperty<double>(0).AddTo(disposable);
-            this.AllocatedPrice = new ReactiveProperty<int>(0).AddTo(disposable);
-            this.Tip = new ReactiveProperty<string>(Tip, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //적요
-            this.BankInfo = new ReactiveProperty<BankModel>().AddTo(disposable);
-            this.ListNo = new ReactiveProperty<int>().AddTo(disposable);//ListNo
-            this.ReceiptNo = new ReactiveProperty<int>().AddTo(disposable); //Refid
-            this.Month = new ReactiveProperty<DateTime>().AddTo(disposable); //날짜
-            this.ReceiptType = new ReactiveProperty<ReceiptType>().AddTo(disposable);//카드,계좌,현금 중분류
-            this.IncomeCostType = new ReactiveProperty<IncomeCostType>((IncomeCostType)incomecost, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //수익 지출 대분류            this.CategoryInfo = new ReactiveProperty<CategoryInfo>(categoryInfo,mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); // 비용 Category 가 할당됨 , 안됨 소분류
-            this.FullyCompleted = new ReactiveProperty<AllocateType>().AddTo(disposable); //계약과의 할당 안됨, 부분완료 , 전체완료 -> 입금들 중 처리해야됨
-            this.Contents = new ReactiveProperty<string>(contents, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //계좌 혹은 카드에 찍힌 내용
-            this.Money = new ReactiveProperty<int>(money, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); //금액
-            this.CategoryInfo = new ReactiveProperty<CategoryInfo>(categoryInfo,mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable); // 비용 Category 가 할당됨 , 안됨 소분류
-            this.ConnectedContract = new ReactiveCollection<Contract>().AddTo(disposable); // Connected 계약 내용
-            this.Memo = new ReactiveProperty<string>(memo, mode: ReactivePropertyMode.DistinctUntilChanged).AddTo(disposable);// 메모
-            this.RemainPrice = new ReactiveProperty<int>().AddTo(disposable);//할당하지 못하고 남은 금액
-            this.indexKey = new ReactiveProperty<string>().AddTo(disposable); // index key
-            this.ChangedItem = new JObject();
-            SetObserver();
-        }
+        
         public override void SetObserver()
         {
             this.ConnectedContract.ToObservable().Subscribe(x => ChangedConnectedContract(x));
@@ -184,17 +168,19 @@ namespace CommonModel.Model
 
         private void ChargeCalc(int allocatePrice)
         {
+            if (this.CategoryInfo.Value == null)
+                return;
             this.RemainPrice.Value = this.Money.Value - this.AllocatedPrice.Value;
-            try {
-                if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
-                {
-                    this.CardCharge.Value = Math.Round(((float)this.RemainPrice.Value / this.Money.Value) * 100, 2);
-                }
-                else
-                {
-                    this.CardCharge.Value = 0;
-                }
-            } catch (Exception) { }
+            
+            if (this.CategoryInfo.Value.Name.Value.Contains("대금"))
+            {
+                this.CardCharge.Value = Math.Round(((float)this.RemainPrice.Value / this.Money.Value) * 100, 2);
+            }
+            else
+            {
+                this.CardCharge.Value = 0;
+            }
+            
             
         }
 

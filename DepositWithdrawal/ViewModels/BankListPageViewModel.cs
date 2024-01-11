@@ -357,15 +357,21 @@ namespace DepositWithdrawal.ViewModels
 
                     foreach (JObject inner in msg["state_history"] as JArray)
                     {
-                        ReceiptModel temp = new ReceiptModel(
-                            inner["shi_use_name"].ToString(), 
-                            FindCategory(inner["shi_biz_type"].ToObject<int>()), 
-                            inner["shi_memo"].ToString(), 
-                            inner["shi_cost"].ToObject<int>(), 
-                            inner["shi_use_content"].ToString(), 
-                            inner["shi_type"].ToObject<int>()
-                            );
-                        if(inner["shi_id"] !=null)
+                        ReceiptModel temp = new ReceiptModel();
+                        if (inner["shi_use_name"] != null)
+                            temp.Tip.Value = inner["shi_use_name"].ToString();
+                        if (inner["shi_biz_type"]!=null)
+                            temp.CategoryInfo.Value = FindCategory(inner["shi_biz_type"].ToObject<int>());
+                        if (inner["shi_memo"]!=null)
+                            temp.Memo.Value = inner["shi_memo"].ToString();
+                        if (inner["shi_cost"]!=null)
+                            temp.Money.Value = inner["shi_cost"].ToObject<int>();
+                        if (inner["shi_use_content"]!=null)
+                            temp.Contents.Value = inner["shi_use_content"].ToString();
+                        if (inner["shi_type"]!=null)
+                            temp.IncomeCostType.Value = (IncomeCostType)inner["shi_type"].ToObject<int>();
+
+                        if (inner["shi_id"] !=null)
                             temp.ReceiptNo.Value = inner["shi_id"].ToObject<int>();
                         if (inner["shi_use_type"]!= null)
                             temp.ReceiptType.Value = (ReceiptType)inner["shi_use_type"].ToObject<int>();
