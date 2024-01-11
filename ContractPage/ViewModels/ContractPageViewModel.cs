@@ -134,7 +134,7 @@ namespace ContractPage.ViewModels
                 JObject search = new JObject();
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["complete"] = (int)this.SearchFullyCompleted.Value;
                 search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
@@ -152,7 +152,7 @@ namespace ContractPage.ViewModels
                 JObject search = new JObject();
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 search["complete"] = (int)this.SearchFullyCompleted.Value;
                 search["cui_phone"] = this.SearchPhone.Value;
                 jobj["search_option"] = search;
@@ -190,16 +190,16 @@ namespace ContractPage.ViewModels
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg==null)
             {
+                this.EndDate.Value = DateTime.Today;
+                this.StartDate.Value = DateTime.Today.AddMonths(-1);
+                this.SearchFullyCompleted.Value = 0;
                 SendData();
             }
             else{
                 int Month = EndDate.Value.Month;
-                DateTime firstDayOfNextMonth = EndDate.Value.AddMonths(1);
-                // 다음 달의 첫 날에서 하루를 빼서 이번 달의 마지막 날을 구합니다.
-                DateTime lastDayOfMonth = firstDayOfNextMonth.AddDays(-1);
-                int day = lastDayOfMonth.Day;
+                int year = EndDate.Value.Year;
+                EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
                 this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
-                this.EndDate.Value = new DateTime(EndDate.Value.Year, Month, day);
                 if (msg.Equals("Complete"))
                 {
                     this.SearchFullyCompleted.Value = FullyCompleted.FullyCompleted;

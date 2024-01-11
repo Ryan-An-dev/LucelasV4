@@ -218,17 +218,17 @@ namespace DeliveryPage.ViewModels
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg == null)
             {
+                this.EndDate.Value = DateTime.Today;
+                this.StartDate.Value = DateTime.Today.AddMonths(-1);
+                SearchFullyCompleted.Value = (FullyCompleted)0;
                 SendData();
             }
             else
             {
                 int Month = EndDate.Value.Month;
-                DateTime firstDayOfNextMonth = EndDate.Value.AddMonths(1);
-                // 다음 달의 첫 날에서 하루를 빼서 이번 달의 마지막 날을 구합니다.
-                DateTime lastDayOfMonth = firstDayOfNextMonth.AddDays(-1);
-                int day = lastDayOfMonth.Day;
+                int year = EndDate.Value.Year;
+                EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
                 this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
-                this.EndDate.Value = new DateTime(EndDate.Value.Year, Month, day);
                 if (msg.Equals("Complete"))
                 {
                     this.SelectedPurpose.Value = ViewModels.SearchPurpose.Completed;
