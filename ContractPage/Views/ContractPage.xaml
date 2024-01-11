@@ -190,7 +190,18 @@
                         Width="0.1*"
                         Binding="{Binding Complete.Value}"
                         Header="완료여부" 
-                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
+                        >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Complete.Value}" Value="FullyCompleted">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                        <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

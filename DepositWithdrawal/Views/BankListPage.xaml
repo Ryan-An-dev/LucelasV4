@@ -371,7 +371,18 @@
                     <DataGridTextColumn 
                         MinWidth="50" Width="0.15*" 
                         MaxWidth="120" Binding="{Binding FullyCompleted.Value}" 
-                        Header="완료유무"/>
+                        Header="완료유무">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FullyCompleted.Value}" Value="FullyCompleted">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                        <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
