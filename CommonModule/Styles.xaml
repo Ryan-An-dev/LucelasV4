@@ -9,8 +9,8 @@
     <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
     <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
     <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Violet.xaml" />
-
-    <!--  Material Design  -->
+    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Badged.xaml" />
+        <!--  Material Design  -->
     <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
     <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
     <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
@@ -228,7 +228,258 @@
            
         </Grid>
     </DataTemplate>
-    <DataTemplate x:Key="CostTemplate">
+    <Style x:Key="MaterialDesign3.NavigationRailListBoxItem" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesign.Brush.Foreground}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="0,3" />
+        <Setter Property="MinHeight" Value="62" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="border"
+                 Margin="{TemplateBinding Margin}"
+                 ClipToBounds="{TemplateBinding ClipToBounds}"
+                 CornerRadius="{Binding Path=(md:NavigationRailAssist.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.3" To="Normal">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CircleEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState Name="Normal" />
+                                <VisualState Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="MouseOverBorder"
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="0.1"
+                                    Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Disabled" />
+                            </VisualStateGroup>
+                            <VisualStateGroup Name="SelectionStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.6" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState Name="Selected">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectedBorder"
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1"
+                                    Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Unselected" />
+                                <VisualState Name="SelectedUnfocused">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectedBorder"
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1"
+                                    Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid ClipToBounds="False">
+                            <Grid>
+                                <Grid.Clip>
+                                    <MultiBinding Converter="{StaticResource BorderClipConverter}">
+                                        <Binding ElementName="border" Path="ActualWidth" />
+                                        <Binding ElementName="border" Path="ActualHeight" />
+                                        <Binding ElementName="border" Path="CornerRadius" />
+                                        <Binding ElementName="border" Path="BorderThickness" />
+                                    </MultiBinding>
+                                </Grid.Clip>
+                                <Border x:Name="MouseOverBorder"
+                       Background="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"
+                       Opacity="0" />
 
-    </DataTemplate>
+                                <Border x:Name="SelectedBorder"
+                       Width="{Binding Path=(md:NavigationRailAssist.SelectionWidth), RelativeSource={RelativeSource TemplatedParent}}"
+                       Height="{Binding Path=(md:NavigationRailAssist.SelectionHeight), RelativeSource={RelativeSource TemplatedParent}}"
+                       VerticalAlignment="Top"
+                       Background="{TemplateBinding Background}"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       BorderThickness="{TemplateBinding BorderThickness}"
+                       CornerRadius="{Binding Path=(md:NavigationRailAssist.SelectionCornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                       Opacity="0" />
+                                <md:Ripple Padding="{TemplateBinding Padding}"
+                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                           ClipToBounds="False"
+                           ContentTemplate="{TemplateBinding ContentTemplate}"
+                           ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                           Feedback="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"
+                           Focusable="False"
+                           RecognizesAccessKey="False"
+                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Grid>
+
+
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*" />
+                                    <RowDefinition Height="3*" />
+                                </Grid.RowDefinitions>
+                                <Grid x:Name="IconContainer"
+                     Grid.RowSpan="1"
+                     Height="{Binding Path=(md:NavigationRailAssist.SelectionHeight), RelativeSource={RelativeSource TemplatedParent}}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch">
+                                    <md:Badged x:Name="badge"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Badge="{Binding Path=(md:BadgedAssist.Badge), RelativeSource={RelativeSource TemplatedParent}}"
+                             BadgeBackground="{Binding Path=(md:BadgedAssist.BadgeBackground), RelativeSource={RelativeSource TemplatedParent}}"
+                             BadgeForeground="{Binding Path=(md:BadgedAssist.BadgeForeground), RelativeSource={RelativeSource TemplatedParent}}"
+                             BadgePlacementMode="{Binding Path=(md:BadgedAssist.BadgePlacementMode), RelativeSource={RelativeSource TemplatedParent}}"
+                             Style="{StaticResource MaterialDesignBadge}">
+
+                                        <md:PackIcon x:Name="Icon"
+                                 Width="{Binding Path=(md:NavigationRailAssist.IconSize), RelativeSource={RelativeSource TemplatedParent}}"
+                                 Height="{Binding Path=(md:NavigationRailAssist.IconSize), RelativeSource={RelativeSource TemplatedParent}}"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Kind="{Binding Path=(md:NavigationRailAssist.SelectedIcon), RelativeSource={RelativeSource TemplatedParent}}" />
+                                    </md:Badged>
+                                </Grid>
+                                <ContentControl x:Name="Text"
+                               Grid.Row="1"
+                               Margin="4,4,4,0"
+                               Padding="0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Content="{TemplateBinding Content}" />
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value=".56" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Icon" Property="Kind" Value="{Binding Path=(md:NavigationRailAssist.UnselectedIcon), RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Trigger>
+                        <Trigger Property="md:NavigationRailAssist.IsTextVisible" Value="False">
+                            <Setter TargetName="IconContainer" Property="Grid.RowSpan" Value="2" />
+                            <Setter TargetName="SelectedBorder" Property="CornerRadius" Value="{Binding Path=(md:NavigationRailAssist.SelectionHeight), RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="SelectedBorder" Property="Height" Value="{Binding Path=(md:NavigationRailAssist.SelectionWidth), RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="Text" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="md:BadgedAssist.IsMiniBadge" Value="True">
+                            <Setter TargetName="badge" Property="Style" Value="{StaticResource MaterialDesignMiniBadge}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Width" Value="80" />
+        <Setter Property="md:BadgedAssist.BadgeBackground" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+        <Setter Property="md:BadgedAssist.BadgeForeground" Value="{DynamicResource MaterialDesign.Brush.Primary.Light.Foreground}" />
+        <Setter Property="md:BadgedAssist.BadgePlacementMode" Value="TopRight" />
+        <Setter Property="md:NavigationRailAssist.CornerRadius" Value="0" />
+        <Setter Property="md:NavigationRailAssist.IconSize" Value="24" />
+        <Setter Property="md:NavigationRailAssist.IsTextVisible" Value="True" />
+        <Setter Property="md:NavigationRailAssist.SelectedIcon" Value="Circle" />
+        <Setter Property="md:NavigationRailAssist.SelectionCornerRadius" Value="16" />
+        <Setter Property="md:NavigationRailAssist.SelectionHeight" Value="32" />
+        <Setter Property="md:NavigationRailAssist.SelectionWidth" Value="56" />
+        <Setter Property="md:NavigationRailAssist.UnselectedIcon" Value="CircleOutline" />
+        <Setter Property="md:ThemeAssist.Theme" Value="{DynamicResource MaterialDesign.Brush.Background}" />
+    </Style>
+    <Style x:Key="CustomColorMaterialDesign3NavigationListBoxItem"
+        TargetType="ListBoxItem"
+        BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
+        <Setter Property="Background" Value="#4A4458" />
+        <Setter Property="Foreground" Value="#E8DEF8" />
+    </Style>
+    <Style x:Key="MaterialDesign3.NavigationRailPrimaryListBoxItem"
+        TargetType="{x:Type ListBoxItem}"
+        BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Primary}" />
+    </Style>
+
+    <Style x:Key="FlowTab" TargetType="{x:Type RadioButton}">
+        <Style.Triggers>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter Property="Foreground" Value="{Binding BorderBrush , RelativeSource={RelativeSource Mode=Self}}" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}" />
+        <Setter Property="Padding" Value="16 4 16 4" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="MinWidth" Value="80" />
+        <Setter Property="BorderThickness" Value="0 0 0 2" />
+        <Setter Property="md:RippleAssist.Feedback" Value="{DynamicResource MaterialDesignFlatButtonRipple}" />
+        <Setter Property="TextBlock.FontWeight" Value="Medium" />
+        <Setter Property="TextBlock.FontSize" Value="14" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="md:ButtonProgressAssist.IndicatorForeground" Value="{DynamicResource MaterialDesignDivider}" />
+        <Setter Property="md:ButtonProgressAssist.IndicatorBackground" Value="Transparent" />
+        <Setter Property="md:ButtonProgressAssist.IsIndicatorVisible" Value="False" />
+        <Setter Property="md:ButtonProgressAssist.Opacity" Value=".4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid SnapsToDevicePixels="true">
+                        <ProgressBar 
+                             Name="ProgressBar"
+                             Style="{DynamicResource MaterialDesignLinearProgressBar}" 
+                             Height="{TemplateBinding Height}"
+                             HorizontalAlignment="Left" 
+                             VerticalAlignment="Center"
+                             BorderThickness="0"
+                             Minimum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.Minimum)}" 
+                             Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.Maximum)}"
+                             Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.IndicatorForeground)}" 
+                             Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.IndicatorBackground)}" 
+                             Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.Value)}" 
+                             IsIndeterminate="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.IsIndeterminate)}" 
+                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.IsIndicatorVisible), Converter={StaticResource BooleanToVisibilityConverter}}" Width="{Binding RelativeSource={RelativeSource FindAncestor , AncestorType={x:Type ButtonBase}}, Path=ActualWidth}" Opacity="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(md:ButtonProgressAssist.Opacity)}" />
+                        <Border Background="{TemplateBinding Background}" Margin="{TemplateBinding BorderThickness}">
+                            <md:Ripple 
+                                 Name="contentPresenter"
+                                 Content="{TemplateBinding Content}" 
+                                 ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                 Focusable="False" 
+                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                 Padding="{TemplateBinding Padding}" 
+                                 Opacity=".82" 
+                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                         <Border Name="SelectionHighlightBorder" 
+                                 BorderBrush="{StaticResource textColor2}" 
+                                 BorderThickness="{TemplateBinding BorderThickness}" 
+                                 Visibility="Hidden" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                            <Setter TargetName="contentPresenter" Property="UIElement.Opacity" Value="1"/>
+                            <Setter TargetName="SelectionHighlightBorder" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="UIElement.Opacity" Value="0.38" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                   
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

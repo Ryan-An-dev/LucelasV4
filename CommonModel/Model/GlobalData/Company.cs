@@ -24,9 +24,9 @@ namespace CommonModel.Model
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.CompanyName = CreateProperty<string>("이름");
-            this.CompanyAddress = CreateProperty<string>("주소");
-            this.CompanyPhone = CreateProperty<string>("번호");
-            this.CompanyAddressDetail = CreateProperty<string>("상세주소");
+            this.CompanyAddress = new ReactiveProperty<string>().AddTo(disposable);
+            this.CompanyPhone = new ReactiveProperty<string>().AddTo(disposable);
+            this.CompanyAddressDetail = new ReactiveProperty<string>().AddTo(disposable);
             SetObserver();
         }
         public Company(int categoryId, string CompanyName)

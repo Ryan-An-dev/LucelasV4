@@ -16,14 +16,7 @@
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
     </UserControl.Resources>
     <Grid>
-            <!--Visibility="{Binding SearchVisibility.Value, UpdateSourceTrigger=PropertyChanged}"-->
-        <!--<Grid 
-            Visibility="Collapsed"
-            Panel.ZIndex="1"
-            Opacity="0.5" 
-            Background="#151f2d">
-            <fa:ImageAwesome Icon="Refresh" Spin="True" Height="48" Width="48" Foreground="White"/>
-        </Grid>-->
+        
         <md:DrawerHost BorderThickness="2" BorderBrush="Transparent">
             <!-- Drawer -->
             <md:DrawerHost.RightDrawerContent>
@@ -43,20 +36,29 @@
 
                     <TextBlock Grid.Column="0" Text="재고 관리" FontSize="18" FontWeight="Bold" Foreground="{StaticResource MainColor}"/>
                     <ComboBox
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    ItemsSource="{Binding CountList}"
-                    SelectedValue="{Binding ListCount.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource MaterialDesignComboBox}" 
-                    md:HintAssist.IsFloating="True" 
-                    md:HintAssist.Hint="리스트설정"
-                    Foreground="{StaticResource MainColor}"
-                    Margin=" 0 4 0 0" Cursor="">
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        ItemsSource="{Binding CountList}"
+                        SelectedValue="{Binding ListCount.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignComboBox}" 
+                        md:HintAssist.IsFloating="True" 
+                        md:HintAssist.Hint="리스트설정"
+                        Foreground="{StaticResource MainColor}"
+                        Margin=" 0 4 0 0" Cursor="">
                     </ComboBox>
                 </Grid>
 
                 <DockPanel Dock="Top">
                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
+                        <ComboBox
+                            ItemsSource="{Binding SearchFullInventoryType}"
+                            SelectedItem="{Binding SelectInventoryType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            Style="{StaticResource MaterialDesignComboBox}" 
+                            md:HintAssist.IsFloating="True" 
+                            md:HintAssist.Hint="재고분류"
+                            Foreground="{StaticResource textColor2}"
+                            Margin=" 0 4 20 0">
+                        </ComboBox>
                         <ComboBox
                             ItemsSource="{Binding SearchPurposeValues}"
                             SelectedItem="{Binding SearchPurpose.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 

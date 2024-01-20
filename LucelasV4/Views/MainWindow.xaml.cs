@@ -36,5 +36,10 @@ namespace LucelasV4.Views
         {
             this.WindowState = WindowState.Minimized;
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

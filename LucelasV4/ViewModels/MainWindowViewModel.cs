@@ -20,11 +20,33 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 
 namespace LucelasV4.ViewModels
 {
+    
+
+    public class SampleItem : PrismCommonModelBase
+    {
+        public string? Title { get; set; }
+        public PackIconKind SelectedIcon { get; set; }
+        public PackIconKind UnselectedIcon { get; set; }
+        private object? _notification = null;
+
+        public object? Notification
+        {
+            get { return _notification; }
+            set { SetProperty(ref _notification, value); }
+        }
+
+        public override void SetObserver()
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class MainWindowViewModel : PrismCommonViewModelBase, ICMDReceiver
     {
+        public ReactiveCollection<SampleItem> ListItems { get; set; }
         public ReactiveCommand<string> MenuSelectCommand { get; }
 
         private CompositeDisposable disposables = new CompositeDisposable();
@@ -54,12 +76,52 @@ namespace LucelasV4.ViewModels
             this.SearchVisibility = new ReactiveProperty<Visibility>().AddTo(this.disposables);
             this.ConnectionCheck = new ReactiveProperty<Visibility>(Visibility.Visible).AddTo(this.disposables);
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
+            this.ListItems = new ReactiveCollection<SampleItem>().AddTo(this.disposables);
             init();
         }
 
         private void init()
         {
             _Container.Resolve<HomePageViewModel>().MenuSelectCommand = this.MenuSelectCommand;
+            ListItems = new()
+            {
+                new SampleItem
+                {
+                    Title = "Payment",
+                    SelectedIcon = PackIconKind.CreditCard,
+                    UnselectedIcon = PackIconKind.CreditCardOutline,
+                },
+                new SampleItem
+                {
+                    Title = "Home",
+                    SelectedIcon = PackIconKind.Home,
+                    UnselectedIcon = PackIconKind.HomeOutline,
+                },
+                new SampleItem
+                {
+                    Title = "Special",
+                    SelectedIcon = PackIconKind.Star,
+                    UnselectedIcon = PackIconKind.StarOutline,
+                },
+                new SampleItem
+                {
+                    Title = "Shared",
+                    SelectedIcon = PackIconKind.Users,
+                    UnselectedIcon = PackIconKind.UsersOutline,
+                },
+                new SampleItem
+                {
+                    Title = "Files",
+                    SelectedIcon = PackIconKind.Folder,
+                    UnselectedIcon = PackIconKind.FolderOutline,
+                },
+                new SampleItem
+                {
+                    Title = "Library",
+                    SelectedIcon = PackIconKind.Bookshelf,
+                    UnselectedIcon = PackIconKind.Bookshelf,
+                },
+            };
         }
 
         public void initLoadingTimer()

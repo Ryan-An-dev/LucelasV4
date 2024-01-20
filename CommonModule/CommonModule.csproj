@@ -15,6 +15,7 @@
     <PackageReference Include="MaterialDesignColors" Version="2.0.7" />
     <PackageReference Include="MaterialDesignThemes" Version="4.6.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.3" />
+    <PackageReference Include="MaterialDesignThemes.Wpf" Version="1.0.1" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>

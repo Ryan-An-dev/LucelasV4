@@ -49,7 +49,52 @@
                         </DatePicker.SelectedDate>
                     </DatePicker>
                 </Grid>
-
+                <StackPanel
+                    Margin="4"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        Foreground="{StaticResource textColor2}"
+                        Margin="4"
+                        IsChecked="True"
+                        Style="{StaticResource FlowTab}">
+                        <StackPanel
+                             Orientation="Horizontal">
+                            <md:PackIcon
+                                Kind="Star" />
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                Text="발주예정" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton
+                        Margin="4"
+                        IsChecked="False"
+                        Foreground="{StaticResource textColor2}"
+                        Style="{StaticResource FlowTab}">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <md:PackIcon
+                                 Kind="Heart" />
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                Text="입고예정" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton
+                        Foreground="{StaticResource textColor2}"
+                        Margin="4"
+                        IsChecked="False"
+                        Style="{StaticResource FlowTab}">
+                        <StackPanel
+                             Orientation="Horizontal">
+                            <md:PackIcon
+                                Kind="Smiley" />
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                Text="배송예정" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
                 <GroupBox
                     Visibility="{Binding IsNewInventory.Value}"
                     Header="제품선택"  

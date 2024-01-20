@@ -5,6 +5,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:fa="http://schemas.fontawesome.io/icons/" 
+        xmlns:local="clr-namespace:LucelasV4.ViewModels"
         WindowState="Maximized" 
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True" 
@@ -13,6 +14,7 @@
         Background="Transparent">
     <Window.Resources>
         <ResourceDictionary Source="pack://application:,,,/CommonModule;component/Styles.xaml"/>
+        
     </Window.Resources>
     <Border CornerRadius="25" Background="#1A1A1C">
         <Grid>
@@ -25,6 +27,49 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border Background="#19191A" CornerRadius="25 0 0 25" Grid.RowSpan="3">
+                <!--<Grid
+                    Width="160"> 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 40">
+                        <Ellipse Width="8" Height="8" Fill="#eb1700"></Ellipse>
+                        <Ellipse Width="8" Height="8" Fill="#ffaf01" Margin="7 0"></Ellipse>
+                        <Ellipse Width="8" Height="8" Fill="#009d00"></Ellipse>
+                    </StackPanel>
+                    <Viewbox
+                        Grid.Row="1"
+                        Width="160"
+                        VerticalAlignment="Top"
+                        Stretch="Uniform">
+                        <ListBox
+                              Grid.Row="1"
+                              Margin="0,0,0,0"
+                              Foreground="#E8DEF8"
+                              ItemsSource="{Binding ListItems}"
+                              SelectedIndex="0">    
+                            <ListBox.ItemContainerStyle>
+                                <Style
+                                  TargetType="ListBoxItem"
+                                  BasedOn="{StaticResource CustomColorMaterialDesign3NavigationListBoxItem}">
+                                    <Setter
+                                        Property="md:NavigationRailAssist.SelectedIcon"
+                                        Value="{Binding SelectedIcon}" />
+                                    <Setter
+                                        Property="md:NavigationRailAssist.UnselectedIcon"
+                                        Value="{Binding UnselectedIcon}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.Resources>
+                                <DataTemplate
+                                    DataType="{x:Type local:SampleItem}">
+                                    <TextBlock Text="{Binding Title}" />
+                                </DataTemplate>
+                            </ListBox.Resources>
+                        </ListBox>
+                    </Viewbox>
+                </Grid>-->
                 <Grid>
                     <StackPanel VerticalAlignment="Top" Orientation="Vertical">
                         <!--Ellipses-->
@@ -42,6 +87,10 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="Home" VerticalAlignment="Center" Margin="5"
                                                  Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="홈화면"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <!--재무관리-->
@@ -50,6 +99,10 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="ContentCopy" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="입출금"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <!--계약관리-->
@@ -58,14 +111,10 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="PaperAdd" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
-                                </StackPanel>
-                            </Button>
-                            <!--통계-->
-                            <Button   Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="StatisticsPage"
-                                          Style="{StaticResource MaterialDesignFlatButton}">
-                                <StackPanel Orientation="Vertical">
-                                    <md:PackIcon Kind="Analytics" VerticalAlignment="Center" Margin="5" 
-                                                 Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="계약"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <!--재고관리-->
@@ -77,6 +126,10 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="TableFurniture" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="재고"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <!--배송관리-->
@@ -88,8 +141,25 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="Truck" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="배송"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
+                            <!--통계-->
+                            <Button   Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="StatisticsPage"
+                                          Style="{StaticResource MaterialDesignFlatButton}">
+                                <StackPanel Orientation="Vertical">
+                                    <md:PackIcon Kind="Analytics" VerticalAlignment="Center" Margin="5" 
+                                                 Width="30" Height="30" />
+                                    <TextBlock 
+                                        Text="통계"
+                                        FontWeight="Bold"
+                                        HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
                             <!--세팅-->
                             <Button  Margin="5"  
                                      Height="80" 
@@ -99,11 +169,16 @@
                                 <StackPanel Orientation="Vertical">
                                     <md:PackIcon Kind="Settings" VerticalAlignment="Center" Margin="5" 
                                                  Width="30" Height="30" />
+                                    <TextBlock 
+                                          Text="설정"
+                                          FontWeight="Bold"
+                                          HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
+             
             </Border>
             <Grid Grid.Column="1"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" Width="auto" Background="#1A1A1C">
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -119,11 +194,18 @@
                 </StackPanel>
             </Grid>
             <ContentControl Grid.Row="1" Grid.Column="1" prism:RegionManager.RegionName="ContentRegion"/>
-            <Grid 
+            <md:Card  
                 Visibility="{Binding SearchVisibility.Value}" 
-                Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" Opacity="0.5" Background="#151f2d">
-                <fa:ImageAwesome Icon="Refresh" Spin="True" Height="48" Width="48" Foreground="White"/>
-            </Grid>
+                Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" Opacity="0.5" Background="#151f2d"
+                Padding="4"
+                UniformCornerRadius="14">
+                <ProgressBar
+                    Width="150"
+                    Height="150"
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="50" />
+            </md:Card>
         </Grid>
     </Border>
 </Window>

@@ -17,6 +17,7 @@ using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -25,12 +26,19 @@ using System.Windows.Markup;
 
 namespace MESPage.ViewModels
 {
-
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum InventoryType
+    {
+        [Description("계약재고")]
+        Contract = 1,
+        [Description("창고재고")]
+        Stock = 2,
+    }
     public enum MovePageType { Next = 1, Prev }
     public class MesPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
-
+        public ReactiveProperty<InventoryType> SelectInventoryType { get; set; }
         public ReactiveProperty<Purpose> SearchPurpose { get; set; }
         public ReactiveProperty<FurnitureType>SelectedType { get; set; }
         public ReactiveProperty<string> SearchPhone { get; set; }
@@ -40,6 +48,10 @@ namespace MESPage.ViewModels
         public IEnumerable<FullyCompleted> SearchFullyCompletedValues
         {
             get { return Enum.GetValues(typeof(FullyCompleted)).Cast<FullyCompleted>(); }
+        }
+        public IEnumerable<InventoryType> SearchFullInventoryType
+        {
+            get { return Enum.GetValues(typeof(InventoryType)).Cast<InventoryType>(); }
         }
         public IEnumerable<Purpose> SearchPurposeValues
         {
@@ -71,7 +83,7 @@ namespace MESPage.ViewModels
 
         public MesPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
-            
+            this.SelectInventoryType = new ReactiveProperty<InventoryType>(InventoryType.Contract).AddTo(this.disposable);
             this.SearchPurpose = new ReactiveProperty<Purpose>().AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
@@ -111,7 +123,18 @@ namespace MESPage.ViewModels
             this.SearchVisibility = new ReactiveProperty<Visibility>(Visibility.Collapsed);
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.IsLoading.Subscribe(x => OnLoadingChanged(x));
+            this.SelectInventoryType.Subscribe(x => OnChangedInventoryType(x));
         }
+        private void OnChangedInventoryType(InventoryType type)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.InventoryItems.Clear();
+            });
+            SendData();
+        }
+
+
         private void OnLoadingChanged(bool isLoading)
         {
             SearchVisibility.Value = isLoading ? Visibility.Visible : Visibility.Collapsed;
@@ -159,6 +182,7 @@ namespace MESPage.ViewModels
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
+                search["inventory_type"] = (int)this.SelectInventoryType.Value;
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 jobj["search_option"] = search;
                 network.Get(jobj);
@@ -177,6 +201,7 @@ namespace MESPage.ViewModels
                 int[] temp = new int[1];
                 temp[0] = (int)this.SearchPurpose.Value;
                 search["receiving_type"] = new JArray(temp);
+                search["inventory_type"] = (int)this.SelectInventoryType.Value;
                 search["product_type"] = (int)this.SelectedType.Value.Id.Value;
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
                 jobj["search_option"] = search;

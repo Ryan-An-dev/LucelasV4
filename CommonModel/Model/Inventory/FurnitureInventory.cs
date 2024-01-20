@@ -17,16 +17,18 @@ namespace CommonModel
     {
         [Description("모두")]
         All = 0,
+        [Description("발주예정")]
+        PreOrder = 1,
         [Description("입고예정")]
-        PreStored = 1,
+        PreStored = 2,
         [Description("배달예정")]
-        BookingDelivery = 2,
+        BookingDelivery = 3,
         [Description("창고재고")]
-        Stored = 3,
+        Stored = 4,
         [Description("DP용")]
-        DP = 4,
+        DP = 5,
         [Description("배달완료")]
-        Completed = 5,
+        Completed = 6,
     }
     //재고
     public class FurnitureInventory: PrismCommonModelBase
