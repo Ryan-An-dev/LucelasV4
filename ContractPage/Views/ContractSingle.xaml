@@ -259,44 +259,49 @@
                     Header="배송">
                     <StackPanel>
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="0.5*"/>
-                            </Grid.ColumnDefinitions>
-                            <DatePicker 
-                                Margin="8 0"
-                                Width="200" HorizontalAlignment="Left" 
-                                md:HintAssist.Hint="배송희망일" FontSize="14" 
-                                md:HintAssist.IsFloating="True"  
-                                Foreground="{StaticResource textColor2}" 
-                                BorderBrush="{StaticResource textColor2}" >
-                                <DatePicker.SelectedDate>
-                                    <Binding Path="Contract.Value.Delivery.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <val:NotEmptyValidation/>
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </DatePicker.SelectedDate>
-                            </DatePicker>
-                            <md:TimePicker 
-                                Is24Hours="False"  Width="200"  Grid.Column="1" HorizontalAlignment="Right" 
-                                   md:HintAssist.Hint="희망시간"
-                                   FontSize="14" Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
-                                   md:HintAssist.IsFloating="True"  
-                                   Foreground="{StaticResource textColor2}" 
-                                   BorderBrush="{StaticResource textColor2}" >
-                                <md:TimePicker.Text>
-                                    <Binding 
-                                        Path="Contract.Value.Delivery.Value"
-                                        NotifyOnValidationError="True" 
-                                        Mode="TwoWay" 
-                                        UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <val:NotEmptyValidation/>
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </md:TimePicker.Text>
-                            </md:TimePicker>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox
+                                    Content="배송일자 확정"
+                                    Foreground="{StaticResource textColor}"
+                                    IsChecked="{Binding Contract.Value.DeliveryFinalize.Value, Converter={StaticResource BooleanToDeliveryFinalConverter}}"
+                                    ToolTip="MaterialDesignSwitchToggleButton" />
+                                <DatePicker 
+                                    Margin="20 0 20 0"
+                                    Width="110" HorizontalAlignment="Left" 
+                                    md:HintAssist.Hint="배송희망일" FontSize="14" 
+                                    md:HintAssist.IsFloating="True"  
+                                    Foreground="{StaticResource textColor2}" 
+                                    BorderBrush="{StaticResource textColor2}" >
+                                    <DatePicker.SelectedDate>
+                                        <Binding Path="Contract.Value.Delivery.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:NotEmptyValidation/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </DatePicker.SelectedDate>
+                                </DatePicker>
+                                <md:TimePicker 
+                                    Margin="10 0 0 0"
+                                       Is24Hours="False"  Width="140" HorizontalAlignment="Right" 
+                                       md:HintAssist.Hint="희망시간"
+                                       FontSize="14" Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
+                                       md:HintAssist.IsFloating="True"  
+                                       Foreground="{StaticResource textColor2}" 
+                                       BorderBrush="{StaticResource textColor2}" >
+                                    <md:TimePicker.Text>
+                                        <Binding 
+                                            Path="Contract.Value.Delivery.Value"
+                                            NotifyOnValidationError="True" 
+                                            Mode="TwoWay" 
+                                            UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:NotEmptyValidation/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </md:TimePicker.Text>
+                                </md:TimePicker>
+                            </StackPanel>
+                            
                         </Grid>
                         <GroupBox Header="배송인원선택" Margin="0 20 0 0" Height="140">
                             <ScrollViewer>
@@ -359,7 +364,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="50" VerticalAlignment="Bottom" Grid.Row="2">
+        <md:ColorZone Mode="Dark" DockPanel.Dock="Bottom" Height="60" VerticalAlignment="Bottom" Grid.Row="2">
             <Grid Width="Auto">
                 <views:DeleteButton Command="{Binding DeleteButton}"
                                     Visibility="{Binding VisibilityAddButton.Value}"/>

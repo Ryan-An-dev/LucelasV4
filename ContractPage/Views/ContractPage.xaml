@@ -39,31 +39,16 @@
             </Grid>
             <DockPanel Dock="Top">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0 0 0 16">
-                    <TextBox 
-                        md:HintAssist.Hint="이름"  MinWidth="100"
-                        Text="{Binding SearchName.Value}" 
-                        Margin="0 0 8 0" 
-                        md:HintAssist.IsFloating="True" 
-                        Cursor="IBeam" 
-                        Foreground="{StaticResource textColor2}"/>
 
-                    <TextBox 
-                        md:HintAssist.Hint="번호 4자리"  MinWidth="100"
-                        Text="{Binding SearchPhone.Value}" 
-                        Margin="0 0 8 0" 
-                        md:HintAssist.IsFloating="True" 
-                        Cursor="IBeam" 
-                        Foreground="{StaticResource textColor2}"/>
-                    
                     <ComboBox
-                        ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
-                        SelectedItem="{Binding SearchFullyCompleted.Value}"
+                        ItemsSource="{Binding SearchDateTypelValues, Mode= OneWay}" 
+                        SelectedItem="{Binding SelectedDateType.Value}"
                         Style="{StaticResource MaterialDesignComboBox}" 
                         md:HintAssist.IsFloating="True" 
-                        md:HintAssist.Hint="완료유/무"
+                        md:HintAssist.Hint="검색옵션"
                         Foreground="{StaticResource textColor2}"
                         Margin=" 0 5 15 0"
-                        />
+                    />
                     <StackPanel Orientation="Horizontal">
                         <DatePicker 
                             BorderBrush="{StaticResource textColor2}"
@@ -85,7 +70,39 @@
                             SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
                             Foreground="{StaticResource textColor2}"/>
                     </StackPanel>
+                    <ComboBox
+                        ItemsSource="{Binding SearchDeliveryFinalValues, Mode= OneWay}" 
+                        SelectedItem="{Binding SelectedDeliveryFinal.Value}"
+                        Style="{StaticResource MaterialDesignComboBox}" 
+                        md:HintAssist.IsFloating="True" 
+                        md:HintAssist.Hint="배송일자확정 유/무"
+                        Foreground="{StaticResource textColor2}"
+                        Margin=" 0 5 15 0"
+                    />      
+                    <ComboBox
+                        ItemsSource="{Binding SearchFullyCompletedValues, Mode= OneWay}" 
+                        SelectedItem="{Binding SearchFullyCompleted.Value}"
+                        Style="{StaticResource MaterialDesignComboBox}" 
+                        md:HintAssist.IsFloating="True" 
+                        md:HintAssist.Hint="완료유/무"
+                        Foreground="{StaticResource textColor2}"
+                        Margin=" 0 5 15 0"
+                        />
+                    <TextBox 
+                         md:HintAssist.Hint="이름"  MinWidth="100"
+                         Text="{Binding SearchName.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
 
+                    <TextBox 
+                         md:HintAssist.Hint="번호 4자리"  MinWidth="100"
+                         Text="{Binding SearchPhone.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
                     <Button 
                         Content="{md:PackIcon Kind=Search}" 
                         Padding="0" 

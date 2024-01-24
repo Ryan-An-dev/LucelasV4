@@ -150,6 +150,7 @@
     <local:ReverseBoolConverter x:Key="ReverseBool"/>
     <local:BooleanToEnumConverter x:Key="BooleanToEnumConverter"/>
     <local:BooleanToDeliveryConverter x:Key="BooleanToDeliveryConverter"/>
+    <local:BooleanToDeliveryFinalConverter x:Key="BooleanToDeliveryFinalConverter"/>
 
     <Selector:DepositStyleSelector x:Key="DepositCellStyleSelector">
         <Selector:DepositStyleSelector.IncomeDataStyle>

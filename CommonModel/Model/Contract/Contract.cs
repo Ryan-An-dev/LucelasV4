@@ -22,6 +22,19 @@ namespace CommonModel.Model
         [Description("배달완료")]
         Completed = 1
     }
+
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum DeliveryFinal
+    {
+
+        [Description("모두")]
+        All = 0,
+        [Description("배송일자 확정")]
+        Checked = 1,
+        [Description("배송일자 미확정")]
+        UnChecked = 2
+    }
+
     public class Contract : PrismCommonModelBase
     {
         [JsonPropertyName("con_id")]
@@ -56,8 +69,11 @@ namespace CommonModel.Model
         public ReactiveCollection<Employee> DeliveryMan { get; set; }
         public ReactiveProperty<DeliveryComplete> DeliveryComplete { get; set; }
         public ReactiveProperty<AllocateType> Complete { get; set; }
+
+        public ReactiveProperty<DeliveryFinal> DeliveryFinalize { get; set; }
         public Contract()
         {
+            DeliveryFinalize = new ReactiveProperty<DeliveryFinal>(DeliveryFinal.UnChecked);
             Complete = new ReactiveProperty<AllocateType>(AllocateType.NotYet).AddTo(disposable);
             DeliveryComplete = new ReactiveProperty<DeliveryComplete>(0).AddTo(disposable);
             DeliveryManCombine = new ReactiveProperty<string>().AddTo(disposable);
@@ -77,8 +93,6 @@ namespace CommonModel.Model
             ProductNameCombine = new ReactiveProperty<string>().AddTo(disposable);
             ProductMemoCombine = new ReactiveProperty<string>().AddTo(disposable);
             this.Contractor.Value = new Customer();
-            
-
             SetObserver();
         }
         public void CompleteChangedData()
@@ -96,6 +110,7 @@ namespace CommonModel.Model
             this.Memo.Subscribe(x => ChangedJson("memo", x));
             this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
             this.Contractor.Subscribe(x => ChangedJson("cui_id", x.Id.Value));
+            this.DeliveryFinalize.Subscribe(x => ChangedJson("delivery_finalize", x));
             this.Payment.ToObservable().Subscribe(updatedItems => { isChanged = true; });
         }
         public void ChangedDelevery(string name, object value)

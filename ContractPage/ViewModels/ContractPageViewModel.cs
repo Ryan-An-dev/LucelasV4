@@ -16,6 +16,7 @@ using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -28,6 +29,15 @@ using System.Windows.Media;
 namespace ContractPage.ViewModels
 {
     public enum MovePageType { Next = 1, Prev }
+
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum SearchDateType
+    {
+        [Description("계약일기준")]
+        ContractInitTime = 1,
+        [Description("배송일기준")]
+        DeliveryInitTime = 2
+    }
     public class ContractPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
     {
         #region SearchCondition
@@ -40,7 +50,16 @@ namespace ContractPage.ViewModels
         {
             get { return Enum.GetValues(typeof(FullyCompleted)).Cast<FullyCompleted>(); }
         }
-
+        public IEnumerable<DeliveryFinal> SearchDeliveryFinalValues
+        {
+            get { return Enum.GetValues(typeof(DeliveryFinal)).Cast<DeliveryFinal>(); }
+        }
+        public IEnumerable<SearchDateType> SearchDateTypelValues
+        {
+            get { return Enum.GetValues(typeof(SearchDateType)).Cast<SearchDateType>(); }
+        }
+        public ReactiveProperty<SearchDateType> SelectedDateType { get; set; }
+        public ReactiveProperty<DeliveryFinal> SelectedDeliveryFinal { get; set; }
         #endregion
         public ObservableCollection<int> CountList { get; set; } = new ObservableCollection<int>();
         public DelegateCommand SearchButton { get; }
@@ -63,6 +82,8 @@ namespace ContractPage.ViewModels
 
         public ContractPageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            SelectedDeliveryFinal = new ReactiveProperty<DeliveryFinal>((DeliveryFinal)0).AddTo(this.disposable);
+            SelectedDateType = new ReactiveProperty<SearchDateType>(SearchDateType.ContractInitTime).AddTo(this.disposable);
             Total = new ReactiveProperty<int>().AddTo(disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
@@ -83,6 +104,7 @@ namespace ContractPage.ViewModels
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             SelectedItem = new ReactiveProperty<Contract>().AddTo(disposable);
+            
 
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             if (temp.FurnitureInfos.Count > 0) {
@@ -133,6 +155,8 @@ namespace ContractPage.ViewModels
                 jobj["page_unit"] = (ListCount.Value * CurrentPage.Value) > TotalItemCount.Value ? TotalItemCount.Value - (ListCount.Value * (CurrentPage.Value - 1)) : ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
+                search["delivery_finalize"] = (int)this.SelectedDeliveryFinal.Value;
+                search["datetype"] = (int)this.SelectedDateType.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
@@ -151,6 +175,8 @@ namespace ContractPage.ViewModels
                 jobj["page_unit"] = this.ListCount.Value;
                 jobj["page_start_pos"] = (this.CurrentPage.Value - 1) * this.ListCount.Value;
                 JObject search = new JObject();
+                search["delivery_finalize"] = (int)this.SelectedDeliveryFinal.Value;
+                search["datetype"] = (int)this.SelectedDateType.Value;
                 search["cui_name"] = this.SearchName.Value;
                 search["start_time"] = this.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 search["end_time"] = this.EndDate.Value.ToString("yyyy-MM-dd 23:59:59");
@@ -321,7 +347,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
-            ErpLogWriter.LogWriter.Trace(msg.ToString());
+            //ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
@@ -421,7 +447,8 @@ namespace ContractPage.ViewModels
                                 temp.Price.Value = inner["total"].ToObject<int>();
                             if (inner["payment_complete"] != null)
                                 temp.PaymentComplete.Value = (FullyCompleted)inner["payment_complete"].ToObject<int>();
-
+                            if (inner["delivery_finalize"]!=null)
+                                temp.DeliveryFinalize.Value = (DeliveryFinal)inner["delivery_finalize"].ToObject<int>();
 
                             //계약금,잔금 부분
                             if (inner["payment"] != null && !inner["payment"].ToString().Equals(""))

@@ -69,6 +69,8 @@ namespace CommonModule
             }
         }
 
+
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool)
@@ -79,6 +81,38 @@ namespace CommonModule
                         return DeliveryComplete.Completed;
                     case false:
                         return DeliveryComplete.NotYet;
+                    default:
+                        return DependencyProperty.UnsetValue;
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    public class BooleanToDeliveryFinalConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DeliveryFinal.Checked)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool)
+            {
+                switch (value)
+                {
+                    case true:
+                        return DeliveryFinal.Checked;
+                    case false:
+                        return DeliveryFinal.UnChecked;
                     default:
                         return DependencyProperty.UnsetValue;
                 }
