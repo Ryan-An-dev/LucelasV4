@@ -90,14 +90,14 @@
                     Params ="BankListPage_InComplete"
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="2"
-                    Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
+                    Number="{Binding HomeSummary.Value.DeliveryUnFinalizeCount.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="ContractPage_InCompleteDelivery"
                     Title=" 배송일 미확정 계약 건수(+7일 이내)" 
                     IsTechnical="False"/>   
                 <uc:MontlyCard 
                     Grid.Row="3"
-                    Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
+                    Number="{Binding HomeSummary.Value.NotOrderCount.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="ContractPage_InCompleteDelivery"
                     Title=" 배송일 기준 미발주 건수(+3일 이내)" 
