@@ -65,9 +65,10 @@
             >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.33*"/>
-                    <RowDefinition Height="0.33*"/>
-                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
                     Number="{Binding HomeSummary.Value.NotCompleteContract.Value}" 
@@ -82,6 +83,12 @@
                     Params ="BankListPage_InComplete"
                     IsTechnical="False"/>
                 <uc:MontlyCard Grid.Row="2"
+                    Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="ContractPage_InCompleteDelivery"
+                    Title=" 배송일 미확정 계약 건수(+7일 이내)" 
+                    IsTechnical="False"/>   
+                <uc:MontlyCard Grid.Row="3"
                     Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="DeliveryPage_InComplete"

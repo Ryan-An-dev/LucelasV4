@@ -63,21 +63,6 @@
                         Foreground="{StaticResource textColor2}"
                         Margin=" 0 5 15 0"
                         />
-                    <TextBox 
-                         md:HintAssist.Hint="고객 이름"  MinWidth="100"
-                         Text="{Binding SearchName.Value}" 
-                         Margin="0 0 8 0" 
-                         md:HintAssist.IsFloating="True" 
-                         Cursor="IBeam" 
-                         Foreground="{StaticResource textColor2}"/>
-
-                    <TextBox 
-                         md:HintAssist.Hint="고객번호 4자리"  MinWidth="100"
-                         Text="{Binding SearchPhone.Value}" 
-                         Margin="0 0 8 0" 
-                         md:HintAssist.IsFloating="True" 
-                         Cursor="IBeam" 
-                         Foreground="{StaticResource textColor2}"/>
                     <StackPanel Orientation="Horizontal">
                         <DatePicker 
                             BorderBrush="{StaticResource textColor2}"
@@ -99,6 +84,21 @@
                             SelectedDate="{Binding EndDate.Value, TargetNullValue=''}"
                             Foreground="{StaticResource textColor2}"/>
                     </StackPanel>
+                    <TextBox 
+                         md:HintAssist.Hint="고객 이름"  MinWidth="100"
+                         Text="{Binding SearchName.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
+
+                    <TextBox 
+                         md:HintAssist.Hint="고객번호 4자리"  MinWidth="100"
+                         Text="{Binding SearchPhone.Value}" 
+                         Margin="0 0 8 0" 
+                         md:HintAssist.IsFloating="True" 
+                         Cursor="IBeam" 
+                         Foreground="{StaticResource textColor2}"/>
 
                     <Button 
                         Content="{md:PackIcon Kind=Search}" 

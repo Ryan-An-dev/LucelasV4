@@ -222,6 +222,13 @@ namespace ContractPage.ViewModels
                 this.SearchFullyCompleted.Value = 0;
                 SendData();
             }
+            else if(msg == "InCompleteDelivery"){ 
+                this.EndDate.Value = DateTime.Today.AddDays(7);
+                this.StartDate.Value = DateTime.Today;
+                this.SelectedDeliveryFinal.Value = DeliveryFinal.UnChecked;
+                this.SelectedDateType.Value = SearchDateType.DeliveryInitTime;
+                SendData();
+            }
             else{
                 int Month = EndDate.Value.Month;
                 int year = EndDate.Value.Year;

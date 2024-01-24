@@ -83,8 +83,8 @@ namespace DeliveryPage.ViewModels
             this.SelectedPurpose = new ReactiveProperty<SearchPurpose>(0).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.SearchFullyCompleted = new ReactiveProperty<FullyCompleted>((FullyCompleted)0).AddTo(this.disposable);
-            this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today).AddTo(this.disposable);
-            this.StartDate = new ReactiveProperty<DateTime>(DateTime.Today.AddMonths(-1)).AddTo(this.disposable);
+            this.EndDate = new ReactiveProperty<DateTime>(DateTime.Today.AddDays(3)).AddTo(this.disposable);
+            this.StartDate = new ReactiveProperty<DateTime>(DateTime.Today.AddDays(-3)).AddTo(this.disposable);
             this.CurrentPage = new ReactiveProperty<int>(1).AddTo(this.disposable);
             this.ListCount = new ReactiveProperty<int>(30).AddTo(this.disposable);
             this.FirstItem = new ReactiveProperty<int>(0).AddTo(this.disposable);
@@ -218,8 +218,8 @@ namespace DeliveryPage.ViewModels
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg == null)
             {
-                this.EndDate.Value = DateTime.Today;
-                this.StartDate.Value = DateTime.Today.AddMonths(-1);
+                this.EndDate.Value = DateTime.Today.AddDays(3);
+                this.StartDate.Value = DateTime.Today.AddDays(-3);
                 SearchFullyCompleted.Value = (FullyCompleted)0;
                 SendData();
             }
@@ -412,7 +412,7 @@ namespace DeliveryPage.ViewModels
 
 
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
-                            foreach (Employee emp in employee.EmployeeInfos)
+                            foreach (Employee emp in employee.EmployeeListViewModel.List)
                             {
                                 Employee newEmp = emp.Copy();
                                 newEmp.Action.Value = AddDelete.Default;
