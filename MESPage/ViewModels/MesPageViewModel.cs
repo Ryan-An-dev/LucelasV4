@@ -131,7 +131,6 @@ namespace MESPage.ViewModels
             {
                 this.InventoryItems.Clear();
             });
-            SendData();
         }
 
 

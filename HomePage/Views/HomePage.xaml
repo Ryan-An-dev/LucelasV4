@@ -30,9 +30,10 @@
             >
             <Grid Height="{Binding ElementName=CompletedStack, Path=ActualHeight,UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.33*"/>
-                    <RowDefinition Height="0.33*"/>
-                    <RowDefinition Height="0.33*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.25*"/>
                 </Grid.RowDefinitions>
                 <uc:MontlyCard 
                     Number="{Binding HomeSummary.Value.CompleteContract.Value}" Grid.Row="0"
@@ -56,6 +57,12 @@
                     Params ="DeliveryPage_Complete"
                     IsTechnical="True"
                     IsActive="False"/>
+                <uc:MontlyCard Grid.Row="3"
+                    Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
+                    Command="{Binding MenuSelectCommand}"
+                    Params ="DeliveryPage_InComplete"
+                    Title=" 금일 배송 예정 건수" 
+                    IsTechnical="False"/>
             </Grid>
         </StackPanel>
         <StackPanel 
@@ -88,11 +95,12 @@
                     Params ="ContractPage_InCompleteDelivery"
                     Title=" 배송일 미확정 계약 건수(+7일 이내)" 
                     IsTechnical="False"/>   
-                <uc:MontlyCard Grid.Row="3"
+                <uc:MontlyCard 
+                    Grid.Row="3"
                     Number="{Binding HomeSummary.Value.TodayDelevery.Value}" 
                     Command="{Binding MenuSelectCommand}"
-                    Params ="DeliveryPage_InComplete"
-                    Title=" 금일 배송 예정 건수" 
+                    Params ="ContractPage_InCompleteDelivery"
+                    Title=" 배송일 기준 미발주 건수(+3일 이내)" 
                     IsTechnical="False"/>
             </Grid>
             

@@ -21,8 +21,14 @@ namespace CommonModel.Model
         public ReactiveProperty<int?> NotCompleteDelivery { get; set; }
         public ReactiveProperty<int?> TodayDelevery { get; set; }
 
+        public ReactiveProperty<int?> DeliveryUnFinalizeCount { get; set; }
+
+        public ReactiveProperty<int?> NotOrderCount { get; set; }
+
         public HomeSummaryModel() : base()
         {
+            DeliveryUnFinalizeCount= new ReactiveProperty<int?>().AddTo(this.disposable);
+            NotOrderCount = new ReactiveProperty<int?>().AddTo(this.disposable);
             this.Month = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
             this.CompleteContract = new ReactiveProperty<int?>(0).AddTo(this.disposable);
             this.CompleteDistribute = new ReactiveProperty<int?>(0).AddTo(this.disposable);

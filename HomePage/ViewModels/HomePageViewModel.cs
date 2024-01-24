@@ -112,6 +112,10 @@ namespace HomePage.ViewModels
                 }
                 if (inner["today_delivery_count"]!=null)
                     HomeSummary.Value.TodayDelevery.Value = int.Parse(inner["today_delivery_count"].ToString());
+                if (inner["delivery_finalize"]!=null)
+                    HomeSummary.Value.DeliveryUnFinalizeCount.Value = int.Parse(inner["delivery_finalize"].ToString());
+                if (inner["not_order_count"]!=null)
+                    HomeSummary.Value.NotOrderCount.Value = int.Parse(inner["not_order_count"].ToString());
             }
         }
 
