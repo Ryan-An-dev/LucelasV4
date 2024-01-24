@@ -18,6 +18,7 @@ using Reactive.Bindings.Extensions;
 using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
@@ -110,9 +111,10 @@ namespace ContractPage.ViewModels
             SelectedEmployee = new ReactiveProperty<Employee>().AddTo(disposable);
             this.RowDoubleClick = new DelegateCommand(RowDoubleClickEvent);
             RowPayDoubleClick = new DelegateCommand(RowPayDoubleClickExec);
-            SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>();
-            EmployeeInfos = temp.EmployeeInfos;
-            
+            //SettingPageViewModel temp = ContainerProvider.Resolve<SettingPageViewModel>();
+            //foreach (Employee emp in temp.EmployeeListViewModel.List) {
+            //    this.EmployeeInfos.Add(emp);
+            //}
         }
 
         private void execCheckBoxAccountCommand(object args)

@@ -292,7 +292,6 @@ namespace CommonModel.Model
             if (deliveryMan.Count > 0) {
                 ChangedItem["delivery_group"] = deliveryMan;
             }
-
             return ChangedItem;
         }
     }

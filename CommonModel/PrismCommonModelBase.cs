@@ -169,34 +169,41 @@ namespace CommonModel
 
         public void ChangedJson(string name, object value)
         {
-            if (value != null)
+            try
             {
-                if (value is int)
+                if (value != null)
                 {
-                    ChangedItem[name] = (int)value;
+                    if (value is int)
+                    {
+                        ChangedItem[name] = (int)value;
+                    }
+                    else if (value is string)
+                    {
+                        ChangedItem[name] = value.ToString();
+                    }
+                    else if (value is JToken)
+                    {
+                        ChangedItem[name] = value.ToString();
+                    }
+                    else if (value is Enum)
+                    {
+                        ChangedItem[name] = (int)value;
+                    }
+                    else if (value is DateTime)
+                    {
+                        DateTime time = (DateTime)value;
+                        ChangedItem[name] = time.ToString("yyyy-MM-dd");
+                    }
+                    else if (value is bool)
+                    {
+                        ChangedItem[name] = (bool)value;
+                    }
+                    isChanged = true;
                 }
-                else if (value is string)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                else if (value is JToken)
-                {
-                    ChangedItem[name] = value.ToString();
-                }
-                else if (value is Enum) {
-                    ChangedItem[name] = (int)value;
-                }
-                else if (value is DateTime)
-                {
-                    DateTime time = (DateTime)value;
-                    ChangedItem[name] = time.ToString("yyyy-MM-dd");
-                }
-                else if(value is bool)
-                {
-                    ChangedItem[name] = (bool)value;
-                }
-                isChanged = true;
+            } catch (Exception) {
+                
             }
+           
         }
     }
 }

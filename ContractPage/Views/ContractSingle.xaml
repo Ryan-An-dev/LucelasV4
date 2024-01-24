@@ -174,25 +174,23 @@
                                     IsReadOnly="True"/>
                                 <DataGridTextColumn 
                                     IsReadOnly="True"
-                                    Header="판매금액" Width="*"
-                                    Binding="{Binding SellPrice.Value, StringFormat=\{0:N0\}}"/>
-                                <DataGridTextColumn 
-                                    IsReadOnly="True"
                                     Header="수량"
                                     Width="*" 
                                     Binding="{Binding SellCount.Value}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
-                            <TextBlock 
-                                Text="총 금액 : " 
-                                Foreground="White" 
-                                FontSize="13" 
-                                FontWeight="Bold"/>
-                            <TextBlock 
-                                Text="{Binding Contract.Value.Price.Value, StringFormat=\{0:N0\}}"
-                                Foreground="White" 
-                                FontSize="13" 
+                            <TextBox 
+                                IsEnabled="False"
+                                Text="총금액 입력 : " 
+                                FontSize="14" 
+                                FontWeight="Bold" 
+                                Foreground="{StaticResource MainColor}"/>
+                            <TextBox 
+                                TextAlignment="Right"
+                                Width="100"
+                                Text="{Binding Contract.Value.Price.Value, StringFormat=\{0:N0\},UpdateSourceTrigger=PropertyChanged}"
+                                Foreground="White"
                                 FontWeight="Bold"/>
                         </StackPanel>
                         <TextBox 

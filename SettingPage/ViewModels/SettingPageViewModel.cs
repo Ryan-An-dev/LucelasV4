@@ -414,7 +414,7 @@ namespace SettingPage.ViewModels
                     {
                         if(this.EmployeeListViewModel != null)
                             this.EmployeeListViewModel.List.Clear();
-                        EmployeeInfos.Clear();
+                        //EmployeeInfos.Clear();
                     });
                     if (msg["employee_list"] == null)
                         return;

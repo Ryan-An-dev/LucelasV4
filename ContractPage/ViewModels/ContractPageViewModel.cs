@@ -286,8 +286,6 @@ namespace ContractPage.ViewModels
 
         private ContractedProduct SetProduct(JObject jobj) {
             ContractedProduct contractedProduct = new ContractedProduct();
-            if (jobj["sell_price"] != null)
-                contractedProduct.SellPrice.Value = jobj["sell_price"].ToObject<int>();
             if (jobj["order_count"] != null)
                 contractedProduct.SellCount.Value = jobj["order_count"].ToObject<int>();
             if (jobj["product_info"] != null) {
@@ -399,7 +397,7 @@ namespace ContractPage.ViewModels
 
                             //
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
-                            foreach (Employee emp in employee.EmployeeInfos)
+                            foreach (Employee emp in employee.EmployeeListViewModel.List)
                             {
                                 Employee newEmp = emp.Copy();
                                 newEmp.Action.Value = AddDelete.Default;
