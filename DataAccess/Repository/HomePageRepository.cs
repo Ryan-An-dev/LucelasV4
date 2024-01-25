@@ -52,7 +52,7 @@ namespace DataAccess.Repository
 
         public void OnSendFail(object sender, Exception ex)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnReceiveFail(object sender, Exception ex)

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Markup;
 
 namespace MESPage.ViewModels
@@ -250,7 +251,19 @@ namespace MESPage.ViewModels
             this.CurrentPage.Value = 1;
             this.TotalPage.Value = 0;
             this.TotalItemCount.Value = 0;
-            SendData();
+            string msg;
+            navigationContext.Parameters.TryGetValue("object", out msg);
+            if (msg == null)
+            {
+                SendData();
+            }
+            else
+            {
+                this.SelectInventoryType.Value = InventoryType.Contract;
+                this.EndDate.Value = DateTime.Now.AddDays(3);
+                this.SearchPurpose.Value = Purpose.PreOrder;
+                SendData();
+            }
 
         }
 

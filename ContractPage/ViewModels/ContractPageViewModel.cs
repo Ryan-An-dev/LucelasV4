@@ -212,14 +212,15 @@ namespace ContractPage.ViewModels
             this.CurrentPage.Value = 1;
             this.TotalPage.Value = 0;
             this.TotalItemCount.Value = 0;
-
+            this.SelectedDeliveryFinal.Value = DeliveryFinal.All;
+            this.SelectedDateType.Value = SearchDateType.ContractInitTime;
+            this.SearchFullyCompleted.Value = FullyCompleted.All;
             string msg;
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg==null)
             {
                 this.EndDate.Value = DateTime.Today;
                 this.StartDate.Value = DateTime.Today.AddMonths(-1);
-                this.SearchFullyCompleted.Value = 0;
                 SendData();
             }
             else if(msg == "InCompleteDelivery"){ 
@@ -229,7 +230,8 @@ namespace ContractPage.ViewModels
                 this.SelectedDateType.Value = SearchDateType.DeliveryInitTime;
                 SendData();
             }
-            else{
+            else
+            {
                 int Month = EndDate.Value.Month;
                 int year = EndDate.Value.Year;
                 EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);

@@ -206,6 +206,26 @@
                         Header="금액" 
                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"/>
                     <DataGridTextColumn 
+                       Width="0.1*"
+                       Binding="{Binding DeliveryFinalize.Value}"
+                       Header="배송일확정"
+                       >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DeliveryFinalize.Value}" Value="Checked">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                        <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DeliveryFinalize.Value}" Value="UnChecked">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                        <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
                          Width="0.1*"
                          Binding="{Binding Seller.Value.Name.Value}" 
                          Header="판매직원"

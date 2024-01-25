@@ -99,7 +99,7 @@
                     Grid.Row="3"
                     Number="{Binding HomeSummary.Value.NotOrderCount.Value}" 
                     Command="{Binding MenuSelectCommand}"
-                    Params ="ContractPage_InCompleteDelivery"
+                    Params ="MesPage_InCompleteDelivery"
                     Title=" 배송일 기준 미발주 건수(+3일 이내)" 
                     IsTechnical="False"/>
             </Grid>

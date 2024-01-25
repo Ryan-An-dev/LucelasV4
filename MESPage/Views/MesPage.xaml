@@ -156,6 +156,14 @@
                             MinWidth="50" Width="0.1*" 
                             MaxWidth="65"  Binding="{Binding No.Value}" 
                             Header="No"/>
+                        <DataGridTextColumn 
+                            Width="0.1*" 
+                            Binding="{Binding ContractedContract.Value.Month.Value, StringFormat=yyyy-MM-dd}" 
+                            Header="계약일"/>
+                        <DataGridTextColumn
+                            Width="0.18*" 
+                            Binding="{Binding ContractedContract.Value.Delivery.Value, StringFormat=yyyy-MM-dd HH:mm}" 
+                            Header="배송일"/>
                         <DataGridTextColumn
                             MinWidth="50" Width="0.1*" 
                             Binding="{Binding Product.Value.Company.Value.CompanyName.Value}" 
@@ -190,10 +198,6 @@
                             MinWidth="100" Width="0.1*" 
                             Binding="{Binding ContractedContract.Value.Contractor.Value.Name.Value}" 
                             Header="고객명"/>
-                        <DataGridTextColumn 
-                            Width="0.1*" 
-                            Binding="{Binding ContractedContract.Value.Month.Value, StringFormat=yyyy-MM-dd}" 
-                            Header="계약일"/>  
                         <DataGridTextColumn 
                             MinWidth="80" Width="0.3*" 
                             Binding="{Binding Memo.Value}" 
