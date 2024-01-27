@@ -178,6 +178,7 @@
                         <StackPanel
                             Orientation="Vertical">
                             <RadioButton
+                                Cursor="Hand"
                                 IsChecked="{Binding Inventory.Value.PreOrder.Value}"
                                 Command="{Binding ProductStateCommand}"
                                 CommandParameter="PreOrder"
@@ -263,6 +264,7 @@
                             </md:PackIcon.RenderTransform>
                         </md:PackIcon>    
                         <RadioButton
+                            Cursor="Hand"
                             IsChecked="{Binding Inventory.Value.PreStored.Value}"
                             Command="{Binding ProductStateCommand}"
                             CommandParameter="PreStored"
@@ -345,6 +347,7 @@
                             </md:PackIcon.RenderTransform>
                         </md:PackIcon>
                         <RadioButton
+                            Cursor="Hand"
                             IsChecked="{Binding Inventory.Value.BookingDelivery.Value}"
                             Command="{Binding ProductStateCommand}" CommandParameter="BookingDelivery"
                             Foreground="{StaticResource textColor2}"

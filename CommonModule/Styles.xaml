@@ -62,117 +62,117 @@
         <DoubleAnimation 
             Storyboard.TargetName="Icon1"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
+            From="0.5" To="1.0" Duration="0:0:0.5"
             BeginTime="0:0:0" />
         <DoubleAnimation Storyboard.TargetName="Icon1ScaleTransform"
                          Storyboard.TargetProperty="ScaleX"
-                         From="1.0" To="1.5" Duration="0:0:1"
+                         From="1.0" To="1.5" Duration="0:0:0.5"
                          BeginTime="0:0:0" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon1ScaleTransform"
                          Storyboard.TargetProperty="ScaleY"
-                         From="1.0" To="1.5" Duration="0:0:1"
+                         From="1.0" To="1.5" Duration="0:0:0.5"
                          BeginTime="0:0:0" AutoReverse="True"/>
         <!-- 두 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon2"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:1" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:0.5" />
         <DoubleAnimation Storyboard.TargetName="Icon2ScaleTransform"
                          Storyboard.TargetProperty="ScaleX"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:1" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:0.5" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon2ScaleTransform"
                          Storyboard.TargetProperty="ScaleY"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:1" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:0.5" AutoReverse="True"/>
         <!-- 세 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon3"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:2" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:1.5" />
         <DoubleAnimation Storyboard.TargetName="Icon3ScaleTransform"
                          Storyboard.TargetProperty="ScaleX"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:2" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:1.5" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon3ScaleTransform"
                          Storyboard.TargetProperty="ScaleY"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:2" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:1.5" AutoReverse="True"/>
 
         <!-- 네 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon4"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:3" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:2" />
         <DoubleAnimation Storyboard.TargetName="Icon4ScaleTransform"
                          Storyboard.TargetProperty="ScaleX"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:3" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:2" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon4ScaleTransform"
                          Storyboard.TargetProperty="ScaleY"
-                         From="1.0" To="1.5" Duration="0:0:1"
-                         BeginTime="0:0:3" AutoReverse="True"/>
+                         From="1.0" To="1.5" Duration="0:0:0.5"
+                         BeginTime="0:0:2" AutoReverse="True"/>
     </Storyboard>
     <Storyboard x:Key="HighlightAnimation2" RepeatBehavior="Forever">
         <!-- 첫 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon5"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
+            From="0.5" To="1.0" Duration="0:0:0.5"
             BeginTime="0:0:0" />
         <DoubleAnimation Storyboard.TargetName="Icon5ScaleTransform"
                          Storyboard.TargetProperty="ScaleX"
-                         From="1.0" To="1.5" Duration="0:0:1"
+                         From="1.0" To="1.5" Duration="0:0:0.5"
                          BeginTime="0:0:0" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon5ScaleTransform"
                          Storyboard.TargetProperty="ScaleY"
-                         From="1.0" To="1.5" Duration="0:0:1"
+                         From="1.0" To="1.5" Duration="0:0:0.5"
                          BeginTime="0:0:0" AutoReverse="True"/>
         <!-- 두 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon6"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:1" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:0.5" />
         <DoubleAnimation Storyboard.TargetName="Icon6ScaleTransform"
                  Storyboard.TargetProperty="ScaleX"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:1" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:0.5" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon6ScaleTransform"
                  Storyboard.TargetProperty="ScaleY"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:1" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:0.5" AutoReverse="True"/>
         <!-- 세 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon7"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:2" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:1.5" />
         <DoubleAnimation Storyboard.TargetName="Icon7ScaleTransform"
                  Storyboard.TargetProperty="ScaleX"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:2" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:1.5" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon7ScaleTransform"
                  Storyboard.TargetProperty="ScaleY"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:2" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:1.5" AutoReverse="True"/>
         <!-- 네 번째 아이콘 애니메이션 -->
         <DoubleAnimation 
             Storyboard.TargetName="Icon8"
             Storyboard.TargetProperty="Opacity"
-            From="0.5" To="1.0" Duration="0:0:1"
-            BeginTime="0:0:3" />
+            From="0.5" To="1.0" Duration="0:0:0.5"
+            BeginTime="0:0:2" />
         <DoubleAnimation Storyboard.TargetName="Icon8ScaleTransform"
                  Storyboard.TargetProperty="ScaleX"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:3" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:2" AutoReverse="True"/>
         <DoubleAnimation Storyboard.TargetName="Icon8ScaleTransform"
                  Storyboard.TargetProperty="ScaleY"
-                 From="1.0" To="1.5" Duration="0:0:1"
-                 BeginTime="0:0:3" AutoReverse="True"/>
+                 From="1.0" To="1.5" Duration="0:0:0.5"
+                 BeginTime="0:0:2" AutoReverse="True"/>
     </Storyboard>
     <!--<Style TargetType="DataGridCell">
         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
