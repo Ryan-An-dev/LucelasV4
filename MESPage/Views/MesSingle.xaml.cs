@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace MESPage.Views
 {
@@ -10,6 +11,10 @@ namespace MESPage.Views
         public MesSingle()
         {
             InitializeComponent();
+            Storyboard storyboard = this.FindResource("HighlightAnimation") as Storyboard;
+            storyboard.Begin();
+            storyboard = this.FindResource("HighlightAnimation2") as Storyboard;
+            storyboard.Begin();
         }
     }
 }

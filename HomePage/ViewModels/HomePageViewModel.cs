@@ -83,9 +83,25 @@ namespace HomePage.ViewModels
             {
                 case COMMAND.GETHOMESUMMARY: //데이터 조회
                     SetHomeSummary(jobj);
+                    using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
+                    {
+                        network.SetReceiver(this);
+                        JObject jobject = new JObject();
+                        jobject["get_mode"] = 1;
+                        jobject["select_count"] = 12;
+                        network.GetDailyList(jobject);
+                    }
+                    break;
+                case COMMAND.GetDailyList:
+                    SetDailyList(jobj);
                     break;
             }
             this.IsLoading.Value = false;
+        }
+
+        private void SetDailyList(JObject jobj)
+        {
+            
         }
 
         private void SetHomeSummary(JObject msg)

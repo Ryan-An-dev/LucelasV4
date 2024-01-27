@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -50,11 +51,19 @@ namespace CommonModel
         public ReactiveProperty<int> Count { get; set; }//수량
         public ReactiveProperty<string> Memo { get; set; } //메모
         
+        public ReactiveProperty<bool> PreOrder { get; set; } //발주예정
+        public ReactiveProperty<bool> PreStored { get; set; } //입고예정
+        public ReactiveProperty<bool> BookingDelivery { get; set; } //배달예정
+
         //연결된 계약을 추가할까? 추가로 받자
         public ReactiveProperty<Contract> ContractedContract { get; set; }
 
         public FurnitureInventory() : base()
         {
+            PreOrder = new ReactiveProperty<bool>(true).AddTo(disposable);
+            PreStored = new ReactiveProperty<bool>(false).AddTo(disposable);
+            BookingDelivery = new ReactiveProperty<bool>(false).AddTo(disposable);
+
             RealPrice = new ReactiveProperty<int>(0).AddTo(disposable);
             CountEnable = new ReactiveProperty<bool>().AddTo(disposable); 
             RealPriceVis = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(disposable);
@@ -96,6 +105,23 @@ namespace CommonModel
             }
             else{
                 RealPriceVis.Value = Visibility.Collapsed;
+            }
+            switch (purpose) { 
+                case Purpose.PreOrder:
+                    PreOrder.Value = true;
+                    PreStored.Value = false;
+                    BookingDelivery.Value = false;
+                    break;
+                case Purpose.PreStored:
+                    PreOrder.Value = false;
+                    PreStored.Value = true;
+                    BookingDelivery.Value = false;
+                    break;
+                case Purpose.BookingDelivery:
+                    PreOrder.Value = false;
+                    PreStored.Value = false;
+                    BookingDelivery.Value = true;
+                    break;    
             }
             ChangedJson("receiving_type", purpose);
         }

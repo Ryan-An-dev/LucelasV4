@@ -179,7 +179,26 @@
                         <DataGridTextColumn
                             MinWidth="100" Width="0.1*" 
                             Binding="{Binding ReceivingType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                            Header="상태"/>
+                            Header="상태">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ReceivingType.Value}" Value="PreOrder">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                            <Setter Property="FontWeight" Value="ExtraBold"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ReceivingType.Value}" Value="PreStored">
+                                            <Setter Property="Foreground" Value="Orange"/>
+                                            <Setter Property="FontWeight" Value="ExtraBold"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ReceivingType.Value}" Value="BookingDelivery">
+                                            <Setter Property="Foreground" Value="Green"/>
+                                            <Setter Property="FontWeight" Value="ExtraBold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn 
                             Width="0.1*" 
                             Binding="{Binding StoreReachDate.Value, StringFormat=yyyy-MM-dd}" 

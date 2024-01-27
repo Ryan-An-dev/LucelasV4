@@ -86,6 +86,10 @@ namespace MESPage.ViewModels
         public DelegateCommand SearchAddress { get; }
         public DelegateCommand<string> SearchName { get; }
         public DelegateCommand<string> AddContractItemButton { get; }
+
+        public DelegateCommand<string> ProductStateCommand { get; }
+
+
         private IRegionManager RegionManager { get; }
         public IContainerProvider ContainerProvider { get; }
 
@@ -107,10 +111,23 @@ namespace MESPage.ViewModels
             DeleteButton = new DelegateCommand(DeleteButtonExecute);
             Inventory = new ReactiveProperty<FurnitureInventory>().AddTo(disposable);
             Title.Value = "신규등록";
-            
-            
+            ProductStateCommand = new DelegateCommand<string>(ExecProductStateCommand);
         }
 
+        private void ExecProductStateCommand(string obj)
+        {
+            switch (obj) { 
+                case "PreOrder":
+                    this.Inventory.Value.ReceivingType.Value = Purpose.PreOrder;
+                    break;
+                 case "PreStored":
+                    this.Inventory.Value.ReceivingType.Value = Purpose.PreStored;
+                    break;
+                 case "BookingDelivery":
+                    this.Inventory.Value.ReceivingType.Value = Purpose.BookingDelivery;
+                    break;
+            }
+        }
 
         public override void RowDoubleClickEvent()
         {
@@ -154,8 +171,6 @@ namespace MESPage.ViewModels
                     
                     break;
                 case "AddPayment":
-                  
-                   
                     break;
                 case "DeletePayment":
                     

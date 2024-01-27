@@ -147,7 +147,7 @@
                                         HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <!--통계-->
+                            <!--통계--><!--
                             <Button   Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="StatisticsPage"
                                           Style="{StaticResource MaterialDesignFlatButton}">
                                 <StackPanel Orientation="Vertical">
@@ -158,7 +158,7 @@
                                         FontWeight="Bold"
                                         HorizontalAlignment="Center"/>
                                 </StackPanel>
-                            </Button>
+                            </Button>-->
                             
                             <!--세팅-->
                             <Button  Margin="5"  

@@ -255,16 +255,18 @@ namespace MESPage.ViewModels
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg == null)
             {
-                SendData();
+               
             }
             else
             {
-                this.SelectInventoryType.Value = InventoryType.Contract;
-                this.EndDate.Value = DateTime.Now.AddDays(3);
-                this.SearchPurpose.Value = Purpose.PreOrder;
-                SendData();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.SelectInventoryType.Value = InventoryType.Contract;
+                    this.EndDate.Value = DateTime.Now.AddDays(3);
+                    this.SearchPurpose.Value = Purpose.PreOrder;
+                });
             }
-
+            SendData();
         }
 
         public void OnRceivedData(ErpPacket packet)
