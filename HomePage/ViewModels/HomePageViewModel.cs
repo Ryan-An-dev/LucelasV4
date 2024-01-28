@@ -167,16 +167,16 @@ namespace HomePage.ViewModels
                 {
                     if (inner["ssi_con_profits"] != null)
                         this.ProfitDailyData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
-                    if (inner["ssi_con_sales"] != null) {
-                        if (int.Parse(inner["ssi_con_sales"].ToString()) >= MaxDaily.Value) { 
-                            MaxDaily.Value = int.Parse(inner["ssi_con_sales"].ToString())*2;
+                    if (inner["sum_con_sales"] != null) {
+                        if (int.Parse(inner["sum_con_sales"].ToString()) >= MaxDaily.Value) { 
+                            MaxDaily.Value = int.Parse(inner["sum_con_sales"].ToString())*2;
                         }
-                        this.SalesDailyData.Add(int.Parse(inner["ssi_con_sales"].ToString()));
+                        this.SalesDailyData.Add(int.Parse(inner["sum_con_sales"].ToString()));
                     }
                     if (inner["date_time"] != null)
                     {
                         DateTime dateTime = inner["date_time"].ToObject<DateTime>();
-                        this.ProfitDailyDate.Add(dateTime.ToString("dd") + "일 " + dateTime.ToString("ddd"));
+                        this.ProfitDailyDate.Add(dateTime.ToString("dd") + dateTime.ToString("ddd"));
                     }
                 }
             }
