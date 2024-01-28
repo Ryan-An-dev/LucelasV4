@@ -578,10 +578,12 @@
                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
                                  Padding="{TemplateBinding Padding}" 
-                                 Opacity=".82" 
+                                 Opacity=".52" 
                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
-                         <Border Name="SelectionHighlightBorder" 
+                         <Border 
+                             Margin="0 0 0 -5"
+                             Name="SelectionHighlightBorder" 
                                  BorderBrush="{StaticResource textColor2}" 
                                  BorderThickness="{TemplateBinding BorderThickness}" 
                                  Visibility="Hidden" />

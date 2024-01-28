@@ -60,7 +60,7 @@ namespace HomePage.ViewModels
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             
-            return true;
+            return false;
             
         }
 
@@ -96,12 +96,12 @@ namespace HomePage.ViewModels
                     SetDailyList(jobj);
                     break;
             }
-            this.IsLoading.Value = false;
+            
         }
 
         private void SetDailyList(JObject jobj)
         {
-            
+            this.IsLoading.Value = false;
         }
 
         private void SetHomeSummary(JObject msg)

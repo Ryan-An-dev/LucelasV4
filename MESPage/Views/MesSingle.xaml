@@ -183,7 +183,7 @@
                                 Command="{Binding ProductStateCommand}"
                                 CommandParameter="PreOrder"
                                 Foreground="{StaticResource textColor2}"
-                                Margin="4"
+                                Margin="10"
                                 Style="{StaticResource FlowTab}">
                                 <StackPanel
                                  Orientation="Vertical">
@@ -268,7 +268,7 @@
                             IsChecked="{Binding Inventory.Value.PreStored.Value}"
                             Command="{Binding ProductStateCommand}"
                             CommandParameter="PreStored"
-                            Margin="4"
+                            Margin="10"
                             Foreground="{StaticResource textColor2}"
                             Style="{StaticResource FlowTab}">
                             <StackPanel
@@ -351,7 +351,7 @@
                             IsChecked="{Binding Inventory.Value.BookingDelivery.Value}"
                             Command="{Binding ProductStateCommand}" CommandParameter="BookingDelivery"
                             Foreground="{StaticResource textColor2}"
-                            Margin="4"
+                            Margin="10"
                             Style="{StaticResource FlowTab}">
                             <StackPanel
                                 Orientation="Vertical">
