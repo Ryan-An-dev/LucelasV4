@@ -128,20 +128,19 @@
                 <!--Title-->
                 <TextBlock Text="일간 매출추이" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
 
-                <!--Filter Button-->
+                <!--Filter Button--><!--
                 <Button Style="{StaticResource titleButton}">
                     <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
-                </Button>
+                </Button>-->
 
                 <!--Legends-->
                 <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            Margin="0 45 0 0">
+                            HorizontalAlignment="Right">
                     <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
                     <TextBlock Text="매출" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
 
-                    <Border Width="12" Height="12" Background="#050506" CornerRadius="3"/>
+                    <Border Width="12" Height="12" Background="#FFC107"  CornerRadius="3"/>
                     <TextBlock Text="순이익" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                 </StackPanel>
 
@@ -178,7 +177,7 @@
                                     Values="{Binding SalesDailyData}"/>
 
                         <lvc:StackedColumnSeries Title="순이익"
-                                    Fill="#050506" 
+                                    Fill="#FFC107" 
                                     Values="{Binding ProfitDailyData}"/>
 
                     </lvc:CartesianChart.Series>
@@ -209,6 +208,8 @@
                             Margin="0 8 40 0">
                         <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
                         <TextBlock Text="매출액" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                        <Border Width="12" Height="12" Background="#FFC107"  CornerRadius="3"/>
+                        <TextBlock Text="순이익" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                     </StackPanel>
                     <lvc:CartesianChart LegendLocation="None" Margin="0 50 0 0">
                         <lvc:CartesianChart.DataTooltip>
@@ -229,7 +230,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="0" MaxValue="100000000">
+                                MinValue="0" MaxValue="{Binding MaxMonthly.Value}">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
                                 </lvc:Axis.Separator>
@@ -240,7 +241,18 @@
                             <lvc:LineSeries 
                                 Title="매출액"
                                 StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
-                                Values="{Binding ProfitData}">
+                                Values="{Binding SalesData}">
+                                <lvc:LineSeries.Fill>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="#2e3966" Offset="0.4"/>
+                                        <GradientStop Color="#21304a" Offset="1.2"/>
+                                    </LinearGradientBrush>
+                                </lvc:LineSeries.Fill>
+                            </lvc:LineSeries>
+                            <lvc:LineSeries 
+                                Title="순이익"
+                                StrokeThickness="2" Stroke="#FFC107"  PointGeometrySize="0"
+                                Values="{Binding ProfitData}">      
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
                                         <GradientStop Color="#2e3966" Offset="0.4"/>

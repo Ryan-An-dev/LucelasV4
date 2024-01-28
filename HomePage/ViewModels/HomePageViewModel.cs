@@ -40,13 +40,16 @@ namespace HomePage.ViewModels
         public ChartValues<int> SalesDailyData { get; set; }
         public ChartValues<string> ProfitDailyDate { get; set; }
         public ChartValues<int> ProfitData { get; set; }
+        public ChartValues<int> SalesData { get; set; }
         public ChartValues<string> ProfitDate { get; set; }
         public ReactiveProperty<int> MaxDaily { get; set; }
-
+        public ReactiveProperty<int> MaxMonthly { get; set; }
         public ReactiveProperty<DateTime> Date { get; set; }
 
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            SalesData = new ChartValues<int>();
+            MaxMonthly = new ReactiveProperty<int>(0).AddTo(this.disposable);
             Date = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
             MaxDaily = new ReactiveProperty<int>(0).AddTo(this.disposable);
             SalesDailyData = new ChartValues<int>();
@@ -159,6 +162,7 @@ namespace HomePage.ViewModels
             {
                 this.ProfitDailyData.Clear();
                 this.ProfitDailyDate.Clear();
+                this.SalesDailyData.Clear();
             });
             if (jobj["summary_list"] != null)
             {
@@ -189,6 +193,7 @@ namespace HomePage.ViewModels
             {
                 this.ProfitData.Clear();
                 this.ProfitDate.Clear();
+                this.SalesData.Clear();
             });
             if (jobj["summary_list"] != null)
             {
@@ -197,6 +202,14 @@ namespace HomePage.ViewModels
                 {
                     if (inner["ssi_con_profits"] != null)
                         this.ProfitData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
+                    if (inner["sum_con_sales"]!=null)
+                    {
+                        if (int.Parse(inner["sum_con_sales"].ToString()) >= MaxMonthly.Value)
+                        {
+                            MaxMonthly.Value = int.Parse(inner["sum_con_sales"].ToString()) * 2;
+                        }
+                        this.SalesData.Add(int.Parse(inner["sum_con_sales"].ToString()));
+                    }
                     if (inner["date_time"] != null)
                     {
                         DateTime dateTime = inner["date_time"].ToObject<DateTime>();
