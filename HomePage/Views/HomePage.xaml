@@ -207,9 +207,10 @@
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis 
-                                    Foreground="#bcc0c6" 
-                                    ShowLabels="True" 
-                                    MinValue="0" MaxValue="100">
+                                LabelFormatter="{Binding YFormatter}"
+                                Foreground="#bcc0c6" 
+                                ShowLabels="True" 
+                                MinValue="0" MaxValue="100000000">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
                                 </lvc:Axis.Separator>
@@ -217,8 +218,10 @@
                         </lvc:CartesianChart.AxisY>
 
                         <lvc:CartesianChart.Series>
-                            <lvc:LineSeries StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
-                                                Values="60,50,68,41,85,34,97,21,64,31,48,64">
+                            <lvc:LineSeries 
+                                Title="매출액"
+                                StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
+                                Values="{Binding ProfitData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
                                         <GradientStop Color="#2e3966" Offset="0.4"/>

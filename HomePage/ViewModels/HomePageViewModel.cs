@@ -4,6 +4,8 @@ using DataAccess;
 using DataAccess.NetWork;
 using DataAccess.Repository;
 using DataAgent;
+using LiveCharts;
+using LiveCharts.Wpf;
 using LogWriter;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
@@ -16,6 +18,7 @@ using SettingPage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -32,8 +35,16 @@ namespace HomePage.ViewModels
         public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
         public ReactiveProperty<bool> IsLoading { get; set; }
         private IContainerProvider ContainerProvider { get; }
+
+        public SeriesCollection ProfitSeries { get; set; }
+        public ChartValues<int> ProfitData { get; set; }
+        public SeriesCollection SalesData { get; set; }
+
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            ProfitSeries= new SeriesCollection();
+            ProfitData = new ChartValues<int>();
+            SalesData = new SeriesCollection();
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
@@ -97,9 +108,32 @@ namespace HomePage.ViewModels
             }
             
         }
+        public string FormatChartDataPoint(ChartPoint chartPoint)
+        {
+            // 한국 원화 형식으로 숫자를 포맷합니다. "{0:C0}"는 소수점 없는 화폐 형식을 의미합니다.
+            return string.Format(CultureInfo.CreateSpecificCulture("ko-KR"), "{0:C0}", chartPoint.Y);
+        }
+        public Func<double, string> YFormatter
+        {
+            get
+            {
+                return value => value.ToString("C0", CultureInfo.CreateSpecificCulture("ko-KR"));
+            }
+        }
 
         private void SetDailyList(JObject jobj)
         {
+            Application.Current.Dispatcher.Invoke(() => { 
+                this.ProfitData.Clear();
+            });
+            if (jobj["summary_list"] != null) { 
+                JArray jarray = jobj["summary_list"] as JArray;
+                foreach (JObject inner in jarray) {
+                    if (inner["ssi_con_profits"]!=null)
+                        this.ProfitData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
+                }
+            }
+            
             this.IsLoading.Value = false;
         }
 
