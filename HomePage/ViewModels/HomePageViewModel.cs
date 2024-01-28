@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace HomePage.ViewModels
 {
@@ -35,21 +36,37 @@ namespace HomePage.ViewModels
         public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
         public ReactiveProperty<bool> IsLoading { get; set; }
         private IContainerProvider ContainerProvider { get; }
-
-        public SeriesCollection ProfitSeries { get; set; }
+        public ChartValues<int> ProfitDailyData { get; set; }
+        public ChartValues<int> SalesDailyData { get; set; }
+        public ChartValues<string> ProfitDailyDate { get; set; }
         public ChartValues<int> ProfitData { get; set; }
-        public SeriesCollection SalesData { get; set; }
+        public ChartValues<string> ProfitDate { get; set; }
+        public ReactiveProperty<int> MaxDaily { get; set; }
+
+        public ReactiveProperty<DateTime> Date { get; set; }
 
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
-            ProfitSeries= new SeriesCollection();
+            Date = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
+            MaxDaily = new ReactiveProperty<int>(0).AddTo(this.disposable);
+            SalesDailyData = new ChartValues<int>();
+            ProfitDailyData = new ChartValues<int>();
+            ProfitDailyDate = new ChartValues<string>();
+            ProfitDate = new ChartValues<string>();
             ProfitData = new ChartValues<int>();
-            SalesData = new SeriesCollection();
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
+            Timer();
         }
-
+        private void Timer() {
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += (s, e) => {
+                Date.Value = DateTime.Now;
+            };
+            timer.Start();
+        }
         
         private void SendData() {
             this.IsLoading.Value = true;
@@ -83,7 +100,18 @@ namespace HomePage.ViewModels
         {
             SendData();
         }
-
+        private void SendData(int mode , int count)
+        {
+            using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobject = new JObject();
+                jobject["get_mode"] = mode;
+                jobject["select_count"] = count;
+                network.GetDailyList(jobject);
+            }
+        }
+        
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
@@ -93,25 +121,13 @@ namespace HomePage.ViewModels
             {
                 case COMMAND.GETHOMESUMMARY: //데이터 조회
                     SetHomeSummary(jobj);
-                    using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
-                    {
-                        network.SetReceiver(this);
-                        JObject jobject = new JObject();
-                        jobject["get_mode"] = 1;
-                        jobject["select_count"] = 12;
-                        network.GetDailyList(jobject);
-                    }
+                    SendData(1,12);
                     break;
                 case COMMAND.GetDailyList:
-                    SetDailyList(jobj);
+                    SetHomeStatisticList(jobj);
                     break;
             }
             
-        }
-        public string FormatChartDataPoint(ChartPoint chartPoint)
-        {
-            // 한국 원화 형식으로 숫자를 포맷합니다. "{0:C0}"는 소수점 없는 화폐 형식을 의미합니다.
-            return string.Format(CultureInfo.CreateSpecificCulture("ko-KR"), "{0:C0}", chartPoint.Y);
         }
         public Func<double, string> YFormatter
         {
@@ -121,20 +137,74 @@ namespace HomePage.ViewModels
             }
         }
 
-        private void SetDailyList(JObject jobj)
+        private void SetHomeStatisticList(JObject jobj)
         {
-            Application.Current.Dispatcher.Invoke(() => { 
-                this.ProfitData.Clear();
-            });
-            if (jobj["summary_list"] != null) { 
-                JArray jarray = jobj["summary_list"] as JArray;
-                foreach (JObject inner in jarray) {
-                    if (inner["ssi_con_profits"]!=null)
-                        this.ProfitData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
+            if (jobj["get_mode"] != null) {
+                switch (jobj["get_mode"].ToObject<int>())
+                {
+                    case 1:
+                        SetMonthlyList(jobj);
+                        break;
+                    case 2:
+                        SetDailyList(jobj);
+                        break;
                 }
             }
-            
+        }
+
+        private void SetDailyList(JObject jobj)
+        {
+            MaxDaily.Value = 0;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.ProfitDailyData.Clear();
+                this.ProfitDailyDate.Clear();
+            });
+            if (jobj["summary_list"] != null)
+            {
+                JArray jarray = jobj["summary_list"] as JArray;
+                foreach (JObject inner in jarray)
+                {
+                    if (inner["ssi_con_profits"] != null)
+                        this.ProfitDailyData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
+                    if (inner["ssi_con_sales"] != null) {
+                        if (int.Parse(inner["ssi_con_sales"].ToString()) >= MaxDaily.Value) { 
+                            MaxDaily.Value = int.Parse(inner["ssi_con_sales"].ToString())*2;
+                        }
+                        this.SalesDailyData.Add(int.Parse(inner["ssi_con_sales"].ToString()));
+                    }
+                    if (inner["date_time"] != null)
+                    {
+                        DateTime dateTime = inner["date_time"].ToObject<DateTime>();
+                        this.ProfitDailyDate.Add(dateTime.ToString("dd") + "일 " + dateTime.ToString("ddd"));
+                    }
+                }
+            }
             this.IsLoading.Value = false;
+        }
+
+        private void SetMonthlyList(JObject jobj)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.ProfitData.Clear();
+                this.ProfitDate.Clear();
+            });
+            if (jobj["summary_list"] != null)
+            {
+                JArray jarray = jobj["summary_list"] as JArray;
+                foreach (JObject inner in jarray)
+                {
+                    if (inner["ssi_con_profits"] != null)
+                        this.ProfitData.Add(int.Parse(inner["ssi_con_profits"].ToString()));
+                    if (inner["date_time"] != null)
+                    {
+                        DateTime dateTime = inner["date_time"].ToObject<DateTime>();
+                        this.ProfitDate.Add(dateTime.ToString("yy") + "년 " + dateTime.ToString("MM") + "월");
+                    }
+                }
+            }
+            SendData(2, 7);
         }
 
         private void SetHomeSummary(JObject msg)
