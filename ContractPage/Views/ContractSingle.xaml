@@ -263,6 +263,58 @@
                                     Foreground="{StaticResource textColor}"
                                     IsChecked="{Binding Contract.Value.DeliveryFinalize.Value, Converter={StaticResource BooleanToDeliveryFinalConverter}}"
                                     ToolTip="MaterialDesignSwitchToggleButton" />
+                                <!--<StackPanel
+                                        Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="24"
+                                        Text="{Binding Contract.Value.Delivery.Value, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
+                                    <Button
+                                        IsEnabled="True"
+                                        Margin="8,0,0,0"
+                                        md:DialogHost.DialogClosingAttached="CombinedDialogClosingEventHandler"
+                                        md:DialogHost.DialogOpenedAttached="CombinedDialogOpenedEventHandler"
+                                        Command="{x:Static md:DialogHost.OpenDialogCommand}"
+                                        Content="...">
+                                        <Button.CommandParameter>
+                                            <Grid Margin="-1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="*" />
+                                                    <RowDefinition
+                                                        Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <StackPanel
+                                                      Grid.Row="0"
+                                                      Orientation="Horizontal">
+                                                    <Calendar
+                                                        x:Name="CombinedCalendar"
+                                                        Margin="-1,-4,-1,0" />
+                                                    <md:Clock
+                                                        x:Name="CombinedClock"
+                                                        DisplayAutomation="CycleWithSeconds"
+                                                        Is24Hours="True" />
+                                                </StackPanel>
+                                                <StackPanel
+                                                      Grid.Row="1"
+                                                      Margin="8"
+                                                      HorizontalAlignment="Right"
+                                                      Orientation="Horizontal">
+                                                    <Button
+                                                        Command="{x:Static md:DialogHost.CloseDialogCommand}"
+                                                        CommandParameter="0"
+                                                        Content="CANCEL"
+                                                         Style="{StaticResource MaterialDesignFlatButton}" />
+                                                    <Button
+                                                        Command="{x:Static md:DialogHost.CloseDialogCommand}"
+                                                        CommandParameter="1"
+                                                        Content="OK"
+                                                        Style="{StaticResource MaterialDesignFlatButton}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button.CommandParameter>
+                                    </Button>
+                                </StackPanel>-->
                                 <DatePicker 
                                     Margin="20 0 20 0"
                                     Width="110" HorizontalAlignment="Left" 
@@ -271,7 +323,10 @@
                                     Foreground="{StaticResource textColor2}" 
                                     BorderBrush="{StaticResource textColor2}" >
                                     <DatePicker.SelectedDate>
-                                        <Binding Path="Contract.Value.Delivery.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding Path="Contract.Value.Delivery.Value" 
+                                                 NotifyOnValidationError="True" 
+                                                 Mode="TwoWay" 
+                                                 UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
                                                 <val:NotEmptyValidation/>
                                             </Binding.ValidationRules>
@@ -279,7 +334,7 @@
                                     </DatePicker.SelectedDate>
                                 </DatePicker>
                                 <md:TimePicker 
-                                    Margin="10 0 0 0"
+                                       Margin="10 0 0 0"
                                        Is24Hours="False"  Width="140" HorizontalAlignment="Right" 
                                        md:HintAssist.Hint="희망시간"
                                        FontSize="14" Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
@@ -288,7 +343,8 @@
                                        BorderBrush="{StaticResource textColor2}" >
                                     <md:TimePicker.Text>
                                         <Binding 
-                                            Path="Contract.Value.Delivery.Value"
+                                            Path="Contract.Value.DeliveryTime.Value"
+                                            StringFormat="HH:mm"
                                             NotifyOnValidationError="True" 
                                             Mode="TwoWay" 
                                             UpdateSourceTrigger="PropertyChanged">

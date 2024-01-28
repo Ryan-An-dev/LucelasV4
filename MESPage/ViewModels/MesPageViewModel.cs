@@ -242,7 +242,7 @@ namespace MESPage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            this.Dispose();
+           
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -255,7 +255,8 @@ namespace MESPage.ViewModels
             navigationContext.Parameters.TryGetValue("object", out msg);
             if (msg == null)
             {
-               
+                this.SelectInventoryType.Value = InventoryType.Contract;
+                this.SearchPurpose.Value = 0;
             }
             else
             {

@@ -250,7 +250,7 @@ namespace DeliveryPage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            this.Dispose();
+            
         }
 
         public void OnRceivedData(ErpPacket packet)

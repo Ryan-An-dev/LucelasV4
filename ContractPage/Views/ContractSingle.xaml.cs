@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using CommonModel;
+using MaterialDesignThemes.Wpf;
+using System;
+using System.Windows.Controls;
 
 namespace ContractPage.Views
 {
@@ -11,5 +14,6 @@ namespace ContractPage.Views
         {
             InitializeComponent();
         }
+       
     }
 }

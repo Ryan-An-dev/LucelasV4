@@ -37,7 +37,6 @@ namespace HomePage.ViewModels
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
-            
         }
 
         

@@ -43,7 +43,7 @@ namespace CommonModel.Model
         [JsonPropertyName("create_time")]
         public ReactiveProperty<DateTime> Month { get; set; } //계약 생성 날짜
         [JsonPropertyName("delivery_date")]
-        public ReactiveProperty<System.DateTime> Delivery { get; set; } //배송일자
+        public ReactiveProperty<DateTime> Delivery { get; set; } //배송일자
         [JsonPropertyName("contractor")]
         public ReactiveProperty<Customer> Contractor { get; set; } //주문자
 
@@ -69,10 +69,11 @@ namespace CommonModel.Model
         public ReactiveCollection<Employee> DeliveryMan { get; set; }
         public ReactiveProperty<DeliveryComplete> DeliveryComplete { get; set; }
         public ReactiveProperty<AllocateType> Complete { get; set; }
-
+        public ReactiveProperty<DateTime> DeliveryTime { get; set; }
         public ReactiveProperty<DeliveryFinal> DeliveryFinalize { get; set; }
         public Contract()
         {
+            DeliveryTime = new ReactiveProperty<DateTime>().AddTo(disposable);
             DeliveryFinalize = new ReactiveProperty<DeliveryFinal>(DeliveryFinal.UnChecked);
             Complete = new ReactiveProperty<AllocateType>(AllocateType.NotYet).AddTo(disposable);
             DeliveryComplete = new ReactiveProperty<DeliveryComplete>(0).AddTo(disposable);
@@ -81,9 +82,9 @@ namespace CommonModel.Model
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.ListNo = new ReactiveProperty<int>().AddTo(disposable);
-            this.Month = CreateDateTimeProperty("delivery_date");
+            this.Month = CreateDateTimeProperty("계약일자");
             this.Contractor = new ReactiveProperty<Customer>().AddTo(disposable);
-            this.Delivery = CreateDateTimeProperty("delivery_date");
+            this.Delivery = CreateDateTimeProperty("배송일자");
             this.Seller = new ReactiveProperty<Employee>(new Employee()).AddTo(disposable);
             this.Price = new ReactiveProperty<int>(0).AddTo(disposable);
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
@@ -112,18 +113,34 @@ namespace CommonModel.Model
             this.Contractor.Subscribe(x => ChangedJson("cui_id", x.Id.Value));
             this.DeliveryFinalize.Subscribe(x => ChangedJson("delivery_finalize", x));
             this.Payment.ToObservable().Subscribe(updatedItems => { isChanged = true; });
+            this.DeliveryTime.Subscribe(x => ChangedDelevery("time", x));
         }
-        public void ChangedDelevery(string name, object value)
+
+        private void ChangedTime(string v, DateTime x)
         {
-            if (value != null)
+            if (x != null)
             {
-                if (value is DateTime)
-                {
-                    DateTime time = (DateTime)value;
-                    ChangedItem[name] = time.ToString("yyyy-MM-dd-HH-mm");
-                }
+                this.Delivery.Value.AddHours(x.Hour);
+                this.Delivery.Value.AddMinutes(x.Minute);
                 isChanged = true;
             }
+            else {
+                return;
+            }
+        }
+
+        public void ChangedDelevery(string name, DateTime value)
+        {
+            if (name == "time") {
+                
+                this.Delivery.Value.AddHours(value.Hour);
+                this.Delivery.Value.AddMinutes(value.Minute);
+            }
+         
+            DateTime time = (DateTime)value;
+            ChangedItem["delivery_date"] = time.ToString("yyyy-MM-dd HH:mm:ss");
+            isChanged = true;
+            
         }
         public void TotalPrice() {
             int temper = 0; 

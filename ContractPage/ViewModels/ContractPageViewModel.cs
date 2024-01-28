@@ -254,7 +254,7 @@ namespace ContractPage.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            this.Dispose();
+           
         }
 
         public void OnRceivedData(ErpPacket packet)
@@ -402,8 +402,11 @@ namespace ContractPage.ViewModels
 
                             //배송일자 
                             if (inner["delivery_date"] != null)
-                                temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
+                            {
 
+                                temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
+                                temp.DeliveryTime.Value = inner["delivery_date"].ToObject<DateTime>();
+                            }
                             //
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
                             foreach (Employee emp in employee.EmployeeListViewModel.List)
