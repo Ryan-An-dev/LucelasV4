@@ -194,7 +194,6 @@ namespace ContractPage.ViewModels
                 case "AddProduct":
                     this.Contract.Value.isChanged = true;
                     SearchCompanySelectExcute();
-                    this.Contract.Value.TotalPrice();
                     ProductMemoCombine();
                     break;
                 case "DeleteProduct":
@@ -410,7 +409,7 @@ namespace ContractPage.ViewModels
                 IsNewContract.Value = Visibility.Collapsed;
                 this.Contract.Value = new Contract();
                 SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
-                foreach (Employee emp in employee.EmployeeInfos)
+                foreach (Employee emp in employee.EmployeeListViewModel.List)
                 {
                     Employee newEmp = emp.Copy();
                     newEmp.Action.Value = AddDelete.Default;

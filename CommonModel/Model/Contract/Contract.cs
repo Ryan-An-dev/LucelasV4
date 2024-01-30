@@ -109,38 +109,23 @@ namespace CommonModel.Model
             this.Price.Subscribe(x => ChangedJson("total", x));
             this.Seller.Subscribe(x => ChangedJson("seller_id", x.Id.Value));
             this.Memo.Subscribe(x => ChangedJson("memo", x));
-            this.Delivery.Subscribe(x => ChangedDelevery("delivery_date", x));
+            this.Delivery.Subscribe(x => ChangedDelivery("delivery_date", x));
             this.Contractor.Subscribe(x => ChangedJson("cui_id", x.Id.Value));
             this.DeliveryFinalize.Subscribe(x => ChangedJson("delivery_finalize", x));
             this.Payment.ToObservable().Subscribe(updatedItems => { isChanged = true; });
-            this.DeliveryTime.Subscribe(x => ChangedDelevery("time", x));
+            this.DeliveryTime.Subscribe(x => ChangedDeleveryTime("delivery_date", x));
         }
-
-        private void ChangedTime(string v, DateTime x)
-        {
-            if (x != null)
-            {
-                this.Delivery.Value.AddHours(x.Hour);
-                this.Delivery.Value.AddMinutes(x.Minute);
-                isChanged = true;
-            }
-            else {
-                return;
-            }
-        }
-
-        public void ChangedDelevery(string name, DateTime value)
-        {
-            if (name == "time") {
-                
-                this.Delivery.Value.AddHours(value.Hour);
-                this.Delivery.Value.AddMinutes(value.Minute);
-            }
-         
-            DateTime time = (DateTime)value;
-            ChangedItem["delivery_date"] = time.ToString("yyyy-MM-dd HH:mm:ss");
+        private void ChangedDelivery(string name, DateTime value) {
+            DateTime temp = new DateTime(value.Year,value.Month,value.Day,this.DeliveryTime.Value.Hour,this.DeliveryTime.Value.Minute,0);
+            ChangedItem[name] = temp.ToString("yyyy-MM-dd HH:mm:ss");
             isChanged = true;
-            
+        }
+
+        public void ChangedDeleveryTime(string name, DateTime value)
+        {
+            DateTime temp = new DateTime(this.Delivery.Value.Year, this.Delivery.Value.Month, this.Delivery.Value.Day, value.Hour, value.Minute, 0);
+            ChangedItem[name] = temp.ToString("yyyy-MM-dd HH:mm:ss");
+            isChanged = true;
         }
         public void TotalPrice() {
             int temper = 0; 
@@ -178,7 +163,7 @@ namespace CommonModel.Model
             NewObject["seller_id"] = this.Seller.Value.Id.Value;
             NewObject["memo"] = this.Memo.Value;
             NewObject["delivery_date"] = this.Delivery.Value.ToString("yyyy-MM-dd-HH-mm");
-
+            NewObject["delivery_finalize"] = (int)this.DeliveryFinalize.Value;
             //고객
             JObject contractor = new JObject();
             contractor["cui_id"] = this.Contractor.Value.Id.Value;

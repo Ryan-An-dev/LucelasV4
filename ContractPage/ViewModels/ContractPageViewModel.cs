@@ -354,7 +354,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
-            //ErpLogWriter.LogWriter.Trace(msg.ToString());
+            ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {
@@ -403,9 +403,8 @@ namespace ContractPage.ViewModels
                             //배송일자 
                             if (inner["delivery_date"] != null)
                             {
-
-                                temp.Delivery.Value = inner["delivery_date"].ToObject<DateTime>();
-                                temp.DeliveryTime.Value = inner["delivery_date"].ToObject<DateTime>();
+                                temp.Delivery.Value = new DateTime(inner["delivery_date"].ToObject<DateTime>().Year, inner["delivery_date"].ToObject<DateTime>().Month, inner["delivery_date"].ToObject<DateTime>().Day, inner["delivery_date"].ToObject<DateTime>().Hour, inner["delivery_date"].ToObject<DateTime>().Minute, 0);
+                                temp.DeliveryTime.Value = new DateTime(inner["delivery_date"].ToObject<DateTime>().Year, inner["delivery_date"].ToObject<DateTime>().Month, inner["delivery_date"].ToObject<DateTime>().Day, inner["delivery_date"].ToObject<DateTime>().Hour, inner["delivery_date"].ToObject<DateTime>().Minute,0);
                             }
                             //
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
@@ -415,6 +414,7 @@ namespace ContractPage.ViewModels
                                 newEmp.Action.Value = AddDelete.Default;
                                 newEmp.IsChecked.Value = false;
                                 temp.DeliveryMan.Add(newEmp);
+                                
                             }
 
                             if (inner["delivery_group"] != null && !inner["delivery_group"].ToString().Equals("")) {
@@ -509,9 +509,13 @@ namespace ContractPage.ViewModels
         {
             try
             {
+                
                 SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
-                Employee item = temp.EmployeeInfos.First(c => c.Id.Value == id);
-                return item;
+                foreach (Employee inner in temp.EmployeeListViewModel.List) { 
+                    if(inner.Id.Value == id)
+                        return inner; 
+                }
+                return null;
             } catch (Exception e) {
                 return null;
             }
