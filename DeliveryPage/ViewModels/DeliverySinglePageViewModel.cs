@@ -193,7 +193,7 @@ namespace DeliveryPage.ViewModels
                 case "AddProduct":
                     this.Contract.Value.isChanged = true;
                     SearchCompanySelectExcute();
-                    this.Contract.Value.TotalPrice();
+                    
                     ProductMemoCombine();
                     break;
                 case "DeleteProduct":
@@ -219,7 +219,7 @@ namespace DeliveryPage.ViewModels
                     }
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     this.Contract.Value.isChanged = true;
-                    this.Contract.Value.TotalPrice();
+                   
                     ProductMemoCombine();
                     break;
                 case "AddPayment":

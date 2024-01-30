@@ -219,7 +219,7 @@ namespace ContractPage.ViewModels
                     }
                     this.Contract.Value.Product.Remove(this.SelectedProduct.Value);
                     this.Contract.Value.isChanged = true;
-                    this.Contract.Value.TotalPrice();
+                    
                     ProductMemoCombine();
                     break;
                 case "AddPayment":

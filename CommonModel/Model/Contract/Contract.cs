@@ -127,13 +127,13 @@ namespace CommonModel.Model
             ChangedItem[name] = temp.ToString("yyyy-MM-dd HH:mm:ss");
             isChanged = true;
         }
-        public void TotalPrice() {
-            int temper = 0; 
-            foreach (ContractedProduct item in this.Product) {
-                temper+=item.total.Value;
-            }
-            this.Price.Value = temper;
-        }
+        //public void TotalPrice() {
+        //    int temper = 0; 
+        //    foreach (ContractedProduct item in this.Product) {
+        //        temper+=item.total.Value;
+        //    }
+        //    this.Price.Value = temper;
+        //}
 
         public void ClearJson() { 
             this.ChangedItem.RemoveAll();

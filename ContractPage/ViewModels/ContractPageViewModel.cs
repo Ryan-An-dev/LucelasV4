@@ -434,7 +434,7 @@ namespace ContractPage.ViewModels
                                     ContractedProduct contractproduct = SetProduct(con);
                                     temp.Product.Add(contractproduct);
                                 }
-                                temp.TotalPrice();
+                               
                                 string combine = "";
                                 foreach (ContractedProduct item in temp.Product)
                                 {
@@ -509,7 +509,6 @@ namespace ContractPage.ViewModels
         {
             try
             {
-                
                 SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
                 foreach (Employee inner in temp.EmployeeListViewModel.List) { 
                     if(inner.Id.Value == id)

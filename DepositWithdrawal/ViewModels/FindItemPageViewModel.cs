@@ -267,7 +267,7 @@ namespace DepositWithdrawal.ViewModels
                                     ContractedProduct contractproduct = SetProduct(con);
                                     temp.Product.Add(contractproduct);
                                 }
-                                temp.TotalPrice();
+                                
                                 string combine = "";
                                 foreach (ContractedProduct item in temp.Product)
                                 {
