@@ -138,14 +138,14 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Right">
                     <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
-                    <TextBlock Text="매출" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                    <TextBlock Text="원가" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
 
                     <Border Width="12" Height="12" Background="#FFC107"  CornerRadius="3"/>
                     <TextBlock Text="순이익" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
                 </StackPanel>
 
                 <!--Cost Chart-->
-                <lvc:CartesianChart LegendLocation="None" Margin="0 40 0 0">
+                <lvc:CartesianChart LegendLocation="None" Margin="0 40 0 0" >
                     <lvc:CartesianChart.DataTooltip>
                         <lvc:DefaultTooltip Background="#1A1A1C" Foreground="#d5e2ff"/>
                     </lvc:CartesianChart.DataTooltip>
@@ -172,13 +172,17 @@
                     </lvc:CartesianChart.AxisY>
 
                     <lvc:CartesianChart.Series>
-                        <lvc:StackedColumnSeries Title="매출"
-                                    Fill="#7166f9" 
-                                    Values="{Binding SalesDailyData}"/>
+                        <lvc:StackedColumnSeries 
+                            Title="원가"              
+                            StackMode="Values"
+                            Fill="#7166f9"
+                            Values="{Binding CostDailyData}"/>       
 
-                        <lvc:StackedColumnSeries Title="순이익"
+                        <lvc:StackedColumnSeries 
+                            Title="순이익" StackMode="Values"
                                     Fill="#FFC107" 
                                     Values="{Binding ProfitDailyData}"/>
+
 
                     </lvc:CartesianChart.Series>
                 </lvc:CartesianChart>
@@ -260,6 +264,7 @@
                                     </LinearGradientBrush>
                                 </lvc:LineSeries.Fill>
                             </lvc:LineSeries>
+
                         </lvc:CartesianChart.Series>
                     </lvc:CartesianChart>
                 </Grid>

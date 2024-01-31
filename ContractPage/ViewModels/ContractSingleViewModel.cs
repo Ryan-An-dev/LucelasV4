@@ -399,8 +399,6 @@ namespace ContractPage.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            
-            
             Contract contract = navigationContext.Parameters["Contract"] as Contract;
             
             if (contract == null)

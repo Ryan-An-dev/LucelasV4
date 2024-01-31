@@ -384,7 +384,7 @@ namespace ContractPage.ViewModels
                             if (inner["create_time"] != null)
                                 temp.Month.Value = inner["create_time"].ToObject<DateTime>();
 
-                            //계약ID
+                            //판매자 
                             if (inner["seller_id"] != null)
                                 temp.Seller.Value = FindEmployee(inner["seller_id"].ToObject<int>());
 
@@ -406,7 +406,8 @@ namespace ContractPage.ViewModels
                                 temp.Delivery.Value = new DateTime(inner["delivery_date"].ToObject<DateTime>().Year, inner["delivery_date"].ToObject<DateTime>().Month, inner["delivery_date"].ToObject<DateTime>().Day, inner["delivery_date"].ToObject<DateTime>().Hour, inner["delivery_date"].ToObject<DateTime>().Minute, 0);
                                 temp.DeliveryTime.Value = new DateTime(inner["delivery_date"].ToObject<DateTime>().Year, inner["delivery_date"].ToObject<DateTime>().Month, inner["delivery_date"].ToObject<DateTime>().Day, inner["delivery_date"].ToObject<DateTime>().Hour, inner["delivery_date"].ToObject<DateTime>().Minute,0);
                             }
-                            //
+
+                            //Model 에 직원 정보 넣기
                             SettingPageViewModel employee = this.ContainerProvider.Resolve<SettingPageViewModel>();
                             foreach (Employee emp in employee.EmployeeListViewModel.List)
                             {

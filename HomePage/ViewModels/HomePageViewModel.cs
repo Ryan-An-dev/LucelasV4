@@ -38,6 +38,7 @@ namespace HomePage.ViewModels
         private IContainerProvider ContainerProvider { get; }
         public ChartValues<int> ProfitDailyData { get; set; }
         public ChartValues<int> SalesDailyData { get; set; }
+        public ChartValues<int> CostDailyData { get; set; }
         public ChartValues<string> ProfitDailyDate { get; set; }
         public ChartValues<int> ProfitData { get; set; }
         public ChartValues<int> SalesData { get; set; }
@@ -48,6 +49,7 @@ namespace HomePage.ViewModels
 
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            CostDailyData = new ChartValues<int>();
             SalesData = new ChartValues<int>();
             MaxMonthly = new ReactiveProperty<int>(0).AddTo(this.disposable);
             Date = new ReactiveProperty<DateTime>(DateTime.Now).AddTo(this.disposable);
@@ -136,7 +138,7 @@ namespace HomePage.ViewModels
         {
             get
             {
-                return value => value.ToString("C0", CultureInfo.CreateSpecificCulture("ko-KR"));
+                return value => (value / 10000).ToString("C0", CultureInfo.CreateSpecificCulture("ko-KR")) + "만원";
             }
         }
 
@@ -163,6 +165,7 @@ namespace HomePage.ViewModels
                 this.ProfitDailyData.Clear();
                 this.ProfitDailyDate.Clear();
                 this.SalesDailyData.Clear();
+                this.CostDailyData.Clear();
             });
             if (jobj["summary_list"] != null)
             {
@@ -182,6 +185,7 @@ namespace HomePage.ViewModels
                         DateTime dateTime = inner["date_time"].ToObject<DateTime>();
                         this.ProfitDailyDate.Add(dateTime.ToString("dd") + dateTime.ToString("ddd"));
                     }
+                    this.CostDailyData.Add(int.Parse(inner["sum_con_sales"].ToString()) - int.Parse(inner["ssi_con_profits"].ToString()));
                 }
             }
             this.IsLoading.Value = false;

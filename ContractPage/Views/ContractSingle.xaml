@@ -410,9 +410,9 @@
                         md:HintAssist.IsFloating="True" 
                         md:HintAssist.Hint="판매자"
                         Foreground="{StaticResource textColor2}"
-                        ItemsSource="{Binding Contract.Value.DeliveryMan}"
+                        ItemsSource="{Binding EmployeeInfos}"
                         DisplayMemberPath="Name.Value"
-                        SelectedItem="{Binding Contract.Value.Seller.Value}" 
+                        SelectedItem="{Binding Contract.Value.Seller.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                         />
                 </GroupBox>
             </StackPanel>
