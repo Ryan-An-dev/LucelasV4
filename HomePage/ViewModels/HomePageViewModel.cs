@@ -75,9 +75,7 @@ namespace HomePage.ViewModels
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
 
-            for(int i = 1; i <32; i++) {
-                ComparisonDate.Add(i.ToString() + "일");
-            }
+            
             Timer();
         }
         private void Timer() {
@@ -158,9 +156,14 @@ namespace HomePage.ViewModels
             MaxComparison.Value = 1000;
             Application.Current.Dispatcher.Invoke(() =>
             {
+                this.ComparisonDate.Clear();
                 this.ComparisonPreviousData.Clear();
                 this.ComparisonPresentData.Clear();
             });
+            for (int i = 1; i < 32; i++)
+            {
+                ComparisonDate.Add(i.ToString() + "일");
+            }
             if (jobj["befor_summary_list"] != null)
             {
                 JArray jarray = jobj["befor_summary_list"] as JArray;
@@ -184,7 +187,7 @@ namespace HomePage.ViewModels
                     if (inner["sum_con_sales"] != null)
                     {
                         Sum += int.Parse(inner["sum_con_sales"].ToString());
-                        this.ComparisonPreviousData.Add(Sum);
+                        this.ComparisonPresentData.Add(Sum);
                         MaxComparison.Value = Sum;
                     }
                 }

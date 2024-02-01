@@ -299,7 +299,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="0" MaxValue="{Binding MaxComparison.Value}">
+                                MinValue="0" MaxValue="1000000">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
                                 </lvc:Axis.Separator>
