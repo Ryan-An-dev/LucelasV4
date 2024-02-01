@@ -73,7 +73,7 @@ namespace CommonModel
             this.ReceivingType = new ReactiveProperty<Purpose>().AddTo(disposable);
             this.StoreReachDate = new ReactiveProperty<DateTime?>().AddTo(disposable);
             this.ContractedContract = new ReactiveProperty<Contract>().AddTo(disposable);   
-            this.Memo = CreateProperty<string>("메모");
+            this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Count = CreateProperty<int>("재고수량");
             RealPrice = new ReactiveProperty<int>().AddTo(disposable);
             SetObserver();
