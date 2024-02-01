@@ -241,7 +241,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
                                 <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
-                                <DataGridTextColumn Header="지불방법" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
+                                <DataGridTextColumn Header="카드사" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
                                 <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
                                 <DataGridTextColumn 
                                     HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"

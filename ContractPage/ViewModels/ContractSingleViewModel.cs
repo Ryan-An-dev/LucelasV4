@@ -128,15 +128,57 @@ namespace ContractPage.ViewModels
         public void RowPayDoubleClickExec() {
             if (SelectedPayment.Value == null)
                 return;
-            int total = this.Contract.Value.Price.Value;
-            foreach (Payment inner in this.Contract.Value.Payment)
+
+            if (SelectedPayment.Value.PaymentCompleted.Value == Complete.InComplete)
             {
-                total -= inner.Price.Value;
+                int total = this.Contract.Value.Price.Value;
+                foreach (Payment inner in this.Contract.Value.Payment)
+                {
+                    total -= inner.Price.Value;
+                }
+                DialogParameters p = new DialogParameters();
+                p.Add("object", SelectedPayment.Value);
+                p.Add("total", total);
+                this.dialogService.ShowDialog("AddPaymentPage", p, r => SetPayment(r), "CommonDialogWindow");
             }
-            DialogParameters p = new DialogParameters();
-            p.Add("object", SelectedPayment.Value);
-            p.Add("total", total);
-            this.dialogService.ShowDialog("AddPaymentPage", p, r => SetPayment(r), "CommonDialogWindow");
+            else {
+                DialogParameters p = new DialogParameters();
+                p.Add("object", SelectedPayment.Value);
+                this.dialogService.ShowDialog("CompletedPaymentPage", p, r => UpdatePayment(r), "CommonDialogWindow");
+            }
+        }
+        private void UpdatePayment(IDialogResult r)
+        {
+            if (r == null) return;
+            if (r.Result == ButtonResult.OK)
+            {
+                if (!r.Parameters.ContainsKey("object")) return;
+                else
+                {
+                    Payment temp = null;
+                    bool action = false;
+                    r.Parameters.TryGetValue("object", out temp);
+                    r.Parameters.TryGetValue("bool", out action);
+                    //if (temp != null && temp.PaymentId.Value != 0)//수정
+                    //{
+                    //    if (this.Contract.Value != null)
+                    //    {
+                    //        this.Contract.Value.isChanged = true;
+                    //        this.Contract.Value.Payment.Remove(this.Contract.Value.Payment.FirstOrDefault(x => x.PaymentId.Value == temp.PaymentId.Value));
+                    //        this.Contract.Value.Payment.Add(temp);
+                    //    }
+                    //}
+                    //else
+                    //{ //추가
+                    //    if (this.Contract.Value != null)
+                    //    {
+                    //        this.Contract.Value.isChanged = true;
+                    //        this.Contract.Value.Payment.Add(temp);
+                    //    }
+                    //}
+
+                }
+            }
         }
 
         public void RowDoubleClickEvent()

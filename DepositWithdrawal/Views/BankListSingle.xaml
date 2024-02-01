@@ -27,11 +27,11 @@
             <DockPanel Background="#19191A">
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="20 0 20 0" >
                     <DatePicker 
-              IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
-              md:HintAssist.Hint="날짜" FontSize="14" 
-              md:HintAssist.IsFloating="True"  
-              Foreground="{StaticResource textColor2}" 
-              BorderBrush="{StaticResource textColor2}" >
+                          IsEnabled="{Binding IsReverseEnableTab.Value, UpdateSourceTrigger=PropertyChanged}" 
+                          md:HintAssist.Hint="날짜" FontSize="14" 
+                          md:HintAssist.IsFloating="True"  
+                          Foreground="{StaticResource textColor2}" 
+                          BorderBrush="{StaticResource textColor2}" >
                         <DatePicker.SelectedDate>
                             <Binding Path="ReceiptModel.Value.Month.Value" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
