@@ -14,6 +14,8 @@ namespace DataAccess.Interface
 
         public void GetDailyList(JObject msg);
 
+        public void GetComparisonList(JObject msg);
+
         #endregion
 
     }

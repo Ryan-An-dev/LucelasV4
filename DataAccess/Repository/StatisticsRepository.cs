@@ -73,5 +73,13 @@ namespace DataAccess.Repository
                 NetManager.Send(msg,COMMAND.GetDailyList);
             }
         }
+
+        public void GetComparisonList(JObject msg)
+        {
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.GetPreviousDailyList);
+            }
+        }
     }
 }

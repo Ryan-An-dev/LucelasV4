@@ -43,6 +43,7 @@ namespace DataAccess
 
         #region 통계데이터
         GetDailyList = 40,
+        GetPreviousDailyList = 41,
         #endregion
 
         #region 계좌/카드

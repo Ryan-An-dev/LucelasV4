@@ -31,7 +31,7 @@ namespace HomePage.ViewModels
     {
         //뷰모델 부를 때마다 서버에 요청해서 데이터 가져오기 
         //뷰모델이 Dispose 될때 수정내역이 있다면 전달하자.
-        
+
         public ReactiveCommand<string> MenuSelectCommand { get; set; }
         public ReactiveProperty<HomeSummaryModel> HomeSummary { get; set; }
         public ReactiveProperty<bool> IsLoading { get; set; }
@@ -45,10 +45,22 @@ namespace HomePage.ViewModels
         public ChartValues<string> ProfitDate { get; set; }
         public ReactiveProperty<int> MaxDaily { get; set; }
         public ReactiveProperty<int> MaxMonthly { get; set; }
+
+        public ChartValues<string> ComparisonDate { get; set; }
+
+        public ReactiveProperty<int> MaxComparison { get; set; }
+
+        public ChartValues<int> ComparisonPreviousData { get; set; }
+        public ChartValues<int> ComparisonPresentData { get; set; }
+
         public ReactiveProperty<DateTime> Date { get; set; }
 
         public HomePageViewModel(IRegionManager regionManager, IContainerProvider containerProvider) : base(regionManager)
         {
+            ComparisonPreviousData = new ChartValues<int>();
+            ComparisonPresentData = new ChartValues<int>();
+            MaxComparison = new ReactiveProperty<int>().AddTo(this.disposable);
+            ComparisonDate = new ChartValues<string>();
             CostDailyData = new ChartValues<int>();
             SalesData = new ChartValues<int>();
             MaxMonthly = new ReactiveProperty<int>(0).AddTo(this.disposable);
@@ -62,6 +74,10 @@ namespace HomePage.ViewModels
             HomeSummary = new ReactiveProperty<HomeSummaryModel>(new HomeSummaryModel()).AddTo(this.disposable);
             this.ContainerProvider = containerProvider;
             this.IsLoading = new ReactiveProperty<bool>(false).AddTo(this.disposable);
+
+            for(int i = 1; i <32; i++) {
+                ComparisonDate.Add(i.ToString() + "일");
+            }
             Timer();
         }
         private void Timer() {
@@ -72,7 +88,7 @@ namespace HomePage.ViewModels
             };
             timer.Start();
         }
-        
+
         private void SendData() {
             this.IsLoading.Value = true;
             using (var network = this.ContainerProvider.Resolve<HomeDataAgent>())
@@ -85,15 +101,15 @@ namespace HomePage.ViewModels
         }
 
         public void Exit() {
-            
+
             //변경된 내용 다시 Save 시키는 로직 넣기
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            
+
             return false;
-            
+
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
@@ -105,7 +121,7 @@ namespace HomePage.ViewModels
         {
             SendData();
         }
-        private void SendData(int mode , int count)
+        private void SendData(int mode, int count)
         {
             using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
             {
@@ -116,7 +132,7 @@ namespace HomePage.ViewModels
                 network.GetDailyList(jobject);
             }
         }
-        
+
         public void OnRceivedData(ErpPacket packet)
         {
             string msg = Encoding.UTF8.GetString(packet.Body);
@@ -126,14 +142,46 @@ namespace HomePage.ViewModels
             {
                 case COMMAND.GETHOMESUMMARY: //데이터 조회
                     SetHomeSummary(jobj);
-                    SendData(1,12);
+                    SendData(1, 12);
                     break;
                 case COMMAND.GetDailyList:
                     SetHomeStatisticList(jobj);
+
+                    break;
+                case COMMAND.GetPreviousDailyList:
+                    SetPreviousDailyList(jobj);
                     break;
             }
-            
         }
+
+        private void SetPreviousDailyList(JObject jobj) {
+            MaxComparison.Value = 1000;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.ComparisonPreviousData.Clear();
+                this.ComparisonPresentData.Clear();
+            });
+            if (jobj["befor_summary_list"] != null)
+            {
+                JArray jarray = jobj["befor_summary_list"] as JArray;
+                foreach (JObject inner in jarray)
+                {
+                    if (inner["sum_con_sales"] != null)
+                        this.ComparisonPreviousData.Add(int.Parse(inner["sum_con_sales"].ToString()));
+                }
+            }
+            if (jobj["now_summary_list"] != null)
+            {
+                JArray jarray = jobj["now_summary_list"] as JArray;
+                foreach (JObject inner in jarray)
+                {
+                    if (inner["sum_con_sales"] != null)
+                        this.ComparisonPresentData.Add(int.Parse(inner["sum_con_sales"].ToString()));
+                }
+            }
+            this.IsLoading.Value = false;
+        }
+
         public Func<double, string> YFormatter
         {
             get
@@ -188,7 +236,13 @@ namespace HomePage.ViewModels
                     this.CostDailyData.Add(int.Parse(inner["sum_con_sales"].ToString()) - int.Parse(inner["ssi_con_profits"].ToString()));
                 }
             }
-            this.IsLoading.Value = false;
+            using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
+            {
+                network.SetReceiver(this);
+                JObject jobject = new JObject();
+                jobject["get_mode"] = DateTime.Now.Month;
+                network.GetComparisonList(jobject);
+            }
         }
 
         private void SetMonthlyList(JObject jobj)

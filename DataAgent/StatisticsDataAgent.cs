@@ -21,6 +21,10 @@ namespace DataAgent
         {
             this.repo.GetDailyList(msg);
         }
-       
+        public void GetComparisonList(JObject msg)
+        {
+            this.repo.GetComparisonList(msg);
+        }
+
     }
 }
