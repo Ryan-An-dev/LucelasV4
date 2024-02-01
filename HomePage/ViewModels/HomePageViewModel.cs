@@ -166,8 +166,13 @@ namespace HomePage.ViewModels
                 JArray jarray = jobj["befor_summary_list"] as JArray;
                 foreach (JObject inner in jarray)
                 {
-                    if (inner["sum_con_sales"] != null)
-                        this.ComparisonPreviousData.Add(int.Parse(inner["sum_con_sales"].ToString()));
+                    int Sum = 0;
+                    if (inner["sum_con_sales"] != null) { 
+                        Sum += int.Parse(inner["sum_con_sales"].ToString());
+                        this.ComparisonPreviousData.Add(Sum);
+                        MaxComparison.Value = Sum;
+                    }
+                    
                 }
             }
             if (jobj["now_summary_list"] != null)
@@ -175,8 +180,13 @@ namespace HomePage.ViewModels
                 JArray jarray = jobj["now_summary_list"] as JArray;
                 foreach (JObject inner in jarray)
                 {
+                    int Sum = 0;
                     if (inner["sum_con_sales"] != null)
-                        this.ComparisonPresentData.Add(int.Parse(inner["sum_con_sales"].ToString()));
+                    {
+                        Sum += int.Parse(inner["sum_con_sales"].ToString());
+                        this.ComparisonPreviousData.Add(Sum);
+                        MaxComparison.Value = Sum;
+                    }
                 }
             }
             this.IsLoading.Value = false;
