@@ -22,8 +22,16 @@
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\AlertWindow2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\CommonDialogWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AlertWindow2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

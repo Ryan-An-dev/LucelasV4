@@ -1,6 +1,7 @@
 ﻿using AddressSearchManager.Models;
 using CommonModel;
 using CommonModel.Model;
+using CommonModule.Views;
 using DataAccess;
 using DataAccess.NetWork;
 using LogWriter;
@@ -269,6 +270,10 @@ namespace ContractPage.ViewModels
                     AddPaymentExcute();
                     break;
                 case "DeletePayment":
+                    if (this.SelectedPayment.Value.PaymentCompleted.Value == Complete.Complete) {
+                        ContainerProvider.Resolve<AlertWindow2>().Show();
+                        return;
+                    }
                     JObject jobject = new JObject();
                     int pay_id = this.SelectedPayment.Value.PaymentId.Value;
                     if (pay_id == 0) {
