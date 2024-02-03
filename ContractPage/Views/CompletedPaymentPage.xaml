@@ -28,7 +28,7 @@
                 Text="완료된 금액 수정"/>
             </Border>
 
-            <Grid Grid.Row="1" Margin="20 5" DataContext="{Binding }">
+            <Grid Grid.Row="1" Margin="20 5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.9*"/>
                     <RowDefinition Height="0.2*"/>
@@ -137,11 +137,12 @@
                         md:HintAssist.IsFloating="True"/>
                 </Grid>
                 <CheckBox 
+                    IsChecked="{Binding Payment.Value.AllocateCheck.Value}"
                     Grid.Row="1"
                      Margin="10 0 0 0"
                      BorderBrush="White"
                      Foreground="{StaticResource MainColor}"
-                     >  
+                     >
                     <ContentControl>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Foreground="{StaticResource textColor}">위 내용으로 [</TextBlock>
@@ -150,7 +151,7 @@
                                 FontWeight="ExtraBold"
                                 Foreground="{StaticResource textColor}"
                                 Margin="5 0 5 0"
-                                Text="{Binding ReceiptModel.Value.Contents.Value}"/>
+                                Text="{Binding ContractorName.Value}"/>
                             <TextBlock Foreground="{StaticResource textColor}"> ]</TextBlock>
                             <TextBlock Foreground="{StaticResource textColor}" Margin="5 0 0 0"> 님의 계약에 연결된 입출금 내역을 </TextBlock>
                             <TextBlock Foreground="{StaticResource textColor}" Margin="5 0 0 0"> 할당 취소합니다.</TextBlock>

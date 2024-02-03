@@ -36,7 +36,7 @@ namespace ContractPage.ViewModels
         /// </summary>
         public ReactiveProperty<Visibility> IsNewContract { get; set; }
 
-
+        public ReactiveProperty<bool> CompleteItem { get; set; }
 
         /// <summary>
         /// 새로운 계약 : Visible  // 기존계약 : Collapse
@@ -76,7 +76,7 @@ namespace ContractPage.ViewModels
         public DelegateCommand<object> CheckBoxAccountCommand { get; set; }
         public ContractSingleViewModel(IRegionManager regionManager, IContainerProvider containerProvider, IDialogService dialogService) : base(regionManager)
         {
-            
+            CompleteItem = new ReactiveProperty<bool>(true).AddTo(disposable);
             CheckBoxAccountCommand = new DelegateCommand<object>(execCheckBoxAccountCommand);
             this.SelectedItem = new ReactiveProperty<PrismCommonModelBase>().AddTo(this.disposable);
             CustIsReadOnly = new ReactiveProperty<bool>(true).AddTo(disposable);
@@ -145,6 +145,7 @@ namespace ContractPage.ViewModels
             else {
                 DialogParameters p = new DialogParameters();
                 p.Add("object", SelectedPayment.Value);
+                p.Add("name", this.Contract.Value.Contractor.Value.Name.Value);
                 this.dialogService.ShowDialog("CompletedPaymentPage", p, r => UpdatePayment(r), "CommonDialogWindow");
             }
         }
@@ -157,26 +158,14 @@ namespace ContractPage.ViewModels
                 else
                 {
                     Payment temp = null;
-                    bool action = false;
                     r.Parameters.TryGetValue("object", out temp);
-                    r.Parameters.TryGetValue("bool", out action);
-                    //if (temp != null && temp.PaymentId.Value != 0)//수정
-                    //{
-                    //    if (this.Contract.Value != null)
-                    //    {
-                    //        this.Contract.Value.isChanged = true;
-                    //        this.Contract.Value.Payment.Remove(this.Contract.Value.Payment.FirstOrDefault(x => x.PaymentId.Value == temp.PaymentId.Value));
-                    //        this.Contract.Value.Payment.Add(temp);
-                    //    }
-                    //}
-                    //else
-                    //{ //추가
-                    //    if (this.Contract.Value != null)
-                    //    {
-                    //        this.Contract.Value.isChanged = true;
-                    //        this.Contract.Value.Payment.Add(temp);
-                    //    }
-                    //}
+                    if (temp != null && temp.AllocateCheck.Value) {
+                        this.Contract.Value.isChanged = true;
+                        Payment inner = this.Contract.Value.Payment.FirstOrDefault(x => x.PaymentId.Value == temp.PaymentId.Value);
+                        inner.AllocateCheck.Value = true;
+                        inner.PaymentCompleted.Value = Complete.InComplete;
+                        temp.Dispose();
+                    }
 
                 }
             }
@@ -461,6 +450,7 @@ namespace ContractPage.ViewModels
                     newEmp.IsChecked.Value = false;
                     this.Contract.Value.DeliveryMan.Add(newEmp);
                 }
+                
             }
             else
             {
@@ -469,6 +459,14 @@ namespace ContractPage.ViewModels
                 this.Contract.Value = contract;
                 this.Contract.Value.ClearJson();
                 this.Contract.Value.isChanged = false;
+                if(this.Contract.Value.Complete.Value == AllocateType.FullyCompleted)
+                {
+                    CompleteItem.Value = false;
+                }
+                else
+                {
+                    CompleteItem.Value = true;
+                }
                 //하나하나에 값 재할당 해줘야한다. 벨류 안바뀌게 
             }
             

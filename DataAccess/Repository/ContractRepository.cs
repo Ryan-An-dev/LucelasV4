@@ -32,6 +32,12 @@ namespace DataAccess.Repository
         {
             this._Receiver.OnRceivedData(packet);
         }
+        public void GetConnectedPayment(JObject msg) {
+            if (NetManager.session_id != 0)
+            {
+                NetManager.Send(msg, COMMAND.GET_CONNECTED_PAYMENT);
+            }
+        }
 
         public void CreateContractHistory(JObject msg)
         {

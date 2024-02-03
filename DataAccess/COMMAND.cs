@@ -39,6 +39,7 @@ namespace DataAccess
         DELETECONTRACT = 33,
         GET_CONNECTED_CONTRACT = 34,
         GET_CONTRACT_FOR_RECEIPT = 35,
+        GET_CONNECTED_PAYMENT = 36,
         #endregion
 
         #region 통계데이터

@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
-            <StackPanel Orientation="Vertical" Margin="20 0 20 0">
+            <StackPanel Orientation="Vertical" Margin="20 0 20 0"   IsEnabled="{Binding CompleteItem.Value}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -242,7 +242,7 @@
                                 <DataGridTextColumn Header="구분" Width="*" Binding="{Binding PaymentType.Value}"/>
                                 <DataGridTextColumn Header="지불방식" Width="*" Binding="{Binding PaymentMethod.Value}"/>
                                 <DataGridTextColumn Header="카드사" Width="*" Binding="{Binding SelectedPayCard.Value.Name.Value}"/>
-                                <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value}"/>
+                                <DataGridTextColumn Header="금액" Width="*" Binding="{Binding Price.Value , StringFormat=\{0:N0\},UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn 
                                     HeaderStyle="{StaticResource MaterialDesignDataGridColumnHeaderCustom}"
                                     Width="*" 

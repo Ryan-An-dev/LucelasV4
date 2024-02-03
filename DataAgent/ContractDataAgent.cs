@@ -43,5 +43,9 @@ namespace DataAgent
         {
             this.repo.DeleteContract(msg);
         }
+        public void GetConnectedPayment(JObject msg)
+        {
+            this.repo.GetConnectedPayment(msg);
+        }
     }
 }

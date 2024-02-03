@@ -56,6 +56,7 @@ namespace CommonModel.Model
         public ReactiveProperty<Complete> PaymentCompleted { get; set; }
 
         public ReactiveProperty<PayCardType>SelectedPayCard { get; set; }
+        public ReactiveProperty<bool> AllocateCheck { get; set; }
         
         public ReactiveProperty<int> Price { get; set; }
 
@@ -63,6 +64,7 @@ namespace CommonModel.Model
 
         public Payment() : base()
         {
+            this.AllocateCheck = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.IsSelected = new ReactiveProperty<bool>(false).AddTo(disposable);
             this.Action = new ReactiveProperty<AddDelete>(AddDelete.Add).AddTo(disposable);
             this.PaymentId = new ReactiveProperty<int>().AddTo(disposable);
@@ -89,6 +91,9 @@ namespace CommonModel.Model
         {
             if (value != null)
             {
+                if (value is bool) {
+                    ChangedItem[name] = (bool)value;
+                }
                 if (value is int)
                 {
                     ChangedItem[name] = (int)value;
@@ -123,11 +128,13 @@ namespace CommonModel.Model
             jobj["payment_method"] = (int)this.PaymentMethod.Value;
             jobj["price"] = (int)this.Price.Value;
             jobj["payment_card"] = (int)this.SelectedPayCard.Value.Id.Value;
+            jobj["allocate_check"] = this.AllocateCheck.Value;
             return jobj;
         }
 
         public override void SetObserver()
         {
+            this.AllocateCheck.Subscribe(x => ChangedJsonADD("allocate_check", x));
             this.PaymentType.Subscribe(x => ChangedJsonADD("payment_type", x));
             this.PaymentMethod.Subscribe(x => multiObserver("payment_method", x));
             this.PaymentCompleted.Subscribe(x => ChangedJsonADD("payment_completed", x));
