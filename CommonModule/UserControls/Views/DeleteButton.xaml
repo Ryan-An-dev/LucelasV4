@@ -7,7 +7,7 @@
         <ResourceDictionary Source="../../Styles.xaml"/>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal" Visibility="Visible">
-        <Button x:Name="BtnDelete" Content="Delete" FontSize="12" Height="30" Width="100" Padding="0" Margin="8" IsEnabled="False" Command="{Binding Command, ElementName=UserControl}" Cursor="Hand" Foreground="White"/>
+        <Button x:Name="BtnDelete" Content="삭제" FontSize="12" Height="30" Width="100" Padding="0" Margin="8" IsEnabled="False" Command="{Binding Command, ElementName=UserControl}" Cursor="Hand" Foreground="White"/>
         <ToggleButton
 			Style="{StaticResource MaterialDesignSwitchToggleButton}"
 			ToolTip="MaterialDesignSwitchToggleButton"

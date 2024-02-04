@@ -25,8 +25,8 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Title.Value}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource MainColor}" Margin="20 8 20 0"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" Grid.Row="1" >
-            <StackPanel Orientation="Vertical" Margin="20 0 20 0"   IsEnabled="{Binding CompleteItem.Value}">
-                <Grid>
+            <StackPanel Orientation="Vertical" Margin="20 0 20 0"   >
+                <Grid IsEnabled="{Binding CompleteItem.Value}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -47,8 +47,8 @@
                         </DatePicker.SelectedDate>
                     </DatePicker>
                 </Grid>
-                
-                <GroupBox Margin="0 20 0 0" x:Name="custGroup">
+
+                <GroupBox Margin="0 20 0 0" x:Name="custGroup" IsEnabled="{Binding CompleteItem.Value}">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal" Width="540">
                             <TextBlock 
@@ -132,7 +132,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox
+                <GroupBox IsEnabled="{Binding CompleteItem.Value}"
                     Header="계약물품"  
                     Margin="0 20 0 0" >
                     <StackPanel Cursor="">
@@ -252,7 +252,7 @@
                         </DataGrid>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox
+                <GroupBox IsEnabled="{Binding CompleteItem.Value}"
                     Margin="0 20 0 0"
                     Header="배송">
                     <StackPanel>
@@ -402,7 +402,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox
+                <GroupBox IsEnabled="{Binding CompleteItem.Value}"
                     Margin="0 20 0 0"
                     Header="판매자">
                     <ComboBox  

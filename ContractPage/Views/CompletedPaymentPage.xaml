@@ -89,24 +89,19 @@
                           md:HintAssist.IsFloating="True" 
                           IsEnabled="False" 
                           Cursor="IBeam"/>
-                    <ComboBox 
+                    <TextBox 
                           Grid.Row="1" Grid.Column="2"
                           md:HintAssist.Hint="중분류"
                           IsEnabled="False"
-                          ItemsSource="{Binding SearchReceiptTypeValues, Mode= OneWay}" 
-                          SelectedItem="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Text="{Binding ReceiptModel.Value.ReceiptType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           FontSize="14" 
-                          Margin="0 0 0 12" 
                           Foreground="{StaticResource textColor2}"  
                           md:HintAssist.IsFloating="True"/>
-                    <ComboBox 
-                        
+                    <TextBox 
                            Grid.Row="2" Grid.Column="0"
-                          SelectedItem="{Binding ReceiptModel.Value.CategoryInfo.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Text="{Binding ReceiptModel.Value.CategoryInfo.Value.Name.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           md:HintAssist.Hint="소분류" 
-                          ItemsSource="{Binding CategoryInfos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name.Value"
                           FontSize="14"
-                          Margin="0 0 0 12" 
                           Foreground="{StaticResource textColor2}"  
                           md:HintAssist.IsFloating="True" />
                     <TextBox 
