@@ -59,7 +59,7 @@ namespace HomePage.ViewModels
         {
             ComparisonPreviousData = new ChartValues<int>();
             ComparisonPresentData = new ChartValues<int>();
-            MaxComparison = new ReactiveProperty<int>().AddTo(this.disposable);
+            MaxComparison = new ReactiveProperty<int>(1000).AddTo(this.disposable);
             ComparisonDate = new ChartValues<string>();
             CostDailyData = new ChartValues<int>();
             SalesData = new ChartValues<int>();
@@ -167,29 +167,33 @@ namespace HomePage.ViewModels
             if (jobj["befor_summary_list"] != null)
             {
                 JArray jarray = jobj["befor_summary_list"] as JArray;
+                int Sum = 0;
                 foreach (JObject inner in jarray)
                 {
-                    int Sum = 0;
+                    
                     if (inner["sum_con_sales"] != null) { 
                         Sum += int.Parse(inner["sum_con_sales"].ToString());
                         this.ComparisonPreviousData.Add(Sum);
-                        MaxComparison.Value = Sum;
                     }
-                    
                 }
+                MaxComparison.Value = Sum;
             }
             if (jobj["now_summary_list"] != null)
             {
                 JArray jarray = jobj["now_summary_list"] as JArray;
+                int Sum = 0;
                 foreach (JObject inner in jarray)
                 {
-                    int Sum = 0;
+                    
                     if (inner["sum_con_sales"] != null)
                     {
                         Sum += int.Parse(inner["sum_con_sales"].ToString());
                         this.ComparisonPresentData.Add(Sum);
-                        MaxComparison.Value = Sum;
+                        
                     }
+                }
+                if (MaxComparison.Value <= Sum) { 
+                    MaxComparison.Value = Sum;
                 }
             }
             this.IsLoading.Value = false;
@@ -253,7 +257,7 @@ namespace HomePage.ViewModels
             {
                 network.SetReceiver(this);
                 JObject jobject = new JObject();
-                jobject["get_mode"] = DateTime.Now.Month;
+                jobject["get_month"] = DateTime.Now.Month;
                 network.GetComparisonList(jobject);
             }
         }

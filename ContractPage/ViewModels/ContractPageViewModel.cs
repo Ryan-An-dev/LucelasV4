@@ -124,7 +124,7 @@ namespace ContractPage.ViewModels
                     this.StartDate.Value = DateTime.Today.AddMonths(-1);
                     break;
                 case SearchDateType.DeliveryInitTime:
-                    this.EndDate.Value = DateTime.Today.AddMonths(1);
+                    this.EndDate.Value = DateTime.Today.AddDays(50);
                     this.StartDate.Value = DateTime.Today;
                     break;
             }

@@ -256,6 +256,7 @@ namespace MESPage.ViewModels
             if (msg == null)
             {
                 this.SelectInventoryType.Value = InventoryType.Contract;
+                this.EndDate.Value = DateTime.Now.AddDays(31);
                 this.SearchPurpose.Value = 0;
             }
             else
@@ -263,7 +264,7 @@ namespace MESPage.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     this.SelectInventoryType.Value = InventoryType.Contract;
-                    this.EndDate.Value = DateTime.Now.AddDays(3);
+                    this.EndDate.Value = DateTime.Now.AddDays(31);
                     this.SearchPurpose.Value = Purpose.PreOrder;
                 });
             }

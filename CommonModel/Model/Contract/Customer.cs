@@ -41,7 +41,7 @@ namespace CommonModel.Model
             this.Name = CreateProperty<string>("이름");
             this.Phone = CreateProperty<string>("번호");
             this.Address = CreateProperty<string>("주소");
-            this.Memo = CreateProperty<string>("메모");
+            this.Memo = new ReactiveProperty<string>().AddTo(disposable);
             this.Address1 = CreateProperty<string>("상세주소");
             SetObserver();
         }

@@ -109,14 +109,14 @@
                     Number="{Binding HomeSummary.Value.DeliveryUnFinalizeCount.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="ContractPage_InCompleteDelivery"
-                    Title=" 배송일 미확정 계약 건수(+7일 이내)" 
+                    Title=" 배송일 미확정 계약 건수(+50일 이내)" 
                     IsTechnical="False"/>   
                 <uc:MontlyCard 
                     Grid.Row="3"
                     Number="{Binding HomeSummary.Value.NotOrderCount.Value}" 
                     Command="{Binding MenuSelectCommand}"
                     Params ="MesPage_InCompleteDelivery"
-                    Title=" 배송일 기준 미발주 건수(+3일 이내)" 
+                    Title=" 배송일 기준 미발주 건수(+30일 이내)" 
                     IsTechnical="False"/>
             </Grid>
             
@@ -299,7 +299,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="0" MaxValue="1000000">
+                                MinValue="100" MaxValue="{Binding MaxComparison.Value, FallbackValue=1000000}">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
                                 </lvc:Axis.Separator>
