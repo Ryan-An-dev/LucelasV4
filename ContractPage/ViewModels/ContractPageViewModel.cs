@@ -104,7 +104,7 @@ namespace ContractPage.ViewModels
             ContractItems = new ReactiveCollection<Contract>().AddTo(this.disposable);
             furnitureInfos = new ReactiveCollection<FurnitureType>().AddTo(this.disposable);
             SelectedItem = new ReactiveProperty<Contract>().AddTo(disposable);
-            
+            SelectedDateType.Subscribe(x => ChangedDateType(x));
 
             SettingPageViewModel temp = this.ContainerProvider.Resolve<SettingPageViewModel>();
             if (temp.FurnitureInfos.Count > 0) {
@@ -114,6 +114,20 @@ namespace ContractPage.ViewModels
             this.CountList.Add(50);
             this.CountList.Add(70);
             this.CountList.Add(100);
+        }
+
+        private void ChangedDateType(SearchDateType x)
+        {
+            switch (x) {
+                case SearchDateType.ContractInitTime:
+                    this.EndDate.Value = DateTime.Today;
+                    this.StartDate.Value = DateTime.Today.AddMonths(-1);
+                    break;
+                case SearchDateType.DeliveryInitTime:
+                    this.EndDate.Value = DateTime.Today.AddMonths(1);
+                    this.StartDate.Value = DateTime.Today;
+                    break;
+            }
         }
 
         private void SearchContractExecute()
