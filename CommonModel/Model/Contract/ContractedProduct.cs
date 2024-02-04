@@ -38,6 +38,7 @@ namespace CommonModel.Model
             this.Id = new ReactiveProperty<int>().AddTo(disposable);
             this.No = new ReactiveProperty<int>().AddTo(disposable);
             this.SellCount = CreateProperty<int>("수량");
+            SellCount.Value = 1;
             this.FurnitureInventory = new ReactiveProperty<Product>().AddTo(disposable);
             this.Action = new ReactiveProperty<AddDelete>(AddDelete.Add).AddTo(disposable);
             this.Memo = new ReactiveProperty<string>().AddTo(disposable);

@@ -7,6 +7,7 @@ using DataAccess.NetWork;
 using DepositWithdrawal.Views;
 using LogWriter;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Ioc;
@@ -287,7 +288,9 @@ namespace DepositWithdrawal.ViewModels
                         Application.Current.Dispatcher.Invoke(() => {
                             DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                             Dispose(); //변경완료 후 변수 초기화
-                            regionManager.RequestNavigate("ContentRegion", nameof(BankListPage));
+                            NavigationParameters temp = new NavigationParameters();
+                            temp.Add("object", "Single");
+                            regionManager.RequestNavigate("ContentRegion", nameof(BankListPage),temp);
                         });
                         break;
                     case COMMAND.GET_CONNECTED_CONTRACT:

@@ -17,16 +17,85 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Input;
+using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Win32;
+using System.Threading;
 
 namespace SettingPage.ViewModels
 {
     public class CompanyListViewModel : PrsimListViewModelBase, INetReceiver
     {
+        public DelegateCommand CmdExcelUpload { get; }
         public CompanyListViewModel(IContainerProvider containerprovider, IRegionManager regionManager, IDialogService dialogService) : base(regionManager, containerprovider,dialogService)
         {
-            
+            this.CmdExcelUpload = new DelegateCommand(ExcelUpload);
         }
 
+        private void ExcelUpload()
+        {
+            OpenExcelFile();
+        }
+        public void OpenExcelFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                ReadExcelFile(filePath);
+            }
+        }
+
+        public void ReadExcelFile(string filePath)
+        {
+            try
+            {
+                var excelApp = new Excel.Application();
+                Excel.Workbook workbook = excelApp.Workbooks.Open(filePath);
+                Excel._Worksheet worksheet = workbook.Sheets[1];
+                Excel.Range range = worksheet.UsedRange;
+
+                for (int row = 2; row <= range.Rows.Count; row++)
+                {
+                    Company company = new Company();
+                    for (int col = 1; col <= range.Columns.Count; col++)
+                    {
+                        string cellValue = range.Cells[row, col].Value2;
+                        if (col == 1)
+                        {
+                            company.CompanyName.Value = cellValue;
+                        }
+                        else {
+                            company.CompanyPhone.Value = cellValue;
+                        }
+                        // 여기에서 cellValue를 사용
+                        ErpLogWriter.LogWriter.Debug(cellValue);
+                    }
+                    using (var network = ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
+                    {
+                        network.SetReceiver(this);
+                        JObject jobj = new JObject();
+                        jobj["company_id"] = (int)0;
+                        jobj["company_name"] = company.CompanyName.Value;
+                        jobj["company_address_detail"] = company.CompanyAddressDetail.Value;
+                        jobj["company_phone"] = company.CompanyPhone.Value;
+                        jobj["company_address"] = company.CompanyAddress.Value;
+                        network.Create(jobj);
+                        IsLoading.Value = true;
+                    }
+                    Thread.Sleep(300);
+                }
+                workbook.Close();
+                excelApp.Quit();
+                IsLoading.Value = false;
+            }
+            catch (Exception ex)
+            {
+                ErpLogWriter.LogWriter.Debug(ex.ToString());
+            }
+        }
         public override void UpdatePageItem(MovePageType param, int count)
         {
             using (var network = ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())

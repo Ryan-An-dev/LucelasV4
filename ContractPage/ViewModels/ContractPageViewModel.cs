@@ -231,33 +231,41 @@ namespace ContractPage.ViewModels
             this.SearchFullyCompleted.Value = FullyCompleted.All;
             string msg;
             navigationContext.Parameters.TryGetValue("object", out msg);
-            if (msg==null)
+            if (msg == "Single")
             {
-                this.EndDate.Value = DateTime.Today;
-                this.StartDate.Value = DateTime.Today.AddMonths(-1);
                 SendData();
             }
-            else if(msg == "InCompleteDelivery"){ 
-                this.EndDate.Value = DateTime.Today.AddDays(7);
-                this.StartDate.Value = DateTime.Today;
-                this.SelectedDeliveryFinal.Value = DeliveryFinal.UnChecked;
-                this.SelectedDateType.Value = SearchDateType.DeliveryInitTime;
-                SendData();
-            }
-            else
-            {
-                int Month = EndDate.Value.Month;
-                int year = EndDate.Value.Year;
-                EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
-                this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
-                if (msg.Equals("Complete"))
+            else{
+                if (msg == null)
                 {
-                    this.SearchFullyCompleted.Value = FullyCompleted.FullyCompleted;
+                    this.EndDate.Value = DateTime.Today;
+                    this.StartDate.Value = DateTime.Today.AddMonths(-1);
+                    SendData();
                 }
-                else {
-                    this.SearchFullyCompleted.Value = FullyCompleted.NotYet;
+                else if (msg == "InCompleteDelivery")
+                {
+                    this.EndDate.Value = DateTime.Today.AddDays(7);
+                    this.StartDate.Value = DateTime.Today;
+                    this.SelectedDeliveryFinal.Value = DeliveryFinal.UnChecked;
+                    this.SelectedDateType.Value = SearchDateType.DeliveryInitTime;
+                    SendData();
                 }
-                SendData();
+                else
+                {
+                    int Month = EndDate.Value.Month;
+                    int year = EndDate.Value.Year;
+                    EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
+                    this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
+                    if (msg.Equals("Complete"))
+                    {
+                        this.SearchFullyCompleted.Value = FullyCompleted.FullyCompleted;
+                    }
+                    else
+                    {
+                        this.SearchFullyCompleted.Value = FullyCompleted.NotYet;
+                    }
+                    SendData();
+                }
             }
         }
 
@@ -368,7 +376,7 @@ namespace ContractPage.ViewModels
             {
                 this.ContractItems.Clear();
             });
-            ErpLogWriter.LogWriter.Trace(msg.ToString());
+            //ErpLogWriter.LogWriter.Trace(msg.ToString());
             if (msg.ToString().Trim() != string.Empty)
             {
                 try {

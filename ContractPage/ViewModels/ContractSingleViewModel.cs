@@ -487,6 +487,13 @@ namespace ContractPage.ViewModels
             {
                 JObject jobj = new JObject();
                 network.SetReceiver(this);
+                if (!this.Contract.Value.Validate().Equals(""))
+                {
+                    AlertWindowBasic temp = this.ContainerProvider.Resolve<AlertWindowBasic>();
+                    temp.TiTle = this.Contract.Value.Validate();
+                    temp.Show();
+                    return;
+                }
                 if (param == 0)
                 { // Update
                     if (this.Title.Value == "신규계약 추가") //신규등록일경우
@@ -535,8 +542,10 @@ namespace ContractPage.ViewModels
                     Application.Current.Dispatcher.Invoke(() => {
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                         this.Contract.Value.CompleteChangedData(); //변경완료 후 변수 초기화
+                        NavigationParameters temp = new NavigationParameters();
+                        temp.Add("object", "Single");
                         Dispose();
-                        regionManager.RequestNavigate("ContentRegion", nameof(ContractPage));
+                        regionManager.RequestNavigate("ContentRegion", nameof(ContractPage), temp);
                     });
                     break;
             }

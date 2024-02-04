@@ -185,7 +185,6 @@ namespace DataAccess.NetWork
         }
         public void StartReceive()
         {
-
             StartReceive(Buffer, _RecvBufferPos, BUFFER_SIZE - _RecvBufferPos);
         }
         private void CheckBuffer(int recvLen, int remain)
@@ -265,10 +264,10 @@ namespace DataAccess.NetWork
 
         private void Initialize()
         {
-            m_timer = new System.Timers.Timer();
-            m_timer.Interval = m_nKeepAliveTime * 1000; // 100 Milliseconds 
-            m_timer.Elapsed += M_timer_Elapsed;
-            m_timer.Start();
+            //m_timer = new System.Timers.Timer();
+            //m_timer.Interval = m_nKeepAliveTime * 1000; // 100 Milliseconds 
+            //m_timer.Elapsed += M_timer_Elapsed;
+            //m_timer.Start();
         }
 
         private void M_timer_Elapsed(object sender, ElapsedEventArgs e)

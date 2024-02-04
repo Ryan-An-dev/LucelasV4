@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid 
             Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}">
@@ -89,30 +89,49 @@
                 <DataGridTextColumn Width="0.2*" Header="가격" Binding="{Binding Price.Value, StringFormat=\{0:N0\}}" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel  Grid.ColumnSpan="2" Grid.Row="2" Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <Button 
-                Width="30" 
-                Height="30" 
-                Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
-                Margin="5 5 5 5" 
-                Foreground="{StaticResource MainColor}" 
-                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
-                />
-            <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} / {1}({2})">
-                        <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                        <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                        <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-            <Button 
-                Width="30" 
-                Height="30" 
-                Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
-                Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
-                Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
-        </StackPanel>
+        <Grid Grid.Row="2" Height="50" DockPanel.Dock="Bottom"  Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
+                <Button 
+            Width="30" 
+            Height="30" 
+            Style="{StaticResource MahApps.Styles.Button.Calendar.Previous}" 
+            Margin="5 5 5 5" 
+            Foreground="{StaticResource MainColor}" 
+            Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Prev}"
+            />
+                <TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="ExtraBold">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} / {1}({2})">
+                            <Binding Path="CurrentPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="TotalPage.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="TotalItemCount.Value" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <Button 
+                    Width="30" 
+                    Height="30" 
+                    Style="{StaticResource MahApps.Styles.Button.Calendar.Next}" 
+                    Margin="5 5 5 5"  Foreground="{StaticResource MainColor}"
+                    Command="{Binding CmdGoPage}" CommandParameter="{x:Static base:MovePageType.Next}"/>
+            </StackPanel>
+            <Grid HorizontalAlignment="Right" Grid.Column="2">
+                <Button  ToolTip="업로드"
+                    Height="30"
+                    Command="{Binding CmdExcelUpload}" 
+                    CommandParameter="SettingPage"
+                    Style="{StaticResource MaterialDesignFlatButton}">
+                    <StackPanel Orientation="Vertical">
+                        <md:PackIcon Kind="Upload" VerticalAlignment="Center"
+                 Width="20" Height="20" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

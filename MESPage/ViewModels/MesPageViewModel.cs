@@ -253,22 +253,29 @@ namespace MESPage.ViewModels
             this.TotalItemCount.Value = 0;
             string msg;
             navigationContext.Parameters.TryGetValue("object", out msg);
-            if (msg == null)
+            if (msg == "Single")
             {
-                this.SelectInventoryType.Value = InventoryType.Contract;
-                this.EndDate.Value = DateTime.Now.AddDays(31);
-                this.SearchPurpose.Value = 0;
+                SendData();
             }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() =>
+            else {
+                if (msg == null)
                 {
                     this.SelectInventoryType.Value = InventoryType.Contract;
                     this.EndDate.Value = DateTime.Now.AddDays(31);
-                    this.SearchPurpose.Value = Purpose.PreOrder;
-                });
+                    this.SearchPurpose.Value = 0;
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.SelectInventoryType.Value = InventoryType.Contract;
+                        this.EndDate.Value = DateTime.Now.AddDays(31);
+                        this.SearchPurpose.Value = Purpose.PreOrder;
+                    });
+                }
+                SendData();
             }
-            SendData();
+            
         }
 
         public void OnRceivedData(ErpPacket packet)

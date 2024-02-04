@@ -109,11 +109,11 @@
                         Cursor="Hand" 
                         Command="{Binding SearchButton}" />
                 </StackPanel>
-                <Button DockPanel.Dock="Right" 
+                <!--<Button DockPanel.Dock="Right" 
                         HorizontalAlignment="Right"
                         Command="{Binding NewButton}"
                         VerticalAlignment="Bottom"
-				        Content="신규계약추가" Cursor="Hand" Margin="0 0 0 10"/>
+				        Content="신규계약추가" Cursor="Hand" Margin="0 0 0 10"/>-->
             </DockPanel>
 
             <StackPanel Height="40" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">

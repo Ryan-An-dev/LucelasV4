@@ -244,8 +244,8 @@
 
                         <lvc:CartesianChart.Series>
                             <lvc:LineSeries 
-                                Title="매출액"
-                                StrokeThickness="4" Stroke="#6860e6" PointGeometrySize="0"
+                                Title="매출액" PointForeground="#6860e6" 
+                                StrokeThickness="4" Stroke="#6860e6" PointGeometrySize="10"
                                 Values="{Binding SalesData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -255,8 +255,8 @@
                                 </lvc:LineSeries.Fill>
                             </lvc:LineSeries>
                             <lvc:LineSeries 
-                                Title="순이익"
-                                StrokeThickness="4" Stroke="#FFC107"  PointGeometrySize="0"
+                                Title="순이익" PointForeground ="#FFC107" 
+                                StrokeThickness="4" Stroke="#FFC107"  PointGeometrySize="10"
                                 Values="{Binding ProfitData}">      
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -317,8 +317,8 @@
 
                         <lvc:CartesianChart.Series>
                             <lvc:LineSeries 
-                                Title="전달"
-                                StrokeThickness="4" Stroke="#6860e6" PointGeometrySize="0"
+                                Title="전달" PointForeground ="#6860e6" 
+                                StrokeThickness="3" Stroke="#6860e6" PointGeometrySize="8"
                             Values="{Binding ComparisonPreviousData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -328,16 +328,11 @@
                                 </lvc:LineSeries.Fill>
                             </lvc:LineSeries>
                             <lvc:LineSeries 
-                                Title="이번달"
-                                DataLabels="False"
-                                StrokeThickness="4" Stroke="#ffaf01" PointGeometrySize="0"
+                                Title="이번달" Fill="Transparent"
+                                DataLabels="False" PointForeground ="#FFC107" 
+                                StrokeThickness="3" Stroke="#ffaf01" PointGeometrySize="8"
                                 Values="{Binding ComparisonPresentData}">
-                                <lvc:LineSeries.Fill>
-                                    <LinearGradientBrush>
-                                        <GradientStop Color="#2e3966" Offset="0.4"/>
-                                        <GradientStop Color="#21304a" Offset="1.2"/>
-                                    </LinearGradientBrush>
-                                </lvc:LineSeries.Fill>
+                             
                             </lvc:LineSeries>
                         </lvc:CartesianChart.Series>
                         

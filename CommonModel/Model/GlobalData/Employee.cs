@@ -12,7 +12,7 @@ namespace CommonModel.Model
     public class Employee : PrismCommonModelBase
     {
         public ReactiveProperty<AddDelete> Action { get; set; }
-        public ReactiveProperty<bool> IsChecked { get; set; }
+        public ReactiveProperty<bool> IsChecked { get; set; } 
         public ReactiveProperty<int> No { get; set; }
         public ReactiveProperty<int> Id { get; set; }
         public ReactiveProperty<string> Name { get; set; }

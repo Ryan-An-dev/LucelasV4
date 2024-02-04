@@ -275,6 +275,8 @@ namespace MESPage.ViewModels
                         DrawerHost.CloseDrawerCommand.Execute(Dock.Right, null);
                         //this.Inventory.Value.CompleteChangedData(); //변경완료 후 변수 초기화
                         Dispose();
+                        NavigationParameters temp = new NavigationParameters();
+                        temp.Add("object", "Single");
                         regionManager.RequestNavigate("ContentRegion", nameof(MesPage));
                     });
                     break;

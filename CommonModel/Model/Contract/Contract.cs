@@ -86,7 +86,7 @@ namespace CommonModel.Model
             this.Contractor = new ReactiveProperty<Customer>().AddTo(disposable);
             this.Delivery = CreateDateTimeProperty("배송일자");
             this.Seller = new ReactiveProperty<Employee>(new Employee()).AddTo(disposable);
-            this.Price = new ReactiveProperty<int>(0).AddTo(disposable);
+            this.Price = CreateProperty<int>("총금액");
             this.DepositComplete= new ReactiveProperty<bool>().AddTo(disposable);
             this.PaymentComplete = new ReactiveProperty<FullyCompleted>(FullyCompleted.NotYet).AddTo(disposable);
             this.Payment = new ReactiveCollection<Payment>().AddTo(disposable);
@@ -96,6 +96,33 @@ namespace CommonModel.Model
             this.Contractor.Value = new Customer();
             SetObserver();
         }
+        public string Validate()
+        {
+            
+            if (this.Contractor.Value.ValidateAllProperties())
+            {
+                return "고객정보가 입력되지 않았습니다.";
+            }
+           
+            if (this.Payment.Count == 0)
+            {
+                return "계약금 및 잔금이 등록되지 않았습니다.";
+            }
+            if (this.Product.Count == 0)
+            {
+                return "판매 상품이 등록되지 않았습니다.";
+            }
+
+            if (this.DeliveryMan.Count == 0) {
+                return "배송인원이 선택되지 않았습니다.";
+            }
+            if (this.Seller.Value.Id.Value == 0)
+            {
+                return "판매자 입력이 되지 않았습니다.";
+            }
+            return "";
+        }
+
         public void CompleteChangedData()
         {
             ChangedItem.RemoveAll();
@@ -199,6 +226,9 @@ namespace CommonModel.Model
             JArray jarrDelivery = new JArray();
             foreach (Employee item in DeliveryMan)
             {
+                if (!item.IsChecked.Value) {
+                    continue;
+                }
                 JObject jobj = new JObject();
                 jobj["employee_id"] = item.Id.Value;
                 jobj["action"] = 1;

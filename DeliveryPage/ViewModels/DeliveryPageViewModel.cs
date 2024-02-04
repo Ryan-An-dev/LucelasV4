@@ -216,30 +216,36 @@ namespace DeliveryPage.ViewModels
             this.TotalItemCount.Value = 0;
             string msg;
             navigationContext.Parameters.TryGetValue("object", out msg);
-            if (msg == null)
+            if (msg == "Single")
             {
-                this.EndDate.Value = DateTime.Today.AddDays(3);
-                this.StartDate.Value = DateTime.Today.AddDays(-3);
-                SearchFullyCompleted.Value = (FullyCompleted)0;
                 SendData();
             }
-            else
-            {
-                int Month = EndDate.Value.Month;
-                int year = EndDate.Value.Year;
-                EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
-                this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
-                if (msg.Equals("Complete"))
+            else{
+                if (msg == null)
                 {
-                    this.SelectedPurpose.Value = ViewModels.SearchPurpose.Completed;
+                    this.EndDate.Value = DateTime.Today.AddDays(3);
+                    this.StartDate.Value = DateTime.Today.AddDays(-3);
+                    SearchFullyCompleted.Value = (FullyCompleted)0;
+                    SendData();
                 }
                 else
                 {
-                    this.SelectedPurpose.Value = ViewModels.SearchPurpose.BookingDelivery;
-                    this.StartDate.Value = DateTime.Today;
-                    this.EndDate.Value = DateTime.Today;
+                    int Month = EndDate.Value.Month;
+                    int year = EndDate.Value.Year;
+                    EndDate.Value = new DateTime(year, Month, 1).AddMonths(1).AddDays(-1);
+                    this.StartDate.Value = new DateTime(EndDate.Value.Year, Month, 1);
+                    if (msg.Equals("Complete"))
+                    {
+                        this.SelectedPurpose.Value = ViewModels.SearchPurpose.Completed;
+                    }
+                    else
+                    {
+                        this.SelectedPurpose.Value = ViewModels.SearchPurpose.BookingDelivery;
+                        this.StartDate.Value = DateTime.Today;
+                        this.EndDate.Value = DateTime.Today;
+                    }
+                    SendData();
                 }
-                SendData();
             }
         }
 

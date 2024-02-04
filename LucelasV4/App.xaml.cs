@@ -125,6 +125,7 @@ namespace LucelasV4
             containerRegistry.RegisterDialogWindow<CommonDialogWindow>("CommonDialogWindow");
             containerRegistry.RegisterDialogWindow<AlertWindow1>("AlertWindow");
             containerRegistry.RegisterDialogWindow<AlertWindow2>("AlertWindow2");
+            containerRegistry.RegisterDialogWindow<AlertWindowBasic>("AlertWindowBasic");
             containerRegistry.RegisterDialog<SearchAdressPage>("SearchAdressPage");
             containerRegistry.RegisterDialog<SearchNamePage>("SearchNamePage");
             containerRegistry.RegisterDialog<AddPaymentPage>("AddPaymentPage");
