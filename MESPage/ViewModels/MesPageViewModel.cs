@@ -128,10 +128,10 @@ namespace MESPage.ViewModels
         }
         private void OnChangedInventoryType(InventoryType type)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.InventoryItems.Clear();
-            });
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
+            //    //this.InventoryItems.Clear();
+            //});
         }
 
 
@@ -280,13 +280,14 @@ namespace MESPage.ViewModels
                 return;
             }
             ErpLogWriter.LogWriter.Trace(jobj.ToString());
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.InventoryItems.Clear();
-            });
+            
             switch ((COMMAND)packet.Header.CMD)
             {
                 case COMMAND.GET_INVENTORY_LIST: //데이터 조회
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.InventoryItems.Clear();
+                    });
                     if (jobj["inventory_history"] != null && !jobj["inventory_history"].ToString().Equals(""))
                     {
                         JArray jarr = JArray.Parse(jobj["inventory_history"].ToString());

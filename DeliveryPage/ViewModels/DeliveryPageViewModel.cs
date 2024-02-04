@@ -34,9 +34,9 @@ namespace DeliveryPage.ViewModels
         [Description("모두")]
         All = 0,
         [Description("배달예정")]
-        BookingDelivery = 2,
+        BookingDelivery = 3,
         [Description("배달완료")]
-        Completed = 5,
+        Completed = 6,
     }
     public enum MovePageType { Next = 1, Prev }
     public class DeliveryPageViewModel : PrismCommonViewModelBase, INavigationAware, INetReceiver
