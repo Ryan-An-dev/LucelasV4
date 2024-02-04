@@ -245,7 +245,7 @@
                         <lvc:CartesianChart.Series>
                             <lvc:LineSeries 
                                 Title="매출액"
-                                StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
+                                StrokeThickness="4" Stroke="#6860e6" PointGeometrySize="0"
                                 Values="{Binding SalesData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -256,7 +256,7 @@
                             </lvc:LineSeries>
                             <lvc:LineSeries 
                                 Title="순이익"
-                                StrokeThickness="2" Stroke="#FFC107"  PointGeometrySize="0"
+                                StrokeThickness="4" Stroke="#FFC107"  PointGeometrySize="0"
                                 Values="{Binding ProfitData}">      
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -275,7 +275,16 @@
                 <Grid>
                     <!--Title-->
                     <TextBlock Text="전달비교" Style="{StaticResource titleText}"/>
-
+                    <!--Legends-->
+                    <StackPanel Orientation="Horizontal" 
+                         VerticalAlignment="Top" 
+                         HorizontalAlignment="Right"
+                         Margin="0 8 40 0"> 
+                        <Border Width="12" Height="12" Background="#7166f9" CornerRadius="3"/>
+                        <TextBlock Text="전달 매출" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                        <Border Width="12" Height="12" Background="#FFC107"  CornerRadius="3"/>
+                        <TextBlock Text="이번달 매출" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                    </StackPanel>
                     <!--Filter Button-->
                     <Button Style="{StaticResource titleButton}">
                         <Icon:PackIconMaterial Kind="Tune" Style="{StaticResource topMenuButtonIcon}"/>
@@ -309,7 +318,7 @@
                         <lvc:CartesianChart.Series>
                             <lvc:LineSeries 
                                 Title="전달"
-                                StrokeThickness="2" Stroke="#6860e6" PointGeometrySize="0"
+                                StrokeThickness="4" Stroke="#6860e6" PointGeometrySize="0"
                             Values="{Binding ComparisonPreviousData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
@@ -321,7 +330,7 @@
                             <lvc:LineSeries 
                                 Title="이번달"
                                 DataLabels="False"
-                                StrokeThickness="2" Stroke="#ffaf01" PointGeometrySize="0"
+                                StrokeThickness="4" Stroke="#ffaf01" PointGeometrySize="0"
                                 Values="{Binding ComparisonPresentData}">
                                 <lvc:LineSeries.Fill>
                                     <LinearGradientBrush>
