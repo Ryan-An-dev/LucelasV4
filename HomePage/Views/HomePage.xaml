@@ -164,7 +164,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="0" MaxValue="{Binding MaxDaily}">
+                                MinValue="100" MaxValue="{Binding MaxDaily, FallbackValue=1000000}">
                             <lvc:Axis.Separator>
                                 <lvc:Separator StrokeThickness="0"/>
                             </lvc:Axis.Separator>
@@ -235,7 +235,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="0" MaxValue="{Binding MaxMonthly.Value}">
+                                MinValue="100" MaxValue="{Binding MaxMonthly.Value, FallbackValue=100000000}">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
                                 </lvc:Axis.Separator>

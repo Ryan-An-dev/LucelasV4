@@ -196,6 +196,11 @@ namespace HomePage.ViewModels
                     MaxComparison.Value = Sum;
                 }
             }
+            if (MaxComparison.Value == 0)
+            {
+                this.ComparisonPreviousData.Clear();
+                this.ComparisonPresentData.Clear();
+            }
             this.IsLoading.Value = false;
         }
 
@@ -252,6 +257,12 @@ namespace HomePage.ViewModels
                     }
                     this.CostDailyData.Add(int.Parse(inner["sum_con_sales"].ToString()) - int.Parse(inner["ssi_con_profits"].ToString()));
                 }
+                if (MaxDaily.Value == 0) {
+                    this.ProfitDailyData.Clear();
+                    //this.ProfitDailyDate.Clear();
+                    this.SalesDailyData.Clear();
+                    this.CostDailyData.Clear();
+                }
             }
             using (var network = this.ContainerProvider.Resolve<StatisticsDataAgent>())
             {
@@ -290,6 +301,12 @@ namespace HomePage.ViewModels
                         DateTime dateTime = inner["date_time"].ToObject<DateTime>();
                         this.ProfitDate.Add(dateTime.ToString("yy") + "년 " + dateTime.ToString("MM") + "월");
                     }
+                }
+                if (MaxMonthly.Value == 0)
+                {
+                    this.ProfitData.Clear();
+                    //this.ProfitDate.Clear();
+                    this.SalesData.Clear();
                 }
             }
             SendData(2, 7);
