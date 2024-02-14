@@ -68,14 +68,12 @@ namespace LoginPage.ViewModels
                 jobj = JObject.Parse(File.ReadAllText(this._filePath)); 
                 if (jobj["SaveLoginData"] != null)
                     this.SaveLoginData.Value = jobj["SaveLoginData"].ToObject<bool>();
-                if (jobj["AutoLogin"] != null)
-                    this.AutoLogin.Value = jobj["AutoLogin"].ToObject<bool>();
+                //if (jobj["AutoLogin"] != null)
+                //    this.AutoLogin.Value = jobj["AutoLogin"].ToObject<bool>();
                 if (this.SaveLoginData.Value)
                 {
                     if (jobj["Id"] != null)
                         this.ID.Value = jobj["Id"].ToObject<string>();
-                    if (jobj["Pw"] != null)
-                        this.Password.Value = jobj["Pw"].ToString();
                     if (jobj["IP"] != null)
                         this.IP.Value = jobj["IP"].ToString();
                     if (jobj["Port"] != null)
@@ -121,17 +119,21 @@ namespace LoginPage.ViewModels
 
                 if (packet.Header.CMD == (ushort)COMMAND.LOGIN)
                 {
-                    
+                    ErpLogWriter.LogWriter.Error(jobj.ToString());
                     //들어오는 값에 따라 다른 메시지 박스 출력 switch 문
+                    bool result = jobj["login_result"].ToObject<bool>();
 
-
+                    if (!result) {
+                        MessageBox.Show("비밀번호가 틀립니다.");
+                        return;
+                    }
                     //정상로그인 일때 Result = true 넣음
                     var win = this.containerProvider.Resolve<Login>();
                     if (win != null)
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            win.DialogResult = true;
+                            win.DialogResult = result;
                         });
                     }
                     SaveData();
@@ -148,7 +150,6 @@ namespace LoginPage.ViewModels
                 jobj["IP"] = this.IP.Value;
                 jobj["Port"] = this.Port.Value;
                 jobj["Id"] = this.ID.Value;
-                jobj["Pw"] = this.Password.Value;
             }
             File.WriteAllText(this._filePath, jobj.ToString());
         }

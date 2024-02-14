@@ -35,18 +35,21 @@
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                         Text="{Binding ID.Value, Mode=TwoWay, 
                         UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBox Foreground="White"  Width="280" HorizontalAlignment="Center" Height="40" VerticalAlignment="Center"
-                        md:HintAssist.Hint="Password" md:HintAssist.Foreground="White"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        Text="{Binding Password.Value, Mode=TwoWay, 
-                        UpdateSourceTrigger=PropertyChanged}"/>
+                <PasswordBox 
+                     Height="36"
+                     PasswordChanged="PasswordBox_PasswordChanged"
+                      x:Name="passwordBox"
+                      md:HintAssist.Foreground="White"
+                      Foreground="White"
+                      md:HintAssist.Hint="Password"
+                      md:TextFieldAssist.HasClearButton="True" />
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal"  HorizontalAlignment="Center">
                 <TextBlock Text="입력내용 저장" VerticalAlignment="Center" Foreground="White"/>
                 <ToggleButton Margin="10,0,30,0" Name="tglNameEnabled"
                               IsChecked="{Binding SaveLoginData.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Text="자동 로그인" VerticalAlignment="Center" Foreground="White"/>
-                <ToggleButton x:Name="AutoLogin" Margin="10,0,0,0"  IsChecked="{Binding AutoLogin.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <!--<TextBlock Text="자동 로그인" VerticalAlignment="Center" Foreground="White"/>-->
+                <!--<ToggleButton x:Name="AutoLogin" Margin="10,0,0,0"  IsChecked="{Binding AutoLogin.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>-->
             </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="로그인" Margin="0 0 15 0" Command="{Binding TryLogin}"/>

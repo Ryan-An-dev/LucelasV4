@@ -52,9 +52,6 @@ namespace LucelasV4
                 temp.SetMainConnectCheck(Container.Resolve<MainWindowViewModel>());
                 Container.Resolve<MainWindowViewModel>().initLoadingTimer();
             }
-            else {
-                MessageBox.Show("비밀번호가 틀립니다.");
-            }
         }
 
         public void LoadAllModule() {

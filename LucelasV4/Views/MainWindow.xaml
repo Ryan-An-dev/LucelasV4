@@ -7,6 +7,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/" 
         xmlns:local="clr-namespace:LucelasV4.ViewModels"
         WindowState="Maximized" 
+        PreviewMouseDown="Window_PreviewMouseDown"
+        PreviewKeyDown="Window_PreviewKeyDown"
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True" 
         WindowStyle="None"
@@ -27,49 +29,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border Background="#19191A" CornerRadius="25 0 0 25" Grid.RowSpan="3">
-                <!--<Grid
-                    Width="160"> 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 40">
-                        <Ellipse Width="8" Height="8" Fill="#eb1700"></Ellipse>
-                        <Ellipse Width="8" Height="8" Fill="#ffaf01" Margin="7 0"></Ellipse>
-                        <Ellipse Width="8" Height="8" Fill="#009d00"></Ellipse>
-                    </StackPanel>
-                    <Viewbox
-                        Grid.Row="1"
-                        Width="160"
-                        VerticalAlignment="Top"
-                        Stretch="Uniform">
-                        <ListBox
-                              Grid.Row="1"
-                              Margin="0,0,0,0"
-                              Foreground="#E8DEF8"
-                              ItemsSource="{Binding ListItems}"
-                              SelectedIndex="0">    
-                            <ListBox.ItemContainerStyle>
-                                <Style
-                                  TargetType="ListBoxItem"
-                                  BasedOn="{StaticResource CustomColorMaterialDesign3NavigationListBoxItem}">
-                                    <Setter
-                                        Property="md:NavigationRailAssist.SelectedIcon"
-                                        Value="{Binding SelectedIcon}" />
-                                    <Setter
-                                        Property="md:NavigationRailAssist.UnselectedIcon"
-                                        Value="{Binding UnselectedIcon}" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.Resources>
-                                <DataTemplate
-                                    DataType="{x:Type local:SampleItem}">
-                                    <TextBlock Text="{Binding Title}" />
-                                </DataTemplate>
-                            </ListBox.Resources>
-                        </ListBox>
-                    </Viewbox>
-                </Grid>-->
                 <Grid>
                     <StackPanel VerticalAlignment="Top" Orientation="Vertical">
                         <!--Ellipses-->
@@ -182,6 +141,25 @@
             </Border>
             <Grid Grid.Column="1"  MouseLeftButtonDown="Grid_MouseLeftButtonDown" Width="auto" Background="#1A1A1C">
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="0 0 10 0">
+                        <TextBlock 
+                            VerticalAlignment="Center" Foreground="White">[ ID명 ]</TextBlock>
+                        <TextBlock 
+                            VerticalAlignment="Center" Foreground="White">님</TextBlock>
+                        <TextBlock
+                            Margin="10 0 10 0" VerticalAlignment="Center" Foreground="White" Text="남은시간 :"/>
+                        <TextBlock
+                            FontWeight="ExtraBold"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource textColor}"
+                            FontSize="14"
+                            Text="{Binding TimeString.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Margin="5">연장</Button>
+                        <Button>로그아웃</Button>
+                    </StackPanel>
                     <Button Style="{StaticResource MaterialDesignToolButton}" Width="40" Height="40" Margin="0 0 10 0"  PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown">
                         <md:PackIcon Kind="Minimize" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="{StaticResource MainColor}"/>
                     </Button>

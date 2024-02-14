@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using LucelasV4.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LucelasV4.Views
@@ -40,6 +41,18 @@ namespace LucelasV4.Views
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            vm.resetTimer();
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            vm.resetTimer();
         }
     }
 }

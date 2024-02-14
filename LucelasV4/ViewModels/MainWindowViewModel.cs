@@ -60,7 +60,10 @@ namespace LucelasV4.ViewModels
         INetReceiver _Receiver = null;
 
         private DispatcherTimer m_timer  = null;
+        private DispatcherTimer timer;
+        public ReactiveProperty<TimeSpan> TimeLeft { get; set; }
 
+        public ReactiveProperty<string> TimeString { get; set; }
 
         private DispatcherTimer Loading_timer = null;
 
@@ -71,6 +74,8 @@ namespace LucelasV4.ViewModels
         public MainWindowViewModel(IRegionManager regionmanager, IContainerProvider Container)
         {
             //Login module 생성하고, True일때 DataAccess 의 IMPCommandDistributor 를 전역에서 사용하도록 등록해준다.
+            this.TimeLeft = new ReactiveProperty<TimeSpan>().AddTo(this.disposables);
+            this.TimeString = new ReactiveProperty<string>().AddTo(this.disposables);  
             this._Container = Container;
             this.regionmanager = regionmanager;
             this.SearchVisibility = new ReactiveProperty<Visibility>().AddTo(this.disposables);
@@ -78,8 +83,30 @@ namespace LucelasV4.ViewModels
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
             this.ListItems = new ReactiveCollection<SampleItem>().AddTo(this.disposables);
             init();
+            initTimeLeft();
         }
 
+        private void initTimeLeft()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            TimeLeft.Value = TimeSpan.FromMinutes(10);
+            timer.Start();
+        }
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (TimeLeft.Value.TotalSeconds <= 0)
+            {
+                timer.Stop();
+                //로그아웃 처리
+            }
+            else
+            {
+                TimeLeft.Value = TimeLeft.Value.Add(TimeSpan.FromSeconds(-1));
+                TimeString.Value = TimeLeft.Value.ToString(@"mm\:ss");
+            }
+        }
         private void init()
         {
             _Container.Resolve<HomePageViewModel>().MenuSelectCommand = this.MenuSelectCommand;
@@ -244,6 +271,13 @@ namespace LucelasV4.ViewModels
         {
             this.ConnectionCheck.Value = Visibility.Visible;
             //Reconnect();
+        }
+
+        internal void resetTimer()
+        {
+            if(timer!=null)
+                timer.Stop();
+            initTimeLeft();
         }
     }
 }
