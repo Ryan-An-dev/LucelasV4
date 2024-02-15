@@ -24,10 +24,10 @@ namespace DataAccess.NetWork
         protected bool _IsDisposed;
         protected int _RemainBufferSize = 0;
         protected int _RecvBufferPos = 0;
+        protected int _beforeRemain = 0;
         protected int _SessionID;
         protected Stream _ClientStream;
         protected bool _IsConnected;
-        protected int _beforeRemain = 0;
         protected int _bufferSize; 
         private PacketParser _packet;
 
@@ -116,10 +116,16 @@ namespace DataAccess.NetWork
             ErpLogWriter.LogWriter.Trace(string.Format("socket Close And Null처리"));
             if (mainSock != null)
             {
-                mainSock.Close();
+                if (mainSock.Connected)
+                {
+                    mainSock.GetStream().Close();
+                    mainSock.Close();
+                }
                 mainSock.Dispose();
-                mainSock = null;
+                _packet = new PacketParser();
+                _RecvBufferPos = 0;
             }
+            mainSock = null;
         }
 
         void ConnectCallback(IAsyncResult result)
@@ -229,6 +235,7 @@ namespace DataAccess.NetWork
                             if (this._packet.BodyComplete)
                             {
                                 SendCompletePacket();
+                                
                             }
                             rslt += bodyLen;
                         }
@@ -285,6 +292,7 @@ namespace DataAccess.NetWork
             this.state = ConnectState.Disconnected;
             if(this.m_timer!=null)
                 this.m_timer.Stop();
+            this.Close();
         }
 
         public void Send(JObject msg, COMMAND CMD)

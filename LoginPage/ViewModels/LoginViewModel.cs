@@ -93,6 +93,7 @@ namespace LoginPage.ViewModels
 
                 }
                 else { 
+                    
                     Agent.TryLogin(this.IP.Value, this.Port.Value, this.ID.Value, this.Password.Value);
                 }
                 //Agent.TryLogin("192.168.0.121", 2001, "admin", "1234");
@@ -116,15 +117,19 @@ namespace LoginPage.ViewModels
             {
                 string Body = Encoding.UTF8.GetString(packet.Body);
                 JObject jobj = new JObject(JObject.Parse(Body));
+                ErpLogWriter.LogWriter.Error(jobj.ToString());
 
                 if (packet.Header.CMD == (ushort)COMMAND.LOGIN)
                 {
-                    ErpLogWriter.LogWriter.Error(jobj.ToString());
                     //들어오는 값에 따라 다른 메시지 박스 출력 switch 문
                     bool result = jobj["login_result"].ToObject<bool>();
 
                     if (!result) {
                         MessageBox.Show("비밀번호가 틀립니다.");
+                        using (var Agent = containerProvider.Resolve<DataAgent.LoginAgent>())
+                        {
+                            
+                        }
                         return;
                     }
                     //정상로그인 일때 Result = true 넣음

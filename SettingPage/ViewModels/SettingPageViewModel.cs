@@ -472,8 +472,9 @@ namespace SettingPage.ViewModels
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if(this.ProductCategoryListViewModel!=null)
+                        if (this.ProductCategoryListViewModel != null)
                             this.ProductCategoryListViewModel.List.Clear();
+                        this.FurnitureInfos.Clear();
                     });
                     if (msg["category_list"] == null)
                         return;

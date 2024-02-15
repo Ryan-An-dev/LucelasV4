@@ -1,6 +1,8 @@
 ﻿using LucelasV4.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace LucelasV4.Views
 {
@@ -9,11 +11,25 @@ namespace LucelasV4.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer timer;
         public MainWindow()
         {
             InitializeComponent();
+            initTimeLeft();
         }
 
+        public void initTimeLeft()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(30);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            this.passwordBox.Password = "";
+        }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -53,6 +69,12 @@ namespace LucelasV4.Views
         {
             MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
             vm.resetTimer();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            vm.Password.Value = passwordBox.Password;
         }
     }
 }

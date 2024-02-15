@@ -11,6 +11,9 @@ namespace DataAccess.Interface
     {
         public void CheckLogin(string ip, int port, string id, string pw);
 
+        public void Clear();
+
+
         public void RequestGlobalData();
 
     }

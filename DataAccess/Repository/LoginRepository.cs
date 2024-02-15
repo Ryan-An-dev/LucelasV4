@@ -28,6 +28,9 @@ namespace DataAccess.Repository
             NetManager = this._Container.Resolve<SocketClientV2>();
             NetManager.SetReceiver(this);
         }
+        public void Clear() {
+            this.NetManager.Disconnect();
+        }
         public void SetReceiver(INetReceiver netReceiver)
         {
             this._Receiver = netReceiver;
@@ -39,8 +42,13 @@ namespace DataAccess.Repository
             this.port = port;
             this.id = id;
             this.pw = pw;
-
-            this.NetManager.Connect(ip, port);
+            if (this.NetManager.state == ConnectState.Disconnected)
+            {
+                this.NetManager.Connect(ip, port);
+            }
+            else {
+                this.NetManager.TryLogin(id, pw);
+            }
         }
         public void TryLogin(string id, string pass)
         {

@@ -51,6 +51,8 @@ namespace LucelasV4
                 SocketClientV2 temp =Container.Resolve<SocketClientV2>();
                 temp.SetMainConnectCheck(Container.Resolve<MainWindowViewModel>());
                 Container.Resolve<MainWindowViewModel>().initLoadingTimer();
+                Container.Resolve<MainWindowViewModel>().loginInfo();
+                Container.Resolve<MainWindowViewModel>().initTimeLeft();
             }
         }
 
@@ -98,7 +100,7 @@ namespace LucelasV4
         {
             this.regMan = containerRegistry;
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
-            containerRegistry.Register<LoginViewModel>();
+            containerRegistry.RegisterSingleton<LoginViewModel>();
             containerRegistry.RegisterSingleton<Login>();
             containerRegistry.RegisterSingleton<MainWindowViewModel>();
             containerRegistry.RegisterSingleton<HomePageViewModel>();

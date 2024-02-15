@@ -146,7 +146,7 @@
                         VerticalAlignment="Center"
                         Margin="0 0 10 0">
                         <TextBlock 
-                            VerticalAlignment="Center" Foreground="White">[ ID명 ]</TextBlock>
+                            VerticalAlignment="Center" Foreground="White" Text="{Binding ID.Value}"/>
                         <TextBlock 
                             VerticalAlignment="Center" Foreground="White">님</TextBlock>
                         <TextBlock
@@ -157,8 +157,7 @@
                             Foreground="{StaticResource textColor}"
                             FontSize="14"
                             Text="{Binding TimeString.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <Button Margin="5">연장</Button>
-                        <Button>로그아웃</Button>
+                        <Button Margin="15 0 0 0" Height="26" Width="60" Content="연장" Command="{Binding AddTimerCommand}"/>
                     </StackPanel>
                     <Button Style="{StaticResource MaterialDesignToolButton}" Width="40" Height="40" Margin="0 0 10 0"  PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown">
                         <md:PackIcon Kind="Minimize" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="{StaticResource MainColor}"/>
@@ -184,6 +183,61 @@
                     Style="{StaticResource MaterialDesignCircularProgressBar}"
                     Value="50" />
             </md:Card>
+            <Border Visibility="{Binding Lock.Value}"
+                Grid.ColumnSpan="2" 
+                    Grid.Row="0" Grid.RowSpan="2" Background="Black" Opacity="0.9">
+                <Border Width="400" Height="300"
+                    Background="#151f2d"
+                    BorderThickness="5" CornerRadius="10" 
+                    BorderBrush="{StaticResource MainColor}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="180"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Height="180">
+                            <md:PackIcon 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Foreground="{StaticResource MainColor}"
+                                Kind="Error"
+                                Margin="0 60 0 0"
+                                Width="80" Height="80" />
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="ExtraBold"
+                                Foreground="{StaticResource MainColor}"
+                                HorizontalAlignment="Center" 
+                                Text="화면 보호"/>
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="ExtraBold"
+                                Foreground="{StaticResource MainColor}"
+                                HorizontalAlignment="Center" 
+                                Text="(비밀번호를 입력해주세요.)"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Margin="0 20 0 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <PasswordBox 
+                                    Margin="30 0 0 0"
+                                    Width="200"
+                                    Height="36"
+                                    PasswordChanged="PasswordBox_PasswordChanged"
+                                    x:Name="passwordBox"
+                                    md:HintAssist.Foreground="White"
+                                    Foreground="White"
+                                    md:HintAssist.Hint="Password"
+                                    md:TextFieldAssist.HasClearButton="True" >
+                                </PasswordBox>
+                                <Button 
+                                    FontSize="13"
+                                    Content="입력" Width="60" Command="{Binding PasswordCheckCommand}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+            </Border>
         </Grid>
     </Border>
 </Window>

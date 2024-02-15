@@ -76,11 +76,48 @@ namespace SettingPage.ViewModels
                         {
                             if (jobject["company_list"] == null)
                                 return;
+
                             JArray jarr = new JArray();
                             jarr = jobject["company_list"] as JArray;
                             if (jobject["history_count"] != null)
                                 TotalItemCount.Value = jobject["history_count"].ToObject<int>();
                             int i = CurrentPage.Value == 1 ? 1 : ListCount.Value * (CurrentPage.Value - 1) + 1;
+                            if (jarr == null || jarr.Count == 0) {
+
+                                DialogParameters dialogParameters = new DialogParameters();
+                                dialogParameters.Add("object", new Company());
+                                Application.Current.Dispatcher.Invoke(() => { 
+                                
+                                    dialogService.ShowDialog("CompanyAddPage", dialogParameters, r =>
+                                    {
+                                        try
+                                        {
+                                            if (r.Result == ButtonResult.OK)
+                                            {
+                                                Company item = r.Parameters.GetValue<Company>("object");
+                                                if (item != null)
+                                                {
+                                                    using (var network = ContainerProvider.Resolve<DataAgent.CompanyDataAgent>())
+                                                    {
+                                                        network.SetReceiver(this);
+                                                        JObject jobj = new JObject();
+                                                        jobj["company_id"] = (int)0;
+                                                        jobj["company_name"] = item.CompanyName.Value;
+                                                        jobj["company_address_detail"] = item.CompanyAddressDetail.Value;
+                                                        jobj["company_phone"] = item.CompanyPhone.Value;
+                                                        jobj["company_address"] = item.CompanyAddress.Value;
+                                                        network.Create(jobj);
+                                                        IsLoading.Value = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception) { }
+
+                                    }, "CommonDialogWindow");
+                                });
+                                return;
+                            }
                             foreach (JObject jobj in jarr)
                             {
                                 Company temp = new Company();
@@ -229,15 +266,15 @@ namespace SettingPage.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-            //if (parameters.ContainsKey("object"))
-            //{
-            //    Company Company = null;
-            //    parameters.TryGetValue("object", out Company);
-            //    if (Company != null)
-            //    {
-            //        this.Company.Value = Company;
-            //    }
-            //}
+            if (parameters.ContainsKey("object"))
+            {
+                string Company = null;
+                parameters.TryGetValue("object", out Company);
+                if (Company != null)
+                {
+                    SearchTitle(Company);
+                }
+            }
         }
     }
 }

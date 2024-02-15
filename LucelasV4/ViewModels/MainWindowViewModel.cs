@@ -21,6 +21,9 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
+using LoginPage.ViewModels;
+using CommonModule.Views;
+using LucelasV4.Views;
 
 namespace LucelasV4.ViewModels
 {
@@ -48,7 +51,8 @@ namespace LucelasV4.ViewModels
     {
         public ReactiveCollection<SampleItem> ListItems { get; set; }
         public ReactiveCommand<string> MenuSelectCommand { get; }
-
+        public DelegateCommand PasswordCheckCommand { get; }
+        public DelegateCommand AddTimerCommand { get; }
         private CompositeDisposable disposables = new CompositeDisposable();
 
         private IRegionManager regionmanager;
@@ -71,22 +75,55 @@ namespace LucelasV4.ViewModels
         public ReactiveProperty<Visibility> ConnectionCheck { get; set; }
 
         public ReactiveProperty<Visibility> SearchVisibility { get;set; }
+        public ReactiveProperty<Visibility> Lock { get; set; }
+        public ReactiveProperty<string> ID { get; set; }
+        public ReactiveProperty<string> Password { get; set; }
+        public ReactiveProperty<string> originPassword { get; set; }
         public MainWindowViewModel(IRegionManager regionmanager, IContainerProvider Container)
         {
             //Login module 생성하고, True일때 DataAccess 의 IMPCommandDistributor 를 전역에서 사용하도록 등록해준다.
             this.TimeLeft = new ReactiveProperty<TimeSpan>().AddTo(this.disposables);
+            this.AddTimerCommand = new DelegateCommand(ExecAddTimerCommand);
+            this.Lock = new ReactiveProperty<Visibility>(Visibility.Collapsed).AddTo(this.disposables);
+            this.ID = new ReactiveProperty<string>().AddTo(this.disposables);
+            this.originPassword = new ReactiveProperty<string>().AddTo(this.disposables);
+            this.Password = new ReactiveProperty<string>().AddTo(this.disposables);
             this.TimeString = new ReactiveProperty<string>().AddTo(this.disposables);  
             this._Container = Container;
             this.regionmanager = regionmanager;
             this.SearchVisibility = new ReactiveProperty<Visibility>().AddTo(this.disposables);
             this.ConnectionCheck = new ReactiveProperty<Visibility>(Visibility.Visible).AddTo(this.disposables);
+            this.PasswordCheckCommand = new DelegateCommand(ExecutePasswordCheckCommand);
             this.MenuSelectCommand = new ReactiveCommand<string>().WithSubscribe(i => this.ExecuteMenuSelectCommand(i)).AddTo(this.disposables);
             this.ListItems = new ReactiveCollection<SampleItem>().AddTo(this.disposables);
             init();
-            initTimeLeft();
+            
         }
 
-        private void initTimeLeft()
+        private void ExecAddTimerCommand()
+        {
+            TimeLeft.Value = TimeSpan.FromMinutes(10);
+        }
+
+        public void loginInfo() {
+            LoginViewModel instance = _Container.Resolve<LoginViewModel>();
+            this.ID.Value = instance.ID.Value;
+            this.originPassword.Value = instance.Password.Value;
+        }
+        private void ExecutePasswordCheckCommand()
+        {
+            if (this.originPassword.Value == this.Password.Value)
+            {
+                Lock.Value = Visibility.Collapsed;
+                this.Password.Value = string.Empty;
+            }
+            else { 
+                MessageBox.Show("비밀번호가 틀렸습니다.");
+                return;
+            }
+        }
+
+        public void initTimeLeft()
         {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -99,7 +136,7 @@ namespace LucelasV4.ViewModels
             if (TimeLeft.Value.TotalSeconds <= 0)
             {
                 timer.Stop();
-                //로그아웃 처리
+                Lock.Value = Visibility.Visible;
             }
             else
             {

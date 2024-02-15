@@ -21,5 +21,9 @@ namespace DataAgent
         public void TryLogin(string ip, int port, string id, string pw) {
             this.repo.CheckLogin(ip, port, id, pw);
         }
+        public void Clear()
+        {
+            this.repo.Clear();
+        }
     }
 }

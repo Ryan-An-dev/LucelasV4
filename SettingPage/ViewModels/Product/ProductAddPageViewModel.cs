@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using DataAccess.NetWork;
 using DataAccess;
+using Microsoft.Office.Interop.Excel;
 
 namespace SettingPage.ViewModels
 {
@@ -63,9 +64,11 @@ namespace SettingPage.ViewModels
             }, "CommonDialogWindow");
         }
 
-        private void ExecSearchCompany(string obj)
+        private void ExecSearchCompany(string name)
         {
-            DialogService.ShowDialog("CompanySearchList", null, r =>
+            DialogParameters p = new DialogParameters();
+            p.Add("object", name);
+            DialogService.ShowDialog("CompanySearchList", p, r =>
             {
                 try
                 {
@@ -87,7 +90,6 @@ namespace SettingPage.ViewModels
             Product = new ReactiveProperty<Product>().AddTo(disposable);
             SettingPageViewModel temp = con.Resolve<SettingPageViewModel>();
             this.FurnitureType = temp.FurnitureInfos;
-            
         }
 
         public string Title => throw new NotImplementedException();
