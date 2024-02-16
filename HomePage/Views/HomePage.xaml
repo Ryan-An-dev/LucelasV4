@@ -164,7 +164,7 @@
                                 LabelFormatter="{Binding YFormatter}"
                                 Foreground="#bcc0c6" 
                                 ShowLabels="True" 
-                                MinValue="100" MaxValue="{Binding MaxDaily, FallbackValue=1000000}">
+                                MinValue="100" MaxValue="{Binding MaxDaily.Value, FallbackValue=20000000}">
                             <lvc:Axis.Separator>
                                 <lvc:Separator StrokeThickness="0"/>
                             </lvc:Axis.Separator>
