@@ -32,7 +32,7 @@
                 <Grid>
                     <StackPanel VerticalAlignment="Top" Orientation="Vertical">
                         <!--Ellipses-->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 40">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 40" >
                             <Ellipse Width="8" Height="8" Fill="#eb1700"></Ellipse>
                             <Ellipse Width="8" Height="8" Fill="#ffaf01" Margin="7 0"></Ellipse>
                             <Ellipse Width="8" Height="8" Fill="#009d00"></Ellipse>
@@ -106,7 +106,7 @@
                                         HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <!--통계--><!--
+                            <!--통계-->
                             <Button   Margin="5" Height="80" Command="{Binding MenuSelectCommand}" CommandParameter="StatisticsPage"
                                           Style="{StaticResource MaterialDesignFlatButton}">
                                 <StackPanel Orientation="Vertical">
@@ -117,7 +117,7 @@
                                         FontWeight="Bold"
                                         HorizontalAlignment="Center"/>
                                 </StackPanel>
-                            </Button>-->
+                            </Button>
                             
                             <!--세팅-->
                             <Button  Margin="5"  

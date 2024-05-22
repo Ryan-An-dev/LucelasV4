@@ -19,6 +19,7 @@ using CommonModule.Views;
 using HomePage.ViewModels;
 using Prism.Events;
 using CommonServiceLocator;
+using SettingPage.ViewModels;
 
 namespace LucelasV4
 {
@@ -104,6 +105,7 @@ namespace LucelasV4
             containerRegistry.RegisterSingleton<Login>();
             containerRegistry.RegisterSingleton<MainWindowViewModel>();
             containerRegistry.RegisterSingleton<HomePageViewModel>();
+            containerRegistry.RegisterSingleton<SettingPageViewModel>();
             containerRegistry.Register<IReceiptRepository, ReceiptRepository>();
             containerRegistry.Register<IStatisticsRepository, StatisticsRepository>();
             containerRegistry.Register<IHomePageRepository, HomePageRepository>();

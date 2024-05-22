@@ -17,7 +17,6 @@ namespace SettingPage
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<SettingPageViewModel>();
             containerRegistry.RegisterDialog<CompanyAddPage>("CompanyAddPage");
             containerRegistry.RegisterDialog<CustomerAddPage>("CustomerAddPage");
             containerRegistry.RegisterDialog<EmployeeAddPage>("EmployeeAddPage");

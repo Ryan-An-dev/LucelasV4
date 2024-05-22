@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace HomePage.Views
 {
@@ -11,6 +12,6 @@ namespace HomePage.Views
         {
             InitializeComponent();
         }
-
+        
     }
 }

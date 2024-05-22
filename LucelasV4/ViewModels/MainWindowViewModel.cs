@@ -191,7 +191,7 @@ namespace LucelasV4.ViewModels
         public void initLoadingTimer()
         {
             this.Loading_timer = new DispatcherTimer();
-            this.Loading_timer.Interval = TimeSpan.FromMilliseconds(300);
+            this.Loading_timer.Interval = TimeSpan.FromMilliseconds(1000);
             this.Loading_timer.Tick += Loading_timer_Elapsed;
             this.Loading_timer.Start();
         }
@@ -232,7 +232,6 @@ namespace LucelasV4.ViewModels
                 this.Loading_timer = null;
                 initSettingTimer();
                 SettingPageViewModel instance = _Container.Resolve<SettingPageViewModel>();
-                instance.initData();
             }
         }
 

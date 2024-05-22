@@ -37,6 +37,16 @@ namespace LucelasV4.Views
             {
                 this.DragMove();
             }
+            if (e.ClickCount == 2)  // 더블 클릭인 경우
+            {
+                if (this.WindowState == WindowState.Normal)
+                    this.WindowState = WindowState.Maximized;
+                else
+                {
+                    this.WindowState = WindowState.Normal;
+                }
+                e.Handled = true;  // 이벤트 처리를 여기서 종료
+            }
         }
 
         private void Button_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
@@ -76,5 +86,6 @@ namespace LucelasV4.Views
             MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
             vm.Password.Value = passwordBox.Password;
         }
+
     }
 }
