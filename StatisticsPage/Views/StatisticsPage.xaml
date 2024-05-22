@@ -41,51 +41,177 @@
     <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}" Margin="20 0 10 0">
         <Grid Margin="0 0 24 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.6*"/>
-                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*"/>
-                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.43*"/>
+                <RowDefinition Height="0.43*"/>
+                <RowDefinition Height="0.04*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Column="0" Style="{StaticResource mainBorder}"  Margin="10 10 10 10">
+            <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10" Grid.ColumnSpan="2" x:Name="main">
                 <Grid>
                     <!--Title-->
-                    <TextBlock Text="지출내역" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
-
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" Width="{Binding ElementName=main, Path=Width}">
+                        <TextBlock 
+                            Text="2월 " 
+                            Style="{StaticResource titleText}" 
+                            FontSize="40"
+                            TextAlignment="Center"/>
+                        <TextBlock 
+                            Text="실적 통계" 
+                            Style="{StaticResource titleText}" 
+                            FontSize="40" VerticalAlignment="Center"
+                            TextAlignment="Center" />
+                    </StackPanel>
+                    
                     <!--Filter Button-->
-                    <!--<ComboBox 
-                        md:HintAssist.Hint="단위설정" 
+                    <ComboBox 
+                        Width="80"
+                        Height="30"
+                        FontSize="16"
+                        md:HintAssist.Hint="월 선택" 
                         Foreground="{StaticResource MainColor}" 
                         SelectedIndex="{Binding ComboIndex, UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Right" 
-                        VerticalAlignment="Top" 
+                        VerticalAlignment="Center" 
                         ItemsSource="{Binding StatisticsUnitList}"
-                        Margin="0 10 10 0"/>-->
-                    <!--Legends-->
-                    <StackPanel Orientation="Horizontal" 
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            Margin="0 45 0 0">
-                        <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
-                        <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                        <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
-                        <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                    </StackPanel>
-                    <lvc:CartesianChart 
-                        Zoom="Xy"
-                        Series="{Binding SeriesCollection}" 
-                        Margin="0 70 0 0">
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis MinValue="0"  LabelFormatter="{Binding YFormatter}" IsEnabled="False"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding Labels}" IsEnabled="False"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                    </lvc:CartesianChart>
+                        Margin="0 0 10 0"/>
                 </Grid>
             </Border>
-            <Border Grid.Column="1" Style="{StaticResource mainBorder}"  Margin="10 10 10 10">
+            <Border Grid.Column="0" Style="{StaticResource mainBorder}"  Margin="10 10 10 10" Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*"/>
+                        <RowDefinition Height="0.9*"/>
+                    </Grid.RowDefinitions>
+                    <!--Title-->
+                    <TextBlock 
+                        Text="매출/비용" 
+                        FontSize="20"
+                        Style="{StaticResource titleText}" 
+                        Margin="0 3 0 0"
+                        Grid.Row="0"/>
+                    <Grid Grid.Row="1" Margin="0 10 0 0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Margin="0 14 10 0">
+                            <Grid x:Name="lineContainer" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock 
+                                    TextAlignment="Right"
+                                    Margin="0 0 10 0"
+                                    Text="매출액"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="100,000,000원"
+                                    TextAlignment="Right"    
+                                    Margin="0 0 10 0"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                    Grid.Row="1"
+                                    TextAlignment="Right"
+                                    Margin="0 0 10 0"
+                                    Text="판매 원가"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    TextAlignment="Right"  
+                                    Margin="0 0 10 0"
+                                    Text="- 50,000,000원"
+                                    Foreground="Red"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                     Grid.Row="2"
+                                     TextAlignment="Right"
+                                     Margin="0 0 10 0"
+                                     Text="지출액"
+                                     FontSize="14"
+                                     Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                    Grid.Column="1"  
+                                    Grid.Row="2"
+                                    TextAlignment="Right"  
+                                    Foreground="Red"
+                                    Margin="0 0 10 0"
+                                    Text="- 50,000,000원"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <Border Grid.Row="3"
+                                        Width="280"
+                                        Margin="0 0 10 0"
+                                        HorizontalAlignment="Right"
+                                        Grid.ColumnSpan="2" 
+                                        BorderThickness="0 2 0 0"
+                                        BorderBrush="White"/>
+                                <TextBlock 
+                                    Grid.Row="4"
+                                    TextAlignment="Right"
+                                    Margin="0 0 10 0"
+                                    Text="순이익"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                <TextBlock 
+                                    Grid.Column="1"  
+                                    Grid.Row="4"
+                                    TextAlignment="Right"  
+                                    Foreground="Green"
+                                    Margin="0 0 10 0"
+                                    Text="+ 20,000,000원"
+                                    FontSize="14"
+                                    Style="{StaticResource titleText}"/>
+                                
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1" Margin="0 0 10 0">
+                            <StackPanel 
+                                Orientation="Horizontal" 
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Right"
+                                Margin="0 0 0 0">
+                                <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
+                                <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                                <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
+                                <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 8 0" Foreground="#d4d6d9"/>
+                            </StackPanel>
+                            <lvc:CartesianChart 
+                                 Zoom="Xy"
+                                 Series="{Binding SeriesCollection}" 
+                                 Margin="0 16 0 0">
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis MinValue="0"  LabelFormatter="{Binding YFormatter}" IsEnabled="False"></lvc:Axis>
+                                </lvc:CartesianChart.AxisY>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis Labels="{Binding Labels}" IsEnabled="False"></lvc:Axis>
+                                </lvc:CartesianChart.AxisX>
+                            </lvc:CartesianChart>
+                        </Grid>
+                    </Grid>
+                   
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource mainBorder}"  Margin="10 10 10 10" Grid.Row="1">
                 <Grid>
                     <!--Title-->
                     <TextBlock Text="이번달 지출내역" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
@@ -102,38 +228,33 @@
                     </lvc:PieChart>
                 </Grid>
             </Border>
-            <Grid Grid.Row="1" Margin="0,0,0,2" Grid.Column="0" Grid.ColumnSpan="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.6*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                </Grid.ColumnDefinitions>
+            
+            <!--Hire Section-->
+            <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10" Grid.Row="2">
+                <Grid>
+                    <!--Title-->
+                    <TextBlock Text="매출 추이" Style="{StaticResource titleText}"/>
 
-                <!--Hire Section-->
-                <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10">
-                    <Grid>
-                        <!--Title-->
-                        <TextBlock Text="매출 추이" Style="{StaticResource titleText}"/>
-
-                        <!--Filter Button-->
-                        <StackPanel Orientation="Horizontal" 
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            Margin="0 45 0 0">
-                            <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
-                            <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                            <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
-                            <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
-                        </StackPanel>
-                        <lvc:CartesianChart 
-                        Zoom="Xy" Series="{Binding SeriesCollection2}"
-                        Margin="0 70 0 0">
+                    <!--Filter Button-->
+                    <StackPanel Orientation="Horizontal" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Right"
+                        Margin="0 45 0 0">
+                        <Border Width="12" Height="12" Background="DarkRed" CornerRadius="3"/>
+                        <TextBlock Text="이번달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                        <Border Width="12" Height="12" Background="Gray" CornerRadius="3"/>
+                        <TextBlock Text="지난달" VerticalAlignment="Center" Margin="7 0 20 0" Foreground="#d4d6d9"/>
+                    </StackPanel>
+                    <lvc:CartesianChart 
+                    Zoom="Xy" Series="{Binding SeriesCollection2}"
+                    Margin="0 70 0 0">
                            
-                        </lvc:CartesianChart>
+                    </lvc:CartesianChart>
 
-                    </Grid>
-                </Border>
+                </Grid>
+            </Border>
 
-                <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10" Grid.Column="1">
+            <Border Style="{StaticResource mainBorder}" Margin="10 10 10 10" Grid.Row="2" Grid.Column="1">
                     <Grid>
                         <!--Title-->
                         <TextBlock Text="이번달 매출구성" Style="{StaticResource titleText}" Margin="0 -3 0 0"/>
@@ -147,7 +268,7 @@
                         </lvc:PieChart>
                     </Grid>
                 </Border>
-            </Grid>
+           
         </Grid>
     </ScrollViewer>
 
